@@ -133,11 +133,19 @@ h3{font-size:16px;margin-bottom:8px}
         <div class="row"><div><b id="turnLabel">Table is empty</b><div class="muted" style="font-size:12px" id="turnSub"></div></div><div style="display:flex;align-items:center;gap:8px"><span class="turn-clock off" id="turnClock" aria-label="Turn countdown">—</span><span class="pill gold" id="stakePill" hidden></span></div></div>
         <div class="actions" id="actions"></div>
         <div class="dealbox" id="dealBox" hidden>
-          <div class="field"><label for="bootInput">BOOT (CHIPS)</label><input id="bootInput" type="number" min="1" value="100" inputmode="numeric"></div>
+          <div class="field"><label for="bootInput">TABLE BOOT (CHIPS)</label>
+            <select id="bootInput" style="width:100%;background:#091b14;color:var(--cream);border:1px solid #345846;border-radius:11px;padding:12px">
+              <option value="1">Boot 1 · Buy-in 20–100</option>
+              <option value="5">Boot 5 · Buy-in 100–500</option>
+              <option value="10">Boot 10 · Buy-in 200–1,000</option>
+              <option value="25">Boot 25 · Buy-in 500–2,500</option>
+              <option value="50">Boot 50 · Buy-in 1,000–5,000</option>
+              <option value="100" selected>Boot 100 · Buy-in 2,000–10,000</option>
+            </select></div>
           <button class="primary" id="dealBtn" type="button">Deal hand</button>
         </div>
       </div>
-      <div class="msg" id="adminNote" hidden>You are the dealer. Keep this page open during play, because your phone processes every move.</div>
+      <div class="msg" id="adminNote" hidden>You are the dealer. Keep this page open during play, because your phone processes every move. Timer enforcement, account profiles, and server-validated chip balances are not enabled yet.</div>
     </div>
 
     <div class="card" id="pendingCard" hidden>
@@ -396,6 +404,7 @@ async function createRoom(){
   const code = makeCode();
   await db.collection('rooms').doc(code).set({
     adminUid: uid, adminName: name, status: 'open',
+    boot: Number($('bootInput').value) || 100,
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
   });
   enterRoom(code, true, name);
@@ -601,13 +610,13 @@ function renderGame(){
     if (mine.status === 'blind') b('See cards', 'secondary', () => sendAction('see'), busy);
     const cc = costOf(S, uid, 'chaal'), rc = costOf(S, uid, 'raise');
     const liveCount = S.order.filter(u => S.players[u].status === 'blind' || S.players[u].status === 'seen').length;
-    b('Chaal · ' + fmt(cc), 'primary', () => sendAction('chaal'), !myTurn || mine.chips < cc);
+    b('Blind · ' + fmt(cc), 'primary', () => sendAction('chaal'), !myTurn || mine.chips < cc);
     b('Raise · ' + fmt(rc), 'secondary', () => sendAction('raise'), !myTurn || mine.chips < rc || S.stake * 2 > S.maxStake);
     if (liveCount === 2) b('Show · ' + fmt(cc), 'secondary', () => sendAction('show'), !myTurn || mine.chips < cc);
     b('Pack', 'danger', () => sendAction('pack'), !myTurn);
   }
   $('dealBox').hidden = !(isAdmin && !playing);
-  if (isAdmin && S && S.boot) $('bootInput').value = $('bootInput').value || S.boot;
+  if (isAdmin && S && S.boot) $('bootInput').value = String(S.boot);
   renderLists();
 }
 
@@ -651,7 +660,9 @@ function enterRoom(code, isAdmin, name){
 
   unsubs.push(roomRef().onSnapshot(s => {
     if (!s.exists){ leave(true); return; }
-    curAdminName = s.data().adminName; curAdminUid = s.data().adminUid; renderLists();
+    curAdminName = s.data().adminName; curAdminUid = s.data().adminUid;
+     if (s.data().boot) $('bootInput').value = String(s.data().boot);
+     renderLists();
   }, e => toast(fmtErr(e))));
 
   unsubs.push(roomRef().collection('members').onSnapshot(qs => {
