@@ -23,6 +23,12 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .brand small{display:block;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase}
 .status{border:1px solid #315444;border-radius:30px;padding:6px 11px;color:#a8d8b9;font-size:12px}
 .screen{display:none}.screen.active{display:block}
+.table-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.table-tile{background:linear-gradient(145deg,#fff8e8,#e8d9b7);color:#18392b;border:1px solid #d7b968;border-radius:17px;padding:16px;text-align:left;min-height:145px;display:flex;flex-direction:column;gap:8px}
+.table-tile strong{font-size:22px;color:#145b3e}.table-tile .limits{font-size:12px;color:#586b5d}.table-tile .occupancy{font-size:12px;font-weight:800;color:#8a3430}.table-tile:disabled{opacity:.55}
+.auth-actions{display:flex;gap:8px}.auth-actions button{flex:1}
+.profile-strip{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#f7f0dc;color:#18392b;border-radius:16px;padding:14px 16px;margin-bottom:16px}
+@media(max-width:380px){.table-grid{grid-template-columns:1fr}}
 .card{background:linear-gradient(145deg,rgba(21,48,38,.96),rgba(12,31,24,.96));border:1px solid #294b3b;border-radius:20px;padding:22px;margin-bottom:16px}
 .eyebrow{color:var(--gold);text-transform:uppercase;font-size:11px;letter-spacing:2px;font-weight:800}
 .muted{color:var(--muted)}
@@ -89,8 +95,35 @@ h3{font-size:16px;margin-bottom:8px}
     <div class="status" id="status">● Connecting…</div>
   </header>
 
+  <!-- AUTH -->
+  <section class="screen active" id="authScreen">
+    <div class="card">
+      <div class="eyebrow">Welcome to the club</div>
+      <h1>Play your<br><span style="color:var(--gold)">next hand.</span></h1>
+      <div class="tabs"><button id="authPlayerTab" class="on" type="button">Player Login</button><button id="authAdminTab" class="secondary" type="button">Admin Login</button></div>
+      <div class="field"><label for="authEmail">EMAIL</label><input id="authEmail" type="email" placeholder="you@example.com" autocomplete="username"></div>
+      <div class="field"><label for="authPassword">PASSWORD</label><input id="authPassword" type="password" placeholder="At least 6 characters" autocomplete="current-password"></div>
+      <div class="auth-actions"><button class="primary" id="authSignIn" type="button">Sign in</button><button class="secondary" id="authRegister" type="button">Create player account</button></div>
+      <div class="msg err" id="authErr" hidden></div>
+      <p class="muted" style="font-size:12px;margin:14px 0 0">Play chips only. No real-money gambling.</p>
+    </div>
+  </section>
+
+  <!-- PLAYER LOBBY -->
+  <section class="screen" id="lobby">
+    <div class="profile-strip"><div><div class="eyebrow">Player profile</div><b id="lobbyName">Player</b><div class="muted" id="lobbyEmail" style="font-size:12px"></div></div><div style="text-align:right"><div class="muted" style="font-size:11px">CHIP BALANCE</div><b id="lobbyBalance" style="font-size:22px;color:#145b3e">10,000</b></div></div>
+    <div class="card"><div class="eyebrow">Choose your table</div><h2>Six tables. Your stakes.</h2><p class="muted" style="font-size:13px">Select a boot level. Your seat request goes to the table admin for approval.</p><div class="table-grid" id="tableGrid"></div><div class="msg err" id="lobbyErr" hidden></div></div>
+    <div class="row"><span class="muted" style="font-size:12px">Signed in as player</span><button class="ghost small" id="lobbySignOut" type="button">Sign out</button></div>
+  </section>
+
+  <!-- ADMIN DASHBOARD -->
+  <section class="screen" id="adminDashboard">
+    <div class="card"><div class="eyebrow">Club control room</div><h1>Admin<br><span style="color:var(--gold)">Dashboard.</span></h1><p class="muted">Manage the six permanent tables and approve players. Admin access is checked against your Firebase account UID.</p><div class="row" style="margin-bottom:14px"><span class="pill gold">Verified admin</span><button class="ghost small" id="adminSignOut" type="button">Sign out</button></div><button class="primary" id="initTablesBtn" type="button">Set up / refresh six tables</button><div class="msg" id="adminSetupMsg" hidden></div></div>
+    <div class="card"><h2>Permanent tables</h2><div id="adminTableList"></div></div>
+  </section>
+
   <!-- ENTRY -->
-  <section class="screen active" id="entry">
+  <section class="screen" id="entry">
     <div class="card">
       <div class="eyebrow">Your friends. Your table.</div>
       <h1>Game night,<br><span style="color:var(--gold)">dealt better.</span></h1>
@@ -324,7 +357,10 @@ function dropPlayers(G, goneUids){
 //#ENGINE-END
 
 const $ = id => document.getElementById(id);
-let db, auth, uid = null, mode = 'join';
+const GLOBAL_ADMIN_UID = 'OYmXPfqplmMeqzsyD8ePf8m7Foi1';
+const TABLES = [{boot:1,min:20,max:100},{boot:5,min:100,max:500},{boot:10,min:200,max:1000},{boot:25,min:500,max:2500},{boot:50,min:1000,max:5000},{boot:100,min:2000,max:10000}];
+let authMode = 'player';
+let db, auth, uid = null, currentUser = null, mode = 'join';
 let room = null;           // { code, isAdmin, name }
 let unsubs = [];
 let S = null;              // latest public game state
@@ -636,14 +672,7 @@ function renderLists(){
     pl.appendChild(rowEl(m.name, m.id === uid ? 'You' : '', btns, chipsOf(m.id)));
   });
   $('countPill').textContent = (appr.length + 1) + ' players';
-  if (isAdmin){
-    const pe = $('pendingList'); pe.textContent = '';
-    if (!pend.length){ const p = document.createElement('p'); p.className = 'muted'; p.style.margin = 0; p.textContent = 'No requests right now.'; pe.appendChild(p); }
-    pend.forEach(m => {
-      const setStatus = s => db.collection('rooms').doc(code).collection('members').doc(m.id).update({ status: s }).catch(e => toast(fmtErr(e)));
-      pe.appendChild(rowEl(m.name, '', [btn('Approve', 'primary', () => setStatus('approved')), btn('Reject', 'danger', () => setStatus('rejected'))]));
-    });
-  }
+  // Players enter automatically; there is no admin approval queue.
 }
 
 function enterRoom(code, isAdmin, name){
@@ -652,7 +681,7 @@ function enterRoom(code, isAdmin, name){
   try { localStorage.setItem('tpc', JSON.stringify({ name, code })); } catch(e){}
   $('roomCodeBig').textContent = code;
   $('roomRole').textContent = isAdmin ? 'You are the admin' : 'You are in';
-  $('pendingCard').hidden = !isAdmin;
+  if ($('pendingCard')) $('pendingCard').hidden = true;
   curMembers = []; curAdminName = isAdmin ? name : ''; curAdminUid = isAdmin ? uid : '';
   busy = false;
   show('room');
@@ -701,10 +730,103 @@ async function leave(silent){
   if (silent) err('You are no longer in that room.');
 }
 
+function authError(message){ const el=$('authErr'); el.textContent=message; el.hidden=!message; }
+function setAuthMode(m){
+  authMode=m;
+  $('authPlayerTab').className=m==='player'?'on':'secondary';
+  $('authAdminTab').className=m==='admin'?'on':'secondary';
+  $('authRegister').hidden=m==='admin';
+  authError('');
+}
+function goToSignedInHome(user){
+  currentUser=user; uid=user.uid;
+  $('status').textContent='● Connected';
+  $('lobbyEmail').textContent=user.email||'';
+  $('lobbyName').textContent=(user.email||'Player').split('@')[0];
+  if(uid===GLOBAL_ADMIN_UID){ renderAdminTables(); show('adminDashboard'); }
+  else { renderLobbyTables(); show('lobby'); }
+}
+async function signIn(){
+  authError('');
+  const email=$('authEmail').value.trim(), password=$('authPassword').value;
+  if(!email||!password){authError('Enter your email and password.');return;}
+  try{
+    const cred=await auth.signInWithEmailAndPassword(email,password);
+    if(authMode==='admin' && cred.user.uid!==GLOBAL_ADMIN_UID){await auth.signOut();authError('This account is not authorized as the club admin.');return;}
+    if(authMode==='player' && cred.user.uid===GLOBAL_ADMIN_UID){goToSignedInHome(cred.user);return;}
+    goToSignedInHome(cred.user);
+  }catch(e){authError(e.code==='auth/invalid-credential'?'Email or password is incorrect.':(e.message||'Sign in failed.'));}
+}
+async function registerPlayer(){
+  authError('');const email=$('authEmail').value.trim(),password=$('authPassword').value;
+  if(!email||password.length<6){authError('Enter a valid email and a password with at least 6 characters.');return;}
+  try{const c=await auth.createUserWithEmailAndPassword(email,password);goToSignedInHome(c.user);}catch(e){authError(e.message||'Could not create account.');}
+}
+function tableDocId(boot){return 'TABLE_BOOT_'+boot;}
+function tableLimits(boot){return TABLES.find(t=>t.boot===boot)||TABLES[0];}
+async function renderLobbyTables(){
+  const grid=$('tableGrid');grid.textContent='';$('lobbyErr').hidden=true;
+  for(const t of TABLES){
+    const tile=document.createElement('button');tile.type='button';tile.className='table-tile';
+    const title=document.createElement('strong');title.textContent='Boot '+t.boot;
+    const range=document.createElement('span');range.className='limits';range.textContent='Buy-in '+fmt(t.min)+'–'+fmt(t.max);
+    const occupancy=document.createElement('span');occupancy.className='occupancy';occupancy.textContent='Checking table…';
+    const action=document.createElement('span');action.style.fontWeight='800';action.textContent='Choose table →';
+    tile.append(title,range,occupancy,action);grid.appendChild(tile);
+    try{
+      const snap=await db.collection('rooms').doc(tableDocId(t.boot)).get();
+      if(!snap.exists){occupancy.textContent='Table not initialized';tile.disabled=true;action.textContent='Ask admin to set up';continue;}
+      const data=snap.data();
+      occupancy.textContent=data.status==='closed'?'Temporarily closed':'Open for seat requests';
+      tile.onclick=async()=>{
+        const buy=prompt('Choose your buy-in between '+t.min+' and '+t.max+' play chips:',String(t.min));
+        if(buy===null)return;const n=Number(buy);
+        if(!Number.isInteger(n)||n<t.min||n>t.max){$('lobbyErr').textContent='Buy-in must be between '+fmt(t.min)+' and '+fmt(t.max)+'.';$('lobbyErr').hidden=false;return;}
+        // Keep existing table game engine; buy-in is stored as a request field for the table admin.
+        try{$('lobbyErr').hidden=true;$('displayName').value=(currentUser.email||'Player').split('@')[0].slice(0,20);$('roomCode').value=tableDocId(t.boot);await db.collection('rooms').doc(tableDocId(t.boot)).collection('members').doc(uid).set({uid,name:$('displayName').value,status:'approved',buyIn:n,joinedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});enterRoom(tableDocId(t.boot),false,$('displayName').value);}
+        catch(e){$('lobbyErr').textContent=fmtErr(e);$('lobbyErr').hidden=false;}
+      };
+    }catch(e){occupancy.textContent='Could not load';tile.disabled=true;}
+  }
+}
+async function initializePermanentTables(){
+  const msg=$('adminSetupMsg');msg.hidden=false;msg.textContent='Setting up permanent tables…';
+  try{
+    for(const t of TABLES){
+      const ref=db.collection('rooms').doc(tableDocId(t.boot));
+      const snap=await ref.get();
+      if(!snap.exists){await ref.set({adminUid:uid,adminName:(currentUser.email||'Club Admin').split('@')[0],status:'open',boot:t.boot,minBuyIn:t.min,maxBuyIn:t.max,permanent:true,createdAt:firebase.firestore.FieldValue.serverTimestamp()});}
+      else if(snap.data().adminUid===uid){await ref.update({adminName:(currentUser.email||'Club Admin').split('@')[0],status:'open',boot:t.boot,minBuyIn:t.min,maxBuyIn:t.max,permanent:true});}
+    }
+    msg.textContent='Six permanent tables are ready.';renderAdminTables();
+  }catch(e){msg.textContent='Setup failed: '+fmtErr(e);}
+}
+async function renderAdminTables(){
+  const list=$('adminTableList');list.textContent='';
+  for(const t of TABLES){
+    const ref=db.collection('rooms').doc(tableDocId(t.boot));let data=null;
+    try{const snap=await ref.get();if(snap.exists)data=snap.data();}catch(e){}
+    const state=data?(data.status||'open'):'Not created';
+    const info=document.createElement('div');info.className='list-row';
+    const left=document.createElement('div');const name=document.createElement('b');name.textContent='Boot '+t.boot;const detail=document.createElement('div');detail.className='muted';detail.style.fontSize='12px';detail.textContent='Buy-in '+fmt(t.min)+'–'+fmt(t.max)+' · '+state;left.append(name,detail);info.appendChild(left);
+    const buttons=document.createElement('div');buttons.className='btns';
+    if(data&&data.adminUid===uid){buttons.appendChild(btn('Open table','primary',()=>enterRoom(tableDocId(t.boot),true,data.adminName||'Admin')));}
+    info.appendChild(buttons);list.appendChild(info);
+  }
+}
+async function signOutToAuth(){try{await leave(true);}catch(e){}stopListening();room=null;await auth.signOut();uid=null;currentUser=null;show('authScreen');}
+
 function boot(){
   firebase.initializeApp(firebaseConfig);
   auth = firebase.auth(); db = firebase.firestore();
 
+  $('authPlayerTab').onclick=()=>setAuthMode('player');
+  $('authAdminTab').onclick=()=>setAuthMode('admin');
+  $('authSignIn').onclick=signIn;
+  $('authRegister').onclick=registerPlayer;
+  $('initTablesBtn').onclick=initializePermanentTables;
+  $('lobbySignOut').onclick=signOutToAuth;
+  $('adminSignOut').onclick=signOutToAuth;
   $('tabJoin').onclick = () => { setMode('join'); checkReady(); };
   $('tabCreate').onclick = () => { setMode('create'); checkReady(); };
   $('displayName').oninput = checkReady;
@@ -732,12 +854,10 @@ function boot(){
   if (q) $('roomCode').value = q.toUpperCase();
 
   auth.onAuthStateChanged(u => {
-    if (u){ uid = u.uid; $('status').textContent = '● Connected'; checkReady(); }
+    if(u){ currentUser=u; uid=u.uid; $('status').textContent='● Connected'; goToSignedInHome(u); }
+    else {currentUser=null;uid=null;$('status').textContent='● Sign in required';show('authScreen');}
   });
-  auth.signInAnonymously().catch(e => {
-    $('status').textContent = '● Offline';
-    err('Could not sign in: ' + ((e && e.message) || 'unknown error'));
-  });
+  // Email/password accounts are used instead of anonymous sessions so admin access can be verified by UID.
 }
 boot();
 </script>
