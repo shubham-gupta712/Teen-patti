@@ -86,6 +86,14 @@ h3{font-size:16px;margin-bottom:8px}
 .dealbox .field{margin:0;flex:0 0 110px}
 .dealbox button{flex:1}
 @media(max-width:430px){.felt{height:500px}.seat{width:78px}}
+
+/* Persistent app navigation */
+.app-nav{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px;position:sticky;top:0;z-index:20;padding:8px;background:rgba(7,25,20,.96);border:1px solid rgba(221,190,111,.22);border-radius:14px;backdrop-filter:blur(10px)}
+.app-nav button{flex:1;min-width:90px;border:1px solid rgba(221,190,111,.3);border-radius:10px;padding:10px 12px;background:#16382c;color:#f5edcf;font-weight:800;font-size:13px}
+.app-nav button.primary{background:#e7bd63;color:#10251c;border-color:#e7bd63}
+.app-nav .nav-status{width:100%;font-size:11px;color:#b6c7b9;padding:0 4px}
+@media(max-width:480px){.app-nav button{min-width:75px;padding:10px 7px;font-size:12px}}
+
 </style>
 </head>
 <body>
@@ -94,6 +102,8 @@ h3{font-size:16px;margin-bottom:8px}
     <div class="brand"><div class="logo">♠</div><div>TEEN PATTI CLUB<small>Private rooms · play chips only</small></div></div>
     <div class="status" id="status">● Connecting…</div>
   </header>
+<nav class="app-nav" id="appNav" aria-label="Main navigation"><button type="button" data-nav="lobby" onclick="navigateLobby()">⌂ Lobby</button><button type="button" data-nav="room" onclick="navigateCurrentRoom()">♣ Current table</button><button type="button" data-nav="admin" onclick="navigateAdmin()">⚙ Admin</button><button type="button" onclick="navigateSignOut()">Sign out</button><div class="nav-status" id="navStatus">Use Lobby to return to table selection.</div></nav>
+
 
   <!-- AUTH -->
   <section class="screen active" id="authScreen">
@@ -726,7 +736,9 @@ async function leave(silent){
   if (r && !r.isAdmin){
     try { await db.collection('rooms').doc(r.code).collection('members').doc(uid).delete(); } catch(e){}
   }
-  show('entry');
+  if (currentUser && uid!==GLOBAL_ADMIN_UID){ show('playerLobby'); renderLobbyTables(); }
+  else if (currentUser && uid===GLOBAL_ADMIN_UID){ show('adminDashboard'); renderAdminTables(); }
+  else { show('auth'); }
   if (silent) err('You are no longer in that room.');
 }
 
@@ -739,6 +751,7 @@ function setAuthMode(m){
   authError('');
 }
 function goToSignedInHome(user){
+  navSetStatus('Signed in. Use Lobby to choose a table.');
   currentUser=user; uid=user.uid;
   $('status').textContent='● Connected';
   $('lobbyEmail').textContent=user.email||'';
@@ -764,18 +777,24 @@ async function registerPlayer(){
 }
 function tableDocId(boot){return 'TABLE_BOOT_'+boot;}
 function tableLimits(boot){return TABLES.find(t=>t.boot===boot)||TABLES[0];}
+let lobbyRenderVersion = 0;
 async function renderLobbyTables(){
+  const renderVersion = ++lobbyRenderVersion;
   const grid=$('tableGrid');grid.textContent='';$('lobbyErr').hidden=true;
+  const tiles = [];
   for(const t of TABLES){
     const tile=document.createElement('button');tile.type='button';tile.className='table-tile';
     const title=document.createElement('strong');title.textContent='Boot '+t.boot;
     const range=document.createElement('span');range.className='limits';range.textContent='Buy-in '+fmt(t.min)+'–'+fmt(t.max);
     const occupancy=document.createElement('span');occupancy.className='occupancy';occupancy.textContent='Checking table…';
     const action=document.createElement('span');action.style.fontWeight='800';action.textContent='Choose table →';
-    tile.append(title,range,occupancy,action);grid.appendChild(tile);
+    tile.append(title,range,occupancy,action);grid.appendChild(tile);tiles.push({tile,t,occupancy,action});
+  }
+  await Promise.all(tiles.map(async ({tile,t,occupancy,action})=>{
     try{
       const snap=await db.collection('rooms').doc(tableDocId(t.boot)).get();
-      if(!snap.exists){occupancy.textContent='Table not initialized';tile.disabled=true;action.textContent='Ask admin to set up';continue;}
+      if(renderVersion!==lobbyRenderVersion)return;
+      if(!snap.exists){occupancy.textContent='Table not initialized';tile.disabled=true;action.textContent='Table unavailable';return;}
       const data=snap.data();
       occupancy.textContent=data.status==='closed'?'Temporarily closed':'Open for seat requests';
       tile.onclick=async()=>{
@@ -786,8 +805,8 @@ async function renderLobbyTables(){
         try{$('lobbyErr').hidden=true;$('displayName').value=(currentUser.email||'Player').split('@')[0].slice(0,20);$('roomCode').value=tableDocId(t.boot);await db.collection('rooms').doc(tableDocId(t.boot)).collection('members').doc(uid).set({uid,name:$('displayName').value,status:'approved',buyIn:n,joinedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});enterRoom(tableDocId(t.boot),false,$('displayName').value);}
         catch(e){$('lobbyErr').textContent=fmtErr(e);$('lobbyErr').hidden=false;}
       };
-    }catch(e){occupancy.textContent='Could not load';tile.disabled=true;}
-  }
+    }catch(e){if(renderVersion!==lobbyRenderVersion)return;occupancy.textContent='Could not load';tile.disabled=true;action.textContent='Retry after refresh';}
+  }));
 }
 async function initializePermanentTables(){
   const msg=$('adminSetupMsg');msg.hidden=false;msg.textContent='Setting up permanent tables…';
@@ -795,10 +814,18 @@ async function initializePermanentTables(){
     for(const t of TABLES){
       const ref=db.collection('rooms').doc(tableDocId(t.boot));
       const snap=await ref.get();
-      if(!snap.exists){await ref.set({adminUid:uid,adminName:(currentUser.email||'Club Admin').split('@')[0],status:'open',boot:t.boot,minBuyIn:t.min,maxBuyIn:t.max,permanent:true,createdAt:firebase.firestore.FieldValue.serverTimestamp()});}
-      else if(snap.data().adminUid===uid){await ref.update({adminName:(currentUser.email||'Club Admin').split('@')[0],status:'open',boot:t.boot,minBuyIn:t.min,maxBuyIn:t.max,permanent:true});}
+      const payload={adminUid:uid,adminName:(currentUser.email||'Club Admin').split('@')[0],status:'open',boot:t.boot,minBuyIn:t.min,maxBuyIn:t.max,permanent:true};
+      if(!snap.exists){
+        await ref.set({...payload,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+      } else if(snap.data().adminUid===uid){
+        await ref.update(payload);
+      } else {
+        throw new Error('Boot '+t.boot+' is owned by a different admin UID. Check the room document and Firestore rules.');
+      }
+      const verify=await ref.get();
+      if(!verify.exists || verify.data().adminUid!==uid) throw new Error('Could not verify Boot '+t.boot+' after setup.');
     }
-    msg.textContent='Six permanent tables are ready.';renderAdminTables();
+    msg.textContent='All six permanent tables are created and verified.';renderAdminTables();
   }catch(e){msg.textContent='Setup failed: '+fmtErr(e);}
 }
 async function renderAdminTables(){
@@ -860,6 +887,36 @@ function boot(){
   // Email/password accounts are used instead of anonymous sessions so admin access can be verified by UID.
 }
 boot();
+
+
+function navSetStatus(text){
+  const el=$('navStatus'); if(el) el.textContent=text;
+  const nav=$('appNav'); if(nav) nav.style.display=currentUser?'flex':'none';
+}
+function navigateLobby(){
+  if(!currentUser){show('auth');return;}
+  stopListening(); room=null;
+  show('playerLobby');
+  renderLobbyTables();
+  navSetStatus('Lobby: choose any available boot table.');
+}
+function navigateCurrentRoom(){
+  if(room && room.code){show('room');navSetStatus('Current table: '+room.code);return;}
+  navSetStatus('You are not currently at a table. Choose Lobby to join one.');
+  navigateLobby();
+}
+function navigateAdmin(){
+  if(!currentUser){show('auth');return;}
+  if(uid!==GLOBAL_ADMIN_UID){navSetStatus('Admin access is restricted to the authorized admin account.');return;}
+  stopListening();room=null;show('adminDashboard');renderAdminTables();
+  navSetStatus('Admin: manage the six permanent tables.');
+}
+async function navigateSignOut(){
+  stopListening();room=null;
+  try{await auth.signOut();}catch(e){toast(fmtErr(e));}
+  show('auth');navSetStatus('Signed out.');
+}
+
 </script>
 </body>
 </html>
