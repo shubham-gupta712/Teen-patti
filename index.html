@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Teen Patti Club</title>
+<style>
+:root{--bg:#081713;--panel:#10251e;--gold:#e7bd68;--cream:#f7f0dc;--muted:#9eb5a8;--red:#e56b64;--green:#2c9b69}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#153a2c 0,#081713 62%);color:var(--cream);font:15px/1.45 system-ui,Arial,sans-serif;min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer;border:0;border-radius:12px;padding:11px 15px;font-weight:700}
+button:disabled{opacity:.4;cursor:not-allowed}
+.primary{background:var(--gold);color:#1a241a}
+.secondary{background:#234638;color:var(--cream);border:1px solid #37614e}
+.danger{background:#512a2a;color:#ffd9d3;border:1px solid #814440}
+.ghost{background:transparent;color:var(--muted);border:1px solid #355648}
+.small{padding:7px 10px;font-size:12px}
+.wrap{max-width:760px;margin:auto;padding:18px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.brand{display:flex;gap:12px;align-items:center;font-weight:900}
+.logo{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:var(--gold);color:#18271d;font-size:22px}
+.brand small{display:block;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase}
+.status{border:1px solid #315444;border-radius:30px;padding:6px 11px;color:#a8d8b9;font-size:12px}
+.screen{display:none}.screen.active{display:block}
+.card{background:linear-gradient(145deg,rgba(21,48,38,.96),rgba(12,31,24,.96));border:1px solid #294b3b;border-radius:20px;padding:22px;margin-bottom:16px}
+.eyebrow{color:var(--gold);text-transform:uppercase;font-size:11px;letter-spacing:2px;font-weight:800}
+.muted{color:var(--muted)}
+h1,h2,h3,p{margin-top:0}
+h1{font-size:clamp(30px,8vw,44px);line-height:1.05;letter-spacing:-1.4px;margin:10px 0}
+h2{font-size:22px;margin-bottom:6px}
+h3{font-size:16px;margin-bottom:8px}
+.tabs{display:flex;gap:8px;margin:16px 0}
+.tabs button{flex:1}
+.tabs .on{background:var(--gold);color:#1a241a}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;letter-spacing:.5px}
+.field input{width:100%;background:#091b14;color:var(--cream);border:1px solid #345846;border-radius:11px;padding:12px;outline:none}
+.field input:focus{border-color:var(--gold)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.code{font:800 34px/1 ui-monospace,monospace;letter-spacing:6px;color:var(--gold);margin:8px 0 14px;word-break:break-all}
+.list-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #294738}
+.list-row:last-child{border:0}
+.btns{display:flex;gap:6px;flex-shrink:0}
+.pill{background:#1c3c2c;border-radius:20px;padding:3px 9px;color:#b9d8c4;font-size:12px}
+.pill.gold{background:#4b3e22;color:#f2d78f}
+.msg{padding:11px 13px;border-radius:12px;font-size:13px;margin-top:12px;background:#3e351e;color:#f4d990}
+.msg.err{background:#4a2523;color:#ffd0ca}
+.footer{text-align:center;color:#6f8d7d;font-size:11px;margin:22px 0 4px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#f0d48e;color:#18271d;padding:11px 16px;border-radius:12px;font-weight:800;display:none;z-index:10}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="logo">♠</div><div>TEEN PATTI CLUB<small>Private rooms · play chips only</small></div></div>
+    <div class="status" id="status">● Connecting…</div>
+  </header>
+
+  <!-- ENTRY -->
+  <section class="screen active" id="entry">
+    <div class="card">
+      <div class="eyebrow">Your friends. Your table.</div>
+      <h1>Game night,<br><span style="color:var(--gold)">dealt better.</span></h1>
+      <div class="tabs">
+        <button id="tabJoin" class="on" type="button">Join a room</button>
+        <button id="tabCreate" class="secondary" type="button">Create a room</button>
+      </div>
+      <div class="field"><label for="displayName">DISPLAY NAME</label><input id="displayName" maxlength="20" placeholder="e.g. Shubham" autocomplete="off"></div>
+      <div class="field" id="codeField"><label for="roomCode">ROOM CODE</label><input id="roomCode" maxlength="8" placeholder="e.g. K7M2QX" autocomplete="off" autocapitalize="characters"></div>
+      <button class="primary" id="goBtn" type="button" disabled>Request to join →</button>
+      <div class="msg err" id="entryErr" hidden></div>
+    </div>
+  </section>
+
+  <!-- WAITING -->
+  <section class="screen" id="waiting">
+    <div class="card">
+      <div class="eyebrow">Room <span id="waitCode"></span></div>
+      <h2 id="waitTitle">Waiting for the admin…</h2>
+      <p class="muted" id="waitText">Your request was sent. This page updates by itself when the admin decides.</p>
+      <button class="ghost small" id="waitCancel" type="button">Cancel request</button>
+    </div>
+  </section>
+
+  <!-- ROOM -->
+  <section class="screen" id="room">
+    <div class="card">
+      <div class="row"><div class="eyebrow" id="roomRole">Room</div><button class="ghost small" id="leaveBtn" type="button">Leave</button></div>
+      <div class="code" id="roomCodeBig"></div>
+      <div class="row">
+        <span class="muted" style="font-size:13px">Share this code or link with friends.</span>
+        <button class="secondary small" id="copyBtn" type="button">Copy link</button>
+      </div>
+    </div>
+    <div class="card" id="pendingCard" hidden>
+      <h3>Join requests</h3>
+      <div id="pendingList"></div>
+    </div>
+    <div class="card">
+      <div class="row"><h3>At this table</h3><span class="pill" id="countPill"></span></div>
+      <div id="playerList"></div>
+      <div class="msg">Cards, betting and the table come next. This step only handles who is allowed in.</div>
+    </div>
+  </section>
+
+  <div class="footer">TEEN PATTI CLUB · SOCIAL PLAY ONLY · NO REAL-MONEY GAMBLING</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBOhj0_OsrFqV0gs3kO-RuGwd4gDPaldsw",
+  authDomain: "teen-patti-6890c.firebaseapp.com",
+  projectId: "teen-patti-6890c",
+  storageBucket: "teen-patti-6890c.firebasestorage.app",
+  messagingSenderId: "164086089753",
+  appId: "1:164086089753:web:347cb32e808d90f7d18288",
+  measurementId: "G-HSSNPZS8WP"
+};
+
+const $ = id => document.getElementById(id);
+let db, auth, uid = null, mode = 'join';
+let room = null;           // { code, isAdmin, name }
+let unsubs = [];
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function toast(t){
+  const el = $('toast'); el.textContent = t; el.style.display = 'block';
+  clearTimeout(toast.t); toast.t = setTimeout(() => el.style.display = 'none', 2200);
+}
+function err(msg){ const e = $('entryErr'); e.textContent = msg; e.hidden = !msg; }
+function stopListening(){ unsubs.forEach(u => u()); unsubs = []; }
+function makeCode(){
+  const abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const r = new Uint32Array(6); crypto.getRandomValues(r);
+  return Array.from(r, n => abc[n % abc.length]).join('');
+}
+function fmtErr(e){
+  if (e && e.code === 'permission-denied') return 'Not allowed. Check that the Firestore rules for this step are published.';
+  return (e && e.message) || 'Something went wrong. Try again.';
+}
+function rowEl(name, tag, buttons){
+  const row = document.createElement('div'); row.className = 'list-row';
+  const left = document.createElement('div');
+  const n = document.createElement('b'); n.textContent = name;
+  left.appendChild(n);
+  if (tag){ const p = document.createElement('span'); p.className = 'pill gold'; p.style.marginLeft = '8px'; p.textContent = tag; left.appendChild(p); }
+  row.appendChild(left);
+  if (buttons && buttons.length){
+    const b = document.createElement('div'); b.className = 'btns';
+    buttons.forEach(x => b.appendChild(x)); row.appendChild(b);
+  }
+  return row;
+}
+function btn(label, cls, fn){
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = cls + ' small'; b.textContent = label; b.onclick = fn;
+  return b;
+}
+
+function setMode(m){
+  mode = m;
+  $('tabJoin').className = m === 'join' ? 'on' : 'secondary';
+  $('tabCreate').className = m === 'create' ? 'on' : 'secondary';
+  $('codeField').hidden = m !== 'join';
+  $('goBtn').textContent = m === 'join' ? 'Request to join →' : 'Create room →';
+  err('');
+}
+function checkReady(){
+  const nameOk = $('displayName').value.trim().length > 0;
+  const codeOk = mode === 'create' || $('roomCode').value.trim().length >= 4;
+  $('goBtn').disabled = !(uid && nameOk && codeOk);
+}
+
+async function createRoom(){
+  const name = $('displayName').value.trim();
+  const code = makeCode();
+  await db.collection('rooms').doc(code).set({
+    adminUid: uid, adminName: name, status: 'open',
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  enterRoom(code, true, name);
+}
+
+async function joinRoom(){
+  const name = $('displayName').value.trim();
+  const code = $('roomCode').value.trim().toUpperCase();
+  const snap = await db.collection('rooms').doc(code).get();
+  if (!snap.exists) { err('No room with that code. Check it and try again.'); return; }
+  if (snap.data().adminUid === uid) { enterRoom(code, true, snap.data().adminName); return; }
+  const mref = db.collection('rooms').doc(code).collection('members').doc(uid);
+  const mine = await mref.get();
+  if (!mine.exists){
+    await mref.set({ uid, name, status: 'pending', requestedAt: firebase.firestore.FieldValue.serverTimestamp() });
+  }
+  watchMyRequest(code);
+}
+
+function watchMyRequest(code){
+  stopListening();
+  room = { code, isAdmin: false };
+  $('waitCode').textContent = code;
+  show('waiting');
+  const mref = db.collection('rooms').doc(code).collection('members').doc(uid);
+  unsubs.push(mref.onSnapshot(s => {
+    if (!s.exists){ stopListening(); show('entry'); err('Your request was removed.'); return; }
+    const st = s.data().status;
+    if (st === 'approved'){ stopListening(); enterRoom(code, false, s.data().name); }
+    else if (st === 'rejected'){
+      $('waitTitle').textContent = 'Request declined';
+      $('waitText').textContent = 'The admin did not approve this request.';
+    } else {
+      $('waitTitle').textContent = 'Waiting for the admin…';
+      $('waitText').textContent = 'Your request was sent. This page updates by itself when the admin decides.';
+    }
+  }, e => { err(fmtErr(e)); show('entry'); }));
+}
+
+function enterRoom(code, isAdmin, name){
+  stopListening();
+  room = { code, isAdmin, name };
+  try { localStorage.setItem('tpc', JSON.stringify({ name, code })); } catch(e){}
+  $('roomCodeBig').textContent = code;
+  $('roomRole').textContent = isAdmin ? 'You are the admin' : 'You are in';
+  $('pendingCard').hidden = !isAdmin;
+  show('room');
+
+  let adminName = '';
+  let members = [];
+  const render = () => {
+    const pend = members.filter(m => m.status === 'pending');
+    const appr = members.filter(m => m.status === 'approved');
+    const pl = $('playerList'); pl.textContent = '';
+    pl.appendChild(rowEl(adminName || 'Admin', 'Admin'));
+    appr.forEach(m => {
+      const btns = [];
+      if (isAdmin) btns.push(btn('Remove', 'danger', () => db.collection('rooms').doc(code).collection('members').doc(m.id).delete().catch(e => toast(fmtErr(e)))));
+      pl.appendChild(rowEl(m.name, m.id === uid ? 'You' : '', btns));
+    });
+    $('countPill').textContent = (appr.length + 1) + ' players';
+    if (isAdmin){
+      const pe = $('pendingList'); pe.textContent = '';
+      if (!pend.length){ const p = document.createElement('p'); p.className = 'muted'; p.style.margin = 0; p.textContent = 'No requests right now.'; pe.appendChild(p); }
+      pend.forEach(m => {
+        const setStatus = s => db.collection('rooms').doc(code).collection('members').doc(m.id).update({ status: s }).catch(e => toast(fmtErr(e)));
+        pe.appendChild(rowEl(m.name, '', [btn('Approve', 'primary', () => setStatus('approved')), btn('Reject', 'danger', () => setStatus('rejected'))]));
+      });
+    }
+  };
+
+  unsubs.push(db.collection('rooms').doc(code).onSnapshot(s => {
+    if (!s.exists){ leave(true); return; }
+    adminName = s.data().adminName; render();
+  }, e => toast(fmtErr(e))));
+
+  unsubs.push(db.collection('rooms').doc(code).collection('members').onSnapshot(qs => {
+    members = qs.docs.map(d => ({ id: d.id, ...d.data() }));
+    const me = members.find(m => m.id === uid);
+    if (!isAdmin && me && me.status !== 'approved'){ watchMyRequest(code); return; }
+    if (!isAdmin && !me){ leave(true); return; }
+    render();
+  }, e => toast(fmtErr(e))));
+}
+
+async function leave(silent){
+  const r = room; stopListening(); room = null;
+  if (r && !r.isAdmin){
+    try { await db.collection('rooms').doc(r.code).collection('members').doc(uid).delete(); } catch(e){}
+  }
+  show('entry');
+  if (silent) err('You are no longer in that room.');
+}
+
+function boot(){
+  firebase.initializeApp(firebaseConfig);
+  auth = firebase.auth(); db = firebase.firestore();
+
+  $('tabJoin').onclick = () => { setMode('join'); checkReady(); };
+  $('tabCreate').onclick = () => { setMode('create'); checkReady(); };
+  $('displayName').oninput = checkReady;
+  $('roomCode').oninput = checkReady;
+  $('goBtn').onclick = async () => {
+    err(''); $('goBtn').disabled = true;
+    try { mode === 'create' ? await createRoom() : await joinRoom(); }
+    catch(e){ err(fmtErr(e)); }
+    checkReady();
+  };
+  $('leaveBtn').onclick = () => leave(false);
+  $('waitCancel').onclick = () => leave(false);
+  $('copyBtn').onclick = async () => {
+    const link = location.origin + location.pathname + '?room=' + room.code;
+    try { await navigator.clipboard.writeText(link); toast('Link copied'); }
+    catch(e){ toast('Code: ' + room.code); }
+  };
+
+  try {
+    const saved = JSON.parse(localStorage.getItem('tpc') || 'null');
+    if (saved && saved.name) $('displayName').value = saved.name;
+  } catch(e){}
+  const q = new URLSearchParams(location.search).get('room');
+  if (q) $('roomCode').value = q.toUpperCase();
+
+  auth.onAuthStateChanged(u => {
+    if (u){ uid = u.uid; $('status').textContent = '● Connected'; checkReady(); }
+  });
+  auth.signInAnonymously().catch(e => {
+    $('status').textContent = '● Offline';
+    err('Could not sign in: ' + ((e && e.message) || 'unknown error'));
+  });
+}
+boot();
+</script>
+</body>
+</html>
