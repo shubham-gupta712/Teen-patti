@@ -42,12 +42,39 @@ h3{font-size:16px;margin-bottom:8px}
 .list-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #294738}
 .list-row:last-child{border:0}
 .btns{display:flex;gap:6px;flex-shrink:0}
-.pill{background:#1c3c2c;border-radius:20px;padding:3px 9px;color:#b9d8c4;font-size:12px}
+.pill{background:#1c3c2c;border-radius:20px;padding:3px 9px;color:#b9d8c4;font-size:12px;white-space:nowrap}
 .pill.gold{background:#4b3e22;color:#f2d78f}
 .msg{padding:11px 13px;border-radius:12px;font-size:13px;margin-top:12px;background:#3e351e;color:#f4d990}
 .msg.err{background:#4a2523;color:#ffd0ca}
+.msg.win{background:#2b4a1f;color:#d6f5b8;font-weight:700;margin:0 0 12px}
 .footer{text-align:center;color:#6f8d7d;font-size:11px;margin:22px 0 4px}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#f0d48e;color:#18271d;padding:11px 16px;border-radius:12px;font-weight:800;display:none;z-index:10}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#f0d48e;color:#18271d;padding:11px 16px;border-radius:12px;font-weight:800;display:none;z-index:10;max-width:90%;text-align:center}
+
+/* table */
+.felt{position:relative;height:470px;overflow:hidden;border:8px solid #4a3424;border-radius:46% / 32%;background:radial-gradient(ellipse,#16714a 0,#0d4c33 54%,#083a28 100%);box-shadow:inset 0 0 0 3px #987344,inset 0 0 50px #00190e}
+.pot{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);text-align:center}
+.pot small{display:block;letter-spacing:2px;color:#c5e1cf;font-size:10px}
+.pot .amount{font-size:28px;font-weight:900;color:#ffe19a;font-variant-numeric:tabular-nums}
+.seat{position:absolute;transform:translate(-50%,-50%);text-align:center;width:92px}
+.seat.packed{opacity:.45}
+.avatar{width:38px;height:38px;margin:0 auto 3px;border-radius:50%;display:grid;place-items:center;background:#f0d8a2;color:#28392a;border:3px solid #c2a56b;font-weight:900;position:relative}
+.seat.turn .avatar{box-shadow:0 0 0 3px #ffe19a,0 0 16px #ffe19a}
+.dealer{position:absolute;right:-8px;bottom:-4px;background:#fff;color:#222;border-radius:50%;width:16px;height:16px;font-size:10px;line-height:16px;font-weight:900}
+.seat .name{font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seat .chips{font-size:11px;color:#ffe29c;font-variant-numeric:tabular-nums}
+.seat .tag{font-size:10px;color:#c5e1cf;letter-spacing:.6px;text-transform:uppercase}
+.cards{display:flex;justify-content:center;gap:3px;margin-top:4px}
+.pc{width:24px;height:34px;background:#fffaf0;border-radius:4px;color:#17251d;display:grid;place-items:center;font-weight:900;font-size:11px;line-height:1;box-shadow:0 2px 5px #0006;border:1px solid #e2d6bd}
+.pc.red{color:#c0302a}
+.pc.back{background:repeating-linear-gradient(45deg,#e7bd68,#e7bd68 3px,#244d3a 3px,#244d3a 6px);border:2px solid #f0dca9;color:transparent}
+.pc.big{width:40px;height:56px;font-size:16px}
+.actionbar{background:#0b2018;border:1px solid #2a4a39;border-radius:16px;padding:14px;margin-top:14px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.actions button{flex:1 1 auto}
+.dealbox{display:flex;gap:8px;align-items:flex-end;margin-top:12px}
+.dealbox .field{margin:0;flex:0 0 110px}
+.dealbox button{flex:1}
+@media(max-width:430px){.felt{height:500px}.seat{width:78px}}
 </style>
 </head>
 <body>
@@ -93,6 +120,21 @@ h3{font-size:16px;margin-bottom:8px}
         <button class="secondary small" id="copyBtn" type="button">Copy link</button>
       </div>
     </div>
+
+    <div class="card">
+      <div id="resultBox" class="msg win" hidden></div>
+      <div class="felt" id="felt"></div>
+      <div class="actionbar">
+        <div class="row"><div><b id="turnLabel">Table is empty</b><div class="muted" style="font-size:12px" id="turnSub"></div></div><span class="pill gold" id="stakePill" hidden></span></div>
+        <div class="actions" id="actions"></div>
+        <div class="dealbox" id="dealBox" hidden>
+          <div class="field"><label for="bootInput">BOOT (CHIPS)</label><input id="bootInput" type="number" min="1" value="100" inputmode="numeric"></div>
+          <button class="primary" id="dealBtn" type="button">Deal hand</button>
+        </div>
+      </div>
+      <div class="msg" id="adminNote" hidden>You are the dealer. Keep this page open during play, because your phone processes every move.</div>
+    </div>
+
     <div class="card" id="pendingCard" hidden>
       <h3>Join requests</h3>
       <div id="pendingList"></div>
@@ -100,7 +142,6 @@ h3{font-size:16px;margin-bottom:8px}
     <div class="card">
       <div class="row"><h3>At this table</h3><span class="pill" id="countPill"></span></div>
       <div id="playerList"></div>
-      <div class="msg">Cards, betting and the table come next. This step only handles who is allowed in.</div>
     </div>
   </section>
 
@@ -122,10 +163,162 @@ const firebaseConfig = {
   measurementId: "G-HSSNPZS8WP"
 };
 
+//#ENGINE-START
+const START_CHIPS = 10000;
+const RANKS = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+const SUITS = ['♠','♥','♦','♣'];
+const CAT = ['','High card','Pair','Color','Sequence','Pure sequence','Trail'];
+
+function parseCard(c){ return { r: RANKS.indexOf(c.slice(0, -1)) + 2, s: c.slice(-1) }; }
+
+// Score is an array compared left to right. A-2-3 is the highest sequence, then A-K-Q.
+function scoreHand(cards){
+  const p = cards.map(parseCard).sort((a, b) => b.r - a.r);
+  const v = p.map(x => x.r);
+  const flush = p.every(x => x.s === p[0].s);
+  let seq = 0;
+  if (v[0] === v[1] + 1 && v[1] === v[2] + 1) seq = v[0];
+  else if (v[0] === 14 && v[1] === 3 && v[2] === 2) seq = 15;
+  if (v[0] === v[1] && v[1] === v[2]) return [6, v[0]];
+  if (seq && flush) return [5, seq];
+  if (seq) return [4, seq];
+  if (flush) return [3, ...v];
+  if (v[0] === v[1]) return [2, v[0], v[2]];
+  if (v[1] === v[2]) return [2, v[1], v[0]];
+  return [1, ...v];
+}
+function cmpScore(a, b){
+  for (let i = 0; i < Math.max(a.length, b.length); i++){
+    const d = (a[i] || 0) - (b[i] || 0);
+    if (d) return d > 0 ? 1 : -1;
+  }
+  return 0;
+}
+function dealHands(order, rand){
+  const deck = [];
+  SUITS.forEach(s => RANKS.forEach(r => deck.push(r + s)));
+  for (let i = deck.length - 1; i > 0; i--){
+    const j = rand(i + 1);
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  const out = {};
+  order.forEach((u, i) => { out[u] = deck.slice(i * 3, i * 3 + 3); });
+  return out;
+}
+const isLive = G => u => { const s = G.players[u].status; return s === 'blind' || s === 'seen'; };
+function liveOf(G){ return G.order.filter(isLive(G)); }
+function nextLive(G, from){
+  const n = G.order.length, i = G.order.indexOf(from);
+  for (let k = 1; k <= n; k++){
+    const u = G.order[(i + k) % n];
+    if (isLive(G)(u)) return u;
+  }
+  return null;
+}
+function costOf(G, u, type){
+  const base = G.players[u].status === 'seen' ? 2 : 1;
+  return type === 'raise' ? base * G.stake * 2 : base * G.stake;
+}
+function addLog(G, t){ G.log.push(t); if (G.log.length > 12) G.log.shift(); }
+
+function startHandState(prev, roster, boot){
+  const G = prev ? JSON.parse(JSON.stringify(prev)) : { players: {}, handNo: 0, dealerIdx: -1, log: [] };
+  roster.forEach(m => {
+    if (!G.players[m.uid]) G.players[m.uid] = { name: m.name, chips: START_CHIPS, status: 'out' };
+    else G.players[m.uid].name = m.name;
+  });
+  const eligible = roster.filter(m => G.players[m.uid].chips >= boot).map(m => m.uid);
+  if (eligible.length < 2) return null;
+  Object.keys(G.players).forEach(u => { G.players[u].status = 'out'; });
+  G.order = eligible;
+  G.handNo += 1; G.boot = boot; G.stake = boot; G.maxStake = boot * 16; G.pot = 0;
+  eligible.forEach(u => { G.players[u].chips -= boot; G.pot += boot; G.players[u].status = 'blind'; });
+  G.dealerIdx = (G.dealerIdx + 1) % eligible.length;
+  G.turn = eligible[(G.dealerIdx + 1) % eligible.length];
+  G.phase = 'playing';
+  G.result = null;
+  addLog(G, 'Hand ' + G.handNo + ' dealt. Boot ' + boot + ' each.');
+  return G;
+}
+function finishDefault(G, winner, why){
+  const w = G.players[winner], amt = G.pot;
+  w.chips += amt; G.pot = 0; G.turn = null; G.phase = 'between';
+  G.result = { winners: [winner], amount: amt, reveal: {}, text: w.name + ' wins ' + amt + ' chips. ' + (why || 'Everyone else packed.') };
+  addLog(G, G.result.text);
+  return G;
+}
+function showdown(G, requester, hands){
+  const live = liveOf(G);
+  const other = live.find(u => u !== requester);
+  const sr = scoreHand(hands[requester]), so = scoreHand(hands[other]);
+  const winner = cmpScore(sr, so) > 0 ? requester : other; // a tie goes to the player who did not ask
+  const loser = winner === requester ? other : requester;
+  const w = G.players[winner], amt = G.pot;
+  w.chips += amt; G.pot = 0; G.turn = null; G.phase = 'between';
+  G.players[loser].status = 'packed';
+  G.result = {
+    winners: [winner], amount: amt,
+    reveal: { [requester]: hands[requester], [other]: hands[other] },
+    text: w.name + ' wins ' + amt + ' chips with ' + CAT[(winner === requester ? sr : so)[0]] + ' against ' + CAT[(winner === requester ? so : sr)[0]] + '.'
+  };
+  addLog(G, G.result.text);
+  return G;
+}
+// Returns the new state, or null if the move is not allowed.
+function applyAction(G, a, hands){
+  const p = G.players[a.uid];
+  if (G.phase !== 'playing' || !p || a.hand !== G.handNo) return null;
+  if (!isLive(G)(a.uid)) return null;
+  if (a.type === 'see'){
+    if (p.status === 'blind'){ p.status = 'seen'; addLog(G, p.name + ' looked at their cards.'); }
+    return G;
+  }
+  if (G.turn !== a.uid) return null;
+  if (a.type === 'pack'){
+    p.status = 'packed'; addLog(G, p.name + ' packed.');
+  } else if (a.type === 'chaal' || a.type === 'raise' || a.type === 'show'){
+    if (a.type === 'show' && liveOf(G).length !== 2) return null;
+    if (a.type === 'raise' && G.stake * 2 > G.maxStake) return null;
+    const c = costOf(G, a.uid, a.type);
+    if (p.chips < c) return null;
+    p.chips -= c; G.pot += c;
+    if (a.type === 'raise') G.stake *= 2;
+    addLog(G, p.name + (a.type === 'raise' ? ' raised, paying ' : a.type === 'show' ? ' asked for a show, paying ' : ' played chaal, paying ') + c + '.');
+    if (a.type === 'show'){
+      if (!hands || !hands[a.uid]) return null;
+      return showdown(G, a.uid, hands);
+    }
+  } else return null;
+  const live = liveOf(G);
+  if (live.length === 1) return finishDefault(G, live[0]);
+  G.turn = nextLive(G, a.uid);
+  return G;
+}
+// After someone leaves mid-hand: pack them and fix the turn.
+function dropPlayers(G, goneUids){
+  if (G.phase !== 'playing') return G;
+  let changed = false;
+  goneUids.forEach(u => {
+    if (G.players[u] && isLive(G)(u)){ G.players[u].status = 'packed'; addLog(G, G.players[u].name + ' left the table.'); changed = true; }
+  });
+  if (!changed) return G;
+  const live = liveOf(G);
+  if (live.length === 0){ G.phase = 'between'; G.turn = null; G.pot = 0; return G; }
+  if (live.length === 1) return finishDefault(G, live[0]);
+  if (!G.turn || !isLive(G)(G.turn)) G.turn = nextLive(G, G.turn || live[0]) || live[0];
+  return G;
+}
+//#ENGINE-END
+
 const $ = id => document.getElementById(id);
 let db, auth, uid = null, mode = 'join';
 let room = null;           // { code, isAdmin, name }
 let unsubs = [];
+let S = null;              // latest public game state
+let myCards = [];
+let adminG = null, adminReady = false, queue = Promise.resolve(), processed = new Set();
+let curMembers = [], curAdminName = '', curAdminUid = '';
+let lastResultHand = 0, busy = false;
 
 function show(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -134,25 +327,35 @@ function show(id){
 }
 function toast(t){
   const el = $('toast'); el.textContent = t; el.style.display = 'block';
-  clearTimeout(toast.t); toast.t = setTimeout(() => el.style.display = 'none', 2200);
+  clearTimeout(toast.t); toast.t = setTimeout(() => el.style.display = 'none', 3200);
 }
 function err(msg){ const e = $('entryErr'); e.textContent = msg; e.hidden = !msg; }
-function stopListening(){ unsubs.forEach(u => u()); unsubs = []; }
+function stopListening(){
+  unsubs.forEach(u => u()); unsubs = [];
+  S = null; myCards = []; adminG = null; adminReady = false; processed = new Set(); lastResultHand = 0;
+}
+function randInt(n){
+  const r = new Uint32Array(1);
+  const lim = Math.floor(4294967296 / n) * n;
+  do { crypto.getRandomValues(r); } while (r[0] >= lim);
+  return r[0] % n;
+}
 function makeCode(){
   const abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  const r = new Uint32Array(6); crypto.getRandomValues(r);
-  return Array.from(r, n => abc[n % abc.length]).join('');
+  return Array.from({ length: 6 }, () => abc[randInt(abc.length)]).join('');
 }
 function fmtErr(e){
-  if (e && e.code === 'permission-denied') return 'Not allowed. Check that the Firestore rules for this step are published.';
+  if (e && e.code === 'permission-denied') return 'Not allowed. Check that the latest Firestore rules are published.';
   return (e && e.message) || 'Something went wrong. Try again.';
 }
-function rowEl(name, tag, buttons){
+const roomRef = () => db.collection('rooms').doc(room.code);
+function rowEl(name, tag, buttons, right){
   const row = document.createElement('div'); row.className = 'list-row';
   const left = document.createElement('div');
   const n = document.createElement('b'); n.textContent = name;
   left.appendChild(n);
   if (tag){ const p = document.createElement('span'); p.className = 'pill gold'; p.style.marginLeft = '8px'; p.textContent = tag; left.appendChild(p); }
+  if (right){ const c = document.createElement('div'); c.className = 'muted'; c.style.fontSize = '12px'; c.textContent = right; left.appendChild(c); }
   row.appendChild(left);
   if (buttons && buttons.length){
     const b = document.createElement('div'); b.className = 'btns';
@@ -160,11 +363,12 @@ function rowEl(name, tag, buttons){
   }
   return row;
 }
-function btn(label, cls, fn){
+function btn(label, cls, fn, small){
   const b = document.createElement('button');
-  b.type = 'button'; b.className = cls + ' small'; b.textContent = label; b.onclick = fn;
+  b.type = 'button'; b.className = cls + (small === false ? '' : ' small'); b.textContent = label; b.onclick = fn;
   return b;
 }
+const fmt = n => Number(n).toLocaleString('en-IN');
 
 function setMode(m){
   mode = m;
@@ -224,6 +428,194 @@ function watchMyRequest(code){
   }, e => { err(fmtErr(e)); show('entry'); }));
 }
 
+/* ---------- admin: the dealer's phone applies every move ---------- */
+function clone(o){ return JSON.parse(JSON.stringify(o)); }
+function gameDoc(){ return roomRef().collection('game').doc('state'); }
+async function persist(){ await gameDoc().set(adminG); }
+
+function enqueue(fn){
+  queue = queue.then(fn).catch(e => { console.error(e); toast(fmtErr(e)); });
+  return queue;
+}
+function handleAction(d){
+  if (processed.has(d.id)) return;
+  processed.add(d.id);
+  enqueue(async () => {
+    const a = d.data();
+    if (adminG && adminG.phase === 'playing'){
+      let hands = null;
+      if (a.type === 'show'){
+        const live = liveOf(adminG);
+        hands = {};
+        for (const u of live){
+          const s = await roomRef().collection('hands').doc(u).get();
+          if (s.exists) hands[u] = s.data().cards;
+        }
+      }
+      const next = applyAction(clone(adminG), a, hands);
+      if (next){ adminG = next; await persist(); }
+    }
+    await d.ref.delete();
+  });
+}
+function reconcileMembers(){
+  if (!adminG || adminG.phase !== 'playing') return;
+  const ok = new Set(curMembers.filter(m => m.status === 'approved').map(m => m.id));
+  ok.add(curAdminUid);
+  const gone = adminG.order.filter(u => isLive(adminG)(u) && !ok.has(u));
+  if (!gone.length) return;
+  enqueue(async () => {
+    const next = dropPlayers(clone(adminG), gone);
+    if (next !== null){ adminG = next; await persist(); }
+  });
+}
+async function dealNewHand(){
+  const boot = Math.max(1, Math.floor(Number($('bootInput').value) || 100));
+  const roster = [{ uid: curAdminUid, name: curAdminName }]
+    .concat(curMembers.filter(m => m.status === 'approved').map(m => ({ uid: m.id, name: m.name })));
+  const next = startHandState(adminG, roster, boot);
+  if (!next){ toast('Need at least 2 players who each have ' + fmt(boot) + ' chips.'); return; }
+  const hands = dealHands(next.order, randInt);
+  $('dealBtn').disabled = true;
+  await enqueue(async () => {
+    const batch = db.batch();
+    next.order.forEach(u => batch.set(roomRef().collection('hands').doc(u), { cards: hands[u], hand: next.handNo }));
+    batch.set(gameDoc(), next);
+    await batch.commit();
+    adminG = next;
+  });
+  $('dealBtn').disabled = false;
+}
+function topUp(u){
+  if (!adminG || adminG.phase === 'playing' || !adminG.players[u]) return;
+  enqueue(async () => {
+    adminG.players[u].chips += 5000;
+    addLog(adminG, adminG.players[u].name + ' got 5,000 extra play chips.');
+    await persist();
+  });
+}
+
+/* ---------- everyone: sending a move ---------- */
+function sendAction(type){
+  if (!S || S.phase !== 'playing' || busy) return;
+  busy = true; renderGame();
+  roomRef().collection('actions').add({
+    uid, type, hand: S.handNo, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).catch(e => toast(fmtErr(e)));
+  setTimeout(() => { busy = false; renderGame(); }, 1200);
+}
+
+/* ---------- rendering ---------- */
+function cardEl(c, cls){
+  const d = document.createElement('div'); d.className = 'pc' + (cls ? ' ' + cls : '');
+  if (c === null){ d.classList.add('back'); d.textContent = '?'; }
+  else { d.textContent = c; if (c.slice(-1) === '♥' || c.slice(-1) === '♦') d.classList.add('red'); }
+  return d;
+}
+function renderGame(){
+  const felt = $('felt'); felt.textContent = '';
+  const actions = $('actions'); actions.textContent = '';
+  const isAdmin = room && room.isAdmin;
+  $('adminNote').hidden = !isAdmin;
+  const idle = !S || !S.order || !S.order.length;
+  const potEl = document.createElement('div'); potEl.className = 'pot';
+  const sm = document.createElement('small'); sm.textContent = 'CURRENT POT';
+  const am = document.createElement('div'); am.className = 'amount'; am.textContent = fmt(S && S.pot ? S.pot : 0);
+  potEl.appendChild(sm); potEl.appendChild(am); felt.appendChild(potEl);
+
+  if (!idle){
+    const order = S.order;
+    const base = Math.max(0, order.indexOf(uid));
+    const rot = order.slice(base).concat(order.slice(0, base));
+    const n = rot.length;
+    rot.forEach((u, k) => {
+      const p = S.players[u];
+      const me = u === uid && order.indexOf(uid) >= 0;
+      const ang = (90 + k * 360 / n) * Math.PI / 180;
+      const x = k === 0 && me ? 50 : 50 + 41 * Math.cos(ang);
+      const y = k === 0 && me ? 82 : 50 + 38 * Math.sin(ang);
+      const seat = document.createElement('div');
+      seat.className = 'seat' + (S.turn === u ? ' turn' : '') + (p.status === 'packed' ? ' packed' : '');
+      seat.style.left = x + '%'; seat.style.top = y + '%';
+      const av = document.createElement('div'); av.className = 'avatar'; av.textContent = (p.name || '?').slice(0, 1).toUpperCase();
+      if (order[S.dealerIdx] === u){ const dl = document.createElement('span'); dl.className = 'dealer'; dl.textContent = 'D'; av.appendChild(dl); }
+      const nm = document.createElement('div'); nm.className = 'name'; nm.textContent = me ? p.name + ' (you)' : p.name;
+      const ch = document.createElement('div'); ch.className = 'chips'; ch.textContent = fmt(p.chips);
+      const tg = document.createElement('div'); tg.className = 'tag';
+      tg.textContent = p.status === 'blind' ? 'Blind' : p.status === 'seen' ? 'Seen' : p.status === 'packed' ? 'Packed' : '';
+      const cd = document.createElement('div'); cd.className = 'cards';
+      const reveal = S.result && S.result.reveal && S.result.reveal[u];
+      const big = me ? 'big' : '';
+      if (reveal) reveal.forEach(c => cd.appendChild(cardEl(c, big)));
+      else if (me && p.status === 'seen' && myCards.length) myCards.forEach(c => cd.appendChild(cardEl(c, big)));
+      else if (p.status !== 'out') for (let i = 0; i < 3; i++) cd.appendChild(cardEl(null, big));
+      seat.appendChild(av); seat.appendChild(nm); seat.appendChild(ch); seat.appendChild(tg); seat.appendChild(cd);
+      felt.appendChild(seat);
+    });
+  }
+
+  const rb = $('resultBox');
+  if (S && S.result){ rb.hidden = false; rb.textContent = S.result.text; } else rb.hidden = true;
+  if (S && S.result && S.handNo !== lastResultHand){
+    lastResultHand = S.handNo;
+    toast(S.result.text);
+  }
+
+  const mine = S && S.players && S.players[uid];
+  const playing = S && S.phase === 'playing';
+  const myTurn = playing && S.turn === uid && !busy;
+  $('stakePill').hidden = !playing;
+  if (playing){
+    $('stakePill').textContent = 'Stake ' + fmt(S.stake);
+    if (S.turn === uid){ $('turnLabel').textContent = 'Your turn'; $('turnSub').textContent = 'Choose your move.'; }
+    else { const t = S.players[S.turn]; $('turnLabel').textContent = t ? t.name + "'s turn" : 'Waiting'; $('turnSub').textContent = 'Waiting for their move.'; }
+  } else if (S && S.phase === 'between'){
+    $('turnLabel').textContent = 'Hand finished'; $('turnSub').textContent = isAdmin ? 'Deal the next hand when everyone is ready.' : 'Waiting for the dealer to deal again.';
+  } else {
+    $('turnLabel').textContent = 'No hand in play'; $('turnSub').textContent = isAdmin ? 'Add players, then deal.' : 'Waiting for the dealer to deal.';
+  }
+
+  if (playing && mine && (mine.status === 'blind' || mine.status === 'seen')){
+    const b = (label, cls, fn, dis) => { const x = btn(label, cls, fn, false); x.disabled = !!dis; actions.appendChild(x); };
+    if (mine.status === 'blind') b('See cards', 'secondary', () => sendAction('see'), busy);
+    const cc = costOf(S, uid, 'chaal'), rc = costOf(S, uid, 'raise');
+    const liveCount = S.order.filter(u => S.players[u].status === 'blind' || S.players[u].status === 'seen').length;
+    b('Chaal · ' + fmt(cc), 'primary', () => sendAction('chaal'), !myTurn || mine.chips < cc);
+    b('Raise · ' + fmt(rc), 'secondary', () => sendAction('raise'), !myTurn || mine.chips < rc || S.stake * 2 > S.maxStake);
+    if (liveCount === 2) b('Show · ' + fmt(cc), 'secondary', () => sendAction('show'), !myTurn || mine.chips < cc);
+    b('Pack', 'danger', () => sendAction('pack'), !myTurn);
+  }
+  $('dealBox').hidden = !(isAdmin && !playing);
+  if (isAdmin && S && S.boot) $('bootInput').value = $('bootInput').value || S.boot;
+  renderLists();
+}
+
+function renderLists(){
+  if (!room) return;
+  const code = room.code, isAdmin = room.isAdmin;
+  const pend = curMembers.filter(m => m.status === 'pending');
+  const appr = curMembers.filter(m => m.status === 'approved');
+  const chipsOf = u => (S && S.players && S.players[u]) ? fmt(S.players[u].chips) + ' chips' : '';
+  const canTop = isAdmin && !(S && S.phase === 'playing');
+  const pl = $('playerList'); pl.textContent = '';
+  pl.appendChild(rowEl(curAdminName || 'Admin', 'Dealer', canTop && S && S.players && S.players[curAdminUid] ? [btn('+5,000', 'secondary', () => topUp(curAdminUid))] : [], chipsOf(curAdminUid)));
+  appr.forEach(m => {
+    const btns = [];
+    if (canTop && S && S.players && S.players[m.id]) btns.push(btn('+5,000', 'secondary', () => topUp(m.id)));
+    if (isAdmin) btns.push(btn('Remove', 'danger', () => db.collection('rooms').doc(code).collection('members').doc(m.id).delete().catch(e => toast(fmtErr(e)))));
+    pl.appendChild(rowEl(m.name, m.id === uid ? 'You' : '', btns, chipsOf(m.id)));
+  });
+  $('countPill').textContent = (appr.length + 1) + ' players';
+  if (isAdmin){
+    const pe = $('pendingList'); pe.textContent = '';
+    if (!pend.length){ const p = document.createElement('p'); p.className = 'muted'; p.style.margin = 0; p.textContent = 'No requests right now.'; pe.appendChild(p); }
+    pend.forEach(m => {
+      const setStatus = s => db.collection('rooms').doc(code).collection('members').doc(m.id).update({ status: s }).catch(e => toast(fmtErr(e)));
+      pe.appendChild(rowEl(m.name, '', [btn('Approve', 'primary', () => setStatus('approved')), btn('Reject', 'danger', () => setStatus('rejected'))]));
+    });
+  }
+}
+
 function enterRoom(code, isAdmin, name){
   stopListening();
   room = { code, isAdmin, name };
@@ -231,43 +623,41 @@ function enterRoom(code, isAdmin, name){
   $('roomCodeBig').textContent = code;
   $('roomRole').textContent = isAdmin ? 'You are the admin' : 'You are in';
   $('pendingCard').hidden = !isAdmin;
+  curMembers = []; curAdminName = isAdmin ? name : ''; curAdminUid = isAdmin ? uid : '';
+  busy = false;
   show('room');
+  renderGame();
 
-  let adminName = '';
-  let members = [];
-  const render = () => {
-    const pend = members.filter(m => m.status === 'pending');
-    const appr = members.filter(m => m.status === 'approved');
-    const pl = $('playerList'); pl.textContent = '';
-    pl.appendChild(rowEl(adminName || 'Admin', 'Admin'));
-    appr.forEach(m => {
-      const btns = [];
-      if (isAdmin) btns.push(btn('Remove', 'danger', () => db.collection('rooms').doc(code).collection('members').doc(m.id).delete().catch(e => toast(fmtErr(e)))));
-      pl.appendChild(rowEl(m.name, m.id === uid ? 'You' : '', btns));
-    });
-    $('countPill').textContent = (appr.length + 1) + ' players';
-    if (isAdmin){
-      const pe = $('pendingList'); pe.textContent = '';
-      if (!pend.length){ const p = document.createElement('p'); p.className = 'muted'; p.style.margin = 0; p.textContent = 'No requests right now.'; pe.appendChild(p); }
-      pend.forEach(m => {
-        const setStatus = s => db.collection('rooms').doc(code).collection('members').doc(m.id).update({ status: s }).catch(e => toast(fmtErr(e)));
-        pe.appendChild(rowEl(m.name, '', [btn('Approve', 'primary', () => setStatus('approved')), btn('Reject', 'danger', () => setStatus('rejected'))]));
-      });
-    }
-  };
-
-  unsubs.push(db.collection('rooms').doc(code).onSnapshot(s => {
+  unsubs.push(roomRef().onSnapshot(s => {
     if (!s.exists){ leave(true); return; }
-    adminName = s.data().adminName; render();
+    curAdminName = s.data().adminName; curAdminUid = s.data().adminUid; renderLists();
   }, e => toast(fmtErr(e))));
 
-  unsubs.push(db.collection('rooms').doc(code).collection('members').onSnapshot(qs => {
-    members = qs.docs.map(d => ({ id: d.id, ...d.data() }));
-    const me = members.find(m => m.id === uid);
+  unsubs.push(roomRef().collection('members').onSnapshot(qs => {
+    curMembers = qs.docs.map(d => ({ id: d.id, ...d.data() }));
+    const me = curMembers.find(m => m.id === uid);
     if (!isAdmin && me && me.status !== 'approved'){ watchMyRequest(code); return; }
     if (!isAdmin && !me){ leave(true); return; }
-    render();
+    renderLists();
+    if (isAdmin) reconcileMembers();
   }, e => toast(fmtErr(e))));
+
+  unsubs.push(gameDoc().onSnapshot(s => {
+    S = s.exists ? s.data() : null;
+    if (isAdmin && !adminReady){ adminReady = true; adminG = S ? clone(S) : null; }
+    renderGame();
+  }, e => toast(fmtErr(e))));
+
+  unsubs.push(roomRef().collection('hands').doc(uid).onSnapshot(s => {
+    myCards = s.exists ? s.data().cards : [];
+    renderGame();
+  }, () => {}));
+
+  if (isAdmin){
+    unsubs.push(roomRef().collection('actions').onSnapshot(qs => {
+      qs.docChanges().forEach(ch => { if (ch.type === 'added') handleAction(ch.doc); });
+    }, e => toast(fmtErr(e))));
+  }
 }
 
 async function leave(silent){
@@ -295,6 +685,7 @@ function boot(){
   };
   $('leaveBtn').onclick = () => leave(false);
   $('waitCancel').onclick = () => leave(false);
+  $('dealBtn').onclick = () => dealNewHand();
   $('copyBtn').onclick = async () => {
     const link = location.origin + location.pathname + '?room=' + room.code;
     try { await navigator.clipboard.writeText(link); toast('Link copied'); }
