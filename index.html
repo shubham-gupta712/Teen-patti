@@ -130,6 +130,36 @@ button:disabled{opacity:.5;cursor:not-allowed}
   .card{padding:12px}
 }
 
+
+
+/* Refined emerald-and-gold visual system */
+:root{--bg:#06130f;--panel:#10271e;--gold:#edc66f;--cream:#fff7e5;--muted:#a7bcae;--green:#36a879}
+body{background:radial-gradient(ellipse at 50% -15%,#245640 0%,#0b2118 42%,#050f0c 100%);background-attachment:fixed;letter-spacing:.05px}
+.wrap{width:min(100% - 28px,980px);padding:22px 0 30px}
+.top{padding:4px 2px 18px;border-bottom:1px solid #d7b96822;margin-bottom:18px}
+.logo{box-shadow:0 5px 18px #e7bd682c;border:1px solid #ffe3a0}
+.brand{letter-spacing:.4px}
+.status{background:#102e22;white-space:nowrap}
+.card{background:linear-gradient(145deg,rgba(21,49,38,.98),rgba(8,27,20,.98));border:1px solid #42654e88;box-shadow:0 18px 44px #0002}
+.table-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.table-tile{position:relative;overflow:hidden;background:linear-gradient(145deg,#fff9eb 0%,#f0dfb7 100%);border:1px solid #d6b45d;border-radius:20px;padding:19px;min-height:168px;box-shadow:0 9px 22px #0002;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.table-tile:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(#f3d98d,#b88b36)}
+.table-tile strong{font-size:25px;letter-spacing:-.5px}
+.table-tile .occupancy{color:#236545}
+.table-tile:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 15px 28px #0003;border-color:#ffe39b}
+button{transition:filter .15s ease,transform .15s ease,box-shadow .15s ease}
+button:hover:not(:disabled){filter:brightness(1.06)}
+button:active:not(:disabled){transform:translateY(1px)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.primary{background:linear-gradient(135deg,#f5d98e,#d6a84e);box-shadow:0 5px 15px #d7ad4b22}
+.field input{background:rgba(4,19,13,.78);border-color:#3c644e}
+.profile-strip{box-shadow:0 7px 20px #0002}
+.felt{box-shadow:inset 0 0 0 3px #987344,inset 0 0 50px #00190e,0 14px 32px #0003}
+.app-nav{background:rgba(5,20,14,.94);border-color:#d9b85b55}
+@media(max-width:760px){.table-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wrap{width:min(100% - 22px,680px);padding-top:14px}}
+@media(max-width:430px){.table-grid{gap:9px}.table-tile{padding:14px 12px;min-height:150px;border-radius:16px}.table-tile strong{font-size:22px}.card{padding:17px}.top{align-items:flex-start}.brand{font-size:13px}.logo{width:38px;height:38px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
 </style>
 </head>
 <body>
@@ -173,7 +203,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
       </div>
       <div id="playerActivity" class="activity-panel"><span class="muted">Your table and hand activity will appear here.</span></div>
     </div>
-    <div class="card"><div class="eyebrow">Choose your table</div><h2>Six tables. Your stakes.</h2><p class="muted" style="font-size:13px">Choose a boot level and buy-in. You join instantly when the table is open.</p><div class="table-grid" id="tableGrid"></div><div class="msg err" id="lobbyErr" hidden></div></div>
+    <div class="card"><div class="eyebrow">Choose your table</div><h2>Six tables. Your stakes.</h2><p class="muted" style="font-size:13px">Choose a boot level and buy-in. The club admin approves your seat request.</p><div class="table-grid" id="tableGrid"></div><div class="msg err" id="lobbyErr" hidden></div></div>
     <div class="row"><span class="muted" style="font-size:12px">Signed in as player</span><button class="ghost small" id="lobbySignOut" type="button">Sign out</button></div>
   </section>
 
@@ -433,9 +463,11 @@ let clockKey = '', clockEndsAt = 0;
 const TURN_SECONDS = 20;
 
 function show(id){
+  const target = $(id);
+  if(!target){ console.warn('Screen not found:', id); return; }
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  $(id).classList.add('active');
-  window.scrollTo(0, 0);
+  target.classList.add('active');
+  window.scrollTo({top:0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
 }
 function toast(t){
   const el = $('toast'); el.textContent = t; el.style.display = 'block';
@@ -730,6 +762,16 @@ function renderLists(){
   const code = room.code, isAdmin = room.isAdmin;
   const pend = curMembers.filter(m => m.status === 'pending');
   const appr = curMembers.filter(m => m.status === 'approved');
+  const pendingCard=$('pendingCard'), pendingList=$('pendingList');
+  if(pendingCard && pendingList){
+    pendingCard.hidden=!(isAdmin && pend.length);
+    pendingList.textContent='';
+    if(isAdmin) pend.forEach(m=>{
+      const approve=btn('Approve','primary',()=>db.collection('rooms').doc(code).collection('members').doc(m.id).update({status:'approved'}).then(()=>toast(m.name+' approved')).catch(e=>toast(fmtErr(e))));
+      const reject=btn('Reject','danger',()=>db.collection('rooms').doc(code).collection('members').doc(m.id).update({status:'rejected'}).then(()=>toast(m.name+' rejected')).catch(e=>toast(fmtErr(e))));
+      pendingList.appendChild(rowEl(m.name,'Pending',[approve,reject],m.buyIn?'Buy-in '+fmt(m.buyIn):'Buy-in not recorded'));
+    });
+  }
   const chipsOf = u => (S && S.players && S.players[u]) ? fmt(S.players[u].chips) + ' chips' : '';
   const canTop = isAdmin && !(S && S.phase === 'playing');
   const pl = $('playerList'); pl.textContent = '';
@@ -856,14 +898,28 @@ async function renderLobbyTables(){
       if(renderVersion!==lobbyRenderVersion)return;
       if(!snap.exists){occupancy.textContent='Table not initialized';tile.disabled=true;action.textContent='Table unavailable';return;}
       const data=snap.data();
-      occupancy.textContent=data.status==='closed'?'Temporarily closed':'Open · Join instantly';
+      occupancy.textContent=data.status==='closed'?'Temporarily closed':'Open · Request a seat';
+      if(data.status==='closed'){tile.disabled=true;action.textContent='Table closed';return;}
       tile.onclick=async()=>{
         const buy=prompt('Choose your buy-in between '+t.min+' and '+t.max+' play chips:',String(t.min));
         if(buy===null)return;const n=Number(buy);
         if(!Number.isInteger(n)||n<t.min||n>t.max){$('lobbyErr').textContent='Buy-in must be between '+fmt(t.min)+' and '+fmt(t.max)+'.';$('lobbyErr').hidden=false;return;}
         // Keep existing table game engine; buy-in is stored as a request field for the table admin.
-        try{$('lobbyErr').hidden=true;$('displayName').value=(currentUser.email||'Player').split('@')[0].slice(0,20);$('roomCode').value=tableDocId(t.boot);await db.collection('rooms').doc(tableDocId(t.boot)).collection('members').doc(uid).set({uid,name:$('displayName').value,status:'approved',buyIn:n,joinedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});enterRoom(tableDocId(t.boot),false,$('displayName').value);}
-        catch(e){$('lobbyErr').textContent=fmtErr(e);$('lobbyErr').hidden=false;}
+        try{
+          $('lobbyErr').hidden=true;
+          const name=(currentUser.email||'Player').split('@')[0].slice(0,20);
+          const memberRef=db.collection('rooms').doc(tableDocId(t.boot)).collection('members').doc(uid);
+          const existing=await memberRef.get();
+          if(existing.exists && ['pending','approved'].includes(existing.data().status)){
+            if(existing.data().status==='approved') enterRoom(tableDocId(t.boot),false,existing.data().name||name);
+            else watchMyRequest(tableDocId(t.boot));
+            return;
+          }
+          if(existing.exists){throw new Error('A previous request exists for this table. Ask the admin to reset or approve it before requesting again.');}
+          await memberRef.set({uid,name,status:'pending',buyIn:n,requestedAt:firebase.firestore.FieldValue.serverTimestamp()});
+          addPlayerActivity('Requested Boot '+t.boot+' table · buy-in '+fmt(n));
+          watchMyRequest(tableDocId(t.boot));
+        }catch(e){$('lobbyErr').textContent=fmtErr(e);$('lobbyErr').hidden=false;}
       };
     }catch(e){if(renderVersion!==lobbyRenderVersion)return;occupancy.textContent='Could not load';tile.disabled=true;action.textContent='Retry after refresh';}
   }));
@@ -950,13 +1006,6 @@ boot();
 
 
 
-
-
-
-async 
-
-
-
 const playerSessionStats = {hands:0,wins:0,activity:[]};
 function addPlayerActivity(message){
   playerSessionStats.activity.unshift(new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})+' · '+message);
@@ -985,7 +1034,7 @@ function navSetStatus(text){
   const el=$('navStatus'); if(el) el.textContent=text;
 }
 function navigateLobby(){
-  if(!currentUser){ if(typeof show==='function') show('auth'); return; }
+  if(!currentUser){ if(typeof show==='function') show('authScreen'); return; }
   // Leaving a table should detach listeners and clear room state, then render the player lobby.
   if(typeof stopListening==='function') stopListening();
   room=null;
@@ -996,7 +1045,7 @@ function navigateLobby(){
     navSetStatus('Admin dashboard: manage tables here.');
     return;
   }
-  if(typeof show==='function') show('playerLobby');
+  if(typeof show==='function') show('lobby');
   if(typeof renderLobbyTables==='function') renderLobbyTables();
   navSetStatus('Lobby: choose a table to join.');
 }
@@ -1024,15 +1073,15 @@ function navigateSignOut(){
   if(typeof auth!=='undefined' && auth && typeof auth.signOut==='function'){
     if(typeof stopListening==='function') stopListening();
     room=null;
-    auth.signOut().then(()=>{ if(typeof show==='function') show('auth'); }).catch(e=>{ if(typeof toast==='function') toast(fmtErr(e)); });
+    auth.signOut().then(()=>{ if(typeof show==='function') show('authScreen'); }).catch(e=>{ if(typeof toast==='function') toast(fmtErr(e)); });
   }
 }
 function goToPlayerLobbyAfterLeave(){
   if(typeof stopListening==='function') stopListening();
   room=null;
-  if(!currentUser){show('auth');return;}
+  if(!currentUser){show('authScreen');return;}
   if(uid===GLOBAL_ADMIN_UID){show('adminDashboard');if(typeof renderAdminTables==='function')renderAdminTables();}
-  else {show('playerLobby');if(typeof renderLobbyTables==='function')renderLobbyTables();}
+  else {show('lobby');if(typeof renderLobbyTables==='function')renderLobbyTables();}
   navSetStatus(uid===GLOBAL_ADMIN_UID?'Admin dashboard.':'Lobby: choose a table.');
 }
 
