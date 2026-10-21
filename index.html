@@ -94,6 +94,23 @@ h3{font-size:16px;margin-bottom:8px}
 .app-nav .nav-status{width:100%;font-size:11px;color:#b6c7b9;padding:0 4px}
 @media(max-width:480px){.app-nav button{min-width:75px;padding:10px 7px;font-size:12px}}
 
+
+.stats-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:0 0 14px}
+.stat-card{background:linear-gradient(145deg,#183d2e,#0c241b);border:1px solid #2c5942;border-radius:14px;padding:13px;min-width:0}
+.stat-card span{display:block;color:#b9c9b9;font-size:9px;letter-spacing:1px;font-weight:800}
+.stat-card strong{display:block;color:#f4d78c;font-size:22px;margin:6px 0 2px;overflow-wrap:anywhere}
+.stat-card small{display:block;color:#a4b9aa;font-size:10px}
+.quick-card{margin-top:0}
+.quick-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
+.quick-actions button{font-size:12px;padding:11px 8px}
+.activity-panel{background:#0a2018;border:1px solid #294b39;border-radius:11px;padding:12px;font-size:12px;color:#c6d7c9;min-height:42px}
+.dealer-wait{position:absolute;left:50%;top:26%;transform:translate(-50%,-50%);width:100%;text-align:center;color:#f5dfa0;pointer-events:none}
+.dealer-avatar{width:56px;height:56px;border-radius:50%;margin:0 auto 7px;display:grid;place-items:center;background:linear-gradient(145deg,#f1d78f,#b88b3d);border:3px solid #f8e6b3;box-shadow:0 0 22px #e4bd6266;color:#173628;font-size:26px}
+.dealer-wait strong{display:block;font-size:13px}
+.dealer-wait small{display:block;color:#c1d7c8;font-size:10px;margin-top:4px}
+.waiting-badge{display:inline-block;margin-top:7px;padding:5px 9px;border-radius:20px;background:#274c39;border:1px solid #598066;color:#d6efdc;font-size:10px}
+@media(max-width:430px){.stats-grid{gap:7px}.stat-card{padding:11px}.stat-card strong{font-size:20px}}
+
 </style>
 </head>
 <body>
@@ -122,7 +139,22 @@ h3{font-size:16px;margin-bottom:8px}
   <!-- PLAYER LOBBY -->
   <section class="screen" id="lobby">
     <div class="profile-strip"><div><div class="eyebrow">Player profile</div><b id="lobbyName">Player</b><div class="muted" id="lobbyEmail" style="font-size:12px"></div></div><div style="text-align:right"><div class="muted" style="font-size:11px">CHIP BALANCE</div><b id="lobbyBalance" style="font-size:22px;color:#145b3e">10,000</b></div></div>
-    <div class="card"><div class="eyebrow">Choose your table</div><h2>Six tables. Your stakes.</h2><p class="muted" style="font-size:13px">Select a boot level. Your seat request goes to the table admin for approval.</p><div class="table-grid" id="tableGrid"></div><div class="msg err" id="lobbyErr" hidden></div></div>
+    <div class="stats-grid" id="playerStats">
+      <div class="stat-card"><span>CHIP BALANCE</span><strong id="statBalance">10,000</strong><small>Play chips</small></div>
+      <div class="stat-card"><span>HANDS PLAYED</span><strong id="statHands">0</strong><small>Across this session</small></div>
+      <div class="stat-card"><span>WINS</span><strong id="statWins">0</strong><small>Completed hands</small></div>
+      <div class="stat-card"><span>TABLE STATUS</span><strong id="statTable">Lobby</strong><small id="statTableSub">Choose a table to start</small></div>
+    </div>
+    <div class="card quick-card">
+      <div class="row"><div><div class="eyebrow">Your player hub</div><h3>Quick actions</h3></div><span class="pill">Play chips only</span></div>
+      <div class="quick-actions">
+        <button type="button" class="secondary" onclick="showPlayerStats()">📊 My stats</button>
+        <button type="button" class="secondary" onclick="showRecentActivity()">🕘 Recent activity</button>
+        <button type="button" class="secondary" onclick="refreshPlayerLobby()">↻ Refresh tables</button>
+      </div>
+      <div id="playerActivity" class="activity-panel"><span class="muted">Your table and hand activity will appear here.</span></div>
+    </div>
+    <div class="card"><div class="eyebrow">Choose your table</div><h2>Six tables. Your stakes.</h2><p class="muted" style="font-size:13px">Choose a boot level and buy-in. You join instantly when the table is open.</p><div class="table-grid" id="tableGrid"></div><div class="msg err" id="lobbyErr" hidden></div></div>
     <div class="row"><span class="muted" style="font-size:12px">Signed in as player</span><button class="ghost small" id="lobbySignOut" type="button">Sign out</button></div>
   </section>
 
@@ -599,6 +631,13 @@ function renderGame(){
   const am = document.createElement('div'); am.className = 'amount'; am.textContent = fmt(S && S.pot ? S.pot : 0);
   potEl.appendChild(sm); potEl.appendChild(am); felt.appendChild(potEl);
 
+  const activeSeats = curMembers.filter(m => m.status === 'approved').length + (room && room.isAdmin ? 1 : 0);
+  if (idle) {
+    const dealer = document.createElement('div'); dealer.className='dealer-wait';
+    dealer.innerHTML='<div class="dealer-avatar">♠</div><strong>Dealer is ready</strong><small>Waiting for at least 2 players to start a hand</small><span class="waiting-badge">'+activeSeats+' player'+(activeSeats===1?'':'s')+' at table</span>';
+    felt.appendChild(dealer);
+  }
+
   if (!idle){
     const order = S.order;
     const base = Math.max(0, order.indexOf(uid));
@@ -648,7 +687,8 @@ function renderGame(){
   } else if (S && S.phase === 'between'){
     $('turnLabel').textContent = 'Hand finished'; $('turnSub').textContent = isAdmin ? 'Deal the next hand when everyone is ready.' : 'Waiting for the dealer to deal again.';
   } else {
-    $('turnLabel').textContent = 'No hand in play'; $('turnSub').textContent = isAdmin ? 'Add players, then deal.' : 'Waiting for the dealer to deal.';
+    $('turnLabel').textContent = activeSeats < 2 ? 'Waiting for players' : 'Dealer ready';
+    $('turnSub').textContent = activeSeats < 2 ? 'A minimum of 2 players must be seated before cards are dealt.' : (isAdmin ? 'At least 2 players are seated. Deal when ready.' : 'The dealer can now deal the next hand.');
   }
 
   if (playing && mine && (mine.status === 'blind' || mine.status === 'seen')){
@@ -661,7 +701,7 @@ function renderGame(){
     if (liveCount === 2) b('Show · ' + fmt(cc), 'secondary', () => sendAction('show'), !myTurn || mine.chips < cc);
     b('Pack', 'danger', () => sendAction('pack'), !myTurn);
   }
-  $('dealBox').hidden = !(isAdmin && !playing);
+  $('dealBox').hidden = !(isAdmin && !playing && activeSeats >= 2);
   if (isAdmin && S && S.boot) $('bootInput').value = String(S.boot);
   renderLists();
 }
@@ -806,7 +846,7 @@ async function renderLobbyTables(){
       if(renderVersion!==lobbyRenderVersion)return;
       if(!snap.exists){occupancy.textContent='Table not initialized';tile.disabled=true;action.textContent='Table unavailable';return;}
       const data=snap.data();
-      occupancy.textContent=data.status==='closed'?'Temporarily closed':'Open for seat requests';
+      occupancy.textContent=data.status==='closed'?'Temporarily closed':'Open · Join instantly';
       tile.onclick=async()=>{
         const buy=prompt('Choose your buy-in between '+t.min+' and '+t.max+' play chips:',String(t.min));
         if(buy===null)return;const n=Number(buy);
@@ -927,6 +967,30 @@ function navigateAdmin(){
 }
 async function navigateSignOut(){
   navSetStatus('Sign out is not part of player navigation.');
+}
+
+
+
+const playerSessionStats = {hands:0,wins:0,activity:[]};
+function addPlayerActivity(message){
+  playerSessionStats.activity.unshift(new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})+' · '+message);
+  playerSessionStats.activity=playerSessionStats.activity.slice(0,8);
+  const box=$('playerActivity');
+  if(box) box.innerHTML=playerSessionStats.activity.map(x=>'<div style="padding:5px 0;border-bottom:1px solid #294738">'+escapeText(x)+'</div>').join('');
+}
+function escapeText(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function refreshPlayerLobby(){
+  renderLobbyTables();
+  toast('Table list refreshed');
+  addPlayerActivity('Refreshed available tables');
+}
+function showPlayerStats(){
+  $('playerActivity').innerHTML='<b>Session stats</b><div style="margin-top:8px">Hands observed: '+playerSessionStats.hands+'</div><div>Wins observed: '+playerSessionStats.wins+'</div><div>Current chip display: '+($('lobbyBalance')?.textContent||'10,000')+'</div><small class="muted">Stats are session-only in this version.</small>';
+}
+function showRecentActivity(){
+  const box=$('playerActivity');
+  if(!playerSessionStats.activity.length){box.textContent='No activity recorded yet. Join a table to get started.';return;}
+  box.innerHTML=playerSessionStats.activity.map(x=>'<div style="padding:5px 0;border-bottom:1px solid #294738">'+escapeText(x)+'</div>').join('');
 }
 
 </script>
