@@ -203,13 +203,13 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
       </div>
       <div id="playerActivity" class="activity-panel"><span class="muted">Your table and hand activity will appear here.</span></div>
     </div>
-    <div class="card"><div class="eyebrow">Choose your table</div><h2>Six tables. Your stakes.</h2><p class="muted" style="font-size:13px">Choose a boot level and buy-in. The club admin approves your seat request.</p><div class="table-grid" id="tableGrid"></div><div class="msg err" id="lobbyErr" hidden></div></div>
+    <div class="card"><div class="eyebrow">Choose your table</div><h2>Six tables. Your stakes.</h2><p class="muted" style="font-size:13px">Choose a boot level and buy-in. Join instantly; the dealer will be waiting at the table.</p><div class="table-grid" id="tableGrid"></div><div class="msg err" id="lobbyErr" hidden></div></div>
     <div class="row"><span class="muted" style="font-size:12px">Signed in as player</span><button class="ghost small" id="lobbySignOut" type="button">Sign out</button></div>
   </section>
 
   <!-- ADMIN DASHBOARD -->
   <section class="screen" id="adminDashboard">
-    <div class="card"><div class="eyebrow">Club control room</div><h1>Admin<br><span style="color:var(--gold)">Dashboard.</span></h1><p class="muted">Manage the six permanent tables and approve players. Admin access is checked against your Firebase account UID.</p><div class="row" style="margin-bottom:14px"><span class="pill gold">Verified admin</span><button class="ghost small" id="adminSignOut" type="button">Sign out</button></div><button class="primary" id="initTablesBtn" type="button">Set up / refresh six tables</button><div class="msg" id="adminSetupMsg" hidden></div></div>
+    <div class="card"><div class="eyebrow">Club control room</div><h1>Admin<br><span style="color:var(--gold)">Dashboard.</span></h1><p class="muted">Manage the six permanent tables and deal each hand. Players join open tables automatically; the dealer starts the game when everyone is ready. Admin access is checked against your Firebase account UID.</p><div class="row" style="margin-bottom:14px"><span class="pill gold">Verified admin</span><button class="ghost small" id="adminSignOut" type="button">Sign out</button></div><button class="primary" id="initTablesBtn" type="button">Set up / refresh six tables</button><div class="msg" id="adminSetupMsg" hidden></div></div>
     <div class="card"><h2>Permanent tables</h2><div id="adminTableList"></div></div>
   </section>
 
@@ -764,7 +764,7 @@ function renderLists(){
   const appr = curMembers.filter(m => m.status === 'approved');
   const pendingCard=$('pendingCard'), pendingList=$('pendingList');
   if(pendingCard && pendingList){
-    pendingCard.hidden=!(isAdmin && pend.length);
+    pendingCard.hidden=true;
     pendingList.textContent='';
     if(isAdmin) pend.forEach(m=>{
       const approve=btn('Approve','primary',()=>db.collection('rooms').doc(code).collection('members').doc(m.id).update({status:'approved'}).then(()=>toast(m.name+' approved')).catch(e=>toast(fmtErr(e))));
@@ -808,7 +808,7 @@ function enterRoom(code, isAdmin, name){
   unsubs.push(roomRef().collection('members').onSnapshot(qs => {
     curMembers = qs.docs.map(d => ({ id: d.id, ...d.data() }));
     const me = curMembers.find(m => m.id === uid);
-    if (!isAdmin && me && me.status !== 'approved'){ watchMyRequest(code); return; }
+    if (!isAdmin && me && me.status !== 'approved'){ leave(true); return; }
     if (!isAdmin && !me){ leave(true); return; }
     renderLists();
     if (isAdmin) reconcileMembers();
@@ -898,7 +898,7 @@ async function renderLobbyTables(){
       if(renderVersion!==lobbyRenderVersion)return;
       if(!snap.exists){occupancy.textContent='Table not initialized';tile.disabled=true;action.textContent='Table unavailable';return;}
       const data=snap.data();
-      occupancy.textContent=data.status==='closed'?'Temporarily closed':'Open · Request a seat';
+      occupancy.textContent=data.status==='closed'?'Temporarily closed':'Open · Join instantly';
       if(data.status==='closed'){tile.disabled=true;action.textContent='Table closed';return;}
       tile.onclick=async()=>{
         const buy=prompt('Choose your buy-in between '+t.min+' and '+t.max+' play chips:',String(t.min));
@@ -910,15 +910,17 @@ async function renderLobbyTables(){
           const name=(currentUser.email||'Player').split('@')[0].slice(0,20);
           const memberRef=db.collection('rooms').doc(tableDocId(t.boot)).collection('members').doc(uid);
           const existing=await memberRef.get();
-          if(existing.exists && ['pending','approved'].includes(existing.data().status)){
-            if(existing.data().status==='approved') enterRoom(tableDocId(t.boot),false,existing.data().name||name);
-            else watchMyRequest(tableDocId(t.boot));
+          if(existing.exists && existing.data().status==='approved'){
+            enterRoom(tableDocId(t.boot),false,existing.data().name||name);
             return;
           }
-          if(existing.exists){throw new Error('A previous request exists for this table. Ask the admin to reset or approve it before requesting again.');}
-          await memberRef.set({uid,name,status:'pending',buyIn:n,requestedAt:firebase.firestore.FieldValue.serverTimestamp()});
-          addPlayerActivity('Requested Boot '+t.boot+' table · buy-in '+fmt(n));
-          watchMyRequest(tableDocId(t.boot));
+          if(existing.exists && existing.data().status==='pending'){
+            await memberRef.update({status:'approved',name,buyIn:n,joinedAt:firebase.firestore.FieldValue.serverTimestamp()});
+          } else {
+            await memberRef.set({uid,name,status:'approved',buyIn:n,joinedAt:firebase.firestore.FieldValue.serverTimestamp()});
+          }
+          addPlayerActivity('Joined Boot '+t.boot+' table · buy-in '+fmt(n));
+          enterRoom(tableDocId(t.boot),false,name);
         }catch(e){$('lobbyErr').textContent=fmtErr(e);$('lobbyErr').hidden=false;}
       };
     }catch(e){if(renderVersion!==lobbyRenderVersion)return;occupancy.textContent='Could not load';tile.disabled=true;action.textContent='Retry after refresh';}
