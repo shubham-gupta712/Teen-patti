@@ -661,11 +661,15 @@ function sendAction(type){
 let lastAnimatedDealHand = null;
 let animateThisRender = false;
 let dealAnimationIndex = 0;
+let dealSeatIndex = 0, dealCardIndex = 0, dealSeatCount = 1;
 function cardEl(c, cls){
   const d = document.createElement('div'); d.className = 'pc' + (cls ? ' ' + cls : '');
   if (animateThisRender) {
     d.classList.add('deal-in');
-    d.style.animationDelay = (dealAnimationIndex++ * 145) + 'ms';
+    // Round-robin timing: first card to every seat, then second, then third.
+    const sequence = (dealCardIndex++ * dealSeatCount) + dealSeatIndex;
+    d.style.animationDelay = (sequence * 210) + 'ms';
+    dealAnimationIndex++;
   }
   if (c === null){ d.classList.add('back'); d.textContent = '?'; }
   else { d.textContent = c; if (c.slice(-1) === '♥' || c.slice(-1) === '♦') d.classList.add('red'); }
@@ -711,7 +715,10 @@ function renderGame(){
     const base = Math.max(0, order.indexOf(uid));
     const rot = order.slice(base).concat(order.slice(0, base));
     const n = rot.length;
+    dealSeatCount = Math.max(1, n);
     rot.forEach((u, k) => {
+      dealSeatIndex = k;
+      dealCardIndex = 0;
       const p = S.players[u];
       const me = u === uid && order.indexOf(uid) >= 0;
       const ang = (90 + k * 360 / n) * Math.PI / 180;
