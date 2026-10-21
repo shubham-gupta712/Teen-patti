@@ -74,10 +74,6 @@ h3{font-size:16px;margin-bottom:8px}
 .pc.red{color:#c0302a}
 .pc.back{background:repeating-linear-gradient(45deg,#e7bd68,#e7bd68 3px,#244d3a 3px,#244d3a 6px);border:2px solid #f0dca9;color:transparent}
 .pc.big{width:40px;height:56px;font-size:16px}
-/* Sequential dealer-style card reveal: round-robin order across the table. */
-.pc.deal-in{animation:dealerCardIn .34s cubic-bezier(.2,.75,.25,1) both;will-change:transform,opacity}
-@keyframes dealerCardIn{0%{opacity:0;transform:translateY(-24px) translateX(10px) rotate(-12deg) scale(.78)}65%{opacity:1;transform:translateY(3px) translateX(-1px) rotate(2deg) scale(1.04)}100%{opacity:1;transform:translateY(0) translateX(0) rotate(0) scale(1)}}
-@media(prefers-reduced-motion:reduce){.pc.deal-in{animation:none;will-change:auto}}
 .actionbar{background:#0b2018;border:1px solid #2a4a39;border-radius:16px;padding:14px;margin-top:14px}
 .turn-clock{display:inline-flex;align-items:center;justify-content:center;min-width:76px;padding:8px 12px;border-radius:999px;font-weight:900;font-variant-numeric:tabular-nums;color:#fff;background:linear-gradient(120deg,#b51f4b,#792be0);border:1px solid #ff9ac1;box-shadow:0 0 14px #bd35df88;transition:background .2s,box-shadow .2s}
 .turn-clock.urgent{background:linear-gradient(120deg,#ff2638,#b00020);box-shadow:0 0 18px #ff2638cc;animation:clockPulse .65s infinite alternate}
@@ -134,6 +130,28 @@ button:disabled{opacity:.5;cursor:not-allowed}
   .card{padding:12px}
 }
 
+
+
+/* Premium casino-inspired sign-in screen — styling only, existing auth IDs retained */
+#appNav{transition:opacity .18s ease}
+body.auth-view #appNav{display:none!important}
+.auth-shell{display:grid;grid-template-columns:minmax(0,1.03fr) minmax(320px,.97fr);min-height:570px;overflow:hidden;border:1px solid rgba(225,193,119,.32);border-radius:26px;background:#091710;box-shadow:0 28px 80px rgba(0,0,0,.38),0 0 0 1px rgba(255,255,255,.025) inset}
+.auth-showcase{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;min-height:570px;padding:28px;background:radial-gradient(ellipse at 48% 70%,rgba(25,126,79,.52),transparent 44%),linear-gradient(155deg,#163c2d 0%,#0b241a 58%,#071710 100%);border-right:1px solid rgba(224,190,107,.2)}
+.auth-showcase:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.14;background-image:linear-gradient(rgba(236,210,145,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(236,210,145,.12) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to bottom,black,transparent 80%)}
+.auth-showcase:after{content:"";position:absolute;z-index:-1;width:390px;height:390px;border:1px solid rgba(236,201,125,.18);border-radius:50%;right:-145px;top:150px;box-shadow:0 0 0 28px rgba(236,201,125,.025),0 0 0 58px rgba(236,201,125,.025)}
+.showcase-top{display:flex;align-items:center;gap:11px}.showcase-mark{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#f6dfa0,#bd8d3c);color:#15291d;font-size:25px;box-shadow:0 5px 20px #d7ad5d33}.showcase-label{font-size:10px;letter-spacing:2.3px;font-weight:800;color:#e9d8a8}
+.showcase-copy{position:relative;z-index:2;margin-top:28px}.showcase-copy .eyebrow{color:#e2c47d}.showcase-copy h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(39px,5vw,57px);line-height:1.03;letter-spacing:-1.8px;font-weight:500;margin:14px 0}.showcase-copy h1 span{color:#e8c775;font-style:italic}.showcase-copy p{max-width:290px;color:#b6c9bb;font-size:14px;line-height:1.8;margin:0}
+.showcase-table{height:205px;position:relative;margin:14px -4px 8px;perspective:700px}.showcase-halo{position:absolute;width:245px;height:145px;left:50%;top:45%;transform:translate(-50%,-50%) rotate(-9deg);border-radius:50%;background:radial-gradient(ellipse,#218052 0,#0b4a30 65%,#09291c 100%);border:5px solid #a57b3b;box-shadow:0 0 0 2px #e3c477,0 15px 35px #0007,inset 0 0 25px #00170e}
+.showcase-card{position:absolute;top:29px;left:50%;width:76px;height:112px;border-radius:9px;background:linear-gradient(145deg,#fffdf4,#e9dfc8);border:1px solid #d6c49b;color:#193b2b;padding:9px;font-family:Georgia,serif;font-size:24px;line-height:1;box-shadow:0 12px 22px #0006;display:flex;flex-direction:column;justify-content:space-between}.showcase-card span{font-size:26px}.showcase-card.card-a{transform:translateX(-112px) rotate(-17deg);color:#b34238}.showcase-card.card-k{transform:translateX(-40px) translateY(-10px) rotate(1deg)}.showcase-card.card-q{transform:translateX(31px) rotate(15deg);color:#b34238}
+.showcase-chip{position:absolute;display:grid;place-items:center;border-radius:50%;font-size:10px;font-weight:900;color:#f8e8b6;background:repeating-conic-gradient(#d6b15e 0 10deg,#f2d991 10deg 20deg);border:5px dotted #f6e5ad;box-shadow:0 5px 9px #0008,inset 0 0 0 3px #73562c}.chip-one{width:43px;height:43px;left:20%;bottom:8px}.chip-two{width:49px;height:49px;left:42%;bottom:0;background:repeating-conic-gradient(#1e6849 0 10deg,#4c9a6b 10deg 20deg);border-color:#8fc59a;color:#fff}.chip-three{width:38px;height:38px;right:16%;bottom:14px}
+.showcase-footer{display:flex;justify-content:space-between;gap:8px;padding-top:17px;border-top:1px solid rgba(220,194,127,.2);color:#9bb5a3;font-size:9px;letter-spacing:1.5px;font-weight:800}.showcase-footer span:first-child{display:flex;align-items:center;gap:7px}.showcase-footer i{width:6px;height:6px;border-radius:50%;background:#71d49a;box-shadow:0 0 10px #71d49a}
+.auth-panel{display:flex;flex-direction:column;justify-content:center;padding:clamp(22px,4vw,42px);background:radial-gradient(ellipse at top right,rgba(43,86,61,.19),transparent 48%),linear-gradient(145deg,#10271d,#0a1b14)}.auth-panel-head .eyebrow{font-size:10px;letter-spacing:2.2px}.auth-panel-head h2{font-family:Georgia,'Times New Roman',serif;font-size:34px;line-height:1.15;font-weight:500;letter-spacing:-.5px;margin:10px 0 7px;color:#f8f0d9}.auth-panel-head p{font-size:13px;color:#9db6a5;margin:0 0 18px}.auth-tabs{margin:4px 0 23px;padding:4px;border:1px solid #2b4b39;border-radius:13px;background:#071811;gap:4px}.auth-tabs button{padding:11px 9px;border-radius:9px;font-size:12px;letter-spacing:.2px}.auth-tabs .on{background:linear-gradient(135deg,#f1d58d,#d5a84f);color:#17291e;box-shadow:0 4px 14px #d7ae5b22}.auth-tabs button.secondary{background:transparent;color:#b5c8ba;border-color:transparent}.auth-tabs button.secondary:hover{background:#173628;color:#fff0c9}
+.auth-panel .field{margin-bottom:16px}.auth-panel .field label{font-size:9px;letter-spacing:1.6px;color:#a6bca9;font-weight:800;margin-bottom:8px}.auth-panel .field input{min-height:48px;padding:13px 14px;border-radius:10px;background:#071710;border-color:#315441;color:#fff5dd;font-size:13px;transition:border-color .18s,box-shadow .18s,background .18s}.auth-panel .field input::placeholder{color:#61796a}.auth-panel .field input:focus{border-color:#dfbd6a;background:#091c13;box-shadow:0 0 0 3px rgba(223,189,106,.12)}.auth-actions{display:flex;flex-direction:column;gap:9px;margin-top:5px}.auth-actions button{width:100%;min-height:47px;border-radius:10px;font-size:13px;letter-spacing:.1px}.auth-actions .auth-submit{display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(110deg,#f1d58d,#d5a84f);color:#17281e;box-shadow:0 7px 18px #d5a84f20}.auth-actions .auth-submit span{font-size:18px;transition:transform .18s}.auth-actions .auth-submit:hover span{transform:translateX(4px)}.auth-actions .auth-create{background:transparent;border:1px solid #355a44;color:#c0d1c4}.auth-actions .auth-create:hover{background:#173729;border-color:#66845e}.auth-assurance{display:flex;align-items:center;gap:10px;margin-top:25px;padding-top:18px;border-top:1px solid rgba(185,211,190,.12)}.assurance-icon{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:#173729;color:#e8ca7c;font-size:18px}.auth-assurance strong,.auth-assurance small{display:block}.auth-assurance strong{font-size:11px;color:#dce8d9;font-weight:700}.auth-assurance small{font-size:10px;color:#829b89;margin-top:3px}.auth-panel .msg.err{margin-top:14px}
+body.auth-view .top{margin:0 auto 20px;max-width:980px;padding:6px 2px 17px;border-bottom:1px solid rgba(221,190,111,.16)}body.auth-view .wrap{max-width:1020px;padding:22px}body.auth-view .brand{font-size:12px;letter-spacing:.7px}body.auth-view .brand small{font-size:9px;letter-spacing:1.8px}body.auth-view .logo{width:42px;height:42px;border-radius:13px}
+@media(max-width:720px){body.auth-view .wrap{padding:15px}body.auth-view .top{margin-bottom:15px}.auth-shell{grid-template-columns:1fr;min-height:0;border-radius:21px}.auth-showcase{min-height:300px;padding:21px 22px 15px;border-right:0;border-bottom:1px solid rgba(224,190,107,.2)}.showcase-copy{margin-top:20px}.showcase-copy h1{font-size:39px;margin:10px 0}.showcase-copy p{font-size:12px;max-width:250px}.showcase-table{position:absolute;right:0;bottom:16px;width:46%;height:150px;margin:0;opacity:.94;transform:scale(.82);transform-origin:center right}.showcase-halo{width:190px;height:116px}.showcase-card{width:57px;height:86px;font-size:18px;padding:7px}.showcase-card span{font-size:19px}.showcase-card.card-a{transform:translateX(-83px) rotate(-17deg)}.showcase-card.card-k{transform:translateX(-31px) translateY(-8px) rotate(1deg)}.showcase-card.card-q{transform:translateX(21px) rotate(15deg)}.showcase-chip{transform:scale(.78)}.showcase-footer{margin-top:18px;font-size:8px;padding-top:12px}.auth-panel{padding:25px 22px 23px}.auth-panel-head h2{font-size:30px}.auth-tabs{margin-bottom:19px}}
+@media(max-width:390px){.auth-showcase{min-height:280px;padding:18px}.showcase-copy h1{font-size:35px}.showcase-copy p{max-width:190px}.showcase-table{right:-14px;transform:scale(.68);transform-origin:bottom right}.auth-panel{padding:22px 18px}.auth-assurance{margin-top:19px}}
+@media(prefers-reduced-motion:reduce){.auth-panel *,.auth-shell *{transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -142,20 +160,27 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <div class="brand"><div class="logo">♠</div><div>TEEN PATTI CLUB<small>Private rooms · play chips only</small></div></div>
     <div class="status" id="status">● Connecting…</div>
   </header>
-<nav class="app-nav" id="appNav" aria-label="Player navigation"><button type="button" data-nav="lobby" onclick="navigateLobby()">⌂ Lobby</button><button type="button" data-nav="room" id="navCurrentTable" onclick="navigateCurrentRoom()">♣ Current table</button><div class="nav-status" id="navStatus">Lobby: choose a table.</div></nav>
+<nav class="app-nav" id="appNav" aria-label="Player navigation"><button type="button" data-nav="lobby" onclick="navigateLobby()">⌂ Lobby</button><div class="nav-status" id="navStatus">Lobby: choose a table.</div></nav>
 
 
   <!-- AUTH -->
   <section class="screen active" id="authScreen">
-    <div class="card">
-      <div class="eyebrow">Welcome to the club</div>
-      <h1>Play your<br><span style="color:var(--gold)">next hand.</span></h1>
-      <div class="tabs"><button id="authPlayerTab" class="on" type="button">Player Login</button><button id="authAdminTab" class="secondary" type="button">Admin Login</button></div>
-      <div class="field"><label for="authEmail">EMAIL</label><input id="authEmail" type="email" placeholder="you@example.com" autocomplete="username"></div>
-      <div class="field"><label for="authPassword">PASSWORD</label><input id="authPassword" type="password" placeholder="At least 6 characters" autocomplete="current-password"></div>
-      <div class="auth-actions"><button class="primary" id="authSignIn" type="button">Sign in</button><button class="secondary" id="authRegister" type="button">Create player account</button></div>
-      <div class="msg err" id="authErr" hidden></div>
-      <p class="muted" style="font-size:12px;margin:14px 0 0">Play chips only. No real-money gambling.</p>
+    <div class="auth-shell">
+      <div class="auth-showcase">
+        <div class="showcase-top"><span class="showcase-mark">♠</span><span class="showcase-label">THE PRIVATE CLUB</span></div>
+        <div class="showcase-copy"><div class="eyebrow">A more refined game night</div><h1>Every hand<br>has a <span>story.</span></h1><p>Gather your friends. Take your seat. Let the cards speak.</p></div>
+        <div class="showcase-table" aria-hidden="true"><div class="showcase-halo"></div><div class="showcase-card card-a">A<span>♠</span></div><div class="showcase-card card-k">K<span>♥</span></div><div class="showcase-card card-q">Q<span>♣</span></div><div class="showcase-chip chip-one">♠</div><div class="showcase-chip chip-two">TPC</div><div class="showcase-chip chip-three">♠</div></div>
+        <div class="showcase-footer"><span><i></i> PRIVATE TABLES</span><span>PLAY CHIPS ONLY</span></div>
+      </div>
+      <div class="auth-panel">
+        <div class="auth-panel-head"><div class="eyebrow">WELCOME BACK</div><h2>Enter the club</h2><p>Sign in to continue to your table.</p></div>
+        <div class="tabs auth-tabs"><button id="authPlayerTab" class="on" type="button">Player</button><button id="authAdminTab" class="secondary" type="button">Club admin</button></div>
+        <div class="field"><label for="authEmail">EMAIL ADDRESS</label><input id="authEmail" type="email" placeholder="you@example.com" autocomplete="username"></div>
+        <div class="field"><label for="authPassword">PASSWORD</label><input id="authPassword" type="password" placeholder="Enter your password" autocomplete="current-password"></div>
+        <div class="auth-actions"><button class="primary auth-submit" id="authSignIn" type="button">Sign in <span aria-hidden="true">→</span></button><button class="secondary auth-create" id="authRegister" type="button">Create player account</button></div>
+        <div class="msg err" id="authErr" hidden></div>
+        <div class="auth-assurance"><span class="assurance-icon">♧</span><span><strong>Private tables. Friendly competition.</strong><small>For social play only. No real-money gambling.</small></span></div>
+      </div>
     </div>
   </section>
 
@@ -432,13 +457,17 @@ let S = null;              // latest public game state
 let myCards = [];
 let adminG = null, adminReady = false, queue = Promise.resolve(), processed = new Set();
 let curMembers = [], curAdminName = '', curAdminUid = '';
-let lastResultHand = 0, lastAnimatedHand = 0, busy = false;
+let lastResultHand = 0, busy = false;
 let clockKey = '', clockEndsAt = 0;
 const TURN_SECONDS = 20;
 
 function show(id){
+  const aliases = {auth:'authScreen', playerLobby:'lobby'};
+  const target = $(aliases[id] || id);
+  if(!target){ console.warn('Screen not found:', id); return; }
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  $(id).classList.add('active');
+  target.classList.add('active');
+  document.body.classList.toggle('auth-view', target.id === 'authScreen');
   window.scrollTo(0, 0);
 }
 function toast(t){
@@ -448,7 +477,7 @@ function toast(t){
 function err(msg){ const e = $('entryErr'); e.textContent = msg; e.hidden = !msg; }
 function stopListening(){
   unsubs.forEach(u => u()); unsubs = [];
-  S = null; myCards = []; adminG = null; adminReady = false; processed = new Set(); lastResultHand = 0; lastAnimatedHand = 0;
+  S = null; myCards = []; adminG = null; adminReady = false; processed = new Set(); lastResultHand = 0;
 }
 function randInt(n){
   const r = new Uint32Array(1);
@@ -649,10 +678,6 @@ function renderGame(){
   const isAdmin = room && room.isAdmin;
   $('adminNote').hidden = !isAdmin;
   const idle = !S || !S.order || !S.order.length;
-  // Snapshot listeners may render more than once for the same hand. Animate only
-  // the first render of each hand so routine updates never replay the deal.
-  const animateDeal = !idle && Number(S.handNo) !== lastAnimatedHand;
-  if (animateDeal) lastAnimatedHand = Number(S.handNo);
   const potEl = document.createElement('div'); potEl.className = 'pot';
   const sm = document.createElement('small'); sm.textContent = 'CURRENT POT';
   const am = document.createElement('div'); am.className = 'amount'; am.textContent = fmt(S && S.pot ? S.pot : 0);
@@ -688,21 +713,9 @@ function renderGame(){
       const cd = document.createElement('div'); cd.className = 'cards';
       const reveal = S.result && S.result.reveal && S.result.reveal[u];
       const big = me ? 'big' : '';
-      if (reveal) reveal.forEach((c, i) => {
-        const card = cardEl(c, big);
-        if (animateDeal) { card.classList.add('deal-in'); card.style.animationDelay = ((i * n + k) * 180) + 'ms'; }
-        cd.appendChild(card);
-      });
-      else if (me && p.status === 'seen' && myCards.length) myCards.forEach((c, i) => {
-        const card = cardEl(c, big);
-        if (animateDeal) { card.classList.add('deal-in'); card.style.animationDelay = ((i * n + k) * 180) + 'ms'; }
-        cd.appendChild(card);
-      });
-      else if (p.status !== 'out') for (let i = 0; i < 3; i++) {
-        const card = cardEl(null, big);
-        if (animateDeal) { card.classList.add('deal-in'); card.style.animationDelay = ((i * n + k) * 180) + 'ms'; }
-        cd.appendChild(card);
-      }
+      if (reveal) reveal.forEach(c => cd.appendChild(cardEl(c, big)));
+      else if (me && p.status === 'seen' && myCards.length) myCards.forEach(c => cd.appendChild(cardEl(c, big)));
+      else if (p.status !== 'out') for (let i = 0; i < 3; i++) cd.appendChild(cardEl(null, big));
       seat.appendChild(av); seat.appendChild(nm); seat.appendChild(ch); seat.appendChild(tg); seat.appendChild(cd);
       felt.appendChild(seat);
     });
