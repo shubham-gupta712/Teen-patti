@@ -111,6 +111,25 @@ h3{font-size:16px;margin-bottom:8px}
 .waiting-badge{display:inline-block;margin-top:7px;padding:5px 9px;border-radius:20px;background:#274c39;border:1px solid #598066;color:#d6efdc;font-size:10px}
 @media(max-width:430px){.stats-grid{gap:7px}.stat-card{padding:11px}.stat-card strong{font-size:20px}}
 
+
+/* Universal navigation + responsive game layout */
+#appNav{position:sticky;top:4px;z-index:100;box-shadow:0 8px 24px #0003}
+#appNav button{min-height:42px;touch-action:manipulation}
+#appNav [data-nav="lobby"]{background:#e7bd63;color:#12271e;border-color:#e7bd63}
+#appNav .nav-status{line-height:1.4}
+.card,.panel,.table-card{box-sizing:border-box}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+@media(max-width:600px){
+  .wrap,.container,main{width:min(100% - 18px,100%)!important;max-width:100%!important}
+  #appNav{gap:6px;padding:7px}
+  #appNav button{min-width:0;flex:1;padding:10px 5px;font-size:12px}
+  .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .card{padding:12px}
+}
+
 </style>
 </head>
 <body>
@@ -119,7 +138,7 @@ h3{font-size:16px;margin-bottom:8px}
     <div class="brand"><div class="logo">♠</div><div>TEEN PATTI CLUB<small>Private rooms · play chips only</small></div></div>
     <div class="status" id="status">● Connecting…</div>
   </header>
-<nav class="app-nav" id="appNav" aria-label="Main navigation"><button type="button" data-nav="lobby" onclick="navigateLobby()">⌂ Lobby</button><button type="button" data-nav="room" id="navCurrentTable" onclick="navigateCurrentRoom()">♣ Current table</button><div class="nav-status" id="navStatus">Use Lobby to return to table selection.</div></nav>
+<nav class="app-nav" id="appNav" aria-label="Player navigation"><button type="button" data-nav="lobby" onclick="navigateLobby()">⌂ Lobby</button><button type="button" data-nav="room" id="navCurrentTable" onclick="navigateCurrentRoom()">♣ Current table</button><div class="nav-status" id="navStatus">Lobby: choose a table.</div></nav>
 
 
   <!-- AUTH -->
@@ -772,24 +791,15 @@ function enterRoom(code, isAdmin, name){
 }
 
 async function leave(silent){
-  const previousRoom = room;
-  stopListening();
-  room = null;
-  if(previousRoom && !previousRoom.isAdmin){
+  const previousRoom=room;
+  if(typeof stopListening==='function') stopListening();
+  room=null;
+  if(previousRoom && !previousRoom.isAdmin && currentUser && uid){
     try { await db.collection('rooms').doc(previousRoom.code).collection('members').doc(uid).delete(); }
-    catch(e){ console.warn('Could not remove membership on leave:', e); }
+    catch(e){ console.warn('Membership cleanup failed while leaving:',e); }
   }
-  if(!currentUser){
-    show('auth');
-  } else if(uid === GLOBAL_ADMIN_UID){
-    show('adminDashboard');
-    if(typeof renderAdminTables === 'function') renderAdminTables();
-  } else {
-    show('playerLobby');
-    if(typeof renderLobbyTables === 'function') renderLobbyTables();
-  }
-  if(silent) err('You left the table.');
-  navSetStatus(uid === GLOBAL_ADMIN_UID ? 'Admin dashboard.' : 'Lobby: choose any available boot table.');
+  goToPlayerLobbyAfterLeave();
+  if(silent && typeof err==='function') err('You left the table.');
 }
 
 function authError(message){ const el=$('authErr'); el.textContent=message; el.hidden=!message; }
@@ -939,35 +949,11 @@ function boot(){
 boot();
 
 
-function navSetStatus(text){
-  const el=$('navStatus'); if(el) el.textContent=text;
-  const nav=$('appNav'); if(nav) nav.style.display=(currentUser && uid!==GLOBAL_ADMIN_UID)?'flex':'none';
-}
-function navigateLobby(){
-  if(!currentUser){show('auth');return;}
-  stopListening();
-  room = null;
-  const entry = $('entry');
-  if(entry) entry.hidden = true;
-  show('playerLobby');
-  navSetStatus('Lobby: choose any available boot table.');
-  renderLobbyTables();
-}
-function navigateCurrentRoom(){
-  if(room && room.code){
-    show('room');
-    navSetStatus('Current table: '+room.code);
-  } else {
-    navSetStatus('No active table. Returning to the lobby.');
-    navigateLobby();
-  }
-}
-function navigateAdmin(){
-  navSetStatus('Admin controls are available only in the admin dashboard, not in player navigation.');
-}
-async function navigateSignOut(){
-  navSetStatus('Sign out is not part of player navigation.');
-}
+
+
+
+
+async 
 
 
 
@@ -991,6 +977,63 @@ function showRecentActivity(){
   const box=$('playerActivity');
   if(!playerSessionStats.activity.length){box.textContent='No activity recorded yet. Join a table to get started.';return;}
   box.innerHTML=playerSessionStats.activity.map(x=>'<div style="padding:5px 0;border-bottom:1px solid #294738">'+escapeText(x)+'</div>').join('');
+}
+
+
+
+function navSetStatus(text){
+  const el=$('navStatus'); if(el) el.textContent=text;
+}
+function navigateLobby(){
+  if(!currentUser){ if(typeof show==='function') show('auth'); return; }
+  // Leaving a table should detach listeners and clear room state, then render the player lobby.
+  if(typeof stopListening==='function') stopListening();
+  room=null;
+  const entry=$('entry'); if(entry) entry.hidden=true;
+  if(uid===GLOBAL_ADMIN_UID){
+    if(typeof show==='function') show('adminDashboard');
+    if(typeof renderAdminTables==='function') renderAdminTables();
+    navSetStatus('Admin dashboard: manage tables here.');
+    return;
+  }
+  if(typeof show==='function') show('playerLobby');
+  if(typeof renderLobbyTables==='function') renderLobbyTables();
+  navSetStatus('Lobby: choose a table to join.');
+}
+function navigateCurrentRoom(){
+  if(room && room.code){
+    if(typeof show==='function') show('room');
+    navSetStatus('Current table: '+room.code);
+    return;
+  }
+  // Never leave a user on a blank or stale page when no table is active.
+  navigateLobby();
+}
+function navigateAdmin(){
+  if(!currentUser || uid!==GLOBAL_ADMIN_UID){
+    navSetStatus('Admin access is restricted.');
+    return;
+  }
+  if(typeof stopListening==='function') stopListening();
+  room=null;
+  if(typeof show==='function') show('adminDashboard');
+  if(typeof renderAdminTables==='function') renderAdminTables();
+  navSetStatus('Admin dashboard: manage tables here.');
+}
+function navigateSignOut(){
+  if(typeof auth!=='undefined' && auth && typeof auth.signOut==='function'){
+    if(typeof stopListening==='function') stopListening();
+    room=null;
+    auth.signOut().then(()=>{ if(typeof show==='function') show('auth'); }).catch(e=>{ if(typeof toast==='function') toast(fmtErr(e)); });
+  }
+}
+function goToPlayerLobbyAfterLeave(){
+  if(typeof stopListening==='function') stopListening();
+  room=null;
+  if(!currentUser){show('auth');return;}
+  if(uid===GLOBAL_ADMIN_UID){show('adminDashboard');if(typeof renderAdminTables==='function')renderAdminTables();}
+  else {show('playerLobby');if(typeof renderLobbyTables==='function')renderLobbyTables();}
+  navSetStatus(uid===GLOBAL_ADMIN_UID?'Admin dashboard.':'Lobby: choose a table.');
 }
 
 </script>
