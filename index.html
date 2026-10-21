@@ -152,6 +152,28 @@ body.auth-view .top{margin:0 auto 20px;max-width:980px;padding:6px 2px 17px;bord
 @media(max-width:390px){.auth-showcase{min-height:280px;padding:18px}.showcase-copy h1{font-size:35px}.showcase-copy p{max-width:190px}.showcase-table{right:-14px;transform:scale(.68);transform-origin:bottom right}.auth-panel{padding:22px 18px}.auth-assurance{margin-top:19px}}
 @media(prefers-reduced-motion:reduce){.auth-panel *,.auth-shell *{transition:none!important}}
 
+
+/* Premium player lounge dashboard — visual layer only; existing game IDs and flow retained */
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+body.dashboard-view #appNav{display:none!important}
+body.dashboard-view .wrap{max-width:980px;padding-top:17px}
+body.dashboard-view .top{padding:0 2px 15px;border-bottom:1px solid rgba(226,195,120,.14);margin-bottom:18px}
+body.dashboard-view .brand{font-size:12px;letter-spacing:.7px}body.dashboard-view .brand small{font-size:9px;letter-spacing:1.7px}
+.player-hero{position:relative;isolation:isolate;overflow:hidden;border:1px solid rgba(224,190,107,.34);border-radius:23px;padding:23px 25px 20px;margin-bottom:15px;background:radial-gradient(ellipse at 78% 16%,rgba(31,120,77,.34),transparent 39%),linear-gradient(135deg,#163b2b 0%,#0d271c 52%,#081910 100%);box-shadow:0 20px 48px #0003,inset 0 1px 0 #ffffff0a}
+.player-hero:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.12;background-image:linear-gradient(rgba(232,202,128,.22) 1px,transparent 1px),linear-gradient(90deg,rgba(232,202,128,.22) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(120deg,#000,transparent 76%)}
+.player-hero-glow{position:absolute;z-index:-1;right:-65px;top:-95px;width:290px;height:290px;border-radius:50%;border:1px solid #e6c67524;box-shadow:0 0 0 24px #e6c67508,0 0 0 52px #e6c67506}
+.player-hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.club-kicker{display:flex;align-items:center;gap:8px;font-size:9px;letter-spacing:1.7px;color:#c4d8c7;font-weight:800}.live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#75d6a0;box-shadow:0 0 10px #75d6a0}
+.player-welcome{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:20px 0 19px}.player-welcome .eyebrow{font-size:9px;letter-spacing:2px}.player-welcome h1{font-family:Georgia,'Times New Roman',serif;font-weight:500;font-size:clamp(31px,5vw,46px);letter-spacing:-1.2px;line-height:1.08;margin:10px 0}.player-welcome h1 #lobbyGreeting{color:#f3d48b;font-style:italic;overflow-wrap:anywhere}.gold-period{color:#f3d48b}.player-welcome p{color:#a9c4b2;font-size:12px;margin:0}.player-avatar{position:relative;flex:0 0 76px;width:76px;height:76px;display:grid;place-items:center;border-radius:50%;font-family:Georgia,serif;font-size:25px;font-weight:700;color:#1a3224;background:linear-gradient(145deg,#fff0bc,#c49a4c);border:3px solid #f3d993;box-shadow:0 0 0 6px #e5c36d15,0 12px 25px #0005}.player-avatar i{position:absolute;right:-2px;bottom:2px;width:14px;height:14px;border:3px solid #123324;border-radius:50%;background:#74d49a}
+.hero-balance{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 17px;border:1px solid #d9bb7040;border-radius:15px;background:linear-gradient(105deg,#091a12b8,#25493670);box-shadow:inset 0 1px #ffffff08}.balance-label{display:block;color:#b9cdbd;font-size:9px;letter-spacing:1.5px;font-weight:800}.hero-balance strong{display:block;font:700 30px/1.2 Georgia,'Times New Roman',serif;color:#f3d58f;margin:4px 0}.hero-balance small{display:block;font-size:10px;color:#9db6a4}.chip-stack{position:relative;width:75px;height:47px;flex:0 0 75px}.chip-stack i,.chip-stack b{position:absolute;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;border:4px dotted #f4dfa1;box-shadow:0 4px 7px #0006,inset 0 0 0 3px #7a5c2e;background:repeating-conic-gradient(#d3ad58 0 10deg,#f4d78e 10deg 20deg)}.chip-stack i:nth-child(1){left:0;top:7px}.chip-stack i:nth-child(2){left:20px;top:1px;background:repeating-conic-gradient(#286d4b 0 10deg,#64a477 10deg 20deg);border-color:#b4ddb5}.chip-stack i:nth-child(3){left:38px;top:9px}.chip-stack b{left:20px;top:1px;border:0;background:transparent;box-shadow:none;color:#f6e6b5;font-size:14px}
+.stats-grid{gap:10px;margin-bottom:16px}.stat-card{position:relative;overflow:hidden;padding:15px 16px;background:linear-gradient(145deg,#143729,#0a2017);border-color:#2d5941;border-radius:15px;box-shadow:inset 0 1px #ffffff06}.stat-card:after{content:"";position:absolute;right:-20px;bottom:-36px;width:85px;height:85px;border:1px solid #d7b96312;border-radius:50%;box-shadow:0 0 0 12px #d7b96305}.stat-card span{font-size:9px;letter-spacing:1.3px;color:#aac3b0}.stat-card strong{font-family:Georgia,'Times New Roman',serif;font-size:26px;color:#f2d58d;margin:7px 0 3px}.stat-card small{font-size:10px;color:#9bb4a3}
+.lounge-section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:22px 2px 12px}.lounge-section-head .eyebrow{font-size:9px;letter-spacing:2px}.lounge-section-head h2{font-family:Georgia,'Times New Roman',serif;font-size:27px;font-weight:500;letter-spacing:-.4px;margin:5px 0}.lounge-section-head p{font-size:12px;color:#9eb9a7;margin:0}.refresh-button{flex:0 0 43px;width:43px;height:43px;padding:0;border-radius:50%;background:#163a2b;border:1px solid #b9974a66;color:#f0d38c;font-size:23px;box-shadow:0 4px 12px #0002}.table-lounge{border:1px solid #c7a75b44;border-radius:19px;padding:13px;background:linear-gradient(145deg,#102d20,#0a1e15);box-shadow:0 16px 35px #0002}.table-lounge-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:1px 3px 12px;color:#c5d7c8;font-size:9px;letter-spacing:1.2px;font-weight:800}.table-lounge-top span:first-child{display:flex;align-items:center;gap:7px}.play-only{color:#dfc780;border:1px solid #c4a35b44;padding:5px 8px;border-radius:30px;font-size:8px;white-space:nowrap}
+.table-grid{gap:10px}.table-tile{position:relative;isolation:isolate;overflow:hidden;min-height:150px;padding:16px 15px;border-radius:15px;text-align:left;gap:9px;color:#f4edcf;background:radial-gradient(ellipse at 100% 0%,#24674770,transparent 55%),linear-gradient(145deg,#173d2c,#0a2117);border:1px solid #a987454f;box-shadow:inset 0 1px #ffffff0a,0 6px 15px #0002;transition:transform .18s,border-color .18s,box-shadow .18s,background .18s}.table-tile:before{content:"";position:absolute;z-index:-1;right:-19px;bottom:-30px;width:92px;height:92px;border:1px solid #dfbf6a29;border-radius:50%;box-shadow:0 0 0 10px #dfbf6a08,0 0 0 21px #dfbf6a05}.table-tile:after{content:"♠";position:absolute;right:13px;top:10px;color:#e7c46d32;font-size:32px;font-family:Georgia,serif}.table-tile:hover{transform:translateY(-2px);border-color:#e6c36d;box-shadow:0 10px 22px #0003,0 0 0 1px #e6c36d12}.table-tile strong{font-family:Georgia,'Times New Roman',serif;font-size:24px;color:#f4d78f;position:relative}.table-tile .limits{font-size:11px;color:#a9c2b0}.table-tile .occupancy{font-size:10px;font-weight:800;color:#8cdda7}.table-tile span:last-child{font-size:11px;color:#f1e8ca;margin-top:auto}.table-tile:disabled{background:#182820;color:#83968a;border-color:#34473b;box-shadow:none}.table-tile:disabled strong{color:#b1b7a4}.table-tile:disabled .occupancy{color:#e0b47e}
+.player-lower-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;margin-top:14px}.quick-card{margin:0;padding:18px;background:linear-gradient(145deg,#122f22,#0a1e15);border-color:#294a37}.quick-card h3{font-family:Georgia,'Times New Roman',serif;font-weight:500;font-size:22px;margin:5px 0 8px}.quick-actions{margin:9px 0}.quick-actions button{border-radius:10px;background:#173a2a;border-color:#355d43;color:#dce9d9}.activity-panel{background:#091b13;border-color:#294737;font-size:11px}.club-note{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:21px;border:1px solid #b9974a35;border-radius:17px;background:radial-gradient(ellipse at 70% 10%,#27543b7a,transparent 65%),#0d2519}.note-spade{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#f2d58f,#bb8e40);color:#163323;font-size:25px;margin-bottom:14px}.club-note strong{font-family:Georgia,'Times New Roman',serif;font-size:19px;font-weight:500;color:#f0d89a}.club-note p{font-size:11px;color:#a6bda9;margin:7px 0 14px}.club-note small{font-size:8px;letter-spacing:1.4px;color:#789681}
+body.dashboard-view .footer{margin-top:20px}
+@media(max-width:600px){body.dashboard-view .wrap{padding:12px}body.dashboard-view .top{margin-bottom:13px;padding-bottom:12px}.player-hero{padding:17px 16px 15px;border-radius:19px}.player-welcome{padding:19px 0 17px}.player-welcome h1{font-size:34px}.player-avatar{flex-basis:58px;width:58px;height:58px;font-size:20px}.hero-balance{padding:12px}.hero-balance strong{font-size:27px}.chip-stack{transform:scale(.8);transform-origin:right center;margin-left:-8px}.stat-card{padding:12px}.stat-card strong{font-size:23px}.lounge-section-head{margin-top:20px}.lounge-section-head h2{font-size:25px}.table-lounge{padding:9px}.table-grid{gap:8px}.table-tile{min-height:139px;padding:13px 11px;gap:8px}.table-tile strong{font-size:21px}.table-tile:after{right:8px;top:8px;font-size:25px}.player-lower-grid{grid-template-columns:1fr}.club-note{min-height:150px}.table-lounge-top{font-size:8px;letter-spacing:.8px}}
+@media(max-width:360px){.player-welcome h1{font-size:30px}.player-avatar{display:none}.table-tile{min-height:133px}.table-tile strong{font-size:19px}}
+@media(prefers-reduced-motion:reduce){.table-tile{transition:none}}
+
 </style>
 </head>
 <body>
@@ -186,24 +208,22 @@ body.auth-view .top{margin:0 auto 20px;max-width:980px;padding:6px 2px 17px;bord
 
   <!-- PLAYER LOBBY -->
   <section class="screen" id="lobby">
-    <div class="profile-strip"><div><div class="eyebrow">Player profile</div><b id="lobbyName">Player</b><div class="muted" id="lobbyEmail" style="font-size:12px"></div></div><div style="text-align:right"><div class="muted" style="font-size:11px">CHIP BALANCE</div><b id="lobbyBalance" style="font-size:22px;color:#145b3e">10,000</b></div></div>
+    <section class="player-hero">
+      <div class="player-hero-glow" aria-hidden="true"></div>
+      <div class="player-hero-top"><span class="club-kicker"><span class="live-dot"></span> PRIVATE CLUB · PLAYER LOUNGE</span><button class="ghost small" id="lobbySignOut" type="button">Sign out ↗</button></div>
+      <div class="player-welcome"><div><div class="eyebrow">YOUR SEAT IS WAITING</div><h1>Welcome back,<br><span id="lobbyGreeting">Player</span><span class="gold-period">.</span></h1><p>Pick your table. The next hand starts here.</p></div><div class="player-avatar" aria-hidden="true"><span id="playerInitials">♠</span><i></i></div></div>
+      <div class="hero-balance"><div><span class="balance-label">YOUR PLAY-CHIP STACK</span><strong id="lobbyBalance">10,000</strong><small>Available chips · Social play only</small></div><div class="chip-stack" aria-hidden="true"><i></i><i></i><i></i><b>♠</b></div></div>
+      <b id="lobbyName" class="sr-only">Player</b><span id="lobbyEmail" class="sr-only" aria-hidden="true"></span>
+    </section>
     <div class="stats-grid" id="playerStats">
       <div class="stat-card"><span>CHIP BALANCE</span><strong id="statBalance">10,000</strong><small>Play chips</small></div>
       <div class="stat-card"><span>HANDS PLAYED</span><strong id="statHands">0</strong><small>Across this session</small></div>
       <div class="stat-card"><span>WINS</span><strong id="statWins">0</strong><small>Completed hands</small></div>
       <div class="stat-card"><span>TABLE STATUS</span><strong id="statTable">Lobby</strong><small id="statTableSub">Choose a table to start</small></div>
     </div>
-    <div class="card quick-card">
-      <div class="row"><div><div class="eyebrow">Your player hub</div><h3>Quick actions</h3></div><span class="pill">Play chips only</span></div>
-      <div class="quick-actions">
-        <button type="button" class="secondary" onclick="showPlayerStats()">📊 My stats</button>
-        <button type="button" class="secondary" onclick="showRecentActivity()">🕘 Recent activity</button>
-        <button type="button" class="secondary" onclick="refreshPlayerLobby()">↻ Refresh tables</button>
-      </div>
-      <div id="playerActivity" class="activity-panel"><span class="muted">Your table and hand activity will appear here.</span></div>
-    </div>
-    <div class="card"><div class="eyebrow">Choose your table</div><h2>Six tables. Your stakes.</h2><p class="muted" style="font-size:13px">Choose a boot level and buy-in. You join instantly when the table is open.</p><div class="table-grid" id="tableGrid"></div><div class="msg err" id="lobbyErr" hidden></div></div>
-    <div class="row"><span class="muted" style="font-size:12px">Signed in as player</span><button class="ghost small" id="lobbySignOut" type="button">Sign out</button></div>
+    <div class="lounge-section-head"><div><div class="eyebrow">FIND YOUR GAME</div><h2>Choose your table</h2><p>Six tables. One good hand away.</p></div><button type="button" class="refresh-button" onclick="refreshPlayerLobby()" aria-label="Refresh tables">↻</button></div>
+    <div class="table-lounge"><div class="table-lounge-top"><span><i class="live-dot"></i> TABLES OPEN FOR PLAY</span><span class="play-only">PLAY CHIPS ONLY</span></div><div class="table-grid" id="tableGrid"></div><div class="msg err" id="lobbyErr" hidden></div></div>
+    <div class="player-lower-grid"><div class="card quick-card"><div class="eyebrow">YOUR CLUB RECORD</div><h3>At a glance</h3><div class="quick-actions"><button type="button" class="secondary" onclick="showPlayerStats()">♜ My stats</button><button type="button" class="secondary" onclick="showRecentActivity()">◷ Recent activity</button></div><div id="playerActivity" class="activity-panel"><span class="muted">Your table and hand activity will appear here.</span></div></div><div class="club-note"><div class="note-spade">♠</div><strong>Good cards. Good company.</strong><p>Private tables for friendly competition.</p><small>NO REAL-MONEY GAMBLING</small></div></div>
   </section>
 
   <!-- ADMIN DASHBOARD -->
@@ -468,6 +488,7 @@ function show(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   target.classList.add('active');
   document.body.classList.toggle('auth-view', target.id === 'authScreen');
+  document.body.classList.toggle('dashboard-view', target.id === 'lobby');
   window.scrollTo(0, 0);
 }
 function toast(t){
@@ -847,8 +868,11 @@ function goToSignedInHome(user){
   navSetStatus('Signed in. Use Lobby to choose a table.');
   currentUser=user; uid=user.uid;
   $('status').textContent='● Connected';
-  $('lobbyEmail').textContent=user.email||'';
-  $('lobbyName').textContent=(user.email||'Player').split('@')[0];
+  const displayName=(user.displayName||((user.email||'').split('@')[0])||'Player').replace(/[._-]+/g,' ').trim().slice(0,24);
+  $('lobbyEmail').textContent='';
+  $('lobbyName').textContent=displayName;
+  $('lobbyGreeting').textContent=displayName;
+  $('playerInitials').textContent=displayName.split(/\s+/).map(part=>part[0]).join('').slice(0,2).toUpperCase()||'♠';
   if(uid===GLOBAL_ADMIN_UID){ renderAdminTables(); show('adminDashboard'); }
   else { renderLobbyTables(); show('lobby'); }
 }
@@ -895,7 +919,7 @@ async function renderLobbyTables(){
         if(buy===null)return;const n=Number(buy);
         if(!Number.isInteger(n)||n<t.min||n>t.max){$('lobbyErr').textContent='Buy-in must be between '+fmt(t.min)+' and '+fmt(t.max)+'.';$('lobbyErr').hidden=false;return;}
         // Keep existing table game engine; buy-in is stored as a request field for the table admin.
-        try{$('lobbyErr').hidden=true;$('displayName').value=(currentUser.email||'Player').split('@')[0].slice(0,20);$('roomCode').value=tableDocId(t.boot);await db.collection('rooms').doc(tableDocId(t.boot)).collection('members').doc(uid).set({uid,name:$('displayName').value,status:'approved',buyIn:n,joinedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});enterRoom(tableDocId(t.boot),false,$('displayName').value);}
+        try{$('lobbyErr').hidden=true;$('displayName').value=(currentUser.displayName||((currentUser.email||'Player').split('@')[0])).replace(/[._-]+/g,' ').slice(0,20);$('roomCode').value=tableDocId(t.boot);await db.collection('rooms').doc(tableDocId(t.boot)).collection('members').doc(uid).set({uid,name:$('displayName').value,status:'approved',buyIn:n,joinedAt:firebase.firestore.FieldValue.serverTimestamp()});enterRoom(tableDocId(t.boot),false,$('displayName').value);}
         catch(e){$('lobbyErr').textContent=fmtErr(e);$('lobbyErr').hidden=false;}
       };
     }catch(e){if(renderVersion!==lobbyRenderVersion)return;occupancy.textContent='Could not load';tile.disabled=true;action.textContent='Retry after refresh';}
