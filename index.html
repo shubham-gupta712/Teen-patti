@@ -57,31 +57,28 @@ h3{font-size:16px;margin-bottom:8px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#f0d48e;color:#18271d;padding:11px 16px;border-radius:12px;font-weight:800;display:none;z-index:10;max-width:90%;text-align:center}
 
 /* table */
-.felt{position:relative;height:490px;overflow:hidden;border:9px solid #5b4028;border-radius:46% / 32%;background:radial-gradient(ellipse at 50% 44%,#20a96e 0,#08764b 35%,#075538 65%,#043723 100%);box-shadow:inset 0 0 0 3px #d1ad60,inset 0 0 0 7px #123c2b,inset 0 0 55px #00190e,0 16px 34px #0007}
-.felt:before{content:"";position:absolute;inset:12px;border:1px solid #e8d28a66;border-radius:inherit;pointer-events:none;box-shadow:inset 0 0 25px #a8f5d01a}
-.felt:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 25%,#ffffff08 42%,transparent 58%);animation:feltGlimmer 7s ease-in-out infinite}
-@keyframes feltGlimmer{0%,100%{opacity:.25;transform:translateX(-12%)}50%{opacity:1;transform:translateX(12%)}}
-.pot{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);text-align:center;z-index:2;min-width:104px;padding:10px 16px;border-radius:50%;background:radial-gradient(ellipse,#075438aa,transparent 72%);text-shadow:0 2px 8px #002b1c}
+.felt{position:relative;height:470px;overflow:hidden;border:8px solid #4a3424;border-radius:46% / 32%;background:radial-gradient(ellipse,#16714a 0,#0d4c33 54%,#083a28 100%);box-shadow:inset 0 0 0 3px #987344,inset 0 0 50px #00190e}
+.pot{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);text-align:center}
 .pot small{display:block;letter-spacing:2px;color:#c5e1cf;font-size:10px}
-.pot .amount{font-size:31px;font-weight:950;color:#ffe19a;font-variant-numeric:tabular-nums;filter:drop-shadow(0 2px 2px #002b1c)}
-.seat{position:absolute;transform:translate(-50%,-50%);text-align:center;width:104px;z-index:3;padding:7px 5px 8px;border:1px solid #f1d78b35;border-radius:13px;background:linear-gradient(145deg,#063c2cb8,#062c21a8);box-shadow:0 5px 13px #001a1080;backdrop-filter:blur(2px);transition:filter .2s,transform .2s}
+.pot .amount{font-size:28px;font-weight:900;color:#ffe19a;font-variant-numeric:tabular-nums}
+.seat{position:absolute;transform:translate(-50%,-50%);text-align:center;width:92px}
 .seat.packed{opacity:.45}
 .avatar{width:38px;height:38px;margin:0 auto 3px;border-radius:50%;display:grid;place-items:center;background:#f0d8a2;color:#28392a;border:3px solid #c2a56b;font-weight:900;position:relative}
-.seat.turn{border-color:#ffdc7c;background:linear-gradient(145deg,#184b36ee,#082b20ee);box-shadow:0 0 0 1px #ffdc7c66,0 0 22px #ffd66d55,0 8px 20px #001a10}.seat.turn .avatar{box-shadow:0 0 0 3px #ffe19a,0 0 18px #ffe19a;animation:avatarPulse 1.2s ease-in-out infinite alternate}
-@keyframes avatarPulse{from{box-shadow:0 0 0 2px #ffe19a,0 0 8px #ffe19a55}to{box-shadow:0 0 0 4px #ffe19a,0 0 20px #ffe19a}}
+.seat.turn .avatar{box-shadow:0 0 0 3px #ffe19a,0 0 16px #ffe19a}
 .dealer{position:absolute;right:-8px;bottom:-4px;background:#fff;color:#222;border-radius:50%;width:16px;height:16px;font-size:10px;line-height:16px;font-weight:900}
 .seat .name{font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .seat .chips{font-size:11px;color:#ffe29c;font-variant-numeric:tabular-nums}
 .seat .tag{font-size:10px;color:#c5e1cf;letter-spacing:.6px;text-transform:uppercase}
 .cards{display:flex;justify-content:center;gap:3px;margin-top:4px}
-.pc{width:27px;height:38px;background:linear-gradient(145deg,#fffef8,#e9dfc9);border-radius:5px;color:#17251d;display:grid;place-items:center;font-weight:950;font-size:12px;line-height:1;box-shadow:0 3px 7px #00190f99;border:1px solid #fff4d9;position:relative;transform-origin:50% 90%;}
+.pc{width:24px;height:34px;background:#fffaf0;border-radius:4px;color:#17251d;display:grid;place-items:center;font-weight:900;font-size:11px;line-height:1;box-shadow:0 2px 5px #0006;border:1px solid #e2d6bd}
 .pc.red{color:#c0302a}
-.pc.back{background:repeating-linear-gradient(45deg,#e9c66e 0,#e9c66e 2px,#275a43 2px,#275a43 5px,#7e2e4a 5px,#7e2e4a 7px);border:2px solid #fff0bf;color:transparent;box-shadow:0 4px 8px #00170eaa,inset 0 0 0 2px #27543e}
-.pc.big{width:43px;height:61px;font-size:17px;border-radius:7px;box-shadow:0 5px 10px #00170eaa}
-.pc.deal-in{animation:cardFly .52s cubic-bezier(.18,.8,.25,1.15) both}
-@keyframes cardFly{0%{opacity:0;transform:translate(70px,-105px) rotate(24deg) scale(.35)}65%{opacity:1;transform:translate(-3px,3px) rotate(-4deg) scale(1.08)}100%{opacity:1;transform:translate(0,0) rotate(0) scale(1)}}
-@media(prefers-reduced-motion:reduce){.pc.deal-in,.seat.turn .avatar,.felt:after{animation:none}}
-.actionbar{background:linear-gradient(145deg,#0e2c20,#071b14);border:1px solid #c4a45b77;border-radius:18px;padding:14px;margin-top:14px;box-shadow:0 8px 24px #0003,inset 0 1px #ffffff08}
+.pc.back{background:repeating-linear-gradient(45deg,#e7bd68,#e7bd68 3px,#244d3a 3px,#244d3a 6px);border:2px solid #f0dca9;color:transparent}
+.pc.big{width:40px;height:56px;font-size:16px}
+/* Sequential dealer-style card reveal: round-robin order across the table. */
+.pc.deal-in{animation:dealerCardIn .34s cubic-bezier(.2,.75,.25,1) both;will-change:transform,opacity}
+@keyframes dealerCardIn{0%{opacity:0;transform:translateY(-24px) translateX(10px) rotate(-12deg) scale(.78)}65%{opacity:1;transform:translateY(3px) translateX(-1px) rotate(2deg) scale(1.04)}100%{opacity:1;transform:translateY(0) translateX(0) rotate(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.pc.deal-in{animation:none;will-change:auto}}
+.actionbar{background:#0b2018;border:1px solid #2a4a39;border-radius:16px;padding:14px;margin-top:14px}
 .turn-clock{display:inline-flex;align-items:center;justify-content:center;min-width:76px;padding:8px 12px;border-radius:999px;font-weight:900;font-variant-numeric:tabular-nums;color:#fff;background:linear-gradient(120deg,#b51f4b,#792be0);border:1px solid #ff9ac1;box-shadow:0 0 14px #bd35df88;transition:background .2s,box-shadow .2s}
 .turn-clock.urgent{background:linear-gradient(120deg,#ff2638,#b00020);box-shadow:0 0 18px #ff2638cc;animation:clockPulse .65s infinite alternate}
 .turn-clock.off{opacity:.55;filter:saturate(.55);animation:none}
@@ -92,7 +89,7 @@ h3{font-size:16px;margin-bottom:8px}
 .dealbox{display:flex;gap:8px;align-items:flex-end;margin-top:12px}
 .dealbox .field{margin:0;flex:0 0 110px}
 .dealbox button{flex:1}
-@media(max-width:430px){.felt{height:500px;border-width:7px}.seat{width:84px;padding:5px 3px}.seat .name{font-size:10px}.seat .chips{font-size:10px}.pc.big{width:34px;height:49px;font-size:14px}.pc{width:23px;height:33px;font-size:10px}.pot .amount{font-size:27px}}
+@media(max-width:430px){.felt{height:500px}.seat{width:78px}}
 
 /* Persistent app navigation */
 .app-nav{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px;position:sticky;top:0;z-index:20;padding:8px;background:rgba(7,25,20,.96);border:1px solid rgba(221,190,111,.22);border-radius:14px;backdrop-filter:blur(10px)}
@@ -137,36 +134,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
   .card{padding:12px}
 }
 
-
-
-/* Refined emerald-and-gold visual system */
-:root{--bg:#06130f;--panel:#10271e;--gold:#edc66f;--cream:#fff7e5;--muted:#a7bcae;--green:#36a879}
-body{background:radial-gradient(ellipse at 50% -15%,#245640 0%,#0b2118 42%,#050f0c 100%);background-attachment:fixed;letter-spacing:.05px}
-.wrap{width:min(100% - 28px,980px);padding:22px 0 30px}
-.top{padding:4px 2px 18px;border-bottom:1px solid #d7b96822;margin-bottom:18px}
-.logo{box-shadow:0 5px 18px #e7bd682c;border:1px solid #ffe3a0}
-.brand{letter-spacing:.4px}
-.status{background:#102e22;white-space:nowrap}
-.card{background:linear-gradient(145deg,rgba(21,49,38,.98),rgba(8,27,20,.98));border:1px solid #42654e88;box-shadow:0 18px 44px #0002}
-.table-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.table-tile{position:relative;overflow:hidden;background:linear-gradient(145deg,#fff9eb 0%,#f0dfb7 100%);border:1px solid #d6b45d;border-radius:20px;padding:19px;min-height:168px;box-shadow:0 9px 22px #0002;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
-.table-tile:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(#f3d98d,#b88b36)}
-.table-tile strong{font-size:25px;letter-spacing:-.5px}
-.table-tile .occupancy{color:#236545}
-.table-tile:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 15px 28px #0003;border-color:#ffe39b}
-button{transition:filter .15s ease,transform .15s ease,box-shadow .15s ease}
-button:hover:not(:disabled){filter:brightness(1.06)}
-button:active:not(:disabled){transform:translateY(1px)}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-.primary{background:linear-gradient(135deg,#f5d98e,#d6a84e);box-shadow:0 5px 15px #d7ad4b22}
-.field input{background:rgba(4,19,13,.78);border-color:#3c644e}
-.profile-strip{box-shadow:0 7px 20px #0002}
-.felt{box-shadow:inset 0 0 0 3px #987344,inset 0 0 50px #00190e,0 14px 32px #0003}
-.app-nav{background:rgba(5,20,14,.94);border-color:#d9b85b55}
-@media(max-width:760px){.table-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wrap{width:min(100% - 22px,680px);padding-top:14px}}
-@media(max-width:430px){.table-grid{gap:9px}.table-tile{padding:14px 12px;min-height:150px;border-radius:16px}.table-tile strong{font-size:22px}.card{padding:17px}.top{align-items:flex-start}.brand{font-size:13px}.logo{width:38px;height:38px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
-
 </style>
 </head>
 <body>
@@ -210,13 +177,13 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
       </div>
       <div id="playerActivity" class="activity-panel"><span class="muted">Your table and hand activity will appear here.</span></div>
     </div>
-    <div class="card"><div class="eyebrow">Choose your table</div><h2>Six tables. Your stakes.</h2><p class="muted" style="font-size:13px">Choose a boot level and buy-in. Join instantly; the dealer will be waiting at the table.</p><div class="table-grid" id="tableGrid"></div><div class="msg err" id="lobbyErr" hidden></div></div>
+    <div class="card"><div class="eyebrow">Choose your table</div><h2>Six tables. Your stakes.</h2><p class="muted" style="font-size:13px">Choose a boot level and buy-in. You join instantly when the table is open.</p><div class="table-grid" id="tableGrid"></div><div class="msg err" id="lobbyErr" hidden></div></div>
     <div class="row"><span class="muted" style="font-size:12px">Signed in as player</span><button class="ghost small" id="lobbySignOut" type="button">Sign out</button></div>
   </section>
 
   <!-- ADMIN DASHBOARD -->
   <section class="screen" id="adminDashboard">
-    <div class="card"><div class="eyebrow">Club control room</div><h1>Admin<br><span style="color:var(--gold)">Dashboard.</span></h1><p class="muted">Manage the six permanent tables and deal each hand. Players join open tables automatically; the dealer starts the game when everyone is ready. Admin access is checked against your Firebase account UID.</p><div class="row" style="margin-bottom:14px"><span class="pill gold">Verified admin</span><button class="ghost small" id="adminSignOut" type="button">Sign out</button></div><button class="primary" id="initTablesBtn" type="button">Set up / refresh six tables</button><div class="msg" id="adminSetupMsg" hidden></div></div>
+    <div class="card"><div class="eyebrow">Club control room</div><h1>Admin<br><span style="color:var(--gold)">Dashboard.</span></h1><p class="muted">Manage the six permanent tables and approve players. Admin access is checked against your Firebase account UID.</p><div class="row" style="margin-bottom:14px"><span class="pill gold">Verified admin</span><button class="ghost small" id="adminSignOut" type="button">Sign out</button></div><button class="primary" id="initTablesBtn" type="button">Set up / refresh six tables</button><div class="msg" id="adminSetupMsg" hidden></div></div>
     <div class="card"><h2>Permanent tables</h2><div id="adminTableList"></div></div>
   </section>
 
@@ -465,16 +432,14 @@ let S = null;              // latest public game state
 let myCards = [];
 let adminG = null, adminReady = false, queue = Promise.resolve(), processed = new Set();
 let curMembers = [], curAdminName = '', curAdminUid = '';
-let lastResultHand = 0, busy = false;
+let lastResultHand = 0, lastAnimatedHand = 0, busy = false;
 let clockKey = '', clockEndsAt = 0;
 const TURN_SECONDS = 20;
 
 function show(id){
-  const target = $(id);
-  if(!target){ console.warn('Screen not found:', id); return; }
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  target.classList.add('active');
-  window.scrollTo({top:0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+  $(id).classList.add('active');
+  window.scrollTo(0, 0);
 }
 function toast(t){
   const el = $('toast'); el.textContent = t; el.style.display = 'block';
@@ -483,7 +448,7 @@ function toast(t){
 function err(msg){ const e = $('entryErr'); e.textContent = msg; e.hidden = !msg; }
 function stopListening(){
   unsubs.forEach(u => u()); unsubs = [];
-  S = null; myCards = []; adminG = null; adminReady = false; processed = new Set(); lastResultHand = 0;
+  S = null; myCards = []; adminG = null; adminReady = false; processed = new Set(); lastResultHand = 0; lastAnimatedHand = 0;
 }
 function randInt(n){
   const r = new Uint32Array(1);
@@ -658,19 +623,8 @@ function sendAction(type){
 }
 
 /* ---------- rendering ---------- */
-let lastAnimatedDealHand = null;
-let animateThisRender = false;
-let dealAnimationIndex = 0;
-let dealSeatIndex = 0, dealCardIndex = 0, dealSeatCount = 1;
 function cardEl(c, cls){
   const d = document.createElement('div'); d.className = 'pc' + (cls ? ' ' + cls : '');
-  if (animateThisRender) {
-    d.classList.add('deal-in');
-    // Round-robin timing: first card to every seat, then second, then third.
-    const sequence = (dealCardIndex++ * dealSeatCount) + dealSeatIndex;
-    d.style.animationDelay = (sequence * 210) + 'ms';
-    dealAnimationIndex++;
-  }
   if (c === null){ d.classList.add('back'); d.textContent = '?'; }
   else { d.textContent = c; if (c.slice(-1) === '♥' || c.slice(-1) === '♦') d.classList.add('red'); }
   return d;
@@ -691,13 +645,14 @@ setInterval(updateTurnClock, 250);
 function renderGame(){
   updateTurnClock();
   const felt = $('felt'); felt.textContent = '';
-  const handKey = S && S.handNo != null ? String(S.handNo) : null;
-  animateThisRender = !!(S && S.order && S.order.length && handKey !== lastAnimatedDealHand);
-  if (animateThisRender) { lastAnimatedDealHand = handKey; dealAnimationIndex = 0; }
   const actions = $('actions'); actions.textContent = '';
   const isAdmin = room && room.isAdmin;
   $('adminNote').hidden = !isAdmin;
   const idle = !S || !S.order || !S.order.length;
+  // Snapshot listeners may render more than once for the same hand. Animate only
+  // the first render of each hand so routine updates never replay the deal.
+  const animateDeal = !idle && Number(S.handNo) !== lastAnimatedHand;
+  if (animateDeal) lastAnimatedHand = Number(S.handNo);
   const potEl = document.createElement('div'); potEl.className = 'pot';
   const sm = document.createElement('small'); sm.textContent = 'CURRENT POT';
   const am = document.createElement('div'); am.className = 'amount'; am.textContent = fmt(S && S.pot ? S.pot : 0);
@@ -715,10 +670,7 @@ function renderGame(){
     const base = Math.max(0, order.indexOf(uid));
     const rot = order.slice(base).concat(order.slice(0, base));
     const n = rot.length;
-    dealSeatCount = Math.max(1, n);
     rot.forEach((u, k) => {
-      dealSeatIndex = k;
-      dealCardIndex = 0;
       const p = S.players[u];
       const me = u === uid && order.indexOf(uid) >= 0;
       const ang = (90 + k * 360 / n) * Math.PI / 180;
@@ -736,9 +688,21 @@ function renderGame(){
       const cd = document.createElement('div'); cd.className = 'cards';
       const reveal = S.result && S.result.reveal && S.result.reveal[u];
       const big = me ? 'big' : '';
-      if (reveal) reveal.forEach(c => cd.appendChild(cardEl(c, big)));
-      else if (me && p.status === 'seen' && myCards.length) myCards.forEach(c => cd.appendChild(cardEl(c, big)));
-      else if (p.status !== 'out') for (let i = 0; i < 3; i++) cd.appendChild(cardEl(null, big));
+      if (reveal) reveal.forEach((c, i) => {
+        const card = cardEl(c, big);
+        if (animateDeal) { card.classList.add('deal-in'); card.style.animationDelay = ((i * n + k) * 180) + 'ms'; }
+        cd.appendChild(card);
+      });
+      else if (me && p.status === 'seen' && myCards.length) myCards.forEach((c, i) => {
+        const card = cardEl(c, big);
+        if (animateDeal) { card.classList.add('deal-in'); card.style.animationDelay = ((i * n + k) * 180) + 'ms'; }
+        cd.appendChild(card);
+      });
+      else if (p.status !== 'out') for (let i = 0; i < 3; i++) {
+        const card = cardEl(null, big);
+        if (animateDeal) { card.classList.add('deal-in'); card.style.animationDelay = ((i * n + k) * 180) + 'ms'; }
+        cd.appendChild(card);
+      }
       seat.appendChild(av); seat.appendChild(nm); seat.appendChild(ch); seat.appendChild(tg); seat.appendChild(cd);
       felt.appendChild(seat);
     });
@@ -786,16 +750,6 @@ function renderLists(){
   const code = room.code, isAdmin = room.isAdmin;
   const pend = curMembers.filter(m => m.status === 'pending');
   const appr = curMembers.filter(m => m.status === 'approved');
-  const pendingCard=$('pendingCard'), pendingList=$('pendingList');
-  if(pendingCard && pendingList){
-    pendingCard.hidden=true;
-    pendingList.textContent='';
-    if(isAdmin) pend.forEach(m=>{
-      const approve=btn('Approve','primary',()=>db.collection('rooms').doc(code).collection('members').doc(m.id).update({status:'approved'}).then(()=>toast(m.name+' approved')).catch(e=>toast(fmtErr(e))));
-      const reject=btn('Reject','danger',()=>db.collection('rooms').doc(code).collection('members').doc(m.id).update({status:'rejected'}).then(()=>toast(m.name+' rejected')).catch(e=>toast(fmtErr(e))));
-      pendingList.appendChild(rowEl(m.name,'Pending',[approve,reject],m.buyIn?'Buy-in '+fmt(m.buyIn):'Buy-in not recorded'));
-    });
-  }
   const chipsOf = u => (S && S.players && S.players[u]) ? fmt(S.players[u].chips) + ' chips' : '';
   const canTop = isAdmin && !(S && S.phase === 'playing');
   const pl = $('playerList'); pl.textContent = '';
@@ -832,7 +786,7 @@ function enterRoom(code, isAdmin, name){
   unsubs.push(roomRef().collection('members').onSnapshot(qs => {
     curMembers = qs.docs.map(d => ({ id: d.id, ...d.data() }));
     const me = curMembers.find(m => m.id === uid);
-    if (!isAdmin && me && me.status !== 'approved'){ leave(true); return; }
+    if (!isAdmin && me && me.status !== 'approved'){ watchMyRequest(code); return; }
     if (!isAdmin && !me){ leave(true); return; }
     renderLists();
     if (isAdmin) reconcileMembers();
@@ -923,29 +877,13 @@ async function renderLobbyTables(){
       if(!snap.exists){occupancy.textContent='Table not initialized';tile.disabled=true;action.textContent='Table unavailable';return;}
       const data=snap.data();
       occupancy.textContent=data.status==='closed'?'Temporarily closed':'Open · Join instantly';
-      if(data.status==='closed'){tile.disabled=true;action.textContent='Table closed';return;}
       tile.onclick=async()=>{
         const buy=prompt('Choose your buy-in between '+t.min+' and '+t.max+' play chips:',String(t.min));
         if(buy===null)return;const n=Number(buy);
         if(!Number.isInteger(n)||n<t.min||n>t.max){$('lobbyErr').textContent='Buy-in must be between '+fmt(t.min)+' and '+fmt(t.max)+'.';$('lobbyErr').hidden=false;return;}
         // Keep existing table game engine; buy-in is stored as a request field for the table admin.
-        try{
-          $('lobbyErr').hidden=true;
-          const name=(currentUser.email||'Player').split('@')[0].slice(0,20);
-          const memberRef=db.collection('rooms').doc(tableDocId(t.boot)).collection('members').doc(uid);
-          const existing=await memberRef.get();
-          if(existing.exists && existing.data().status==='approved'){
-            enterRoom(tableDocId(t.boot),false,existing.data().name||name);
-            return;
-          }
-          if(existing.exists && existing.data().status==='pending'){
-            await memberRef.update({status:'approved',name,buyIn:n,joinedAt:firebase.firestore.FieldValue.serverTimestamp()});
-          } else {
-            await memberRef.set({uid,name,status:'approved',buyIn:n,joinedAt:firebase.firestore.FieldValue.serverTimestamp()});
-          }
-          addPlayerActivity('Joined Boot '+t.boot+' table · buy-in '+fmt(n));
-          enterRoom(tableDocId(t.boot),false,name);
-        }catch(e){$('lobbyErr').textContent=fmtErr(e);$('lobbyErr').hidden=false;}
+        try{$('lobbyErr').hidden=true;$('displayName').value=(currentUser.email||'Player').split('@')[0].slice(0,20);$('roomCode').value=tableDocId(t.boot);await db.collection('rooms').doc(tableDocId(t.boot)).collection('members').doc(uid).set({uid,name:$('displayName').value,status:'approved',buyIn:n,joinedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});enterRoom(tableDocId(t.boot),false,$('displayName').value);}
+        catch(e){$('lobbyErr').textContent=fmtErr(e);$('lobbyErr').hidden=false;}
       };
     }catch(e){if(renderVersion!==lobbyRenderVersion)return;occupancy.textContent='Could not load';tile.disabled=true;action.textContent='Retry after refresh';}
   }));
@@ -1032,6 +970,13 @@ boot();
 
 
 
+
+
+
+async 
+
+
+
 const playerSessionStats = {hands:0,wins:0,activity:[]};
 function addPlayerActivity(message){
   playerSessionStats.activity.unshift(new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})+' · '+message);
@@ -1060,7 +1005,7 @@ function navSetStatus(text){
   const el=$('navStatus'); if(el) el.textContent=text;
 }
 function navigateLobby(){
-  if(!currentUser){ if(typeof show==='function') show('authScreen'); return; }
+  if(!currentUser){ if(typeof show==='function') show('auth'); return; }
   // Leaving a table should detach listeners and clear room state, then render the player lobby.
   if(typeof stopListening==='function') stopListening();
   room=null;
@@ -1071,7 +1016,7 @@ function navigateLobby(){
     navSetStatus('Admin dashboard: manage tables here.');
     return;
   }
-  if(typeof show==='function') show('lobby');
+  if(typeof show==='function') show('playerLobby');
   if(typeof renderLobbyTables==='function') renderLobbyTables();
   navSetStatus('Lobby: choose a table to join.');
 }
@@ -1099,15 +1044,15 @@ function navigateSignOut(){
   if(typeof auth!=='undefined' && auth && typeof auth.signOut==='function'){
     if(typeof stopListening==='function') stopListening();
     room=null;
-    auth.signOut().then(()=>{ if(typeof show==='function') show('authScreen'); }).catch(e=>{ if(typeof toast==='function') toast(fmtErr(e)); });
+    auth.signOut().then(()=>{ if(typeof show==='function') show('auth'); }).catch(e=>{ if(typeof toast==='function') toast(fmtErr(e)); });
   }
 }
 function goToPlayerLobbyAfterLeave(){
   if(typeof stopListening==='function') stopListening();
   room=null;
-  if(!currentUser){show('authScreen');return;}
+  if(!currentUser){show('auth');return;}
   if(uid===GLOBAL_ADMIN_UID){show('adminDashboard');if(typeof renderAdminTables==='function')renderAdminTables();}
-  else {show('lobby');if(typeof renderLobbyTables==='function')renderLobbyTables();}
+  else {show('playerLobby');if(typeof renderLobbyTables==='function')renderLobbyTables();}
   navSetStatus(uid===GLOBAL_ADMIN_UID?'Admin dashboard.':'Lobby: choose a table.');
 }
 
