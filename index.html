@@ -175,243 +175,99 @@ body.dashboard-view .footer{margin-top:20px}
 @media(prefers-reduced-motion:reduce){.table-tile{transition:none}}
 
 
-/* ==========================================================================
-   TPC VISUAL SYSTEM — v1
-   Layout and motion overrides live here so future design work stays isolated.
-   Keep game/Firebase logic below untouched when making visual-only changes.
-   Sections: tokens → screen transitions → panels → table → cards → controls.
-   ========================================================================== */
 
-/* 01 · Design tokens */
+/* ================================================================
+   TPC VISUAL LAYER v2 — PRESENTATION ONLY
+   Keep future layout / animation changes in this section.
+   Do not put game rules, Firebase calls, or game state here.
+   ================================================================ */
 :root {
-  --tpc-ink: #07140f;
-  --tpc-panel: #0c2118;
-  --tpc-panel-raised: #112d20;
-  --tpc-felt: #075032;
-  --tpc-felt-light: #16734b;
-  --tpc-gold: #e7bd68;
-  --tpc-gold-bright: #ffe7a0;
-  --tpc-line: rgba(231, 189, 104, .24);
-  --tpc-soft-line: rgba(184, 216, 191, .14);
-  --tpc-ease: cubic-bezier(.2, .75, .25, 1);
-  --tpc-fast: 180ms;
-  --tpc-medium: 320ms;
+  --tpc-felt-edge: #c7a15a;
+  --tpc-felt-light: #168052;
+  --tpc-felt-dark: #063a27;
+  --tpc-gold-glow: rgba(239, 204, 119, .32);
+  --tpc-panel-glass: rgba(10, 31, 23, .92);
 }
 
-/* 02 · Screen and page transitions */
-.screen.active {
-  animation: tpc-screen-enter 360ms var(--tpc-ease) both;
-}
-@keyframes tpc-screen-enter {
-  from { opacity: 0; transform: translateY(9px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.top {
-  animation: tpc-header-enter 420ms var(--tpc-ease) both;
-}
-@keyframes tpc-header-enter {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+/* IMPORTANT: author display styles must not override the HTML hidden attribute. */
+[hidden], .dealbox[hidden], #dealBox[hidden], #pendingCard[hidden], #resultBox[hidden],
+#adminNote[hidden], #stakePill[hidden], #lobbyErr[hidden], #authErr[hidden],
+#entryErr[hidden], #adminSetupMsg[hidden] { display: none !important; }
+
+/* Gentle screen entrance; the underlying screen switching logic stays untouched. */
+.screen.active { animation: tpc-screen-in .28s ease both; }
+@keyframes tpc-screen-in {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* 03 · Shared surfaces */
-.card,
-.player-hero,
-.table-lounge,
-.actionbar,
-.club-note,
-.auth-shell {
-  box-shadow: 0 12px 32px rgba(0, 0, 0, .14);
-}
+/* Refined panels and tactile controls. */
 .card {
-  border-color: var(--tpc-soft-line);
-  transition: border-color var(--tpc-medium) ease, box-shadow var(--tpc-medium) ease;
+  box-shadow: 0 14px 34px rgba(0,0,0,.16), inset 0 1px rgba(255,255,255,.025);
+  backdrop-filter: blur(8px);
 }
-button {
-  transition:
-    transform var(--tpc-fast) var(--tpc-ease),
-    filter var(--tpc-fast) ease,
-    box-shadow var(--tpc-fast) ease,
-    background-color var(--tpc-fast) ease;
-  -webkit-tap-highlight-color: transparent;
-}
-button:not(:disabled):active {
-  transform: translateY(1px) scale(.985);
-  filter: brightness(.96);
-}
-button:focus-visible,
-input:focus-visible,
-select:focus-visible {
-  outline: 2px solid var(--tpc-gold-bright);
-  outline-offset: 3px;
-}
+button { transition: transform .16s ease, filter .16s ease, box-shadow .16s ease, border-color .16s ease; }
+button:not(:disabled):active { transform: translateY(1px) scale(.985); }
+button.primary:not(:disabled):hover { filter: brightness(1.06); box-shadow: 0 5px 18px rgba(231,189,104,.16); }
+button.secondary:not(:disabled):hover, button.ghost:not(:disabled):hover { border-color: var(--tpc-felt-edge); }
 
-/* 04 · Game table stage */
-.felt {
+/* Table is a distinct stage with a layered felt, rail, and inner playing line. */
+#felt.felt {
   isolation: isolate;
-  border-color: #5c4228;
+  border: 7px solid #503a27;
+  outline: 1px solid rgba(243,211,139,.55);
+  outline-offset: -9px;
   background:
-    radial-gradient(ellipse at 50% 43%, rgba(40, 143, 91, .38), transparent 48%),
-    radial-gradient(ellipse, var(--tpc-felt-light) 0, var(--tpc-felt) 56%, #062c1d 100%);
-  box-shadow:
-    inset 0 0 0 3px #b38b4e,
-    inset 0 0 0 6px rgba(255, 224, 153, .08),
-    inset 0 0 55px rgba(0, 15, 8, .65),
-    0 12px 28px rgba(0, 0, 0, .18);
+    radial-gradient(ellipse at 50% 44%, rgba(39,151,94,.52), transparent 54%),
+    radial-gradient(ellipse at center, var(--tpc-felt-light) 0%, #0b5b3b 48%, var(--tpc-felt-dark) 100%);
+  box-shadow: inset 0 0 0 2px #a98449, inset 0 0 0 11px rgba(6,35,24,.28),
+    inset 0 0 48px rgba(0,0,0,.45), 0 12px 28px rgba(0,0,0,.18);
 }
-.felt::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 7%;
-  border: 1px solid rgba(255, 224, 153, .08);
-  border-radius: 50%;
-  pointer-events: none;
+#felt.felt::before {
+  content: ""; position: absolute; z-index: -1; inset: 7%; border: 1px solid rgba(227,203,140,.13);
+  border-radius: 48% / 35%; pointer-events: none;
 }
-.pot .amount {
-  text-shadow: 0 2px 14px rgba(255, 215, 123, .18);
-  animation: tpc-pot-settle 420ms var(--tpc-ease) both;
-}
-@keyframes tpc-pot-settle {
-  from { opacity: .45; transform: translateY(4px) scale(.96); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
+.pot { z-index: 1; text-shadow: 0 2px 10px rgba(0,0,0,.24); }
+.pot .amount { font-size: clamp(25px, 4vw, 34px); text-shadow: 0 0 18px rgba(255,224,154,.15); }
 
-/* 05 · Player seats and turn feedback */
-.seat {
-  animation: tpc-seat-arrive 420ms var(--tpc-ease) both;
-  transition: opacity var(--tpc-medium) ease, filter var(--tpc-medium) ease;
-}
-.seat:nth-of-type(2) { animation-delay: 35ms; }
-.seat:nth-of-type(3) { animation-delay: 70ms; }
-.seat:nth-of-type(4) { animation-delay: 105ms; }
-@keyframes tpc-seat-arrive {
-  from { opacity: 0; translate: 0 7px; }
-  to   { opacity: 1; translate: 0 0; }
-}
-.seat.turn .avatar {
-  animation: tpc-active-seat 1.5s ease-in-out infinite alternate;
-}
-@keyframes tpc-active-seat {
-  from { box-shadow: 0 0 0 2px rgba(255, 225, 154, .62), 0 0 8px rgba(255, 225, 154, .18); }
-  to   { box-shadow: 0 0 0 4px rgba(255, 225, 154, .9), 0 0 19px rgba(255, 225, 154, .52); }
-}
-.dealer-wait {
-  animation: tpc-wait-fade 700ms var(--tpc-ease) both;
-}
-.dealer-avatar {
-  animation: tpc-dealer-breathe 2.8s ease-in-out infinite alternate;
-}
-@keyframes tpc-wait-fade {
-  from { opacity: 0; transform: translate(-50%, calc(-50% + 8px)); }
-  to   { opacity: 1; transform: translate(-50%, -50%); }
-}
-@keyframes tpc-dealer-breathe {
-  from { box-shadow: 0 0 12px rgba(228, 189, 98, .25); }
-  to   { box-shadow: 0 0 25px rgba(228, 189, 98, .48); }
-}
+/* Seats enter softly; current turn is clearer without moving seat coordinates. */
+.seat { z-index: 2; filter: drop-shadow(0 3px 5px rgba(0,0,0,.18)); animation: tpc-seat-in .28s ease both; }
+@keyframes tpc-seat-in { from { opacity: 0; transform: translate(-50%,-46%) scale(.94); } to { opacity: 1; transform: translate(-50%,-50%) scale(1); } }
+.avatar { box-shadow: 0 3px 8px rgba(0,0,0,.28); }
+.seat.turn .avatar { box-shadow: 0 0 0 3px #ffe19a, 0 0 0 7px rgba(255,225,154,.12), 0 0 20px #ffe19a; }
+.seat.turn .name { color: #ffe5a2; }
+.pc { transform-origin: center bottom; animation: tpc-card-in .24s cubic-bezier(.2,.75,.25,1) both; }
+.pc:nth-child(2) { animation-delay: .055s; }
+.pc:nth-child(3) { animation-delay: .11s; }
+@keyframes tpc-card-in { from { opacity: 0; transform: translateY(9px) rotate(2deg) scale(.94); } to { opacity: 1; transform: translateY(0) rotate(0) scale(1); } }
+.pc.big { width: clamp(27px, 6vw, 39px); height: clamp(39px, 8vw, 55px); border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,.3); }
 
-/* 06 · Cards — entrance only; card values and game state remain JS-controlled */
-.pc {
-  transform-origin: 50% 90%;
-  animation: tpc-card-deal 360ms var(--tpc-ease) both;
-  backface-visibility: hidden;
-}
-.cards .pc:nth-child(1) { animation-delay: 40ms; }
-.cards .pc:nth-child(2) { animation-delay: 110ms; }
-.cards .pc:nth-child(3) { animation-delay: 180ms; }
-@keyframes tpc-card-deal {
-  from { opacity: 0; transform: translateY(-12px) rotate(-5deg) scale(.88); }
-  to   { opacity: 1; transform: translateY(0) rotate(0) scale(1); }
-}
-.pc.back {
-  box-shadow: 0 2px 5px rgba(0, 0, 0, .35), inset 0 0 0 1px rgba(255, 245, 211, .35);
-}
+/* Keep dealer actions visually separate from player action controls. */
+.actionbar { background: linear-gradient(145deg, rgba(7,27,19,.96), rgba(11,34,24,.96)); border-color: rgba(203,171,91,.25); box-shadow: inset 0 1px rgba(255,255,255,.025); }
+#actions button { min-height: 42px; }
+#dealBox { align-items: stretch; }
+#dealBox .field select, #bootInput { min-height: 44px; }
+#dealBtn { min-height: 44px; }
+#playerList .list-row { padding: 13px 0; }
 
-/* 07 · Action area and buttons */
-.actionbar {
-  border-color: var(--tpc-line);
-  background: linear-gradient(145deg, rgba(9, 31, 21, .98), rgba(7, 24, 16, .98));
-}
-.actions button {
-  min-height: 43px;
-}
-.actions .primary {
-  box-shadow: 0 4px 14px rgba(231, 189, 104, .12);
-}
-.actions .primary:not(:disabled):hover {
-  box-shadow: 0 6px 20px rgba(231, 189, 104, .22);
-}
-.turn-clock {
-  transition: opacity var(--tpc-fast) ease, filter var(--tpc-fast) ease;
-}
-.msg.win {
-  animation: tpc-result-enter 380ms var(--tpc-ease) both;
-}
-@keyframes tpc-result-enter {
-  from { opacity: 0; transform: translateY(-5px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* 08 · Lists and admin controls */
-.list-row {
-  transition: background-color var(--tpc-fast) ease;
-}
-.list-row:hover {
-  background: rgba(231, 189, 104, .035);
-}
-.pill {
-  border: 1px solid rgba(185, 216, 196, .08);
-}
-.pill.gold {
-  border-color: rgba(231, 189, 104, .18);
-}
-
-/* 09 · Room view: the table's own Leave control is the navigation here */
-body:has(#room.active) #appNav [data-nav="lobby"],
-body:has(#room.active) #appNav .nav-status {
-  display: none !important;
-}
-body:has(#room.active) #appNav {
-  display: none !important;
-}
-
-/* 10 · Small screens: preserve usable tap targets and avoid excess motion */
+/* Mobile-first refinements. */
 @media (max-width: 600px) {
-  .felt {
-    height: clamp(360px, 112vw, 470px);
-    border-width: 6px;
-  }
-  .actionbar {
-    padding: 12px;
-  }
-  .actions {
-    gap: 7px;
-  }
-  .actions button {
-    min-height: 42px;
-    padding: 10px 11px;
-  }
+  .wrap { padding-left: 10px; padding-right: 10px; }
+  #room > .card { padding: 14px; border-radius: 17px; }
+  #felt.felt { height: clamp(390px, 104vw, 470px); border-width: 6px; }
+  .seat { width: 74px; }
+  .seat .name { font-size: 10px; }
+  .seat .chips { font-size: 10px; }
+  .seat .tag { font-size: 9px; }
+  .cards { gap: 2px; }
+  .pc:not(.big) { width: 19px; height: 28px; font-size: 9px; }
+  .actionbar { padding: 12px; }
+  .dealbox { gap: 6px; }
+  .dealbox .field { flex-basis: 96px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .screen.active,
-  .top,
-  .seat,
-  .pc,
-  .dealer-wait,
-  .dealer-avatar,
-  .pot .amount,
-  .msg.win {
-    animation: none !important;
-  }
-  .seat.turn .avatar {
-    animation: none !important;
-  }
-  button,
-  .card,
-  .list-row {
-    transition: none !important;
-  }
+  .screen.active, .seat, .pc { animation: none !important; }
+  button { transition: none !important; }
 }
 
 </style>
