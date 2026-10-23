@@ -221,14 +221,14 @@ body.dashboard-view .footer{margin-top:20px}
       <div class="stat-card"><span>WINS</span><strong id="statWins">0</strong><small>Completed hands</small></div>
       <div class="stat-card"><span>TABLE STATUS</span><strong id="statTable">Lobby</strong><small id="statTableSub">Choose a table to start</small></div>
     </div>
-    <div class="lounge-section-head"><div><div class="eyebrow">FIND YOUR GAME</div><h2>Choose your table</h2><p>Six tables. One good hand away.</p></div><button type="button" class="refresh-button" onclick="refreshPlayerLobby()" aria-label="Refresh tables">↻</button></div>
-    <div class="table-lounge"><div class="table-lounge-top"><span><i class="live-dot"></i> TABLES OPEN FOR PLAY</span><span class="play-only">PLAY CHIPS ONLY</span></div><div class="table-grid" id="tableGrid"></div><div class="msg err" id="lobbyErr" hidden></div></div>
+    <div class="lounge-section-head"><div><div class="eyebrow">FIND YOUR GAME</div><h2>Choose your table</h2><p>Six private rooms. Two test opponents at every table.</p></div><button type="button" class="refresh-button" onclick="refreshPlayerLobby()" aria-label="Refresh tables">↻</button></div>
+    <div class="table-lounge"><div class="table-lounge-top"><span><i class="live-dot"></i> PRIVATE TABLES · TEST BOTS INCLUDED</span><span class="play-only">PLAY CHIPS ONLY</span></div><div class="table-grid" id="tableGrid"></div><div class="msg err" id="lobbyErr" hidden></div></div>
     <div class="player-lower-grid"><div class="card quick-card"><div class="eyebrow">YOUR CLUB RECORD</div><h3>At a glance</h3><div class="quick-actions"><button type="button" class="secondary" onclick="showPlayerStats()">♜ My stats</button><button type="button" class="secondary" onclick="showRecentActivity()">◷ Recent activity</button></div><div id="playerActivity" class="activity-panel"><span class="muted">Your table and hand activity will appear here.</span></div></div><div class="club-note"><div class="note-spade">♠</div><strong>Good cards. Good company.</strong><p>Private tables for friendly competition.</p><small>NO REAL-MONEY GAMBLING</small></div></div>
   </section>
 
   <!-- ADMIN DASHBOARD -->
   <section class="screen" id="adminDashboard">
-    <div class="card"><div class="eyebrow">Club control room</div><h1>Admin<br><span style="color:var(--gold)">Dashboard.</span></h1><p class="muted">Manage the six permanent tables and approve players. Admin access is checked against your Firebase account UID.</p><div class="row" style="margin-bottom:14px"><span class="pill gold">Verified admin</span><button class="ghost small" id="adminSignOut" type="button">Sign out</button></div><button class="primary" id="initTablesBtn" type="button">Set up / refresh six tables</button><div class="msg" id="adminSetupMsg" hidden></div></div>
+    <div class="card"><div class="eyebrow">Club control room</div><h1>Admin<br><span style="color:var(--gold)">Dashboard.</span></h1><p class="muted">Manage the six permanent tables, review players, and test full hands against two simulated opponents. Admin access is checked against your Firebase account UID.</p><div class="row" style="margin-bottom:14px"><span class="pill gold">Verified admin</span><button class="ghost small" id="adminSignOut" type="button">Sign out</button></div><button class="primary" id="initTablesBtn" type="button">Set up / refresh six tables</button><div class="msg" id="adminSetupMsg" hidden></div></div>
     <div class="card"><h2>Permanent tables</h2><div id="adminTableList"></div></div>
   </section>
 
@@ -271,7 +271,7 @@ body.dashboard-view .footer{margin-top:20px}
 
     <div class="card">
       <div id="resultBox" class="msg win" hidden></div>
-      <div class="felt" id="felt"></div>
+      <div class="pill" style="margin-bottom:10px">♠ Two test bots are included at every table · play chips only</div><div class="felt" id="felt"></div>
       <div class="actionbar">
         <div class="row"><div><b id="turnLabel">Table is empty</b><div class="muted" style="font-size:12px" id="turnSub"></div></div><div style="display:flex;align-items:center;gap:8px"><span class="turn-clock off" id="turnClock" aria-label="Turn countdown">—</span><span class="pill gold" id="stakePill" hidden></span></div></div>
         <div class="actions" id="actions"></div>
@@ -468,6 +468,9 @@ function dropPlayers(G, goneUids){
 
 const $ = id => document.getElementById(id);
 const GLOBAL_ADMIN_UID = 'OYmXPfqplmMeqzsyD8ePf8m7Foi1';
+// Two simulated opponents per table for testing. They are game-engine seats, not Firebase accounts.
+const TEST_BOTS = [{uid:'TPC_TEST_BOT_1',name:'Dealer Bot'}, {uid:'TPC_TEST_BOT_2',name:'Lucky Bot'}];
+let botTurnKey = '';
 const TABLES = [{boot:1,min:20,max:100},{boot:5,min:100,max:500},{boot:10,min:200,max:1000},{boot:25,min:500,max:2500},{boot:50,min:1000,max:5000},{boot:100,min:2000,max:10000}];
 let authMode = 'player';
 let db, auth, uid = null, currentUser = null, mode = 'join';
@@ -639,7 +642,8 @@ function reconcileMembers(){
 async function dealNewHand(){
   const boot = Math.max(1, Math.floor(Number($('bootInput').value) || 100));
   const roster = [{ uid: curAdminUid, name: curAdminName }]
-    .concat(curMembers.filter(m => m.status === 'approved').map(m => ({ uid: m.id, name: m.name })));
+    .concat(curMembers.filter(m => m.status === 'approved').map(m => ({ uid: m.id, name: m.name })))
+    .concat(botRoster());
   const next = startHandState(adminG, roster, boot);
   if (!next){ toast('Need at least 2 players who each have ' + fmt(boot) + ' chips.'); return; }
   const hands = dealHands(next.order, randInt);
@@ -704,7 +708,7 @@ function renderGame(){
   const am = document.createElement('div'); am.className = 'amount'; am.textContent = fmt(S && S.pot ? S.pot : 0);
   potEl.appendChild(sm); potEl.appendChild(am); felt.appendChild(potEl);
 
-  const activeSeats = curMembers.filter(m => m.status === 'approved').length + (room && room.isAdmin ? 1 : 0);
+  const activeSeats = curMembers.filter(m => m.status === 'approved').length + 1 + TEST_BOTS.length;
   if (idle) {
     const dealer = document.createElement('div'); dealer.className='dealer-wait';
     dealer.innerHTML='<div class="dealer-avatar">♠</div><strong>Dealer is ready</strong><small>Waiting for at least 2 players to start a hand</small><span class="waiting-badge">'+activeSeats+' player'+(activeSeats===1?'':'s')+' at table</span>';
@@ -761,7 +765,7 @@ function renderGame(){
     $('turnLabel').textContent = 'Hand finished'; $('turnSub').textContent = isAdmin ? 'Deal the next hand when everyone is ready.' : 'Waiting for the dealer to deal again.';
   } else {
     $('turnLabel').textContent = activeSeats < 2 ? 'Waiting for players' : 'Dealer ready';
-    $('turnSub').textContent = activeSeats < 2 ? 'A minimum of 2 players must be seated before cards are dealt.' : (isAdmin ? 'At least 2 players are seated. Deal when ready.' : 'The dealer can now deal the next hand.');
+    $('turnSub').textContent = activeSeats < 2 ? 'Two test bots are available while you test the table.' : (isAdmin ? 'At least 2 players are seated. Deal when ready.' : 'The dealer can now deal the next hand.');
   }
 
   if (playing && mine && (mine.status === 'blind' || mine.status === 'seen')){
@@ -798,7 +802,37 @@ function renderLists(){
   // Players enter automatically; there is no admin approval queue.
 }
 
+async function maybeRunBotTurn(){
+  if(!room || !room.isAdmin || !adminG || adminG.phase!=='playing' || !TEST_BOTS.some(b=>b.uid===adminG.turn)) return;
+  const key=String(adminG.handNo)+':'+String(adminG.turn);
+  if(botTurnKey===key) return;
+  botTurnKey=key;
+  const bot=TEST_BOTS.find(b=>b.uid===adminG.turn);
+  setTimeout(()=>enqueue(async()=>{
+    if(!room || !room.isAdmin || !adminG || adminG.phase!=='playing' || adminG.turn!==bot.uid) return;
+    const current=clone(adminG); const player=current.players[bot.uid];
+    if(!player || !isLive(current)(bot.uid)) return;
+    let type='chaal';
+    const live=liveOf(current);
+    // Bots play simply and predictably for testing: occasionally pack when short-stacked,
+    // otherwise call. They request a show only when heads-up and affordable.
+    const callCost=costOf(current,bot.uid,'chaal');
+    if(player.chips < callCost) type='pack';
+    else if(live.length===2 && Math.random()<0.12) type='show';
+    else if(Math.random()<0.08) type='pack';
+    let hands=null;
+    if(type==='show'){
+      hands={};
+      for(const u of live){const snap=await roomRef().collection('hands').doc(u).get();if(snap.exists)hands[u]=snap.data().cards;}
+      if(!hands[bot.uid] || !hands[live.find(u=>u!==bot.uid)]) type='chaal';
+    }
+    const next=applyAction(current,{uid:bot.uid,type,hand:current.handNo},hands);
+    if(next){adminG=next;await persist();}
+  }), 900);
+}
+
 function enterRoom(code, isAdmin, name){
+  botTurnKey='';
   stopListening();
   room = { code, isAdmin, name };
   try { localStorage.setItem('tpc', JSON.stringify({ name, code })); } catch(e){}
@@ -830,6 +864,8 @@ function enterRoom(code, isAdmin, name){
     S = s.exists ? s.data() : null;
     if (isAdmin && !adminReady){ adminReady = true; adminG = S ? clone(S) : null; }
     renderGame();
+    if(!TEST_BOTS.some(b=>b.uid===S?.turn)) botTurnKey='';
+    if(isAdmin) maybeRunBotTurn();
   }, e => toast(fmtErr(e))));
 
   unsubs.push(roomRef().collection('hands').doc(uid).onSnapshot(s => {
@@ -893,6 +929,7 @@ async function registerPlayer(){
   try{const c=await auth.createUserWithEmailAndPassword(email,password);goToSignedInHome(c.user);}catch(e){authError(e.message||'Could not create account.');}
 }
 function tableDocId(boot){return 'TABLE_BOOT_'+boot;}
+function botRoster(){return TEST_BOTS.map(b=>({...b}));}
 function tableLimits(boot){return TABLES.find(t=>t.boot===boot)||TABLES[0];}
 let lobbyRenderVersion = 0;
 async function renderLobbyTables(){
@@ -919,7 +956,12 @@ async function renderLobbyTables(){
       if(renderVersion!==lobbyRenderVersion)return;
       if(!snap.exists){occupancy.textContent='Table not initialized';tile.disabled=true;action.textContent='Table unavailable';return;}
       const data=snap.data();
-      occupancy.textContent=data.status==='closed'?'Temporarily closed':'Open · Join instantly';
+      if(data.status==='closed'){occupancy.textContent='Temporarily closed';tile.disabled=true;action.textContent='Table closed';return;}
+      try {
+        const membersSnap=await db.collection('rooms').doc(tableDocId(t.boot)).collection('members').get();
+        const humans=membersSnap.docs.filter(d=>d.data().status==='approved').length;
+        occupancy.textContent=(humans+2)+' seats active · includes 2 test bots';
+      } catch (_) { occupancy.textContent='Open · 2 test bots available'; }
       tile.onclick=async()=>{
         const buy=prompt('Choose your buy-in between '+t.min+' and '+t.max+' play chips:',String(t.min));
         if(buy===null)return;const n=Number(buy);
