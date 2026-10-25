@@ -206,6 +206,22 @@ button.busy:after{content:"";position:absolute;inset:0;margin:auto;width:18px;he
 .revealrow{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
 .glog{margin-top:12px;font-size:12px;color:#9aa4b2;display:grid;gap:2px}
 
+/* ---- avatars and table names ---- */
+.avgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:12px 0 4px}
+.avopt{font-size:24px;padding:8px 0;border-radius:12px;border:1px solid rgba(216,180,90,.25);background:rgba(0,0,0,.25);cursor:pointer;min-height:44px}
+.avopt.on{border-color:#d8b45a;background:rgba(216,180,90,.22);box-shadow:0 0 0 2px rgba(216,180,90,.35)}
+.avatar,.av{font-size:22px;line-height:1}
+.tile .stake{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#d8b45a;margin-top:2px}
+.profile>div:nth-child(2){flex:1;min-width:0}
+.profile.editing{flex-wrap:wrap}
+.profile.editing .bal{display:none}
+.profile.editing .row{flex-wrap:nowrap;gap:6px}
+.profile.editing input{min-width:0;flex:1}
+.profile .avgrid{flex-basis:100%;margin:6px 0 0}
+.avopt{background:rgba(255,255,255,.55);border-color:rgba(90,62,8,.25)}
+.avopt.on{background:#fff;border-color:#8a5a00;box-shadow:0 0 0 2px rgba(138,90,0,.45)}
+.profile .btn-ghost{color:#3d2a05;border-color:rgba(90,62,8,.45)}
+
 </style>
 </head>
 <body>
@@ -262,15 +278,26 @@ const HEARTBEAT_MS = 25000;
 const ACTION_STALE_MS = 60000;             // dealer ignores requests older than this
 const ACTION_WAIT_MS = 8000;               // player waits this long for the dealer to answer
 const TABLES = [
-  { id: 'boot_1',   boot: 1,   min: 20,   max: 100 },
-  { id: 'boot_5',   boot: 5,   min: 100,  max: 500 },
-  { id: 'boot_10',  boot: 10,  min: 200,  max: 1000 },
-  { id: 'boot_25',  boot: 25,  min: 500,  max: 2500 },
-  { id: 'boot_50',  boot: 50,  min: 1000, max: 5000 },
-  { id: 'boot_100', boot: 100, min: 2000, max: 10000 }
+  { id: 'boot_1',   boot: 1,   min: 20,   max: 100,   title: 'Chai Stall' },
+  { id: 'boot_5',   boot: 5,   min: 100,  max: 500,   title: 'Dhaba Nights' },
+  { id: 'boot_10',  boot: 10,  min: 200,  max: 1000,  title: 'Mehfil Lounge' },
+  { id: 'boot_25',  boot: 25,  min: 500,  max: 2500,  title: 'Haveli Room' },
+  { id: 'boot_50',  boot: 50,  min: 1000, max: 5000,  title: 'Maharaja Suite' },
+  { id: 'boot_100', boot: 100, min: 2000, max: 10000, title: 'Royal Durbar' }
 ];
 const TABLE_BY_ID = Object.fromEntries(TABLES.map(t => [t.id, t]));
-const tableName = t => 'Boot ' + t.boot;
+const tableName = t => t.title || ('Boot ' + t.boot);     // the table's name, e.g. "Mehfil Lounge"
+const tableStake = t => 'Boot ' + t.boot;                   // its stake, shown beside the name
+
+/* Avatars. The IDs are what is stored (and checked by the rules); the picture is only drawn here. */
+const AVATARS = [
+  ['spade', '\u2660\uFE0F'], ['heart', '\u2665\uFE0F'], ['diamond', '\u2666\uFE0F'], ['club', '\u2663\uFE0F'],
+  ['crown', '\u{1F451}'], ['tiger', '\u{1F42F}'], ['fox', '\u{1F98A}'], ['owl', '\u{1F989}'],
+  ['dragon', '\u{1F409}'], ['rocket', '\u{1F680}'], ['star', '\u2B50'], ['dice', '\u{1F3B2}']
+];
+const AVATAR_IDS = AVATARS.map(a => a[0]);
+const DEFAULT_AVATAR = 'spade';                             // must match the default in firestore.rules
+const avatarEmoji = id => id === 'bot' ? '\u{1F916}' : ((AVATARS.find(a => a[0] === id) || AVATARS[0])[1]);
 
 /* ==========================================================================
    SECTION 2 - UTILITIES
@@ -456,7 +483,7 @@ const Repo = {
     if (snap.exists) return snap.data();
     const name = cleanName(S.pendingName || user.displayName) || nameFromEmail(user.email);
     try {
-      await ref.set({ uid: user.uid, name, chips: START_CHIPS, tableId: '', createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
+      await ref.set({ uid: user.uid, name, avatar: AVATAR_IDS[Math.abs([...user.uid].reduce((a, ch) => a * 31 + ch.charCodeAt(0), 7)) % AVATAR_IDS.length], chips: START_CHIPS, tableId: '', createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
     } catch (e) {
       const again = await ref.get();          // another tab may have created it first
       if (again.exists) return again.data();
@@ -465,9 +492,9 @@ const Repo = {
     S.pendingName = '';
     return (await ref.get()).data();
   },
-  // Rule: users update (rename, only while not seated)
-  renameProfile(uid, name) {
-    return Repo.userRef(uid).update({ name, updatedAt: FV.serverTimestamp() });
+  // Rule: users update (name/avatar, only while not seated)
+  updateProfile(uid, name, avatar) {
+    return Repo.userRef(uid).update({ name, avatar, updatedAt: FV.serverTimestamp() });
   },
 
   /* ---- joining and leaving (rules: users update + members create/delete) ---- */
@@ -491,7 +518,7 @@ const Repo = {
       if (u.tableId) throw new AppError('You already have a seat at ' + tableName(TABLE_BY_ID[u.tableId] || { boot: '?' }) + '. Leave that table first.');
       if (ms.exists) throw new AppError('A stale seat record exists at this table. Contact the admin.');
       if (u.chips < buyIn) throw new AppError('You only have ' + fmt(u.chips) + ' chips.');
-      tx.set(mref, { uid, name: u.name, seatState: 'standing', buyIn, stack: buyIn, joinedAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
+      tx.set(mref, { uid, name: u.name, avatar: u.avatar || DEFAULT_AVATAR, seatState: 'standing', buyIn, stack: buyIn, joinedAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
       tx.update(uref, { chips: u.chips - buyIn, tableId, updatedAt: FV.serverTimestamp() });
       return 'joined';
     });
@@ -601,7 +628,7 @@ const S = {
   busy: {},                   // busy flags keyed by action
   pending: null,              // a sit/stand request waiting for the dealer
   buy: null,                  // buy-in sheet: { tableId }
-  editName: false, nameDraft: '',
+  editName: false, nameDraft: '', avatarDraft: '',
   dealerInfo: { processed: 0, lastError: '' },
   act: null                   // a betting move waiting for the dealer: { key, type }
 };
@@ -835,18 +862,24 @@ function renderAuth() {
 /* ---- lobby ---- */
 function renderLobby() {
   const p = S.profile;
+  const picker = S.editName
+    ? h('div', { class: 'avgrid', id: 'avatarGrid', role: 'radiogroup', 'aria-label': 'Choose an avatar' }, AVATARS.map(([id, em]) =>
+        h('button', { type: 'button', class: 'avopt' + (S.avatarDraft === id ? ' on' : ''), 'data-avatar': id, role: 'radio', 'aria-checked': S.avatarDraft === id ? 'true' : 'false', 'aria-label': id, text: em,
+          onclick: () => { S.avatarDraft = id; scheduleRender(); } })))
+    : null;
   const nameBlock = S.editName
     ? h('div', { class: 'row' },
-        h('input', { id: 'nameEdit', type: 'text', maxlength: NAME_MAX, value: S.nameDraft, 'aria-label': 'Display name',
+        h('input', { id: 'nameEdit', type: 'text', maxlength: NAME_MAX, value: S.nameDraft, 'aria-label': 'Game name',
           oninput: e => { S.nameDraft = e.target.value; } }),
-        h('button', { class: 'btn-small btn-secondary', type: 'button', text: 'Save', onclick: handleRename }),
+        h('button', { id: 'saveProfileBtn', class: 'btn-small btn-secondary', type: 'button', text: 'Save', onclick: handleRename }),
         h('button', { class: 'btn-small btn-ghost', type: 'button', text: 'Cancel', onclick: () => { S.editName = false; scheduleRender(); } }))
     : h('div', {}, h('b', { text: p.name }),
-        h('button', { id: 'editNameBtn', class: 'btn-link', type: 'button', text: 'Edit name', onclick: () => { S.editName = true; S.nameDraft = p.name; scheduleRender(); } }));
-  const profile = h('div', { class: 'profile' },
-    h('div', { class: 'avatar', text: initial(p.name) }),
+        h('button', { id: 'editNameBtn', class: 'btn-link', type: 'button', text: 'Edit name & avatar', onclick: () => { S.editName = true; S.nameDraft = p.name; S.avatarDraft = p.avatar || DEFAULT_AVATAR; scheduleRender(); } }));
+  const profile = h('div', { class: 'profile' + (S.editName ? ' editing' : '') },
+    h('div', { class: 'avatar', id: 'myAvatar', text: avatarEmoji(S.editName ? S.avatarDraft : p.avatar) }),
     nameBlock,
-    h('div', { class: 'bal' }, h('b', { id: 'walletBal', text: fmt(p.chips) }), h('br'), h('span', { text: 'Play chips' })));
+    h('div', { class: 'bal' }, h('b', { id: 'walletBal', text: fmt(p.chips) }), h('br'), h('span', { text: 'Play chips' })),
+    picker);
   const tiles = TABLES.map(t => tableTile(t));
   return h('div', {},
     profile,
@@ -869,6 +902,7 @@ function tableTile(t) {
   }
   return h('button', { class: 'tile', type: 'button', 'data-table': t.id, disabled: !usable, onclick: () => openBuyIn(t.id) },
     h('div', { class: 'top' }, h('strong', { text: tableName(t) }), badge),
+    h('div', { class: 'stake', text: tableStake(t) }),
     h('div', { class: 'limits' }, 'Buy-in ', h('b', { text: fmt(t.min) + ' - ' + fmt(t.max) })),
     h('div', { class: 'meta', text: meta }),
     h('div', { class: 'cta', text: usable ? 'Join table' : 'Unavailable' }));
@@ -880,7 +914,7 @@ function renderAdmin() {
     const doc = S.rooms[t.id], loaded = !!S.roomsLoaded[t.id];
     const on = dealerOnline(doc);
     return h('div', { class: 'card tight', 'data-table': t.id },
-      h('div', { class: 'row' }, h('strong', { class: 'gold', text: tableName(t) }),
+      h('div', { class: 'row' }, h('strong', { class: 'gold', text: tableName(t) + ' \u00B7 ' + tableStake(t) }),
         h('span', { class: 'badge ' + (!loaded ? '' : !doc ? 'off' : on ? 'on' : ''), text: !loaded ? 'Loading' : !doc ? 'Not set up' : on ? 'Dealer online' : 'No dealer' })),
       h('div', { class: 'muted', text: 'Buy-in ' + fmt(t.min) + ' - ' + fmt(t.max) }),
       h('div', { class: 'astats' },
@@ -914,7 +948,7 @@ function renderTable(asDealer) {
       h('div', {},
         h('div', { class: 'eyebrow', text: asDealer ? 'Dealer console' : 'You are at' }),
         h('div', { class: 'tname', id: 'roomTitle', text: tableName(cfg) }),
-        h('div', { class: 'muted', text: 'Buy-in ' + fmt(cfg.min) + ' to ' + fmt(cfg.max) + ' play chips' })),
+        h('div', { class: 'muted', id: 'roomStake', text: tableStake(cfg) + ' \u00B7 Buy-in ' + fmt(cfg.min) + ' to ' + fmt(cfg.max) + ' play chips' })),
       asDealer
         ? h('button', { id: 'closeDealerBtn', class: 'btn-ghost btn-small', type: 'button', text: 'Close console', onclick: () => { location.hash = '#/admin'; go(); } })
         : h('button', { id: 'leaveBtn', class: 'btn-ghost btn-small' + (S.busy.leave ? ' busy' : ''), type: 'button', text: 'Leave table', disabled: !!S.busy.leave, onclick: handleLeave })),
@@ -957,7 +991,7 @@ function renderTable(asDealer) {
   const roster = h('div', { class: 'card' },
     h('div', { class: 'row' }, h('h3', { text: 'At this table' }), h('span', { class: 'pill', id: 'countPill', text: R.members.length + (R.members.length === 1 ? ' player' : ' players') })),
     R.members.length ? h('div', { id: 'roster' }, R.members.map(m => seatRow(m, !asDealer && me && m.uid === me.uid)).concat((R.bots || []).filter(b => b.seatState === 'seated').map(b =>
-      h('div', { class: 'seatrow', 'data-bot': b.botId }, h('div', { class: 'av', text: '\u2699' }), h('div', { class: 'nm' }, h('b', { text: b.name }), h('span', { text: fmt(b.stack) + ' chips' })), h('span', { class: 'pill gold', text: 'Test bot' }))))) : h('p', { class: 'muted', text: 'No players yet.' }));
+      h('div', { class: 'seatrow', 'data-bot': b.botId }, h('div', { class: 'av', text: avatarEmoji('bot') }), h('div', { class: 'nm' }, h('b', { text: b.name }), h('span', { text: fmt(b.stack) + ' chips' })), h('span', { class: 'pill gold', text: 'Test bot' }))))) : h('p', { class: 'muted', text: 'No players yet.' }));
   nodes.push(roster);
 
   /* controls */
@@ -979,7 +1013,7 @@ function renderTable(asDealer) {
 
 function seatRow(m, isMe) {
   return h('div', { class: 'seatrow' + (isMe ? ' me' : ''), 'data-uid': m.uid },
-    h('div', { class: 'av', text: initial(m.name) }),
+    h('div', { class: 'av', text: avatarEmoji(m.avatar) }),
     h('div', { class: 'nm' }, h('b', { text: m.name + (isMe ? ' (you)' : '') }), h('span', { text: fmt(m.stack) + ' chips' })),
     h('span', { class: 'pill ' + (m.seatState === 'seated' ? '' : 'gold'), text: m.seatState === 'seated' ? 'Seated' : 'Standing' }));
 }
@@ -1025,7 +1059,7 @@ function renderGame(R, asDealer, me) {
     const p = G.players[id];
     const st = p.status === 'packed' ? 'Packed' : p.status === 'seen' ? 'Seen' : 'Blind';
     return h('div', { class: 'seatrow gp' + (G.turn === id ? ' turn' : '') + (p.status === 'packed' ? ' out' : '') + (id === uid ? ' me' : ''), 'data-uid': id },
-      h('div', { class: 'av', text: initial(p.name) }),
+      h('div', { class: 'av', text: avatarEmoji(p.avatar) }),
       h('div', { class: 'nm' }, h('b', { text: p.name + (id === uid ? ' (you)' : '') + (i === G.dealerIdx ? ' · D' : '') }), h('span', { text: fmt(p.chips) + ' chips' })),
       h('span', { class: 'pill ' + (p.status === 'packed' ? 'gold' : ''), text: st }));
   })));
@@ -1051,7 +1085,7 @@ function renderMoves(G, uid) {
     h('div', { class: 'moves' },
       btn('seeBtn', 'see', 'See cards', 'btn-secondary'),
       btn('chaalBtn', 'chaal', lm.chaal.label + ' ' + fmt(lm.chaal.cost), 'btn-primary'),
-      btn('raiseBtn', 'raise', 'Raise ' + fmt(lm.raise.cost), 'btn-secondary'),
+      btn('raiseBtn', 'raise', 'Chal ' + fmt(lm.raise.cost), 'btn-secondary'),
       btn('showBtn', 'show', 'Show ' + fmt(lm.show.cost), 'btn-secondary'),
       btn('packBtn', 'pack', 'Pack', 'btn-ghost')),
     h('p', { id: 'moveNote', class: 'muted', style: 'font-size:13px;margin:8px 0 0', text: busy ? 'Waiting for the dealer…' : (lm.myTurn && !lm.raise.ok && lm.raise.reason ? note || lm.raise.reason : note) }));
@@ -1141,8 +1175,9 @@ async function handleSignOut() {
 function handleRename() {
   const name = cleanName(S.nameDraft);
   if (!name) return toast('Enter a display name (up to ' + NAME_MAX + ' characters).', 'err');
-  return withBusy('rename', 'rename profile', async () => {
-    await Repo.renameProfile(S.user.uid, name);
+  const avatar = AVATAR_IDS.includes(S.avatarDraft) ? S.avatarDraft : DEFAULT_AVATAR;
+  return withBusy('rename', 'save profile', async () => {
+    await Repo.updateProfile(S.user.uid, name, avatar);
     S.editName = false;
   });
 }
@@ -1406,8 +1441,8 @@ const Dealer = {
   async deal() {
     if (!Dealer.canDeal()) return;
     const R = S.room, cfg = TABLE_BY_ID[R.id], prev = Dealer.G;
-    const parts = R.members.filter(m => m.seatState === 'seated').slice(0, MAX_HUMAN_SEATS).map(m => ({ id: m.uid, name: m.name, chips: m.stack }))
-      .concat(readyBots(R).map(b => ({ id: b.botId, name: b.name, chips: b.stack, bot: true })));
+    const parts = R.members.filter(m => m.seatState === 'seated').slice(0, MAX_HUMAN_SEATS).map(m => ({ id: m.uid, name: m.name, avatar: m.avatar, chips: m.stack }))
+      .concat(readyBots(R).map(b => ({ id: b.botId, name: b.name, avatar: 'bot', chips: b.stack, bot: true })));
     const r = startHand({ tableId: R.id, boot: cfg.boot, participants: parts, prev, now: Date.now(), rnd: secureRandInt });
     if (r.error) { S.dealerInfo.lastError = r.error; scheduleRender(); return; }
     S.dealerInfo.lastError = '';
@@ -1669,7 +1704,7 @@ function startHand(o) {
   const players = {};
   for (const id of order) {
     const p = E.find(x => x.id === id);
-    players[id] = { name: p.name, bot: !!p.bot, chips: p.chips - boot, status: 'blind', invested: boot };
+    players[id] = { name: p.name, avatar: p.avatar || (p.bot ? 'bot' : ''), bot: !!p.bot, chips: p.chips - boot, status: 'blind', invested: boot };
   }
   const handNo = (prev.handNo || 0) + 1;
   const G = {
@@ -1749,7 +1784,7 @@ function applyAction(G0, id, type, now, hands) {
   if (type === 'raise') {
     if (!lm.raise.ok) return bad(lm.raise.reason);
     G.stake *= 2; const c = raiseCost({ stake: G.stake / 2, players: G.players }, id); pay(G, id, c);
-    addLog(G, p.name + ' raises to ' + G.stake + ' (paid ' + c + ').');
+    addLog(G, p.name + ' plays chal, stake now ' + G.stake + ' (paid ' + c + ').');
     advanceTurn(G, now); return { ok: true, G };
   }
   if (type === 'show') {
