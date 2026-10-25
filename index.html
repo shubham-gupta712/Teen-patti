@@ -227,12 +227,12 @@ button.busy:after{content:"";position:absolute;inset:0;margin:auto;width:18px;he
 .felthead{display:flex;align-items:center;justify-content:space-between;margin:0 6px 6px}
 .stakeline{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
 .stakeline b{color:var(--gold);font-size:15px;font-family:var(--serif);letter-spacing:0}
-.felt{position:relative;width:100%;aspect-ratio:7/8;max-height:540px;margin:34px auto 10px}
+.felt{position:relative;width:100%;aspect-ratio:7/8;max-width:440px;margin:34px auto 10px}
 .felt .surface{position:absolute;inset:11% 9% 13%;border-radius:50%;
   background:radial-gradient(ellipse at 50% 42%,#1f8a63 0,#136a4c 48%,#0b4733 100%);
   border:5px solid #5a3a14;box-shadow:0 0 0 2px var(--gold-2),0 0 0 7px #2a1a08,0 18px 36px rgba(0,0,0,.55),inset 0 0 40px rgba(0,0,0,.45),inset 0 0 0 2px rgba(255,233,166,.18)}
 .felt .surface:after{content:"";position:absolute;inset:7%;border-radius:50%;border:1.5px dashed rgba(255,233,166,.22)}
-.centre{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);width:46%;display:flex;flex-direction:column;align-items:center;text-align:center;pointer-events:none}
+.centre{position:absolute;left:50%;top:57%;transform:translate(-50%,-50%);width:46%;display:flex;flex-direction:column;align-items:center;text-align:center;pointer-events:none}
 .potlabel{font-size:10px;letter-spacing:3px;font-weight:800;color:#bfe9d3;margin-top:3px}
 .potnum{margin:0;font-size:34px;line-height:1.05;text-shadow:0 2px 8px rgba(0,0,0,.6);font-variant-numeric:tabular-nums}
 .idletext{margin:6px 0 0;font-size:12.5px;line-height:1.35;color:#cfe9db;max-width:150px}
@@ -291,6 +291,32 @@ button.busy:after{content:"";position:absolute;inset:0;margin:auto;width:18px;he
 .fxchip{position:fixed;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe9a6,#c99a2e);border:2px dashed #8a6314;box-shadow:0 2px 4px rgba(0,0,0,.5)}
 .confetti{position:fixed;width:8px;height:12px;border-radius:2px}
 @media(max-width:360px){.seat{width:78px}.seat .ring{width:44px;height:44px}.seat .sname{max-width:78px}.potnum{font-size:28px}}
+
+/* compact table header */
+.tablehead{padding:12px 14px}
+.tablehead .tname{font-size:23px;margin:0}
+.thtitle{min-width:0}
+.thtitle .muted{font-size:12px}
+.statusbar{display:flex;align-items:center;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(47,106,84,.7)}
+.stackbox{display:flex;align-items:baseline;gap:6px}
+.stackbox b{font:700 22px var(--serif);color:var(--gold);font-variant-numeric:tabular-nums}
+.statusbar button{margin-left:auto;min-height:36px;padding:7px 16px}
+.tablehead .dlr{margin-top:8px;font-size:11.5px;color:var(--muted)}
+.fineline{margin:6px 0 0;font-size:12px;color:var(--muted)}
+.fineline.warn{color:#ffe08a}
+
+/* the dealer */
+.dealer{position:absolute;left:84%;top:7%;transform:translateX(-50%);z-index:1;display:flex;flex-direction:column;align-items:center;pointer-events:none}
+.dring{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#2a2a2a,#0d0d0d);border:2px solid var(--gold);box-shadow:0 3px 8px rgba(0,0,0,.6);font-size:21px;line-height:1}
+.dlabel{margin-top:2px;font-size:9px;letter-spacing:2px;font-weight:800;text-transform:uppercase;color:var(--gold);text-shadow:0 1px 2px #000}
+.deck{position:absolute;right:46px;top:6px;width:22px;height:30px}
+.deck i{position:absolute;inset:0;border-radius:4px;background:repeating-linear-gradient(45deg,#7a1f2b,#7a1f2b 3px,#5c1620 3px,#5c1620 6px);border:1.5px solid #d8b45a;box-shadow:0 1px 3px rgba(0,0,0,.6)}
+.deck i:nth-child(2){transform:translate(-1px,-1px)}.deck i:nth-child(3){transform:translate(-2px,-2px)}
+
+/* revealed opponent cards at showdown: nearly as big as yours */
+.mc.face{width:44px;height:62px;margin:0 -5px;font-size:15px;border-radius:6px;border:1px solid #cfc6aa;background:linear-gradient(160deg,#fffdf5,#efe8d3)}
+.mc.face b{font-size:17px}
+.mc.face span{font-size:17px}
 
 </style>
 </head>
@@ -1035,18 +1061,33 @@ function renderTable() {
   const me = myMember(R);
   const online = hostLive(R.doc);
   const ready = R.loaded.doc && R.loaded.members;
-  const header = h('div', { class: 'card' },
+  const sitWhy = me ? sitBlockReason(R, me) : '', standWhy = me ? standBlockReason(R, me) : '', leaveWhy = me ? leaveBlockReason(R, me) : '';
+  const seated = !!me && me.seatState === 'seated';
+  const pendingNote = S.pending ? 'Working on it…' : '';
+  const note = pendingNote || (seated ? standWhy : sitWhy);
+
+  /* one compact header: where you are, your stack, sit/stand and leave */
+  const header = h('div', { class: 'card tight tablehead' },
     h('div', { class: 'row' },
-      h('div', {},
-        h('div', { class: 'eyebrow', text: S.isAdmin ? 'Admin view' : 'You are at' }),
+      h('div', { class: 'thtitle' },
         h('div', { class: 'tname', id: 'roomTitle', text: tableName(cfg) }),
-        h('div', { class: 'muted', id: 'roomStake', text: tableStake(cfg) + ' \u00B7 Buy-in ' + fmt(cfg.min) + ' to ' + fmt(cfg.max) + ' play chips' })),
+        h('div', { class: 'muted', id: 'roomStake', text: tableStake(cfg) + ' \u00B7 Buy-in ' + fmt(cfg.min) + ' to ' + fmt(cfg.max) })),
       S.isAdmin
         ? h('button', { id: 'backBtn', class: 'btn-ghost btn-small', type: 'button', text: 'Back', onclick: () => { location.hash = '#/admin'; } })
-        : h('button', { id: 'leaveBtn', class: 'btn-ghost btn-small' + (S.busy.leave ? ' busy' : ''), type: 'button', text: 'Leave table', disabled: !!S.busy.leave, onclick: handleLeave })),
-    h('div', { class: 'dlr', style: 'margin-top:10px' },
+        : h('button', { id: 'leaveBtn', class: 'btn-ghost btn-small' + (S.busy.leave ? ' busy' : ''), type: 'button', text: 'Leave', disabled: !!S.busy.leave, onclick: handleLeave })),
+    me && ready ? h('div', { class: 'statusbar' },
+      h('div', { class: 'stackbox' }, h('span', { class: 'muted', text: 'Stack' }), h('b', { id: 'myStack', text: fmt(me.stack) })),
+      h('span', { class: 'pill ' + (seated ? '' : 'gold'), id: 'mySeatState', text: seated ? 'Seated' : 'Standing' }),
+      seated
+        ? h('button', { id: 'standBtn', class: 'btn-secondary btn-small' + (S.busy.seat || S.pending ? ' busy' : ''), type: 'button', text: 'Stand up', disabled: !!standWhy || !!S.busy.seat || !!S.pending, onclick: () => handleSeatChange('stand') })
+        : h('button', { id: 'sitBtn', class: 'btn-primary btn-small' + (S.busy.seat || S.pending ? ' busy' : ''), type: 'button', text: 'Sit down', disabled: !!sitWhy || !!S.busy.seat || !!S.pending, onclick: () => handleSeatChange('sit') })) : null,
+    h('div', { class: 'dlr' },
       h('span', { class: 'dot' + (online ? ' on' : '') }),
-      h('span', { id: 'tableState', text: online ? (Dealer.active ? 'Table live \u00B7 your phone is running it' : 'Table live') : 'Connecting to the table\u2026' })));
+      h('span', { id: 'tableState', text: online ? (Dealer.active ? 'Table live \u00B7 your phone is running it' : 'Table live') : 'Connecting to the table\u2026' })),
+    me && ready && note ? h('p', { id: 'controlNote', class: 'fineline', text: note }) : null,
+    me && ready && leaveWhy ? h('p', { id: 'leaveNote', class: 'fineline', text: leaveWhy }) : null,
+    me && ready && seated && R.game && R.game.phase === 'playing' && R.game.players && R.game.players[me.uid] && R.game.players[me.uid].standAfter ? h('p', { class: 'fineline', id: 'standAfter', role: 'status', text: 'You will stand up when this hand ends.' }) : null,
+    me && ready && me.stack < cfg.boot ? h('p', { class: 'fineline warn', id: 'outOfChips', role: 'status', text: 'Out of chips — watching table.' }) : null);
 
   if (S.act && R.game && gameSig(R.game) !== S.act.key) S.act = null;
   const nodes = [header];
@@ -1054,40 +1095,14 @@ function renderTable() {
   if (R.doc === null) nodes.push(h('div', { class: 'msg err', role: 'alert', text: 'This table is not set up. The admin needs to set up the tables.' }));
   if (!me && !S.busy.leave && !S.isAdmin) nodes.push(h('div', { class: 'msg err', role: 'alert', text: 'Your seat record could not be found at this table. Contact the admin.' }));
 
-  /* status card */
-  const status = h('div', { class: 'card tight', id: 'statusCard' });
-  if (me) {
-    status.appendChild(h('div', { class: 'row' },
-      h('div', {}, h('div', { class: 'muted', text: 'Your stack' }), h('div', { class: 'tname', id: 'myStack', text: fmt(me.stack) })),
-      h('span', { class: 'pill ' + (me.seatState === 'seated' ? '' : 'gold'), id: 'mySeatState', text: me.seatState === 'seated' ? 'Seated' : 'Standing' })));
-    status.appendChild(h('p', { class: 'muted', id: 'handState', text: liveHand(R) ? 'A hand is in progress.' : 'No hand in progress.' }));
-    if (me.seatState === 'seated' && R.game && R.game.phase === 'playing' && R.game.players && R.game.players[me.uid] && R.game.players[me.uid].standAfter) status.appendChild(h('div', { class: 'msg', id: 'standAfter', role: 'status', text: 'You will stand up when this hand ends.' }));
-    if (me.stack < cfg.boot) status.appendChild(h('div', { class: 'msg', id: 'outOfChips', role: 'status', text: 'Out of chips — watching table.' }));
-  }
-  nodes.push(status);
-
   if (R.loaded.game) nodes.push(renderGame(R, me));
 
-  /* roster */
-  const roster = h('div', { class: 'card' },
-    h('div', { class: 'row' }, h('h3', { text: 'At this table' }), h('span', { class: 'pill', id: 'countPill', text: R.members.length + (R.members.length === 1 ? ' player' : ' players') })),
-    R.members.length ? h('div', { id: 'roster' }, R.members.map(m => seatRow(m, me && m.uid === me.uid, S.isAdmin ? R : null)).concat((R.bots || []).filter(b => b.seatState === 'seated').map(b =>
-      h('div', { class: 'seatrow', 'data-bot': b.botId }, h('div', { class: 'av', text: avatarEmoji('bot') }), h('div', { class: 'nm' }, h('b', { text: b.name }), h('span', { text: fmt(b.stack) + ' chips' })), h('span', { class: 'pill gold', text: 'Test bot' }))))) : h('p', { class: 'muted', text: 'No players yet.' }));
-  nodes.push(roster);
-
-  /* controls */
-  if (me) {
-    const sitWhy = sitBlockReason(R, me), standWhy = standBlockReason(R, me), leaveWhy = leaveBlockReason(R, me);
-    const seated = me.seatState === 'seated';
-    const why = seated ? standWhy : sitWhy;
-    const pendingNote = S.pending ? 'Working on it…' : '';
-    nodes.push(h('div', { class: 'card tight', id: 'controlsCard' },
-      h('div', { class: 'controls' },
-        seated
-          ? h('button', { id: 'standBtn', class: 'btn-secondary' + (S.busy.seat || S.pending ? ' busy' : ''), type: 'button', text: 'Stand up', disabled: !!standWhy || !!S.busy.seat || !!S.pending, onclick: () => handleSeatChange('stand') })
-          : h('button', { id: 'sitBtn', class: 'btn-primary' + (S.busy.seat || S.pending ? ' busy' : ''), type: 'button', text: 'Sit down', disabled: !!sitWhy || !!S.busy.seat || !!S.pending, onclick: () => handleSeatChange('sit') })),
-      h('p', { id: 'controlNote', class: 'muted', style: 'margin:10px 0 0;font-size:13px', text: pendingNote || why || (seated ? (liveHand(R) && !(R.game.players && R.game.players[me.uid]) ? 'You will be dealt into the next hand.' : 'You will be dealt into the next hand.') : '') }),
-      leaveWhy ? h('p', { id: 'leaveNote', class: 'muted', style: 'margin:6px 0 0;font-size:13px', text: leaveWhy }) : null));
+  /* the player list is an admin tool; players see everyone on the felt */
+  if (S.isAdmin) {
+    nodes.push(h('div', { class: 'card' },
+      h('div', { class: 'row' }, h('h3', { text: 'At this table' }), h('span', { class: 'pill', id: 'countPill', text: R.members.length + (R.members.length === 1 ? ' player' : ' players') })),
+      R.members.length ? h('div', { id: 'roster' }, R.members.map(m => seatRow(m, false, R)).concat((R.bots || []).filter(b => b.seatState === 'seated').map(b =>
+        h('div', { class: 'seatrow', 'data-bot': b.botId }, h('div', { class: 'av', text: avatarEmoji('bot') }), h('div', { class: 'nm' }, h('b', { text: b.name }), h('span', { text: fmt(b.stack) + ' chips' })), h('span', { class: 'pill gold', text: 'Test bot' }))))) : h('p', { class: 'muted', text: 'No players yet.' })));
   }
   return h('div', {}, nodes);
 }
@@ -1180,7 +1195,8 @@ function renderGame(R, me) {
     centre.appendChild(h('p', { id: 'idleNote', class: 'idletext', text: !hostLive(R.doc) ? 'Connecting to the table…' : readyHumans(R).length === 0 ? 'Sit down to play. A bot will keep you company.' : 'The next hand is about to be dealt.' }));
   }
 
-  const felt = h('div', { class: 'felt' }, h('div', { class: 'surface' }), centre,
+  const dealer = h('div', { class: 'dealer', id: 'dealerFigure', 'aria-label': 'Dealer' }, h('div', { class: 'dring' }, h('span', { text: '\u{1F3A9}' })), h('div', { class: 'dlabel', text: 'Dealer' }), h('div', { class: 'deck', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')));
+  const felt = h('div', { class: 'felt' }, h('div', { class: 'surface' }), dealer, centre,
     h('div', { id: 'gamePlayers' }, ordered.map((sp, k) => {
       const pos = seatXY(k, ordered.length), isMe = sp.id === uid, out = sp.status === 'packed';
       const cards = live && !isMe && !out ? h('div', { class: 'mcs' }, [0, 1, 2].map(i => miniCard(reveal[sp.id] ? reveal[sp.id][i] : '', i))) : null;
@@ -1209,14 +1225,15 @@ function renderGame(R, me) {
 
 function renderMoves(G, uid) {
   const lm = legalMoves(G, uid), busy = !!S.act;
+  const withCost = (m, text) => m.cost > 0 ? text + ' \u00B7 ' + fmt(m.cost) : text;
   const btn = (id, type, text, cls) => h('button', { id, class: cls + (S.act && S.act.type === type ? ' busy' : ''), type: 'button', text, disabled: !lm[type].ok || busy, onclick: () => handleGameAction(type) });
   const note = lm.myTurn ? (lm.chaal.ok ? '' : lm.chaal.reason) : 'Wait for your turn.';
   return h('div', { id: 'moves' },
     h('div', { class: 'moves' },
       btn('seeBtn', 'see', 'See cards', 'btn-secondary'),
-      btn('chaalBtn', 'chaal', lm.chaal.label, 'btn-primary'),
-      btn('raiseBtn', 'raise', lm.raise.label, 'btn-secondary'),
-      btn('showBtn', 'show', 'Show', 'btn-secondary'),
+      btn('chaalBtn', 'chaal', withCost(lm.chaal, lm.chaal.label), 'btn-primary'),
+      btn('raiseBtn', 'raise', withCost(lm.raise, lm.raise.label), 'btn-secondary'),
+      btn('showBtn', 'show', withCost(lm.show, 'Show'), 'btn-secondary'),
       btn('packBtn', 'pack', 'Pack', 'btn-ghost')),
     h('p', { id: 'moveNote', class: 'muted', style: 'font-size:13px;margin:8px 0 0', text: busy ? 'Sending…' : (lm.myTurn && !lm.raise.ok && lm.raise.reason ? note || lm.raise.reason : note) }));
 }
@@ -1817,8 +1834,8 @@ const Fx = {
 
   // Cards come off the middle of the table one at a time, round the table, three rounds.
   deal(elapsed) {
-    const pot = $('potAmt'); if (!pot) return;
-    const c = Fx.centre(pot), seats = [...document.querySelectorAll('#gamePlayers .seat')];
+    const src = $('dealerFigure'); if (!src) return;
+    const c = Fx.centre(src), seats = [...document.querySelectorAll('#gamePlayers .seat')];
     let k = 0;
     for (let r = 0; r < 3; r++) seats.forEach(s => {
       const el = s.classList.contains('me') ? document.querySelectorAll('#myCards .pcard')[r] : s.querySelector('.mc[data-i="' + r + '"]');
@@ -1830,6 +1847,9 @@ const Fx = {
         { transform: 'none', opacity: 1 }], { duration: 380, delay: k++ * 110, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' });
       a.currentTime = elapsed;
     });
+    // the dealer nods at every card
+    const dr = src.querySelector('.dring');
+    if (dr) for (let i = 0; i < k; i++) { const a = dr.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.14)' }, { transform: 'scale(1)' }], { duration: 160, delay: i * 110 }); a.currentTime = elapsed; }
   },
 
   // Looking at your cards turns them over.
