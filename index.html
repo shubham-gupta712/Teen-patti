@@ -197,8 +197,6 @@ button.busy:after{content:"";position:absolute;inset:0;margin:auto;width:18px;he
 .pcard.back{background:repeating-linear-gradient(45deg,#7a1f2b,#7a1f2b 6px,#5c1620 6px,#5c1620 12px);border:2px solid #d8b45a}
 .myhand{display:flex;gap:10px;justify-content:center;margin:14px 0}
 .myhand.small{margin:4px 0;gap:6px}.myhand.small .pcard{width:34px;height:48px;font-size:13px}
-.moves{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.moves button:first-child,.moves #packBtn{grid-column:auto}
 .timer{font-variant-numeric:tabular-nums;color:#d8b45a}
 .result{margin-top:12px;padding:12px;border-radius:12px;border:1px solid #d8b45a;text-align:center}
 .revealrow{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
@@ -221,102 +219,168 @@ button.busy:after{content:"";position:absolute;inset:0;margin:auto;width:18px;he
 .profile .btn-ghost{color:#3d2a05;border-color:rgba(90,62,8,.45)}
 
 /* ==========================================================================
-   SECTION 13 - TABLE FELT, SEATS, CARDS, EFFECTS (Phase 6)
+   SECTION 13 - FULL-SCREEN TABLE (Phase 6)
+   The table screen is the whole screen: felt, seats, dealer, pot, your cards
+   and your moves. Nothing else is on it.
    ========================================================================== */
-.felt-card{padding:14px 10px 16px;overflow:hidden}
-.felthead{display:flex;align-items:center;justify-content:space-between;margin:0 6px 6px}
-.stakeline{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-.stakeline b{color:var(--gold);font-size:15px;font-family:var(--serif);letter-spacing:0}
-.felt{position:relative;width:100%;aspect-ratio:7/8;max-width:440px;margin:34px auto 10px}
-.felt .surface{position:absolute;inset:11% 9% 13%;border-radius:50%;
-  background:radial-gradient(ellipse at 50% 42%,#1f8a63 0,#136a4c 48%,#0b4733 100%);
-  border:5px solid #5a3a14;box-shadow:0 0 0 2px var(--gold-2),0 0 0 7px #2a1a08,0 18px 36px rgba(0,0,0,.55),inset 0 0 40px rgba(0,0,0,.45),inset 0 0 0 2px rgba(255,233,166,.18)}
-.felt .surface:after{content:"";position:absolute;inset:7%;border-radius:50%;border:1.5px dashed rgba(255,233,166,.22)}
-.centre{position:absolute;left:50%;top:57%;transform:translate(-50%,-50%);width:46%;display:flex;flex-direction:column;align-items:center;text-align:center;pointer-events:none}
+body.intable{background:#030d09;overflow:hidden}
+.intable .topbar,.intable .footer{display:none}
+.intable .wrap{width:100%;max-width:none;padding:0}
+.tscreen{position:fixed;inset:0;width:100%;max-width:520px;margin:0 auto;display:flex;flex-direction:column;overflow:hidden;
+  background:radial-gradient(ellipse 100% 55% at 50% 38%,#0f4a38 0,#07261c 60%,#030d09 100%)}
+.tscreen.admin{position:static;height:auto;min-height:100vh;overflow:visible}
+.tscreen.admin .tfelt{height:640px;flex:none}
+.ttop{display:flex;align-items:center;gap:8px;padding:max(8px,env(safe-area-inset-top)) 10px 6px;z-index:5}
+.tbtn{min-height:34px;padding:6px 14px;border-radius:20px;font-size:13px;color:var(--ink);background:rgba(0,0,0,.35);border:1px solid rgba(242,199,92,.4);box-shadow:none}
+.tbtn.gold{background:var(--gold-grad);color:var(--gold-ink);border-color:transparent}
+.tspacer{width:70px}
+.tmid{flex:1;min-width:0;text-align:center}
+.tmid .tname{margin:0;font-size:19px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tsub{display:flex;justify-content:center;align-items:center;gap:5px;font-size:11px;color:var(--muted);white-space:nowrap}
+.tsub .pill{padding:0 8px;font-size:10.5px}
+.tload{flex:1;display:grid;place-items:center}
+.tfelt{position:relative;flex:1;min-height:0}
+.tarea{position:absolute;left:0;right:0;top:0}
+.tarea .surface{position:absolute;inset:10% 4% 9%;border-radius:50%;
+  background:radial-gradient(ellipse at 50% 45%,#22966b 0,#157553 50%,#0a4632 100%);
+  border:6px solid #5a3a14;box-shadow:0 0 0 2px var(--gold-2),0 0 0 8px #24160a,0 20px 40px rgba(0,0,0,.6),inset 0 0 50px rgba(0,0,0,.5),inset 0 0 0 2px rgba(255,233,166,.18)}
+.tarea .surface:after{content:"";position:absolute;inset:6%;border-radius:50%;border:1.5px dashed rgba(255,233,166,.22)}
+.centre{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58%;display:flex;flex-direction:column;align-items:center;text-align:center;pointer-events:none}
 .potlabel{font-size:10px;letter-spacing:3px;font-weight:800;color:#bfe9d3;margin-top:3px}
-.potnum{margin:0;font-size:34px;line-height:1.05;text-shadow:0 2px 8px rgba(0,0,0,.6);font-variant-numeric:tabular-nums}
-.idletext{margin:6px 0 0;font-size:12.5px;line-height:1.35;color:#cfe9db;max-width:150px}
+.potnum{font:700 34px/1.05 var(--serif);color:var(--gold);text-shadow:0 2px 8px rgba(0,0,0,.6);font-variant-numeric:tabular-nums}
+.stakeline{margin-top:2px;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#bfe9d3}
+.stakeline b{color:#fff3c4;font-size:13px;letter-spacing:0}
+.idletext{margin:6px 0 0;font-size:12.5px;line-height:1.35;color:#cfe9db;max-width:170px}
+.whyline{margin-top:3px;font-size:12px;color:#cfe9db}
+.tnote{margin:5px 0 0;padding:3px 10px;border-radius:12px;font-size:11.5px;line-height:1.3;color:#d9efe3;background:rgba(0,0,0,.4)}
+.tnote.warn{color:#ffe08a}.tnote.err{color:#ffd5dc}
+.glog{margin-top:8px;display:grid;gap:1px;font-size:10.5px;color:rgba(207,233,219,.75);text-shadow:0 1px 2px #000}
+.glog div:nth-child(n+2){opacity:.65}.glog div:nth-child(n+3){opacity:.4}.glog div:nth-child(n+4){opacity:.25}
 .chipstack{position:relative;width:34px;height:30px}
 .chipstack i{position:absolute;left:3px;width:28px;height:11px;border-radius:50%;background:radial-gradient(ellipse at 50% 40%,#ffe9a6,#c99a2e);border:1.5px solid #8a6314;box-shadow:0 1px 0 #6e4d0c}
 .chipstack i:nth-child(1){bottom:0}.chipstack i:nth-child(2){bottom:5px}.chipstack i:nth-child(3){bottom:10px}.chipstack i:nth-child(4){bottom:15px}
 .chipstack.idle{opacity:.55}
-.winbanner{margin-top:6px;padding:5px 14px;border-radius:20px;font:800 14px var(--serif);color:var(--gold-ink);background:var(--gold-grad);box-shadow:0 4px 14px rgba(0,0,0,.5),0 0 18px rgba(242,199,92,.5);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.winbanner{margin-top:4px;padding:5px 14px;border-radius:20px;font:800 14px var(--serif);color:var(--gold-ink);background:var(--gold-grad);box-shadow:0 4px 14px rgba(0,0,0,.5),0 0 18px rgba(242,199,92,.5);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-.seat{position:absolute;width:92px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;text-align:center;z-index:2}
-.seat .ring{position:relative;display:grid;place-items:center;width:50px;height:50px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#1c6a52,#0a3025);border:2px solid var(--gold-2);box-shadow:0 4px 10px rgba(0,0,0,.5)}
+/* seats */
+.seat{position:absolute;width:96px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;text-align:center;z-index:2}
+.seat .ring{position:relative;display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#1c6a52,#0a3025);border:2px solid var(--gold-2);box-shadow:0 4px 10px rgba(0,0,0,.55)}
 .seat.me .ring{border-color:var(--purple)}
-.seat .ava{font-size:26px;line-height:1}
-.seat.turn .ring{box-shadow:0 0 0 3px rgba(242,199,92,.95),0 0 20px 6px rgba(242,199,92,.65)}
+.seat .ava{font-size:30px;line-height:1}
 .seat.win .ring{border-color:var(--green);box-shadow:0 0 0 3px rgba(46,229,157,.95),0 0 22px 8px rgba(46,229,157,.65)}
-.seat .dbtn{position:absolute;right:-6px;bottom:-3px;width:19px;height:19px;border-radius:50%;display:grid;place-items:center;font:800 11px var(--serif);color:var(--gold-ink);background:var(--gold-grad);box-shadow:0 2px 4px rgba(0,0,0,.5)}
-.seat .sname{max-width:92px;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:800;text-shadow:0 1px 3px #000}
-.seat .schips{margin-top:1px;padding:1px 9px;border-radius:12px;background:rgba(0,0,0,.5);font-size:11.5px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums;border:1px solid rgba(242,199,92,.25)}
-.seat.out{opacity:.5}
+.tring{position:absolute;left:-9px;top:-9px;width:76px;height:76px;transform:rotate(-90deg);pointer-events:none;overflow:visible}
+.tring circle{fill:none;stroke-width:4;stroke-linecap:round}
+.tring .ttrack{stroke:rgba(0,0,0,.45)}
+.tring .tprog{transition:stroke-dashoffset .5s linear,stroke .5s}
+.seat .dbtn{position:absolute;right:-8px;bottom:-4px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font:800 11px var(--serif);color:var(--gold-ink);background:var(--gold-grad);box-shadow:0 2px 4px rgba(0,0,0,.5);z-index:2}
+.seat .sname{max-width:96px;margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:800;text-shadow:0 1px 3px #000}
+.seat .schips{margin-top:1px;padding:1px 9px;border-radius:12px;background:rgba(0,0,0,.55);font-size:11.5px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums;border:1px solid rgba(242,199,92,.25)}
+.seat.out{opacity:.55}
 .slabel{margin-top:3px;padding:0 8px;border-radius:10px;font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;background:#0b2a20;color:#9cf0c6;border:1px solid var(--line)}
 .slabel.seen{background:#3a1f5a;color:#e6c6ff;border-color:rgba(192,75,255,.5)}
 .slabel.out{background:#3a2430;color:#ffb3c1;border-color:rgba(255,77,109,.4)}
-.mcs{display:flex;justify-content:center;margin-top:4px}
-.mc{width:22px;height:31px;margin:0 -3px;border-radius:4px;box-shadow:0 2px 4px rgba(0,0,0,.55);transform:rotate(calc((var(--r,0)) * 1deg))}
-.mc:nth-child(1){--r:-9}.mc:nth-child(3){--r:9}
+.dealerseat .ring{border-color:var(--gold);background:radial-gradient(circle at 35% 30%,#2e2e2e,#0d0d0d)}
+.dealerseat .sname{color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;font-size:10.5px}
+.deck{position:absolute;left:70px;top:14px;width:22px;height:30px}
+.deck i{position:absolute;inset:0;border-radius:4px;background:repeating-linear-gradient(45deg,#7a1f2b,#7a1f2b 3px,#5c1620 3px,#5c1620 6px);border:1.5px solid #d8b45a;box-shadow:0 1px 3px rgba(0,0,0,.6)}
+.deck i:nth-child(2){transform:translate(-1px,-1px)}.deck i:nth-child(3){transform:translate(-2px,-2px)}
+
+/* opponents' cards: small and face down, large once revealed */
+.mcs{display:flex;justify-content:center;margin-top:6px}
+.mc{width:24px;height:34px;margin:0 -3px;border-radius:4px;box-shadow:0 2px 4px rgba(0,0,0,.55)}
+.mc:nth-child(1){transform:rotate(-9deg)}.mc:nth-child(3){transform:rotate(9deg)}
 .mc.back{background:repeating-linear-gradient(45deg,#7a1f2b,#7a1f2b 3px,#5c1620 3px,#5c1620 6px);border:1.5px solid #d8b45a}
-.mc.face{background:#f7f3e8;color:#14181f;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;line-height:1}
+.mc.face{width:44px;height:62px;margin:0 -6px;font-size:15px;border-radius:6px;border:1px solid #cfc6aa;background:linear-gradient(160deg,#fffdf5,#efe8d3);color:#14181f;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05}
 .mc.face.red{color:#b3261e}
-.mc.face b{font-size:11px}
+.mc.face b{font-size:18px}.mc.face span{font-size:18px}
 
-/* cards in your hand */
-.pcard{width:62px;height:88px;border-radius:9px;font-size:24px;border:1px solid #cfc6aa;background:linear-gradient(160deg,#fffdf5,#efe8d3);position:relative}
-.pcard span{font-size:26px}
-.pcard.back{border:2px solid #d8b45a;box-shadow:0 4px 10px rgba(0,0,0,.5),inset 0 0 0 3px #5c1620}
-.myhand{gap:12px;margin:8px 0 12px;perspective:600px}
-.myhand.small .pcard{width:34px;height:48px;font-size:13px}
-
-/* turn bar */
-.turnline{display:block;margin:2px 6px 8px;font-weight:700}
-.tl-row{display:flex;justify-content:space-between;align-items:baseline}
-.turnline.mine #turnName{color:var(--gold)}
-.timer{font:800 18px var(--serif);color:var(--gold);transition:color .3s}
-.timer.low{color:#ff6b86}
-.tbar{height:5px;margin-top:5px;border-radius:5px;background:rgba(0,0,0,.4);overflow:hidden}
-.tbar i{display:block;height:100%;transform-origin:left;background:linear-gradient(90deg,#c99a2e,#ffe9a6);transition:transform .5s linear;border-radius:5px}
-
-/* move buttons: the main move is the biggest */
-.moves{grid-template-areas:"chaal chaal" "raise show" "see pack";gap:10px;margin-top:6px}
-#chaalBtn{grid-area:chaal;min-height:56px;font-size:17px}
-#raiseBtn{grid-area:raise}#showBtn{grid-area:show}#seeBtn{grid-area:see}#packBtn{grid-area:pack}
-.result{margin:12px 6px 0}
-.glog{margin:12px 6px 0}
+/* your cards and moves */
+.tpanel{position:absolute;left:0;right:0;bottom:0;padding:6px 12px max(12px,env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(3,13,9,0),rgba(3,13,9,.88) 22%);z-index:4}
+.tpanel.slim{padding-bottom:max(18px,env(safe-area-inset-bottom))}
+.pcard{width:66px;height:94px;border-radius:9px;font-size:25px;border:1px solid #cfc6aa;background:linear-gradient(160deg,#fffdf5,#efe8d3);box-shadow:0 4px 10px rgba(0,0,0,.5);position:relative;color:#14181f;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}
+.pcard.red{color:#b3261e}
+.pcard span{font-size:27px}
+.pcard.back{background:repeating-linear-gradient(45deg,#7a1f2b,#7a1f2b 6px,#5c1620 6px,#5c1620 12px);border:2px solid #d8b45a;box-shadow:0 4px 10px rgba(0,0,0,.5),inset 0 0 0 3px #5c1620}
+.myhand{display:flex;gap:10px;justify-content:center;margin:0 0 8px;perspective:600px}
+.movenote{margin:6px 0 0;min-height:16px;text-align:center;font-size:12px;color:var(--muted)}
 
 /* effects layer */
 #fxLayer{position:fixed;inset:0;z-index:60;pointer-events:none;overflow:hidden}
 .fxchip{position:fixed;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe9a6,#c99a2e);border:2px dashed #8a6314;box-shadow:0 2px 4px rgba(0,0,0,.5)}
 .confetti{position:fixed;width:8px;height:12px;border-radius:2px}
-@media(max-width:360px){.seat{width:78px}.seat .ring{width:44px;height:44px}.seat .sname{max-width:78px}.potnum{font-size:28px}}
+@media(max-height:640px){.seat .ring{width:50px;height:50px}.tring{left:-9px;top:-9px}.seat .ava{font-size:26px}.pcard{width:58px;height:82px}}
 
-/* compact table header */
-.tablehead{padding:12px 14px}
-.tablehead .tname{font-size:23px;margin:0}
-.thtitle{min-width:0}
-.thtitle .muted{font-size:12px}
-.statusbar{display:flex;align-items:center;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(47,106,84,.7)}
-.stackbox{display:flex;align-items:baseline;gap:6px}
-.stackbox b{font:700 22px var(--serif);color:var(--gold);font-variant-numeric:tabular-nums}
-.statusbar button{margin-left:auto;min-height:36px;padding:7px 16px}
-.tablehead .dlr{margin-top:8px;font-size:11.5px;color:var(--muted)}
-.fineline{margin:6px 0 0;font-size:12px;color:var(--muted)}
-.fineline.warn{color:#ffe08a}
+/* ---- casino look (from the reference layout) ---- */
+.tscreen.land{max-width:none}
+.tarea .surface{inset:9% 4% 8%;border-radius:999px;
+  background:radial-gradient(ellipse at 50% 45%,#23a06f 0,#16794f 52%,#0b4a32 100%);
+  border:7px solid #b27a3a;
+  box-shadow:0 0 0 2px #e6b567,0 0 0 11px #17171c,0 0 0 13px #3b3b45,0 22px 44px rgba(0,0,0,.65),inset 0 0 55px rgba(0,0,0,.5)}
+.tarea .surface:after{inset:5%;border-radius:999px;border:1.5px solid rgba(255,233,166,.25)}
+.surface .wm{position:absolute;left:0;right:0;top:27%;text-align:center;font:700 13px var(--serif);letter-spacing:7px;color:rgba(255,233,166,.2)}
+.chipstack{width:58px}
+.chipstack i{left:0;width:24px;height:10px}
+.chipstack i:nth-child(odd){background:radial-gradient(ellipse at 50% 40%,#ff9aa6,#d63a52);border-color:#7d1d2c}
+.chipstack i:nth-child(1){left:2px;bottom:0}.chipstack i:nth-child(2){left:2px;bottom:5px}.chipstack i:nth-child(3){left:2px;bottom:10px}
+.chipstack:before,.chipstack:after{content:"";position:absolute;bottom:0;width:24px;height:22px;border-radius:50%/45%;border:1.5px solid #1e5f99;background:repeating-linear-gradient(180deg,#5fb2ff 0 4px,#2f7fc9 4px 7px);box-shadow:0 1px 0 #123e66}
+.chipstack:before{left:30px}.chipstack:after{left:18px;bottom:8px;border-color:#b26a12;background:repeating-linear-gradient(180deg,#ffbf5a 0 4px,#e0861c 4px 7px)}
+.chipstack i:nth-child(4){display:none}
 
-/* the dealer */
-.dealer{position:absolute;left:84%;top:7%;transform:translateX(-50%);z-index:1;display:flex;flex-direction:column;align-items:center;pointer-events:none}
-.dring{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#2a2a2a,#0d0d0d);border:2px solid var(--gold);box-shadow:0 3px 8px rgba(0,0,0,.6);font-size:21px;line-height:1}
-.dlabel{margin-top:2px;font-size:9px;letter-spacing:2px;font-weight:800;text-transform:uppercase;color:var(--gold);text-shadow:0 1px 2px #000}
-.deck{position:absolute;right:46px;top:6px;width:22px;height:30px}
-.deck i{position:absolute;inset:0;border-radius:4px;background:repeating-linear-gradient(45deg,#7a1f2b,#7a1f2b 3px,#5c1620 3px,#5c1620 6px);border:1.5px solid #d8b45a;box-shadow:0 1px 3px rgba(0,0,0,.6)}
-.deck i:nth-child(2){transform:translate(-1px,-1px)}.deck i:nth-child(3){transform:translate(-2px,-2px)}
+/* seats as player panels */
+.seat{width:104px}
+.seat .sbody{width:100%;margin-top:-14px;padding:18px 6px 6px;border-radius:12px;background:linear-gradient(180deg,rgba(10,20,28,.82),rgba(6,12,18,.9));border:1.5px solid rgba(255,255,255,.14);box-shadow:0 6px 14px rgba(0,0,0,.45)}
+.seat .ring{z-index:1}
+.seat.me .sbody{border-color:rgba(192,75,255,.7)}
+.seat.turn .sbody{border-color:rgba(242,199,92,.9);box-shadow:0 0 14px rgba(242,199,92,.35),0 6px 14px rgba(0,0,0,.45)}
+.seat.win .sbody{border-color:rgba(46,229,157,.9)}
+.seat .sname{margin-top:0}
+.seat .schips{background:none;border:0;padding:0;font-size:13px}
+.dealerseat .sbody{border-color:rgba(242,199,92,.8)}
+.dtag{margin:3px auto 0;padding:1px 12px;width:max-content;border-radius:6px;font:800 10px var(--serif);letter-spacing:1.5px;color:var(--gold-ink);background:var(--gold-grad)}
+.dealerseat .sname{display:none}
+.deck{left:auto;right:-22px;top:20px}
+.turntag{position:absolute;top:-22px;left:50%;transform:translateX(-50%);z-index:3;padding:2px 10px;border-radius:8px;font:800 10px var(--serif);letter-spacing:1.4px;white-space:nowrap;color:var(--gold-ink);background:var(--gold-grad);box-shadow:0 0 12px rgba(242,199,92,.6)}
+.mcs{margin-top:5px}
 
-/* revealed opponent cards at showdown: nearly as big as yours */
-.mc.face{width:44px;height:62px;margin:0 -5px;font-size:15px;border-radius:6px;border:1px solid #cfc6aa;background:linear-gradient(160deg,#fffdf5,#efe8d3)}
-.mc.face b{font-size:17px}
-.mc.face span{font-size:17px}
+/* control panel */
+.tpanel{padding:4px 10px max(12px,env(safe-area-inset-bottom))}
+.tpanel .moves,.moves{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px;border-radius:16px;background:rgba(7,14,22,.88);border:1.5px solid rgba(80,200,255,.35);box-shadow:0 0 18px rgba(80,200,255,.12)}
+.mv{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-height:62px;padding:6px 2px;border-radius:12px;background:rgba(255,255,255,.04);border:2px solid rgba(255,255,255,.2);box-shadow:none;font-weight:800;letter-spacing:.3px}
+.mv:before{content:attr(data-ic);font-size:19px;line-height:1}
+.mv .lb{font-size:12.5px;letter-spacing:.3px}
+.mv .am{font:800 14px var(--serif);font-variant-numeric:tabular-nums}
+.mv-pack{order:1;color:#ff8a9c;border-color:#ff4d6d;background:rgba(255,77,109,.08)}
+.mv-chaal{order:2;color:var(--gold);border-color:var(--gold);background:linear-gradient(180deg,rgba(242,199,92,.28),rgba(242,199,92,.08))}
+.mv-double{order:3;color:#6fd6ff;border-color:#3aa0ff;background:rgba(58,160,255,.1)}
+.mv-show{order:4;color:#e8e8e8;border-color:#aeb4bd;background:rgba(255,255,255,.07)}
+.mv-see{order:0;grid-column:1/-1;min-height:34px;flex-direction:row;gap:8px;color:#c9f0dc;border-color:rgba(46,229,157,.5);background:rgba(46,229,157,.08)}
+.mv-see.gone{display:none}
+.mv:disabled{opacity:.38}
+.mv.busy{color:transparent!important}
+.myhand.tappable .pcard{cursor:pointer}
+.myhand{margin-bottom:6px}
+.myhand .pcard:nth-child(1){transform:rotate(-6deg) translateY(4px)}.myhand .pcard:nth-child(3){transform:rotate(6deg) translateY(4px)}
+.movenote{margin:4px 0 0}
+
+/* landscape: the table fills a wide screen, the controls sit on its lower rail */
+.tscreen.land .ttop{padding-top:4px;padding-bottom:2px}
+.tscreen.land .tmid .tname{font-size:16px}
+.tscreen.land .tarea .surface{inset:7% 8% 4%}
+.tscreen.land .seat{width:96px}
+.tscreen.land .seat .ring{width:46px;height:46px}.tscreen.land .tring{left:-9px;top:-9px;width:64px;height:64px}
+.tscreen.land .seat .ava{font-size:24px}
+.tscreen.land .tpanel{left:50%;right:auto;width:min(540px,56%);transform:translateX(-50%);bottom:4px;padding:0}
+.tscreen.land .tpanel .myhand{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 2px);margin:0}
+.tscreen.land .pcard{width:54px;height:76px}
+.tscreen.land .moves{grid-template-columns:repeat(5,1fr);padding:6px}
+.tscreen.land .mv-see{grid-column:auto;order:0;flex-direction:column;min-height:50px}
+.tscreen.land .mv{min-height:50px}
+.tscreen.land .movenote{display:none}
+.tscreen.land .glog{display:none}
+.tscreen.land .centre{top:39%!important}
+.tscreen.land .chipstack,.tscreen.land .surface .wm{display:none}
+.tscreen.land .potnum{font-size:26px}
+.tscreen.land .pcard{width:50px;height:70px}
 
 </style>
 </head>
@@ -405,10 +469,11 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 // Builds DOM safely: text always goes through textContent, never innerHTML.
 function h(tag, props, ...kids) {
-  const el = document.createElement(tag);
+  const svg = tag === 'svg' || tag === 'circle';
+  const el = svg ? document.createElementNS('http://www.w3.org/2000/svg', tag) : document.createElement(tag);
   for (const [k, v] of Object.entries(props || {})) {
     if (v === undefined || v === null || v === false) continue;
-    if (k === 'class') el.className = v;
+    if (k === 'class') { if (svg) el.setAttribute('class', v); else el.className = v; }
     else if (k === 'text') el.textContent = v;
     else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
     else el.setAttribute(k, v === true ? '' : v);
@@ -933,6 +998,7 @@ function render() {
   }
   if (enter) node.classList.add('enter');
   $('screen').replaceChildren(node);
+  document.body.classList.toggle('intable', r.name === 'table');
   if (r.name === 'table') Fx.after(); else Fx.leave();
 }
 
@@ -1056,55 +1122,47 @@ function renderAdmin() {
 
 /* ---- table room ---- */
 function renderTable() {
-  const R = S.room;
-  const cfg = TABLE_BY_ID[R.id];
-  const me = myMember(R);
-  const online = hostLive(R.doc);
-  const ready = R.loaded.doc && R.loaded.members;
+  const R = S.room, cfg = TABLE_BY_ID[R.id], me = myMember(R);
+  const online = hostLive(R.doc), ready = R.loaded.doc && R.loaded.members;
   const sitWhy = me ? sitBlockReason(R, me) : '', standWhy = me ? standBlockReason(R, me) : '', leaveWhy = me ? leaveBlockReason(R, me) : '';
   const seated = !!me && me.seatState === 'seated';
+  if (S.act && R.game && gameSig(R.game) !== S.act.key) S.act = null;
+  const G = R.game, live = !!(G && G.phase !== 'idle' && Array.isArray(G.order) && G.players);
+
+  /* top strip: leave, where you are, sit/stand */
+  const top = h('div', { class: 'ttop' },
+    S.isAdmin
+      ? h('button', { id: 'backBtn', class: 'tbtn', type: 'button', text: 'Back', onclick: () => { location.hash = '#/admin'; } })
+      : h('button', { id: 'leaveBtn', class: 'tbtn' + (S.busy.leave ? ' busy' : ''), type: 'button', text: 'Leave', disabled: !!S.busy.leave, onclick: handleLeave }),
+    h('div', { class: 'tmid' },
+      h('div', { class: 'tname', id: 'roomTitle', text: tableName(cfg) }),
+      h('div', { class: 'tsub' }, h('span', { class: 'dot' + (online ? ' on' : '') }), h('span', { id: 'tableState', text: online ? 'Table live' : 'Connecting…' }), live ? h('span', { class: 'pill', id: 'handNo', text: 'Hand ' + G.handNo }) : null,
+      me && ready ? h('span', { class: 'pill ' + (seated ? '' : 'gold'), id: 'mySeatState', text: seated ? 'Seated' : 'Standing' }) : null)),
+    me && ready
+      ? (seated
+        ? h('button', { id: 'standBtn', class: 'tbtn' + (S.busy.seat || S.pending ? ' busy' : ''), type: 'button', text: 'Stand up', disabled: !!standWhy || !!S.busy.seat || !!S.pending, onclick: () => handleSeatChange('stand') })
+        : h('button', { id: 'sitBtn', class: 'tbtn gold' + (S.busy.seat || S.pending ? ' busy' : ''), type: 'button', text: 'Sit down', disabled: !!sitWhy || !!S.busy.seat || !!S.pending, onclick: () => handleSeatChange('sit') }))
+      : h('span', { class: 'tspacer' }));
+
+  const screen = h('div', { class: 'tscreen' + (S.isAdmin ? ' admin' : '') + (isLand() ? ' land' : '') }, top);
+  if (!ready) { screen.appendChild(h('div', { class: 'tload' }, renderLoading())); return screen; }
+  const msgs = [];
+  if (R.doc === null) msgs.push(h('p', { class: 'tnote err', text: 'This table is not set up. The admin needs to set up the tables.' }));
+  if (!me && !S.busy.leave && !S.isAdmin) msgs.push(h('p', { class: 'tnote err', text: 'Your seat record could not be found at this table. Contact the admin.' }));
   const pendingNote = S.pending ? 'Working on it…' : '';
   const note = pendingNote || (seated ? standWhy : sitWhy);
+  if (me && note) msgs.push(h('p', { id: 'controlNote', class: 'tnote', text: note }));
+  if (me && seated && live && G.players[me.uid] && G.players[me.uid].standAfter) msgs.push(h('p', { id: 'standAfter', class: 'tnote', role: 'status', text: 'You will stand up when this hand ends.' }));
+  if (me && me.stack < cfg.boot) msgs.push(h('p', { id: 'outOfChips', class: 'tnote warn', role: 'status', text: 'Out of chips — watching table.' }));
 
-  /* one compact header: where you are, your stack, sit/stand and leave */
-  const header = h('div', { class: 'card tight tablehead' },
-    h('div', { class: 'row' },
-      h('div', { class: 'thtitle' },
-        h('div', { class: 'tname', id: 'roomTitle', text: tableName(cfg) }),
-        h('div', { class: 'muted', id: 'roomStake', text: tableStake(cfg) + ' \u00B7 Buy-in ' + fmt(cfg.min) + ' to ' + fmt(cfg.max) })),
-      S.isAdmin
-        ? h('button', { id: 'backBtn', class: 'btn-ghost btn-small', type: 'button', text: 'Back', onclick: () => { location.hash = '#/admin'; } })
-        : h('button', { id: 'leaveBtn', class: 'btn-ghost btn-small' + (S.busy.leave ? ' busy' : ''), type: 'button', text: 'Leave', disabled: !!S.busy.leave, onclick: handleLeave })),
-    me && ready ? h('div', { class: 'statusbar' },
-      h('div', { class: 'stackbox' }, h('span', { class: 'muted', text: 'Stack' }), h('b', { id: 'myStack', text: fmt(me.stack) })),
-      h('span', { class: 'pill ' + (seated ? '' : 'gold'), id: 'mySeatState', text: seated ? 'Seated' : 'Standing' }),
-      seated
-        ? h('button', { id: 'standBtn', class: 'btn-secondary btn-small' + (S.busy.seat || S.pending ? ' busy' : ''), type: 'button', text: 'Stand up', disabled: !!standWhy || !!S.busy.seat || !!S.pending, onclick: () => handleSeatChange('stand') })
-        : h('button', { id: 'sitBtn', class: 'btn-primary btn-small' + (S.busy.seat || S.pending ? ' busy' : ''), type: 'button', text: 'Sit down', disabled: !!sitWhy || !!S.busy.seat || !!S.pending, onclick: () => handleSeatChange('sit') })) : null,
-    h('div', { class: 'dlr' },
-      h('span', { class: 'dot' + (online ? ' on' : '') }),
-      h('span', { id: 'tableState', text: online ? (Dealer.active ? 'Table live \u00B7 your phone is running it' : 'Table live') : 'Connecting to the table\u2026' })),
-    me && ready && note ? h('p', { id: 'controlNote', class: 'fineline', text: note }) : null,
-    me && ready && leaveWhy ? h('p', { id: 'leaveNote', class: 'fineline', text: leaveWhy }) : null,
-    me && ready && seated && R.game && R.game.phase === 'playing' && R.game.players && R.game.players[me.uid] && R.game.players[me.uid].standAfter ? h('p', { class: 'fineline', id: 'standAfter', role: 'status', text: 'You will stand up when this hand ends.' }) : null,
-    me && ready && me.stack < cfg.boot ? h('p', { class: 'fineline warn', id: 'outOfChips', role: 'status', text: 'Out of chips — watching table.' }) : null);
-
-  if (S.act && R.game && gameSig(R.game) !== S.act.key) S.act = null;
-  const nodes = [header];
-  if (!ready) { nodes.push(renderLoading()); return h('div', {}, nodes); }
-  if (R.doc === null) nodes.push(h('div', { class: 'msg err', role: 'alert', text: 'This table is not set up. The admin needs to set up the tables.' }));
-  if (!me && !S.busy.leave && !S.isAdmin) nodes.push(h('div', { class: 'msg err', role: 'alert', text: 'Your seat record could not be found at this table. Contact the admin.' }));
-
-  if (R.loaded.game) nodes.push(renderGame(R, me));
-
-  /* the player list is an admin tool; players see everyone on the felt */
+  if (R.loaded.game) screen.appendChild(renderFelt(R, me, msgs));
   if (S.isAdmin) {
-    nodes.push(h('div', { class: 'card' },
+    screen.appendChild(h('div', { class: 'card', style: 'margin:12px' },
       h('div', { class: 'row' }, h('h3', { text: 'At this table' }), h('span', { class: 'pill', id: 'countPill', text: R.members.length + (R.members.length === 1 ? ' player' : ' players') })),
       R.members.length ? h('div', { id: 'roster' }, R.members.map(m => seatRow(m, false, R)).concat((R.bots || []).filter(b => b.seatState === 'seated').map(b =>
         h('div', { class: 'seatrow', 'data-bot': b.botId }, h('div', { class: 'av', text: avatarEmoji('bot') }), h('div', { class: 'nm' }, h('b', { text: b.name }), h('span', { text: fmt(b.stack) + ' chips' })), h('span', { class: 'pill gold', text: 'Test bot' }))))) : h('p', { class: 'muted', text: 'No players yet.' })));
   }
-  return h('div', {}, nodes);
+  return screen;
 }
 
 function seatRow(m, isMe, adminR) {
@@ -1124,15 +1182,16 @@ function cardNode(c, faceDown) {
   return h('div', { class: 'pcard' + (isRed(c) ? ' red' : ''), 'aria-label': c }, h('b', { text: c.slice(0, -1) }), h('span', { text: c.slice(-1) }));
 }
 function fmtSecs(ms) { return Math.max(0, Math.ceil(ms / 1000)) + 's'; }
+const TIMER_R = 33, TIMER_C = 2 * Math.PI * TIMER_R;
+const timerColor = f => f > .5 ? '#f2c75c' : f > .25 ? '#ff9f43' : '#ff4d6d';
+// The turn timer lives on the player's picture: a ring that drains and glows harder as time runs out.
 function updateTimer() {
-  const el = $('turnTimer'), G = S.room && S.room.game;
-  if (el && G && G.phase === 'playing') {
-    const left = G.turnEndsAt - Date.now();
-    el.textContent = fmtSecs(left);
-    el.classList.toggle('low', left < 6000);
-    const bar = document.querySelector('#turnBar i');
-    if (bar) bar.style.transform = 'scaleX(' + Math.max(0, Math.min(1, (left - 500) / GAME_CONFIG.turnMs)) + ')';
-  }
+  const G = S.room && S.room.game;
+  if (!G || G.phase !== 'playing') return;
+  const svg = document.querySelector('.seat.turn .tring'), arc = document.querySelector('.seat.turn .tprog');
+  if (!svg || !arc) return;
+  const f = Math.max(0, Math.min(1, (G.turnEndsAt - Date.now() - 500) / GAME_CONFIG.turnMs)), col = timerColor(f);
+  arc.style.strokeDashoffset = String(TIMER_C * (1 - f)); arc.style.stroke = col; svg.style.color = col;
 }
 
 /* Who sits where: the players of the live hand, or the seated players between hands. */
@@ -1142,115 +1201,116 @@ function seatList(R, G, live) {
   (R.bots || []).filter(b => b.seatState === 'seated').forEach(b => list.push({ id: b.botId, name: b.name, avatar: 'bot', chips: b.stack, status: '', bot: true, dealer: false }));
   return list;
 }
-// Seat k of n around the oval; seat 0 (you) is at the bottom, play runs clockwise.
-function seatXY(k, n) {
-  const a = Math.PI / 2 + k * 2 * Math.PI / n;
-  return { x: 50 + 37 * Math.cos(a), y: 49 + 37 * Math.sin(a) };
-}
+// Seats around the table. Portrait: you at the bottom, the dealer at the top, the others between.
+// Landscape (a wide screen): the dealer on top, you at the lower right, the others down the sides.
+const isLand = () => window.innerWidth > window.innerHeight * 1.2;
+const SLOTS = { 2: [180], 3: [155, 25], 4: [155, 215, 325] };
+const LAND_SLOTS = { 2: [[13, 52]], 3: [[13, 34], [87, 34]], 4: [[13, 32], [13, 70], [87, 32]] };
+function seatXY(deg) { const a = deg * Math.PI / 180; return { x: 50 + 32 * Math.cos(a), y: 47 + 38 * Math.sin(a) }; }
 function miniCard(c, i) {
   if (!c) return h('div', { class: 'mc back', 'data-i': i });
   return h('div', { class: 'mc face' + (isRed(c) ? ' red' : ''), 'data-i': i, 'aria-label': c }, h('b', { text: c.slice(0, -1) }), h('span', { text: c.slice(-1) }));
 }
 
-function renderGame(R, me) {
-  const G = R.game, uid = S.user && S.user.uid;
-  const card = h('div', { class: 'card felt-card', id: 'gameCard' });
+function renderFelt(R, me, msgs) {
+  const G = R.game, uid = S.user && S.user.uid, land = isLand();
   const live = !!(G && G.phase !== 'idle' && Array.isArray(G.order) && G.players);
-  if (G && G.phase !== 'idle' && !live) {
-    card.appendChild(h('h3', { text: 'Table' }));
-    card.appendChild(h('p', { id: 'idleNote', class: 'muted', text: 'The hand state is not readable. Hang on.' }));
-    return card;
-  }
   const playing = live && G.phase === 'playing', result = live && G.phase === 'result' && G.result;
+  const mine = uid && live && G.players[uid];
   const seats = seatList(R, G, live);
+  if (me && !seats.some(x => x.id === me.uid)) seats.push({ id: me.uid, name: me.name, avatar: me.avatar, chips: me.stack, status: '', bot: false, dealer: false, standing: true });
   const mi = seats.findIndex(x => x.id === uid);
   const ordered = mi > 0 ? seats.slice(mi).concat(seats.slice(0, mi)) : seats;
-  const reveal = (result && G.result.reveal) || {};
-  const winners = result ? G.result.winners : [];
+  const total = Math.min(4, ordered.length + (mi >= 0 ? 0 : 1));
+  const reveal = (result && G.result.reveal) || {}, winners = result ? G.result.winners : [];
+  const showMoves = !!(mine && playing);
+  const oppPos = k => {                                           // k = index among the other players
+    if (land) { const l = LAND_SLOTS[total] || LAND_SLOTS[4]; const q = l[Math.min(k, l.length - 1)]; return { x: q[0], y: q[1] }; }
+    const d = SLOTS[total] || SLOTS[4]; return seatXY(d[Math.min(k, d.length - 1)]);
+  };
 
-  if (live) {
-    card.appendChild(h('div', { class: 'felthead' },
-      h('span', { class: 'pill', id: 'handNo', text: 'Hand ' + G.handNo }),
-      h('span', { class: 'stakeline' }, 'Stake ', h('b', { id: 'stakeAmt', text: fmt(G.stake) }))));
-  }
-  if (playing) {
-    const turnName = G.players[G.turn] ? G.players[G.turn].name : '';
-    const left = Math.max(0, G.turnEndsAt - Date.now()), frac = Math.min(1, left / GAME_CONFIG.turnMs);
-    card.appendChild(h('div', { class: 'turnline' + (G.turn === uid ? ' mine' : ''), id: 'turnLine' },
-      h('div', { class: 'tl-row' },
-        h('span', { id: 'turnName', text: G.turn === uid ? 'Your turn' : turnName + ' to act' }),
-        h('span', { id: 'turnTimer', class: 'timer', text: fmtSecs(left) })),
-      h('div', { class: 'tbar', id: 'turnBar' }, h('i', { style: 'transform:scaleX(' + frac + ')' }))));
-  }
+  const reserve = land ? 0 : (showMoves ? (mine.status === 'blind' ? 282 : 246) : mine ? 130 : 20);
+  const area = h('div', { class: 'tarea', style: 'bottom:' + reserve + 'px' }, h('div', { class: 'surface' }, h('div', { class: 'wm', text: 'TEEN PATTI' })));
 
-  const potVal = result ? G.result.amount : (live ? G.pot : 0);
-  const centre = h('div', { class: 'centre' });
+  /* dealer: sits at the top seat; the cards come from here */
+  area.appendChild(h('div', { class: 'seat dealerseat', id: 'dealerFigure', style: 'left:50%;top:' + (land ? 13 : 9) + '%', 'aria-label': 'Dealer' },
+    h('div', { class: 'ring dring' }, h('span', { class: 'ava', text: '\u{1F3A9}' })),
+    h('div', { class: 'sbody' }, h('div', { class: 'sname', text: 'Dealer' }), h('div', { class: 'dtag', text: 'DEALER' })),
+    h('div', { class: 'deck', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'))));
+
+  /* centre of the table: pot, stake, messages, log */
+  const centre = h('div', { class: 'centre', style: land ? 'top:42%' : null });
   if (live) {
     centre.appendChild(h('div', { class: 'chipstack', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'), h('i')));
     centre.appendChild(h('div', { class: 'potlabel', text: result ? 'WON' : 'POT' }));
-    centre.appendChild(h('div', { class: 'tname potnum', id: 'potAmt', text: fmt(potVal) }));
-    if (result) centre.appendChild(h('div', { class: 'winbanner', id: 'winBanner', text: winners.map(id => G.players[id].name).join(' & ') }));
+    centre.appendChild(h('div', { class: 'potnum', id: 'potAmt', text: fmt(result ? G.result.amount : G.pot) }));
+    if (result) centre.appendChild(h('div', { id: 'resultCard', role: 'status' },
+      h('div', { class: 'winbanner', id: 'winBanner', text: winners.map(id => G.players[id].name).join(' & ') }),
+      h('div', { class: 'whyline', id: 'resultWhy', text: G.result.reason === 'fold' ? 'Everyone else packed' : G.result.rank })));
+    else centre.appendChild(h('div', { class: 'stakeline' }, 'Stake ', h('b', { id: 'stakeAmt', text: fmt(G.stake) })));
   } else {
     centre.appendChild(h('div', { class: 'chipstack idle', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')));
     centre.appendChild(h('p', { id: 'idleNote', class: 'idletext', text: !hostLive(R.doc) ? 'Connecting to the table…' : readyHumans(R).length === 0 ? 'Sit down to play. A bot will keep you company.' : 'The next hand is about to be dealt.' }));
   }
+  msgs.forEach(m => centre.appendChild(m));
+  if (G && G.log && G.log.length) centre.appendChild(h('div', { class: 'glog', id: 'gameLog' }, G.log.slice(-4).reverse().map(t => h('div', { text: t }))));
+  area.appendChild(centre);
 
-  const dealer = h('div', { class: 'dealer', id: 'dealerFigure', 'aria-label': 'Dealer' }, h('div', { class: 'dring' }, h('span', { text: '\u{1F3A9}' })), h('div', { class: 'dlabel', text: 'Dealer' }), h('div', { class: 'deck', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')));
-  const felt = h('div', { class: 'felt' }, h('div', { class: 'surface' }), dealer, centre,
-    h('div', { id: 'gamePlayers' }, ordered.map((sp, k) => {
-      const pos = seatXY(k, ordered.length), isMe = sp.id === uid, out = sp.status === 'packed';
-      const cards = live && !isMe && !out ? h('div', { class: 'mcs' }, [0, 1, 2].map(i => miniCard(reveal[sp.id] ? reveal[sp.id][i] : '', i))) : null;
-      const label = out ? 'Packed' : sp.status === 'seen' ? 'Seen' : sp.status === 'blind' ? 'Blind' : '';
-      return h('div', { class: 'seat gp' + (playing && G.turn === sp.id ? ' turn' : '') + (out ? ' out' : '') + (isMe ? ' me' : '') + (winners.includes(sp.id) ? ' win' : ''), 'data-uid': sp.id, style: 'left:' + pos.x.toFixed(1) + '%;top:' + pos.y.toFixed(1) + '%' },
-        h('div', { class: 'ring' }, h('span', { class: 'ava', text: avatarEmoji(sp.avatar) }), sp.dealer ? h('span', { class: 'dbtn', title: 'Dealer', text: 'D' }) : null),
+  /* players */
+  const seatEls = [];
+  ordered.forEach((sp, k) => {
+    const isMe = sp.id === uid;
+    const pos = isMe ? (land ? { x: 88, y: 72 } : seatXY(90)) : oppPos(k - (mi >= 0 ? 1 : 0));
+    const out = sp.status === 'packed', turn = playing && G.turn === sp.id;
+    const cards = live && !isMe && !out && !sp.standing ? h('div', { class: 'mcs' }, [0, 1, 2].map(i => miniCard(reveal[sp.id] ? reveal[sp.id][i] : '', i))) : null;
+    const label = sp.standing ? 'Standing' : out ? 'Packed' : sp.status === 'seen' ? 'Seen' : sp.status === 'blind' ? 'Blind' : '';
+    let ring = null;
+    if (turn) {
+      const f = Math.max(0, Math.min(1, (G.turnEndsAt - Date.now() - 500) / GAME_CONFIG.turnMs)), col = timerColor(f);
+      ring = h('svg', { class: 'tring', viewBox: '0 0 76 76', style: 'color:' + col, 'aria-hidden': 'true' },
+        h('circle', { cx: 38, cy: 38, r: TIMER_R, class: 'ttrack' }),
+        h('circle', { cx: 38, cy: 38, r: TIMER_R, class: 'tprog', style: 'stroke:' + col + ';stroke-dasharray:' + TIMER_C + ';stroke-dashoffset:' + (TIMER_C * (1 - f)) }));
+    }
+    seatEls.push(h('div', { class: 'seat gp' + (turn ? ' turn' : '') + (out || sp.standing ? ' out' : '') + (isMe ? ' me' : '') + (winners.includes(sp.id) ? ' win' : ''), 'data-uid': sp.id, style: 'left:' + pos.x.toFixed(1) + '%;top:' + pos.y.toFixed(1) + '%' },
+      turn && isMe ? h('div', { class: 'turntag', text: 'YOUR TURN' }) : null,
+      h('div', { class: 'ring' }, h('span', { class: 'ava', text: avatarEmoji(sp.avatar) }), ring, sp.dealer ? h('span', { class: 'dbtn', title: 'Dealer button', text: 'D' }) : null),
+      h('div', { class: 'sbody' },
         h('div', { class: 'sname', text: isMe ? 'You' : sp.name }),
         h('div', { class: 'schips', text: fmt(sp.chips) }),
-        cards,
-        label ? h('div', { class: 'slabel ' + (out ? 'out' : sp.status), text: label }) : null);
-    })));
-  card.appendChild(felt);
+        label ? h('div', { class: 'slabel ' + (out || sp.standing ? 'out' : sp.status), text: label }) : null,
+        cards)));
+  });
+  area.appendChild(h('div', { id: 'gamePlayers' }, seatEls));
 
-  const mine = uid && live && G.players[uid];
+  const wrap = h('div', { class: 'tfelt', id: 'gameCard' }, area);
+
+  /* your cards and moves sit on the table's lower edge */
   if (mine) {
     const hd = R.myHand && R.myHand.handId === G.handId ? R.myHand.cards : null;
     const hidden = mine.status === 'blind' || !hd;
-    card.appendChild(h('div', { class: 'myhand', id: 'myCards' }, [0, 1, 2].map(i => cardNode(hd && !hidden ? hd[i] : '', hidden))));
-    if (mine.status === 'blind') card.appendChild(h('p', { class: 'muted', style: 'text-align:center;margin:4px 0', text: 'You are playing blind. Look at your cards any time.' }));
-    if (playing) card.appendChild(renderMoves(G, uid));
-  } else if (playing) card.appendChild(h('p', { class: 'muted', style: 'text-align:center', text: S.isAdmin ? 'You are watching this hand.' : 'You are watching this hand.' }));
-  if (result) card.appendChild(renderResult(G));
-  if (G && G.log && G.log.length) card.appendChild(logNode(G));
-  return card;
+    const canSee = playing && mine.status === 'blind';
+    const hand = h('div', { class: 'myhand' + (canSee ? ' tappable' : ''), id: 'myCards', onclick: canSee ? () => handleGameAction('see') : null }, [0, 1, 2].map(i => cardNode(hd && !hidden ? hd[i] : '', hidden)));
+    const panel = h('div', { class: 'tpanel' + (showMoves ? '' : ' slim') }, hand);
+    if (showMoves) panel.appendChild(renderMoves(G, uid));
+    wrap.appendChild(panel);
+  }
+  return wrap;
 }
 
 function renderMoves(G, uid) {
   const lm = legalMoves(G, uid), busy = !!S.act;
-  const withCost = (m, text) => m.cost > 0 ? text + ' \u00B7 ' + fmt(m.cost) : text;
-  const btn = (id, type, text, cls) => h('button', { id, class: cls + (S.act && S.act.type === type ? ' busy' : ''), type: 'button', text, disabled: !lm[type].ok || busy, onclick: () => handleGameAction(type) });
+  // label on top, what it costs underneath; the icon is drawn by CSS so the text stays plain
+  const btn = (id, type, label, cost, cls, ic) => h('button', { id, class: cls + (S.act && S.act.type === type ? ' busy' : '') + (type === 'see' && lm.status === 'seen' ? ' gone' : ''), 'data-ic': ic, type: 'button', disabled: !lm[type].ok || busy, onclick: () => handleGameAction(type) },
+    h('span', { class: 'lb', text: label }), cost > 0 ? h('span', { class: 'am', text: fmt(cost) }) : null);
   const note = lm.myTurn ? (lm.chaal.ok ? '' : lm.chaal.reason) : 'Wait for your turn.';
   return h('div', { id: 'moves' },
     h('div', { class: 'moves' },
-      btn('seeBtn', 'see', 'See cards', 'btn-secondary'),
-      btn('chaalBtn', 'chaal', withCost(lm.chaal, lm.chaal.label), 'btn-primary'),
-      btn('raiseBtn', 'raise', withCost(lm.raise, lm.raise.label), 'btn-secondary'),
-      btn('showBtn', 'show', withCost(lm.show, 'Show'), 'btn-secondary'),
-      btn('packBtn', 'pack', 'Pack', 'btn-ghost')),
-    h('p', { id: 'moveNote', class: 'muted', style: 'font-size:13px;margin:8px 0 0', text: busy ? 'Sending…' : (lm.myTurn && !lm.raise.ok && lm.raise.reason ? note || lm.raise.reason : note) }));
-}
-
-function renderResult(G) {
-  const r = G.result;
-  const names = r.winners.map(id => G.players[id].name).join(' and ');
-  const box = h('div', { class: 'result', id: 'resultCard', role: 'status' },
-    h('div', { class: 'eyebrow', text: r.winners.length > 1 ? 'Pot split' : 'Winner' }),
-    h('div', { class: 'tname', id: 'resultWho', text: names + ' · ' + fmt(r.amount) }),
-    h('div', { class: 'muted', id: 'resultWhy', text: r.reason === 'fold' ? 'Everyone else packed.' : 'Show: ' + r.rank + '.' }));
-  const rv = Object.keys(r.reveal || {});
-  rv.forEach(id => box.appendChild(h('div', { class: 'revealrow' }, h('span', { text: G.players[id].name }), h('div', { class: 'myhand small' }, r.reveal[id].map(c => cardNode(c, false))))));
-  return box;
-}
-function logNode(G) {
-  return h('div', { class: 'glog', id: 'gameLog' }, (G.log || []).slice(-6).reverse().map(t => h('div', { text: t })));
+      btn('seeBtn', 'see', 'See cards', 0, 'mv mv-see', '\u{1F441}'),
+      btn('chaalBtn', 'chaal', lm.chaal.label, lm.chaal.cost, 'mv mv-chaal', '\u{1FA99}'),
+      btn('raiseBtn', 'raise', lm.raise.label, lm.raise.cost, 'mv mv-double', '\u23EB'),
+      btn('showBtn', 'show', 'Show', lm.show.cost, 'mv mv-show', '\u{1F0CF}'),
+      btn('packBtn', 'pack', 'Pack', 0, 'mv mv-pack', '\u{1F6AB}')),
+    h('p', { id: 'moveNote', class: 'movenote', text: busy ? 'Sending…' : (lm.myTurn && !lm.raise.ok && lm.raise.reason ? note || lm.raise.reason : note) || (lm.myTurn ? 'Your turn' : '') }));
 }
 
 /* ==========================================================================
@@ -1860,15 +1920,24 @@ const Fx = {
     });
   },
 
-  // Whose turn it is, and who won, glow; the phase is tied to the clock so a re-render does not restart the pulse.
+  // The winner glows; the timer ring on the player whose turn it is pulses faster as time runs out.
+  // Phases are tied to the clock so a re-render does not restart the pulse.
   glow() {
-    document.querySelectorAll('#gamePlayers .seat.turn .ring, #gamePlayers .seat.win .ring').forEach(el => {
-      const win = el.parentNode.classList.contains('win'), col = win ? '46,229,157' : '242,199,92';
+    document.querySelectorAll('#gamePlayers .seat.win .ring').forEach(el => {
       const a = el.animate([
-        { boxShadow: '0 0 0 2px rgba(' + col + ',.9),0 0 6px 1px rgba(' + col + ',.35)' },
-        { boxShadow: '0 0 0 3px rgba(' + col + ',1),0 0 22px 8px rgba(' + col + ',.8)' }], { duration: 750, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' });
+        { boxShadow: '0 0 0 2px rgba(46,229,157,.9),0 0 6px 1px rgba(46,229,157,.35)' },
+        { boxShadow: '0 0 0 3px rgba(46,229,157,1),0 0 22px 8px rgba(46,229,157,.8)' }], { duration: 750, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' });
       a.currentTime = Date.now() % 1500;
     });
+    const G = S.room && S.room.game, svg = document.querySelector('.seat.turn .tring');
+    if (svg && G && G.phase === 'playing') {
+      const f = Math.max(0, Math.min(1, (G.turnEndsAt - Date.now()) / GAME_CONFIG.turnMs));
+      const dur = f > .5 ? 1400 : f > .25 ? 900 : 480, strong = f > .5 ? 7 : f > .25 ? 11 : 16;
+      const a = svg.animate([
+        { filter: 'drop-shadow(0 0 2px currentColor)', opacity: .8 },
+        { filter: 'drop-shadow(0 0 ' + strong + 'px currentColor)', opacity: 1 }], { duration: dur, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' });
+      a.currentTime = Date.now() % (dur * 2);
+    }
   },
 
   // A few chips slide from one place to another.
@@ -2207,6 +2276,7 @@ function wireStaticControls() {
   $('buyModal').addEventListener('click', e => { if (e.target === $('buyModal')) closeBuyIn(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('buyModal').hidden) closeBuyIn(); });
   window.addEventListener('hashchange', go);
+  window.addEventListener('resize', () => { if (S.route && S.route.name === 'table') scheduleRender(); });
   window.addEventListener('online', () => setConnection(true));
   window.addEventListener('offline', () => setConnection(false));
 }
