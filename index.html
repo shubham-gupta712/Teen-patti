@@ -382,6 +382,90 @@ body.intable{background:#030d09;overflow:hidden}
 .tscreen.land .potnum{font-size:26px}
 .tscreen.land .pcard{width:50px;height:70px}
 
+/* ==========================================================================
+   SECTION 14 - TABLE POLISH: depth, light, motion
+   ========================================================================== */
+.tarea{container-type:size}
+.stage{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(100cqw,74cqh);height:min(135cqw,100cqh)}
+.stage.land{width:min(100cqw,190cqh);height:min(52.6cqw,100cqh)}
+.tarea .surface,.tscreen.land .tarea .surface{inset:7% 2% 6%}
+.stage.land .surface{inset:5% 3% 3%}
+.tarea .surface{
+  background:
+    radial-gradient(ellipse 60% 40% at 38% 26%,rgba(255,255,255,.16),transparent 70%),
+    radial-gradient(ellipse at 50% 48%,#27ad77 0,#178150 50%,#0a4a32 100%);
+  border:8px solid #b27a3a;
+  box-shadow:0 0 0 2px #f0c06a,0 0 0 12px #121217,0 0 0 14px #44444f,0 0 0 15px #111,0 26px 50px rgba(0,0,0,.7),0 0 70px rgba(46,229,157,.12),inset 0 0 60px rgba(0,0,0,.55),inset 0 2px 0 rgba(255,255,255,.25)}
+.tarea .surface:after{inset:4.5%;border:2px dashed rgba(255,233,166,.3)}
+.surface .spade{position:absolute;left:0;right:0;top:50%;transform:translateY(-52%);text-align:center;font-size:150px;line-height:1;color:rgba(0,0,0,.1)}
+.surface .wm{top:19%;font-size:12px;letter-spacing:8px;color:rgba(255,233,166,.28)}
+.stage.land .surface .spade{font-size:110px}
+.tscreen:before{content:"";position:absolute;inset:-20%;pointer-events:none;background:radial-gradient(circle at 20% 20%,rgba(46,229,157,.1),transparent 40%),radial-gradient(circle at 80% 75%,rgba(242,199,92,.08),transparent 42%);animation:drift 14s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(4%,3%) scale(1.08)}}
+
+/* pot chips */
+.potchips{position:relative;width:72px;height:50px;margin-bottom:2px}
+.potchips .pc{position:absolute;width:28px;height:13px;border-radius:50%;box-shadow:0 2px 0 rgba(0,0,0,.45),inset 0 0 0 2px rgba(255,255,255,.55)}
+.pc.r{background:radial-gradient(ellipse at 50% 35%,#ff8f9f,#d1304a)}
+.pc.b{background:radial-gradient(ellipse at 50% 35%,#7cc4ff,#2a73c4)}
+.pc.o{background:radial-gradient(ellipse at 50% 35%,#ffd27a,#e0861c)}
+.pc.g{background:radial-gradient(ellipse at 50% 35%,#7dffc0,#1ea96b)}
+.potnum{font-size:38px;text-shadow:0 2px 0 #7a5410,0 0 18px rgba(242,199,92,.45)}
+.centre .cta{pointer-events:auto;margin-top:12px;padding:13px 26px;border-radius:30px;font-size:16px;color:var(--gold-ink);background:var(--gold-grad);box-shadow:0 5px 0 #8a6314,0 0 26px rgba(242,199,92,.5);animation:breathe 1.6s ease-in-out infinite}
+.centre .cta:disabled{animation:none;opacity:.5}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.idletext{font-size:14px;max-width:190px;color:#e4f6ec}
+
+/* seats */
+.seat{width:108px}
+.seat .ring{width:64px;height:64px;border-width:3px;background:radial-gradient(circle at 35% 28%,#2a8a6a,#0a3025);box-shadow:0 6px 14px rgba(0,0,0,.6),inset 0 2px 4px rgba(255,255,255,.25)}
+.seat .ava{font-size:34px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}
+.tring{left:-10px;top:-10px;width:84px;height:84px}
+.seat .sbody{margin-top:-16px;padding:20px 6px 7px;background:linear-gradient(180deg,rgba(18,34,46,.9),rgba(6,12,18,.94));backdrop-filter:blur(2px)}
+.seat .sname{font-size:13px}
+.seat .schips{font-size:14px;color:#ffe08a}
+.seat .schips:before{content:"\1FA99 ";font-size:12px}
+.seat.me .sbody{border-color:#c04bff;box-shadow:0 0 14px rgba(192,75,255,.35),0 6px 14px rgba(0,0,0,.45)}
+.seat.turn{z-index:3}
+.seat.turn .ring{border-color:#ffe9a6}
+.seat.win .sbody:before{content:"\1F451";position:absolute;top:-34px;left:50%;transform:translateX(-50%);font-size:22px;animation:bob 1s ease-in-out infinite alternate}
+.seat .sbody{position:relative}
+@keyframes bob{from{transform:translate(-50%,0)}to{transform:translate(-50%,-5px)}}
+
+/* floating action labels */
+.bubble{position:fixed;display:flex;align-items:center;gap:6px;padding:4px 11px;border-radius:14px;font:800 13px var(--serif);white-space:nowrap;color:#fff;background:rgba(10,20,28,.92);border:1.5px solid rgba(255,255,255,.35);box-shadow:0 4px 12px rgba(0,0,0,.5)}
+.bubble b{color:#ffe08a}
+.bubble.pack{border-color:#ff4d6d;color:#ffb3c1}
+.bubble.chaal,.bubble.blind{border-color:#f2c75c;color:#ffe9a6}
+.bubble.double{border-color:#3aa0ff;color:#9fd6ff}
+.bubble.show{border-color:#e8e8e8}
+.bubble.seen{border-color:#c04bff;color:#ecc6ff}
+
+/* cards with proper faces */
+.pcard{display:block;padding:0;width:70px;height:100px;font-family:var(--serif)}
+.pcard b{position:absolute;left:7px;top:5px;font-size:20px;line-height:1}
+.pcard span{position:absolute;left:0;right:0;top:50%;transform:translateY(-36%);text-align:center;font-size:44px;line-height:1}
+.pcard:after{content:attr(data-r);position:absolute;right:7px;bottom:5px;font-size:15px;font-weight:700;transform:rotate(180deg)}
+.pcard.back:before{content:"\2660";position:absolute;inset:0;display:grid;place-items:center;font-size:34px;color:#e6c36a;text-shadow:0 0 8px rgba(0,0,0,.6)}
+.pcard.back{background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.08),transparent 55%),repeating-linear-gradient(45deg,#8a2433,#8a2433 6px,#611826 6px,#611826 12px)}
+.myhand{gap:6px}
+.myhand .pcard{margin:0 -4px}
+.myhand.tappable .pcard{animation:hint 1.8s ease-in-out infinite}
+.myhand.tappable .pcard:nth-child(2){animation-delay:.15s}.myhand.tappable .pcard:nth-child(3){animation-delay:.3s}
+@keyframes hint{0%,100%{translate:0 0}50%{translate:0 -5px}}
+
+/* controls */
+.tbtn.icon{padding:6px 10px;font-size:15px}
+.mv{transition:transform .08s,box-shadow .2s}
+.mv:active:not(:disabled){transform:scale(.94)}
+.mv-chaal{box-shadow:0 0 14px rgba(242,199,92,.35)}
+.tpanel .moves,.moves{background:linear-gradient(180deg,rgba(14,26,38,.94),rgba(6,12,18,.96));border-color:rgba(80,200,255,.45)}
+@media(prefers-reduced-motion:reduce){.tscreen:before{animation:none}.centre .cta,.myhand.tappable .pcard,.seat.win .sbody:before{animation:none}}
+.stage{width:min(94cqw,72cqh);height:min(127cqw,100cqh)}
+.stage.land{width:min(96cqw,190cqh);height:min(50cqw,100cqh)}
+.centre{width:40%}
+.tscreen.land .centre{top:30%!important}.tscreen.land .tpanel .myhand{bottom:calc(100% - 6px)}
+
 </style>
 </head>
 <body>
@@ -1134,6 +1218,7 @@ function renderTable() {
     S.isAdmin
       ? h('button', { id: 'backBtn', class: 'tbtn', type: 'button', text: 'Back', onclick: () => { location.hash = '#/admin'; } })
       : h('button', { id: 'leaveBtn', class: 'tbtn' + (S.busy.leave ? ' busy' : ''), type: 'button', text: 'Leave', disabled: !!S.busy.leave, onclick: handleLeave }),
+    h('button', { id: 'soundBtn', class: 'tbtn icon', type: 'button', 'aria-label': Sfx.on ? 'Sound on' : 'Sound off', text: Sfx.on ? '\u{1F50A}' : '\u{1F507}', onclick: () => { Sfx.toggle(); scheduleRender(); } }),
     h('div', { class: 'tmid' },
       h('div', { class: 'tname', id: 'roomTitle', text: tableName(cfg) }),
       h('div', { class: 'tsub' }, h('span', { class: 'dot' + (online ? ' on' : '') }), h('span', { id: 'tableState', text: online ? 'Table live' : 'Connecting…' }), live ? h('span', { class: 'pill', id: 'handNo', text: 'Hand ' + G.handNo }) : null,
@@ -1179,7 +1264,7 @@ function seatRow(m, isMe, adminR) {
 const isRed = c => /[♥♦]$/.test(c);
 function cardNode(c, faceDown) {
   if (faceDown || !c) return h('div', { class: 'pcard back', 'aria-label': 'Face-down card' });
-  return h('div', { class: 'pcard' + (isRed(c) ? ' red' : ''), 'aria-label': c }, h('b', { text: c.slice(0, -1) }), h('span', { text: c.slice(-1) }));
+  return h('div', { class: 'pcard' + (isRed(c) ? ' red' : ''), 'aria-label': c, 'data-r': c.slice(0, -1) }, h('b', { text: c.slice(0, -1) }), h('span', { text: c.slice(-1) }));
 }
 function fmtSecs(ms) { return Math.max(0, Math.ceil(ms / 1000)) + 's'; }
 const TIMER_R = 33, TIMER_C = 2 * Math.PI * TIMER_R;
@@ -1204,12 +1289,21 @@ function seatList(R, G, live) {
 // Seats around the table. Portrait: you at the bottom, the dealer at the top, the others between.
 // Landscape (a wide screen): the dealer on top, you at the lower right, the others down the sides.
 const isLand = () => window.innerWidth > window.innerHeight * 1.2;
-const SLOTS = { 2: [180], 3: [155, 25], 4: [155, 215, 325] };
+const SLOTS = { 2: [205], 3: [155, 25], 4: [155, 215, 325] };
 const LAND_SLOTS = { 2: [[13, 52]], 3: [[13, 34], [87, 34]], 4: [[13, 32], [13, 70], [87, 32]] };
 function seatXY(deg) { const a = deg * Math.PI / 180; return { x: 50 + 32 * Math.cos(a), y: 47 + 38 * Math.sin(a) }; }
 function miniCard(c, i) {
   if (!c) return h('div', { class: 'mc back', 'data-i': i });
   return h('div', { class: 'mc face' + (isRed(c) ? ' red' : ''), 'data-i': i, 'aria-label': c }, h('b', { text: c.slice(0, -1) }), h('span', { text: c.slice(-1) }));
+}
+
+// Chips stacked in the middle: the more is in the pot, the taller the stacks.
+function potChips(pot, boot) {
+  const n = pot <= 0 ? 0 : Math.min(18, Math.max(2, Math.ceil(pot / Math.max(1, boot) / 1.5)));
+  const cols = ['r', 'b', 'o', 'g'], box = h('div', { class: 'potchips', 'aria-hidden': 'true' });
+  const pos = [[0, 6], [26, 6], [13, 20], [40, 18]];
+  for (let i = 0; i < n; i++) { const c = i % 4, layer = Math.floor(i / 4); box.appendChild(h('i', { class: 'pc ' + cols[c], style: 'left:' + pos[c][0] + 'px;bottom:' + (pos[c][1] + layer * 5) + 'px' })); }
+  return box;
 }
 
 function renderFelt(R, me, msgs) {
@@ -1230,10 +1324,11 @@ function renderFelt(R, me, msgs) {
   };
 
   const reserve = land ? 0 : (showMoves ? (mine.status === 'blind' ? 282 : 246) : mine ? 130 : 20);
-  const area = h('div', { class: 'tarea', style: 'bottom:' + reserve + 'px' }, h('div', { class: 'surface' }, h('div', { class: 'wm', text: 'TEEN PATTI' })));
+  const stage = h('div', { class: 'stage' + (land ? ' land' : '') }, h('div', { class: 'surface' }, h('div', { class: 'spade', text: '\u2660' }), h('div', { class: 'wm', text: 'TEEN PATTI' })));
+  const area = h('div', { class: 'tarea', style: 'bottom:' + reserve + 'px' }, stage);
 
   /* dealer: sits at the top seat; the cards come from here */
-  area.appendChild(h('div', { class: 'seat dealerseat', id: 'dealerFigure', style: 'left:50%;top:' + (land ? 13 : 9) + '%', 'aria-label': 'Dealer' },
+  stage.appendChild(h('div', { class: 'seat dealerseat', id: 'dealerFigure', style: 'left:50%;top:' + (land ? 13 : 9) + '%', 'aria-label': 'Dealer' },
     h('div', { class: 'ring dring' }, h('span', { class: 'ava', text: '\u{1F3A9}' })),
     h('div', { class: 'sbody' }, h('div', { class: 'sname', text: 'Dealer' }), h('div', { class: 'dtag', text: 'DEALER' })),
     h('div', { class: 'deck', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'))));
@@ -1241,7 +1336,7 @@ function renderFelt(R, me, msgs) {
   /* centre of the table: pot, stake, messages, log */
   const centre = h('div', { class: 'centre', style: land ? 'top:42%' : null });
   if (live) {
-    centre.appendChild(h('div', { class: 'chipstack', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'), h('i')));
+    centre.appendChild(potChips(result ? G.result.amount : G.pot, G.boot));
     centre.appendChild(h('div', { class: 'potlabel', text: result ? 'WON' : 'POT' }));
     centre.appendChild(h('div', { class: 'potnum', id: 'potAmt', text: fmt(result ? G.result.amount : G.pot) }));
     if (result) centre.appendChild(h('div', { id: 'resultCard', role: 'status' },
@@ -1249,12 +1344,13 @@ function renderFelt(R, me, msgs) {
       h('div', { class: 'whyline', id: 'resultWhy', text: G.result.reason === 'fold' ? 'Everyone else packed' : G.result.rank })));
     else centre.appendChild(h('div', { class: 'stakeline' }, 'Stake ', h('b', { id: 'stakeAmt', text: fmt(G.stake) })));
   } else {
-    centre.appendChild(h('div', { class: 'chipstack idle', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')));
+    centre.appendChild(potChips(0, 1));
     centre.appendChild(h('p', { id: 'idleNote', class: 'idletext', text: !hostLive(R.doc) ? 'Connecting to the table…' : readyHumans(R).length === 0 ? 'Sit down to play. A bot will keep you company.' : 'The next hand is about to be dealt.' }));
   }
+  if (!live && me && me.seatState !== 'seated') { const why = sitBlockReason(R, me); centre.appendChild(h('button', { id: 'sitCta', class: 'cta', type: 'button', text: 'Take your seat', disabled: !!why || !!S.pending || !!S.busy.seat, onclick: () => handleSeatChange('sit') })); }
   msgs.forEach(m => centre.appendChild(m));
   if (G && G.log && G.log.length) centre.appendChild(h('div', { class: 'glog', id: 'gameLog' }, G.log.slice(-4).reverse().map(t => h('div', { text: t }))));
-  area.appendChild(centre);
+  stage.appendChild(centre);
 
   /* players */
   const seatEls = [];
@@ -1280,7 +1376,7 @@ function renderFelt(R, me, msgs) {
         label ? h('div', { class: 'slabel ' + (out || sp.standing ? 'out' : sp.status), text: label }) : null,
         cards)));
   });
-  area.appendChild(h('div', { id: 'gamePlayers' }, seatEls));
+  stage.appendChild(h('div', { id: 'gamePlayers' }, seatEls));
 
   const wrap = h('div', { class: 'tfelt', id: 'gameCard' }, area);
 
@@ -1669,7 +1765,7 @@ const Dealer = {
     const id = G.turn, p = G.players[id];
     if (!p || !p.bot) { Dealer.botKey = ''; return false; }
     const key = G.handNo + '|' + id + '|' + (G.log || []).length;
-    if (Dealer.botKey !== key) { Dealer.botKey = key; Dealer.botDue = now + 700 + secureRandInt(1100); return true; }
+    if (Dealer.botKey !== key) { Dealer.botKey = key; Dealer.botDue = Math.max(now, (G.dealtAt || 0) + GAME_CONFIG.dealPadMs) + 700 + secureRandInt(1100); return true; }
     if (now < Dealer.botDue) return true;
     const mv = botMove(G, id, Dealer.hands[id] || [], secureRandInt);
     if (!mv) return true;
@@ -1837,12 +1933,38 @@ const Dealer = {
    restarting or vanishing. Everything is skipped when the person has asked
    for reduced motion.
    ========================================================================== */
+/* Sound and buzz: tiny synthesized sounds (no files), off with the speaker button. */
+const Sfx = {
+  on: (() => { try { return localStorage.getItem('tp_sound') !== '0'; } catch (e) { return true; } })(),
+  ctx: null,
+  init() {
+    if (!Sfx.ctx) { try { Sfx.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { Sfx.ctx = null; } }
+    if (Sfx.ctx && Sfx.ctx.state === 'suspended') Sfx.ctx.resume().catch(() => {});
+  },
+  toggle() { Sfx.on = !Sfx.on; try { localStorage.setItem('tp_sound', Sfx.on ? '1' : '0'); } catch (e) { /* private window */ } Sfx.init(); if (Sfx.on) Sfx.ping(); },
+  tone(f, d, type, v, at) {
+    if (!Sfx.on || !Sfx.ctx || Sfx.ctx.state !== 'running') return;
+    try {
+      const c = Sfx.ctx, t = c.currentTime + (at || 0), o = c.createOscillator(), g = c.createGain();
+      o.type = type || 'sine'; o.frequency.setValueAtTime(f, t);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v || 0.05, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+      o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + d + 0.03);
+    } catch (e) { /* audio is optional */ }
+  },
+  card(at) { Sfx.tone(520, .05, 'triangle', .05, at); Sfx.tone(1100, .035, 'square', .018, at); },
+  chip() { Sfx.tone(1760, .09, 'triangle', .045); Sfx.tone(2350, .07, 'triangle', .03, .05); },
+  ping() { Sfx.tone(880, .12, 'sine', .06); Sfx.tone(1320, .18, 'sine', .05, .1); },
+  win() { [523, 659, 784, 1047].forEach((f, i) => Sfx.tone(f, .22, 'triangle', .06, i * .1)); },
+  buzz(p) { try { if (Fx.on && navigator.vibrate) navigator.vibrate(p); } catch (e) { /* not supported */ } }
+};
+document.addEventListener('pointerdown', () => Sfx.init(), { once: false, passive: true });
+
 const Fx = {
   on: !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches),
   hand: '', chips: {}, status: '', dealStart: 0, flipStart: 0, wonHand: '', winStart: 0,
-  shown: 0, target: 0, raf: 0,
+  shown: 0, target: 0, raf: 0, pl: {}, stake: 0, turnKey: '',
 
-  leave() { Fx.hand = ''; Fx.chips = {}; Fx.status = ''; Fx.wonHand = ''; Fx.dealStart = Fx.flipStart = 0; },
+  leave() { Fx.hand = ''; Fx.chips = {}; Fx.status = ''; Fx.wonHand = ''; Fx.dealStart = Fx.flipStart = 0; Fx.pl = {}; Fx.turnKey = ''; },
   centre(el) { const b = el.getBoundingClientRect(); return { x: b.left + b.width / 2, y: b.top + b.height / 2 }; },
   seat(id) { return document.querySelector('#gamePlayers .seat[data-uid="' + id + '"] .ring'); },
 
@@ -1860,22 +1982,41 @@ const Fx = {
       Fx.dealStart = Fx.on && fresh && G.phase === 'playing' ? now : 0;
       Fx.shown = Fx.dealStart ? 0 : (result ? G.result.amount : G.pot);
       Fx.status = mine ? mine.status : '';
-      if (Fx.dealStart) G.order.forEach(id => Fx.fly(Fx.seat(id), $('potAmt'), 2, 650));      // the boot goes in
+      Fx.pl = {}; Fx.stake = G.stake;
+      if (Fx.dealStart) {
+        G.order.forEach(id => Fx.fly(Fx.seat(id), $('potAmt'), 2, 1500));      // the boot goes in once the cards are out
+        for (let i = 0; i < G.order.length * 3; i++) Sfx.card(i * .22);
+      }
     } else if (Fx.on) {
       G.order.forEach(id => { if (Fx.chips[id] !== undefined && cur[id] < Fx.chips[id]) Fx.fly(Fx.seat(id), $('potAmt'), Math.min(5, Math.max(1, Math.round((Fx.chips[id] - cur[id]) / Math.max(1, G.stake)))), 0); });
+      G.order.forEach(id => {
+        const pv = Fx.pl[id], p = G.players[id]; if (!pv) return;
+        const paid = pv.chips - p.chips; let word = '';
+        if (p.status === 'packed' && pv.status !== 'packed') word = 'Pack';
+        else if (paid > 0 && result && G.result.reason === 'show') word = 'Show';
+        else if (paid > 0) word = G.stake > Fx.stake ? 'Double' : (p.status === 'seen' ? 'Chaal' : 'Blind');
+        else if (p.status === 'seen' && pv.status === 'blind') word = 'Seen';
+        if (word) { Fx.bubble(id, word, paid > 0 ? paid : 0); if (paid > 0) Sfx.chip(); }
+      });
       if (mine && Fx.status === 'blind' && mine.status === 'seen') Fx.flipStart = now;
       Fx.status = mine ? mine.status : '';
     }
-    Fx.chips = cur;
+    Fx.chips = cur; Fx.stake = G.stake;
+    G.order.forEach(id => { Fx.pl[id] = { chips: G.players[id].chips, status: G.players[id].status }; });
+    // my turn: a ping and a buzz, once
+    const tk = G.handId + '|' + G.turn + '|' + G.pot;
+    if (G.phase === 'playing' && G.turn === uid && tk !== Fx.turnKey) { Fx.turnKey = tk; if (!isNew || !fresh) { Sfx.ping(); Sfx.buzz([30, 40, 30]); } }
+    if (G.turn !== uid) Fx.turnKey = G.phase === 'playing' ? Fx.turnKey : '';
 
     // pot count-up (the number shown survives a re-render)
-    Fx.target = result ? G.result.amount : G.pot;
+    const prevT = Fx.target; Fx.target = result ? G.result.amount : G.pot;
+    if (Fx.on && !isNew && Fx.target > prevT && $('potAmt')) $('potAmt').animate([{ transform: 'scale(1)' }, { transform: 'scale(1.3)' }, { transform: 'scale(1)' }], { duration: 320, easing: 'ease-out' });
     if (!Fx.on) Fx.shown = Fx.target;
     Fx.paint();
     if (Fx.shown !== Fx.target && !Fx.raf) Fx.raf = requestAnimationFrame(Fx.step);
 
     if (!Fx.on) return;
-    if (Fx.dealStart && now - Fx.dealStart < 2400) Fx.deal(now - Fx.dealStart);
+    if (Fx.dealStart && now - Fx.dealStart < 4400) Fx.deal(now - Fx.dealStart);
     if (Fx.flipStart && now - Fx.flipStart < 700) Fx.flip(now - Fx.flipStart);
     Fx.glow();
     if (result && Fx.wonHand !== G.handId) { Fx.wonHand = G.handId; Fx.winStart = now; Fx.celebrate(G); }
@@ -1904,12 +2045,14 @@ const Fx = {
       const a = el.animate([
         { transform: 'translate(' + (c.x - b.left - b.width / 2) + 'px,' + (c.y - b.top - b.height / 2) + 'px) scale(.45) rotate(-120deg)', opacity: 0 },
         { opacity: 1, offset: .2 },
-        { transform: 'none', opacity: 1 }], { duration: 380, delay: k++ * 110, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' });
+        { transform: 'none', opacity: 1 }], { duration: 620, delay: 700 + k++ * 220, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' });
       a.currentTime = elapsed;
     });
     // the dealer nods at every card
     const dr = src.querySelector('.dring');
-    if (dr) for (let i = 0; i < k; i++) { const a = dr.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.14)' }, { transform: 'scale(1)' }], { duration: 160, delay: i * 110 }); a.currentTime = elapsed; }
+    if (dr) for (let i = 0; i < k; i++) { const a = dr.animate([{ transform: 'scale(1) rotate(0)' }, { transform: 'scale(1.16) rotate(-8deg)' }, { transform: 'scale(1) rotate(0)' }], { duration: 200, delay: 700 + i * 220 }); a.currentTime = elapsed; }
+    const dk = src.querySelector('.deck');
+    if (dk) { const a = dk.animate([{ transform: 'translateX(0) rotate(0)' }, { transform: 'translateX(-6px) rotate(-10deg)' }, { transform: 'translateX(6px) rotate(8deg)' }, { transform: 'translateX(-4px) rotate(-6deg)' }, { transform: 'translateX(0) rotate(0)' }], { duration: 650, easing: 'ease-in-out' }); a.currentTime = elapsed; }
   },
 
   // Looking at your cards turns them over.
@@ -1929,6 +2072,8 @@ const Fx = {
         { boxShadow: '0 0 0 3px rgba(46,229,157,1),0 0 22px 8px rgba(46,229,157,.8)' }], { duration: 750, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' });
       a.currentTime = Date.now() % 1500;
     });
+    const cb = document.querySelector('#chaalBtn:not(:disabled)');
+    if (cb) { const a = cb.animate([{ boxShadow: '0 0 0 rgba(242,199,92,0)' }, { boxShadow: '0 0 18px 3px rgba(242,199,92,.65)' }], { duration: 900, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' }); a.currentTime = Date.now() % 1800; }
     const G = S.room && S.room.game, svg = document.querySelector('.seat.turn .tring');
     if (svg && G && G.phase === 'playing') {
       const f = Math.max(0, Math.min(1, (G.turnEndsAt - Date.now()) / GAME_CONFIG.turnMs));
@@ -1938,6 +2083,19 @@ const Fx = {
         { filter: 'drop-shadow(0 0 ' + strong + 'px currentColor)', opacity: 1 }], { duration: dur, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' });
       a.currentTime = Date.now() % (dur * 2);
     }
+  },
+
+  // A little label floats up from a player's picture: what they just did.
+  bubble(id, word, amount) {
+    const L = $('fxLayer'), ring = Fx.seat(id); if (!Fx.on || !L || !ring) return;
+    const c = Fx.centre(ring), b = h('div', { class: 'bubble ' + word.toLowerCase() }, h('span', { text: word }), amount ? h('b', { text: '\u2212' + fmt(amount) }) : null);
+    b.style.left = c.x + 'px'; b.style.top = (c.y - 44) + 'px'; L.appendChild(b);
+    const an = b.animate([
+      { transform: 'translate(-50%,6px) scale(.6)', opacity: 0 },
+      { transform: 'translate(-50%,-6px) scale(1.08)', opacity: 1, offset: .18 },
+      { transform: 'translate(-50%,-22px) scale(1)', opacity: 1, offset: .75 },
+      { transform: 'translate(-50%,-36px) scale(.96)', opacity: 0 }], { duration: 1500, easing: 'ease-out', fill: 'both' });
+    an.onfinish = () => b.remove();
   },
 
   // A few chips slide from one place to another.
@@ -1961,7 +2119,8 @@ const Fx = {
   // Once per hand: the pot slides to the winner and a little confetti goes up.
   celebrate(G) {
     const pot = $('potAmt'), win = G.result.winners;
-    win.forEach(id => Fx.fly(pot, Fx.seat(id), 6, 150));
+    win.forEach(id => Fx.fly(pot, Fx.seat(id), 8, 150));
+    if (win.includes(S.user && S.user.uid)) { Sfx.win(); Sfx.buzz([40, 50, 40, 50, 80]); }
     const L = $('fxLayer'), src = Fx.seat(win[0]);
     if (!L || !src) return;
     const o = Fx.centre(src), cols = ['#f2c75c', '#ffe9a6', '#2ee59d', '#ffffff', '#ff4d6d'];
@@ -2017,7 +2176,7 @@ const ENGINE = {
   LOG_MAX: 20,
   BOT_STACK_MULT: 50
 };
-const GAME_CONFIG = { turnMs: 20000, resultMs: 6000, autoDealMs: 3000, maxMissed: 2 };
+const GAME_CONFIG = { turnMs: 20000, resultMs: 6000, autoDealMs: 3000, maxMissed: 2, dealPadMs: 2600 };
 
 /* ---- deck and randomness ---- */
 function secureRandInt(n) {
@@ -2130,7 +2289,7 @@ function startHand(o) {
   const handNo = (prev.handNo || 0) + 1;
   const G = {
     phase: 'playing', handNo, handId: o.tableId + '-' + handNo, boot, stake: boot, maxStake: boot * ENGINE.STAKE_CAP_MULT,
-    pot: boot * n, order, turn: order[0], dealerIdx: n - 1, turnEndsAt: now + GAME_CONFIG.turnMs, players, result: null, log: [], dealtAt: now
+    pot: boot * n, order, turn: order[0], dealerIdx: n - 1, turnEndsAt: now + GAME_CONFIG.turnMs + GAME_CONFIG.dealPadMs, players, result: null, log: [], dealtAt: now
   };
   addLog(G, 'Hand ' + handNo + ' dealt. Boot ' + boot + ' each.');
   return { G, hands };
