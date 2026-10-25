@@ -189,6 +189,23 @@ button.busy:after{content:"";position:absolute;inset:0;margin:auto;width:18px;he
   .spinner,button.busy:after{animation-duration:1.6s!important;animation-iteration-count:infinite!important}
 }
 
+/* ==========================================================================
+   SECTION 12 - HAND (functional; premium table design comes in Phase 6)
+   ========================================================================== */
+.pcard{width:54px;height:76px;border-radius:8px;background:#f7f3e8;color:#14181f;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:20px;line-height:1.1;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.pcard.red{color:#b3261e}
+.pcard.back{background:repeating-linear-gradient(45deg,#7a1f2b,#7a1f2b 6px,#5c1620 6px,#5c1620 12px);border:2px solid #d8b45a}
+.myhand{display:flex;gap:10px;justify-content:center;margin:14px 0}
+.myhand.small{margin:4px 0;gap:6px}.myhand.small .pcard{width:34px;height:48px;font-size:13px}
+.moves{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.moves button:first-child,.moves #packBtn{grid-column:auto}
+.turnline{display:flex;justify-content:space-between;margin:10px 0;font-weight:600}
+.timer{font-variant-numeric:tabular-nums;color:#d8b45a}
+.gp.turn{outline:2px solid #d8b45a}.gp.out{opacity:.5}
+.result{margin-top:12px;padding:12px;border-radius:12px;border:1px solid #d8b45a;text-align:center}
+.revealrow{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.glog{margin-top:12px;font-size:12px;color:#9aa4b2;display:grid;gap:2px}
+
 </style>
 </head>
 <body>
@@ -429,6 +446,7 @@ const Repo = {
   botsCol: t => db.collection('rooms').doc(t).collection('bots'),
   gameRef: t => db.collection('rooms').doc(t).collection('game').doc('state'),
   actionsCol: t => db.collection('rooms').doc(t).collection('actions'),
+  handsCol: t => db.collection('rooms').doc(t).collection('hands'),
 
   /* ---- profile (rules: users) ---- */
   // Rule: users create (owner, chips = 10,000, tableId '')
@@ -501,12 +519,39 @@ const Repo = {
   watchRoom: (sc, t, cb) => sc.listen(Repo.roomRef(t), s => cb(s.exists ? s.data() : null)),
   watchMembers: (sc, t, cb) => sc.listen(Repo.membersCol(t), s => cb(s.docs.map(d => d.data()))),
   watchBots: (sc, t, cb) => sc.listen(Repo.botsCol(t), s => cb(s.docs.map(d => d.data()))),
+  // Rule: hands get (only the document whose ID is my UID)
+  watchHand: (sc, t, uid, cb) => sc.listen(Repo.handsCol(t).doc(uid), s => cb(s.exists ? s.data() : null)),
   watchGame: (sc, t, cb) => sc.listen(Repo.gameRef(t), s => cb(s.exists ? s.data() : null)),
 
   /* ---- admin and dealer only (rules: isAdmin) ---- */
   watchActions: (sc, t, onAdded) => sc.listen(Repo.actionsCol(t), s => {
     s.docChanges().forEach(c => { if (c.type === 'added') onAdded(c.doc.id, c.doc.data()); });
   }),
+
+  /* ---- the hand pipeline: admin/dealer only (rules: game, hands, members update) ---- */
+  // Firestore rejects undefined; the engine state is plain JSON, so a round trip cleans it.
+  _game(G) { return Object.assign(JSON.parse(JSON.stringify(G)), { updatedAt: FV.serverTimestamp() }); },
+  // Rule: game create/update (validGame)
+  writeGame: (t, G) => Repo.gameRef(t).set(Repo._game(G)),
+  // One batch: every private hand and the public state appear together.
+  // Rule: hands create (validHand) + game update
+  dealHand(t, G, hands) {
+    const b = db.batch();
+    for (const id of Object.keys(hands)) b.set(Repo.handsCol(t).doc(id), { id, handId: G.handId, cards: hands[id], createdAt: FV.serverTimestamp() });
+    b.set(Repo.gameRef(t), Repo._game(G));
+    return b.commit();
+  },
+  // One batch: the finished state and every player's new stack/seat state.
+  // Rule: members update (seatState, stack, updatedAt only) + game update
+  settle(t, G, plan) {
+    const b = db.batch();
+    for (const id of Object.keys(plan)) b.update(Repo.membersCol(t).doc(id), { stack: plan[id].stack, seatState: plan[id].seatState, updatedAt: FV.serverTimestamp() });
+    b.set(Repo.gameRef(t), Repo._game(G));
+    return b.commit();
+  },
+  // Rule: hands delete (admin), list (admin)
+  async getHands(t) { const s = await Repo.handsCol(t).get(); const o = {}; s.docs.forEach(d => { o[d.id] = d.data(); }); return o; },
+  async clearHands(t, ids) { const b = db.batch(); ids.forEach(id => b.delete(Repo.handsCol(t).doc(id))); return b.commit(); },
   deleteAction: (t, id) => Repo.actionsCol(t).doc(id).delete(),
   setPresence: (t, seated, online) =>
     Repo.roomRef(t).update({ dealerAt: online ? Date.now() : 0, seated, updatedAt: FV.serverTimestamp() }),
@@ -552,7 +597,8 @@ const S = {
   pending: null,              // a sit/stand request waiting for the dealer
   buy: null,                  // buy-in sheet: { tableId }
   editName: false, nameDraft: '',
-  dealerInfo: { processed: 0, lastError: '' }
+  dealerInfo: { processed: 0, lastError: '' },
+  act: null                   // a betting move waiting for the dealer: { key, type }
 };
 
 let scopeProfile = null, scopeRooms = null, scopeRoom = null;
@@ -654,7 +700,7 @@ function openRoomsScope() {
 
 /* Live data for one table. */
 function openRoomScope(tableId) {
-  const R = { id: tableId, doc: undefined, members: [], bots: [], game: null, loaded: {} };
+  const R = { id: tableId, doc: undefined, members: [], bots: [], game: null, myHand: null, loaded: {} };
   S.room = R;
   const sc = scopeRoom = Scopes.open('room:' + tableId);
   Repo.watchRoom(sc, tableId, d => { R.doc = d; R.loaded.doc = true; setConnection(true); scheduleRender(); });
@@ -667,7 +713,9 @@ function openRoomScope(tableId) {
   });
   Repo.watchBots(sc, tableId, list => { R.bots = list; R.loaded.bots = true; scheduleRender(); });
   Repo.watchGame(sc, tableId, g => { R.game = g; R.loaded.game = true; scheduleRender(); });
+  if (!S.isAdmin && S.user) Repo.watchHand(sc, tableId, S.user.uid, hd => { R.myHand = hd; scheduleRender(); });
   sc.every(scheduleRender, 15000);
+  sc.every(updateTimer, 500);                         // countdown text only; never re-draws the screen
 }
 
 /* Table facts derived from state. */
@@ -866,6 +914,7 @@ function renderTable(asDealer) {
       h('span', { class: 'dot' + (online ? ' on' : '') }),
       h('span', { id: 'dealerState', text: online ? 'Dealer online' : 'Dealer offline — hands are paused' })));
 
+  if (S.act && R.game && gameSig(R.game) !== S.act.key) S.act = null;
   const nodes = [header];
   if (!ready) { nodes.push(renderLoading()); return h('div', {}, nodes); }
   if (R.doc === null) nodes.push(h('div', { class: 'msg err', role: 'alert', text: 'This table is not set up. The admin needs to set up the tables.' }));
@@ -875,16 +924,24 @@ function renderTable(asDealer) {
   const status = h('div', { class: 'card tight', id: 'statusCard' });
   if (asDealer) {
     status.appendChild(h('h3', { text: 'You are the dealer' }));
-    status.appendChild(h('p', { class: 'muted', text: 'Keep this page open. Your phone confirms seat changes and shows the table as online. Requests handled: ' + S.dealerInfo.processed + '.' }));
+    status.appendChild(h('p', { class: 'muted', text: 'Keep this page open. This phone shuffles, deals, checks every move and settles chips. Requests handled: ' + S.dealerInfo.processed + '.' }));
+    const el = Dealer.eligible ? Dealer.eligible().length : 0;
+    status.appendChild(h('div', { class: 'controls' },
+      h('button', { id: 'dealBtn', class: 'btn-primary', type: 'button', text: 'Deal hand now', disabled: !Dealer.canDeal(), onclick: () => Dealer.dealNow() }),
+      h('button', { id: 'autoBtn', class: 'btn-secondary', type: 'button', text: 'Auto-deal: ' + (Dealer.autoDeal ? 'On' : 'Off'), onclick: () => Dealer.setAutoDeal(!Dealer.autoDeal) })));
+    status.appendChild(h('p', { id: 'dealNote', class: 'muted', style: 'font-size:13px', text: Dealer.halted ? 'Dealing is stopped.' : !Dealer.booted ? 'Starting…' : R.game && R.game.phase !== 'idle' ? 'A hand is in progress.' : el < 2 ? 'Waiting for two seated players with enough chips (' + el + ' ready).' : Dealer.autoDeal ? 'Next hand deals automatically.' : 'Ready to deal.' }));
     if (S.dealerInfo.lastError) status.appendChild(h('div', { class: 'msg err', role: 'alert', text: S.dealerInfo.lastError }));
   } else if (me) {
     status.appendChild(h('div', { class: 'row' },
       h('div', {}, h('div', { class: 'muted', text: 'Your stack' }), h('div', { class: 'tname', id: 'myStack', text: fmt(me.stack) })),
       h('span', { class: 'pill ' + (me.seatState === 'seated' ? '' : 'gold'), id: 'mySeatState', text: me.seatState === 'seated' ? 'Seated' : 'Standing' })));
     status.appendChild(h('p', { class: 'muted', id: 'handState', text: liveHand(R) ? 'A hand is in progress.' : 'No hand in progress.' }));
+    if (me.seatState === 'seated' && R.game && R.game.phase === 'playing' && R.game.players && R.game.players[me.uid] && R.game.players[me.uid].standAfter) status.appendChild(h('div', { class: 'msg', id: 'standAfter', role: 'status', text: 'You will stand up when this hand ends.' }));
     if (me.stack < cfg.boot) status.appendChild(h('div', { class: 'msg', id: 'outOfChips', role: 'status', text: 'Out of chips — watching table.' }));
   }
   nodes.push(status);
+
+  if (R.loaded.game) nodes.push(renderGame(R, asDealer, me));
 
   /* roster */
   const roster = h('div', { class: 'card' },
@@ -914,6 +971,94 @@ function seatRow(m, isMe) {
     h('div', { class: 'av', text: initial(m.name) }),
     h('div', { class: 'nm' }, h('b', { text: m.name + (isMe ? ' (you)' : '') }), h('span', { text: fmt(m.stack) + ' chips' })),
     h('span', { class: 'pill ' + (m.seatState === 'seated' ? '' : 'gold'), text: m.seatState === 'seated' ? 'Seated' : 'Standing' }));
+}
+
+
+/* ---- the hand ---- */
+const isRed = c => /[♥♦]$/.test(c);
+function cardNode(c, faceDown) {
+  if (faceDown || !c) return h('div', { class: 'pcard back', 'aria-label': 'Face-down card' });
+  return h('div', { class: 'pcard' + (isRed(c) ? ' red' : ''), 'aria-label': c }, h('b', { text: c.slice(0, -1) }), h('span', { text: c.slice(-1) }));
+}
+function fmtSecs(ms) { return Math.max(0, Math.ceil(ms / 1000)) + 's'; }
+function updateTimer() {
+  const el = $('turnTimer'), G = S.room && S.room.game;
+  if (el && G && G.phase === 'playing') el.textContent = fmtSecs(G.turnEndsAt - Date.now());
+}
+
+function renderGame(R, asDealer, me) {
+  const G = R.game, uid = S.user && S.user.uid;
+  const card = h('div', { class: 'card', id: 'gameCard' });
+  if (!G || G.phase === 'idle') {
+    const el = R.members.filter(m => m.seatState === 'seated' && m.stack >= TABLE_BY_ID[R.id].boot).length;
+    card.appendChild(h('h3', { text: 'Table' }));
+    card.appendChild(h('p', { id: 'idleNote', class: 'muted', text: !dealerOnline(R.doc) ? 'Waiting for the dealer.' : el < 2 ? 'Waiting for at least two seated players.' : 'The next hand is about to be dealt.' }));
+    if (G && G.log && G.log.length) card.appendChild(logNode(G));
+    return card;
+  }
+  if (!Array.isArray(G.order) || !G.players) {
+    card.appendChild(h('h3', { text: 'Table' }));
+    card.appendChild(h('p', { id: 'idleNote', class: 'muted', text: 'The hand state is not readable. Waiting for the dealer.' }));
+    return card;
+  }
+  const playing = G.phase === 'playing';
+  const turnName = playing && G.players[G.turn] ? G.players[G.turn].name : '';
+  card.appendChild(h('div', { class: 'row' },
+    h('div', {}, h('div', { class: 'muted', text: 'Pot' }), h('div', { class: 'tname', id: 'potAmt', text: fmt(G.pot) })),
+    h('div', {}, h('div', { class: 'muted', text: 'Stake' }), h('div', { class: 'tname', id: 'stakeAmt', text: fmt(G.stake) })),
+    h('span', { class: 'pill', id: 'handNo', text: 'Hand ' + G.handNo })));
+  if (playing) card.appendChild(h('div', { class: 'turnline', id: 'turnLine' },
+    h('span', { id: 'turnName', text: G.turn === uid ? 'Your turn' : turnName + ' to act' }),
+    h('span', { id: 'turnTimer', class: 'timer', text: fmtSecs(G.turnEndsAt - Date.now()) })));
+  card.appendChild(h('div', { id: 'gamePlayers' }, G.order.map((id, i) => {
+    const p = G.players[id];
+    const st = p.status === 'packed' ? 'Packed' : p.status === 'seen' ? 'Seen' : 'Blind';
+    return h('div', { class: 'seatrow gp' + (G.turn === id ? ' turn' : '') + (p.status === 'packed' ? ' out' : '') + (id === uid ? ' me' : ''), 'data-uid': id },
+      h('div', { class: 'av', text: initial(p.name) }),
+      h('div', { class: 'nm' }, h('b', { text: p.name + (id === uid ? ' (you)' : '') + (i === G.dealerIdx ? ' · D' : '') }), h('span', { text: fmt(p.chips) + ' chips' })),
+      h('span', { class: 'pill ' + (p.status === 'packed' ? 'gold' : ''), text: st }));
+  })));
+  // my cards and moves
+  const mine = !asDealer && uid && G.players[uid];
+  if (mine) {
+    const hd = R.myHand && R.myHand.handId === G.handId ? R.myHand.cards : null;
+    const hidden = mine.status === 'blind' || !hd;
+    card.appendChild(h('div', { class: 'myhand', id: 'myCards' }, [0, 1, 2].map(i => cardNode(hd && !hidden ? hd[i] : '', hidden))));
+    if (mine.status === 'blind') card.appendChild(h('p', { class: 'muted', style: 'text-align:center;margin:4px 0', text: 'You are playing blind. Look at your cards any time.' }));
+    if (playing) card.appendChild(renderMoves(G, uid));
+  } else if (!asDealer && playing) card.appendChild(h('p', { class: 'muted', text: 'You are watching this hand.' }));
+  if (G.phase === 'result' && G.result) card.appendChild(renderResult(G));
+  card.appendChild(logNode(G));
+  return card;
+}
+
+function renderMoves(G, uid) {
+  const lm = legalMoves(G, uid), busy = !!S.act;
+  const btn = (id, type, text, cls) => h('button', { id, class: cls + (S.act && S.act.type === type ? ' busy' : ''), type: 'button', text, disabled: !lm[type].ok || busy, onclick: () => handleGameAction(type) });
+  const note = lm.myTurn ? (lm.chaal.ok ? '' : lm.chaal.reason) : 'Wait for your turn.';
+  return h('div', { id: 'moves' },
+    h('div', { class: 'moves' },
+      btn('seeBtn', 'see', 'See cards', 'btn-secondary'),
+      btn('chaalBtn', 'chaal', lm.chaal.label + ' ' + fmt(lm.chaal.cost), 'btn-primary'),
+      btn('raiseBtn', 'raise', 'Raise ' + fmt(lm.raise.cost), 'btn-secondary'),
+      btn('showBtn', 'show', 'Show ' + fmt(lm.show.cost), 'btn-secondary'),
+      btn('packBtn', 'pack', 'Pack', 'btn-ghost')),
+    h('p', { id: 'moveNote', class: 'muted', style: 'font-size:13px;margin:8px 0 0', text: busy ? 'Waiting for the dealer…' : (lm.myTurn && !lm.raise.ok && lm.raise.reason ? note || lm.raise.reason : note) }));
+}
+
+function renderResult(G) {
+  const r = G.result;
+  const names = r.winners.map(id => G.players[id].name).join(' and ');
+  const box = h('div', { class: 'result', id: 'resultCard', role: 'status' },
+    h('div', { class: 'eyebrow', text: r.winners.length > 1 ? 'Pot split' : 'Winner' }),
+    h('div', { class: 'tname', id: 'resultWho', text: names + ' · ' + fmt(r.amount) }),
+    h('div', { class: 'muted', id: 'resultWhy', text: r.reason === 'fold' ? 'Everyone else packed.' : 'Show: ' + r.rank + '.' }));
+  const rv = Object.keys(r.reveal || {});
+  rv.forEach(id => box.appendChild(h('div', { class: 'revealrow' }, h('span', { text: G.players[id].name }), h('div', { class: 'myhand small' }, r.reveal[id].map(c => cardNode(c, false))))));
+  return box;
+}
+function logNode(G) {
+  return h('div', { class: 'glog', id: 'gameLog' }, (G.log || []).slice(-6).reverse().map(t => h('div', { text: t })));
 }
 
 /* ==========================================================================
@@ -1072,6 +1217,21 @@ function handleLeave() {
   });
 }
 
+/* ---- betting moves ---- */
+// A move is "pending" until the game state changes, so a double tap sends once.
+const gameSig = G => G ? [G.handNo, G.phase, G.turn, G.pot, G.stake, (G.log || []).length].join('|') : '';
+function handleGameAction(type) {
+  const R = S.room, G = R.game, uid = S.user.uid;
+  if (!G || G.phase !== 'playing' || S.act) return;
+  const lm = legalMoves(G, uid), m = lm[type];
+  if (!m || !m.ok) return toast((m && m.reason) || 'That move is not available.', 'err');
+  const sc = scopeRoom, key = gameSig(G);
+  S.act = { key, type }; scheduleRender();
+  return Repo.sendAction(uid, R.id, type, G.handNo).catch(e => { S.act = null; fail(e, 'send ' + type); scheduleRender(); }).then(() => {
+    sc.later(() => { if (S.act && S.act.key === key) { S.act = null; toast('The dealer did not respond. Try again.', 'err'); scheduleRender(); } }, ACTION_WAIT_MS);
+  });
+}
+
 /* ---- admin ---- */
 function handleSetup() {
   return withBusy('setup', 'set up tables', async () => {
@@ -1087,19 +1247,30 @@ function handleSetup() {
    queue by writing to the shared documents. Phase 4 adds the hand engine as
    more handlers in this same pipeline. Players can never run any of this:
    the rules let only the admin UID write what the dealer writes.
+
+   HAND PIPELINE: Dealer.G (public state) and Dealer.hands (private cards) live
+   in memory. Every change goes through exclusive() so two things never edit
+   the same hand at once, and through commit()/commitResult(), the only places
+   that write the game to Firestore. A 1-second tick handles the turn timer,
+   result window, auto-deal and resuming after a reload.
    ========================================================================== */
 const Dealer = {
   sc: null, tableId: null, queue: [], running: false, seen: new Set(), lastSeated: -1,
+  G: null, hands: {}, booted: false, halted: false, autoDeal: true, chain: Promise.resolve(),
+  resultAt: 0, eligSince: 0, lastCommitAt: 0,
 
   start(tableId) {
     Dealer.stop();
     Dealer.tableId = tableId;
     Dealer.seen = new Set(); Dealer.queue = []; Dealer.lastSeated = -1;
+    Dealer.G = null; Dealer.hands = {}; Dealer.booted = false; Dealer.halted = false;
+    Dealer.resultAt = 0; Dealer.eligSince = 0; Dealer.lastCommitAt = 0;
     S.dealerInfo = { processed: 0, lastError: '' };
     const sc = Dealer.sc = Scopes.open('dealer:' + tableId);
     Repo.watchActions(sc, tableId, (id, data) => Dealer.enqueue(id, data));
     Dealer.beat();
     sc.every(Dealer.beat, HEARTBEAT_MS);
+    sc.every(() => Dealer.exclusive(Dealer.tick), 1000);
     window.addEventListener('pagehide', Dealer.onHide);
   },
 
@@ -1155,33 +1326,425 @@ const Dealer = {
     const created = tsMs(a.createdAt) || Date.now();         // a just-written request may not carry its server time yet
     const member = R && R.members.find(m => m.uid === a.uid);
     const handler = Dealer.handlers[a.type];
+    // A request can arrive before the console has read the table; wait for that, never drop it.
+    for (let i = 0; i < 60 && Dealer.sc && !Dealer.booted && !Dealer.halted; i++) await new Promise(r => setTimeout(r, 250));
+    if (Dealer.halted) return;
     // Stale, unknown, or from someone with no seat: discard without effect.
-    if (Date.now() - created <= ACTION_STALE_MS && member && handler) await handler(member, a, R);
+    if (Date.now() - created <= ACTION_STALE_MS && member && handler && Dealer.booted && !Dealer.halted) await Dealer.exclusive(() => handler(member, a, R));
     await Repo.deleteAction(t, id);
     S.dealerInfo.processed++;
     scheduleRender();
+  },
+
+  /* ---- one thing at a time ---- */
+  exclusive(fn) {
+    const sc = Dealer.sc;
+    const run = async () => {
+      if (!sc || Dealer.sc !== sc) return;
+      try { await fn(); }
+      catch (e) {
+        console.error('[TeenPatti] dealer step failed', e && e.code, e && e.message);
+        S.dealerInfo.lastError = 'Dealer step failed: ' + friendlyError(e);
+        scheduleRender();
+      }
+    };
+    return (Dealer.chain = Dealer.chain.then(run, run));
+  },
+
+  eligible() {
+    const R = S.room, boot = TABLE_BY_ID[R.id].boot;
+    return R.members.filter(m => m.seatState === 'seated' && m.stack >= boot).slice(0, MAX_HUMAN_SEATS);
+  },
+  canDeal() { return Dealer.booted && !Dealer.halted && Dealer.G && Dealer.G.phase === 'idle' && Dealer.eligible().length >= 2; },
+
+  /* ---- the single write path for the game ---- */
+  // Writes the new state; a finished hand is settled in the same batch.
+  async commit(G, hands) {
+    const t = Dealer.tableId;
+    if (G.phase === 'result') await Repo.settle(t, G, settlementPlan(G));
+    else if (hands) await Repo.dealHand(t, G, hands);
+    else await Repo.writeGame(t, G);
+    Dealer.G = G; if (hands) Dealer.hands = hands;
+    Dealer.lastCommitAt = Date.now();
+    if (G.phase === 'result') Dealer.resultAt = Date.now() + GAME_CONFIG.resultMs;
+    scheduleRender();
+  },
+
+  async deal() {
+    if (!Dealer.canDeal()) return;
+    const R = S.room, cfg = TABLE_BY_ID[R.id], prev = Dealer.G;
+    const parts = R.members.filter(m => m.seatState === 'seated').map(m => ({ id: m.uid, name: m.name, chips: m.stack }));
+    const r = startHand({ tableId: R.id, boot: cfg.boot, participants: parts, prev, now: Date.now(), rnd: secureRandInt });
+    if (r.error) { S.dealerInfo.lastError = r.error; scheduleRender(); return; }
+    S.dealerInfo.lastError = '';
+    await Dealer.commit(r.G, r.hands);
+  },
+  // The dealer console button. Goes through the same lock and the same checks.
+  dealNow() { return Dealer.exclusive(() => Dealer.deal()); },
+  setAutoDeal(on) { Dealer.autoDeal = !!on; Dealer.eligSince = 0; scheduleRender(); },
+
+  /* ---- the 1-second tick: boot/resume, turn timer, result window, auto-deal ---- */
+  async tick() {
+    const R = S.room;
+    if (!R || !Dealer.sc || !R.loaded.doc || !R.loaded.members || !R.loaded.game) return;
+    if (!Dealer.booted) return Dealer.resume();
+    if (Dealer.halted) return;
+    const G = Dealer.G, now = Date.now();
+    // Another dealer console wrote a different hand state: stop, never fight over it.
+    if (R.game && (R.game.handNo !== G.handNo || R.game.phase !== G.phase) && now - Dealer.lastCommitAt > 4000) {
+      Dealer.halted = true;
+      S.dealerInfo.lastError = 'Another dealer console seems to be open for this table. This one has stopped dealing. Close the other one, then reload.';
+      scheduleRender(); return;
+    }
+    if (G.phase === 'playing') {
+      if (now > G.turnEndsAt) {
+        const who = G.turn, nm = G.players[who] && G.players[who].name;
+        let N = forcePack(G, who, now);
+        if (N === G) return;
+        N.log = (N.log || []).concat(nm + ' ran out of time and packed.').slice(-ENGINE.LOG_MAX);
+        await Dealer.commit(N);
+      }
+      return;
+    }
+    if (G.phase === 'result') {
+      if (now >= Dealer.resultAt) {
+        const ids = G.order.slice();
+        await Repo.writeGame(Dealer.tableId, idleState(G));
+        Dealer.G = idleState(G); Dealer.hands = {}; Dealer.eligSince = 0;
+        Repo.clearHands(Dealer.tableId, ids).catch(e => console.error('[TeenPatti] could not clear hands', e && e.code));
+        scheduleRender();
+      }
+      return;
+    }
+    // idle
+    if (Dealer.autoDeal && Dealer.eligible().length >= 2) {
+      if (!Dealer.eligSince) Dealer.eligSince = now;
+      if (now - Dealer.eligSince >= GAME_CONFIG.autoDealMs) { Dealer.eligSince = 0; await Dealer.deal(); }
+    } else Dealer.eligSince = 0;
+  },
+
+  // First tick after the console opens (or reloads): pick up the table as it is.
+  async resume() {
+    const t = Dealer.tableId, g = S.room.game, now = Date.now();
+    if (!g || g.phase === 'idle') { Dealer.G = g ? Object.assign({}, g) : idleState({ handNo: 0, handId: '', boot: TABLE_BY_ID[t].boot, order: [], dealerIdx: 0, log: [] }); Dealer.hands = {}; Dealer.booted = true; return; }
+    if (g.phase === 'result') { Dealer.G = g; Dealer.resultAt = now + GAME_CONFIG.resultMs; Dealer.booted = true; return; }
+    // A hand was in progress. The cards must still be on the server, or the hand is abandoned.
+    const hs = await Repo.getHands(t), hands = {};
+    for (const id of g.order) if (g.players[id] && g.players[id].status !== 'packed' && hs[id] && hs[id].handId === g.handId) hands[id] = hs[id].cards;
+    const complete = g.order.every(id => g.players[id].status === 'packed' || hands[id]);
+    if (complete) {
+      Dealer.hands = hands; Dealer.G = Object.assign({}, g, { turnEndsAt: now + GAME_CONFIG.turnMs });
+      await Repo.writeGame(t, Dealer.G);
+      S.dealerInfo.lastError = 'Resumed hand ' + g.handNo + ' after a reload.';
+    } else {
+      // Stacks are only written at hand end, so abandoning costs nobody anything.
+      const idle = idleState(g); idle.log = (g.log || []).concat('Hand abandoned: the dealer lost the cards. No chips were lost.').slice(-ENGINE.LOG_MAX);
+      await Repo.writeGame(t, idle); Dealer.G = idle; Dealer.hands = {};
+      Repo.clearHands(t, g.order).catch(() => {});
+      S.dealerInfo.lastError = 'The cards for hand ' + g.handNo + ' were lost, so it was cancelled. No chips were lost.';
+    }
+    Dealer.booted = true; scheduleRender();
   },
 
   handlers: {
     // Sit between hands, with chips for the boot and a free seat.
     async sit(member, a, R) {
       const cfg = TABLE_BY_ID[R.id];
-      if (member.seatState === 'seated' || liveHand(R)) return;
+      if (member.seatState === 'seated' || Dealer.G.phase !== 'idle') return;
       if (member.stack < cfg.boot) return;
       if (seatedHumans(R) >= MAX_HUMAN_SEATS) return;
       await Repo.setSeatState(R.id, member.uid, 'seated');
     },
-    // Stand up. No hand can be live before the Phase 4 engine exists, so the
-    // dealer stands the player immediately; Phase 4 adds the mid-hand case.
+    // Stand up. Between hands: immediately. During a hand: the player packs now
+    // and is stood up in the same batch that settles the hand.
     async stand(member, a, R) {
-      if (member.seatState === 'standing' || liveHand(R)) return;
+      const G = Dealer.G;
+      if (inHand(G, member.uid)) {
+        let N = forcePack(G, member.uid, Date.now());
+        N.players[member.uid].standAfter = true;
+        N.log = (N.log || []).concat(member.name + ' packed and will stand up.').slice(-ENGINE.LOG_MAX);
+        await Dealer.commit(N);
+        return;
+      }
+      if (G.phase === 'playing' && G.players[member.uid]) { G.players[member.uid].standAfter = true; await Repo.writeGame(Dealer.tableId, G); return; }
+      if (member.seatState === 'standing') return;
       await Repo.setSeatState(R.id, member.uid, 'standing');
-    }
+    },
+    see: (m, a) => Dealer.play(m, a, 'see'),
+    chaal: (m, a) => Dealer.play(m, a, 'chaal'),
+    raise: (m, a) => Dealer.play(m, a, 'raise'),
+    pack: (m, a) => Dealer.play(m, a, 'pack'),
+    show: (m, a) => Dealer.play(m, a, 'show')
+  },
+
+  // Every betting move: stale hand numbers and illegal moves are dropped silently
+  // (the player's screen already shows why they were not available).
+  async play(member, a, type) {
+    const G = Dealer.G;
+    if (!G || G.phase !== 'playing' || a.handNo !== G.handNo) return;
+    const r = applyAction(G, member.uid, type, Date.now(), Dealer.hands);
+    if (!r.ok) { console.warn('[TeenPatti] rejected', type, member.uid, r.error); return; }
+    await Dealer.commit(r.G);
   }
 };
 
 /* ==========================================================================
-   SECTION 23 - APPLICATION INITIALIZATION
+   SECTION 24 - GAME ENGINE
+   Pure functions: no screen, no Firebase, no clock except the `now` passed in.
+   The browser dealer and the unit tests call exactly the same code.
+
+   RULES USED (three-card Teen Patti, standard 52-card deck)
+   Hand ranking, highest first:
+     1. Trail (three of a kind)        compare rank
+     2. Pure sequence (straight flush) compare top card
+     3. Sequence (straight)            compare top card
+     4. Color (flush)                  compare cards high to low
+     5. Pair                           compare pair rank, then the odd card
+     6. High card                      compare cards high to low
+   Sequences: A-K-Q is highest, A-2-3 is second highest, then K-Q-J down to 4-3-2.
+   Suits never break a tie. Identical rank patterns tie and the pot is split;
+   an odd leftover chip goes to the earliest of the tied players in turn order.
+
+   BETTING
+   Every player pays the boot into the pot. `stake` starts at the boot.
+     Blind player  : chaal costs  stake
+     Seen player   : chaal costs  2 x stake
+     Raise         : stake doubles (stake x 2); the raiser then pays at their own
+                     rate for the new stake (blind = new stake, seen = 2 x new stake)
+     Stake cap     : stake may not exceed boot x 64
+     Show          : only when exactly two players remain; costs the same as chaal
+                     for the player who asks; both hands are then revealed
+     Pack          : fold. See: free, any time while still blind.
+   A player who cannot afford a move may not make it (they can pack). No side pots.
+   ========================================================================== */
+//#ENGINE-START
+const ENGINE = {
+  RANKS: ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'],
+  SUITS: ['♠', '♥', '♦', '♣'],
+  HAND_NAMES: ['', 'High card', 'Pair', 'Color', 'Sequence', 'Pure sequence', 'Trail'],
+  STAKE_CAP_MULT: 64,
+  LOG_MAX: 20
+};
+const GAME_CONFIG = { turnMs: 20000, resultMs: 8000, autoDealMs: 5000 };
+
+/* ---- deck and randomness ---- */
+function secureRandInt(n) {
+  const cr = typeof crypto !== 'undefined' && crypto.getRandomValues ? crypto : null;
+  if (!cr) throw new Error('A secure random source is required to shuffle.');
+  const limit = Math.floor(0x100000000 / n) * n, buf = new Uint32Array(1);
+  do { cr.getRandomValues(buf); } while (buf[0] >= limit);
+  return buf[0] % n;
+}
+function newDeck() {
+  const d = [];
+  for (const r of ENGINE.RANKS) for (const s of ENGINE.SUITS) d.push(r + s);
+  return d;
+}
+// Fisher-Yates with an injectable integer source (rnd(n) returns 0..n-1).
+function shuffle(deck, rnd) {
+  const a = deck.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); const t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+
+/* ---- ranking ---- */
+function parseCard(c) { return { r: ENGINE.RANKS.indexOf(c.slice(0, -1)) + 2, s: c.slice(-1) }; }
+
+// Returns an array compared left to right: [category, ...tiebreakers].
+function scoreHand(cards) {
+  const p = cards.map(parseCard).sort((a, b) => b.r - a.r);
+  const v = p.map(x => x.r);
+  const flush = p.every(x => x.s === p[0].s);
+  let seq = 0;
+  if (v[0] === v[1] + 1 && v[1] === v[2] + 1) seq = v[0];
+  else if (v[0] === 14 && v[1] === 3 && v[2] === 2) seq = 13.5;      // A-2-3: second highest sequence
+  if (v[0] === v[1] && v[1] === v[2]) return [6, v[0]];
+  if (seq && flush) return [5, seq];
+  if (seq) return [4, seq];
+  if (flush) return [3, v[0], v[1], v[2]];
+  if (v[0] === v[1]) return [2, v[0], v[2]];
+  if (v[1] === v[2]) return [2, v[1], v[0]];
+  return [1, v[0], v[1], v[2]];
+}
+function compareScores(a, b) {
+  for (let i = 0; i < Math.max(a.length, b.length); i++) {
+    const x = a[i] || 0, y = b[i] || 0;
+    if (x !== y) return x > y ? 1 : -1;
+  }
+  return 0;
+}
+const handName = cards => ENGINE.HAND_NAMES[scoreHand(cards)[0]];
+
+/* ---- state helpers ---- */
+const cloneState = G => JSON.parse(JSON.stringify(G));
+const activeIds = G => G.order.filter(id => G.players[id] && G.players[id].status !== 'packed');
+const inHand = (G, id) => !!(G && G.phase === 'playing' && G.players && G.players[id] && G.players[id].status !== 'packed');
+
+function addLog(G, text) {
+  G.log = (G.log || []).concat(text).slice(-ENGINE.LOG_MAX);
+}
+
+/* ---- costs (the label and the cost both come from the player's real status) ---- */
+function chaalCost(G, id) { return G.players[id].status === 'seen' ? 2 * G.stake : G.stake; }
+function raiseCost(G, id) {
+  const ns = G.stake * 2;
+  return G.players[id].status === 'seen' ? 2 * ns : ns;
+}
+
+// Everything the screen and the dealer need to know about one player's options.
+function legalMoves(G, id) {
+  const none = { ok: false, reason: 'No hand in progress.' };
+  const out = { inHand: false, status: '', myTurn: false, activeCount: 0, see: none, chaal: Object.assign({ label: 'Chaal', cost: 0 }, none), raise: Object.assign({ cost: 0 }, none), show: Object.assign({ cost: 0 }, none), pack: none };
+  if (!G || G.phase !== 'playing' || !G.players || !G.players[id]) return out;
+  const p = G.players[id];
+  if (p.status === 'packed') { const r = { ok: false, reason: 'You packed this hand.' }; out.status = 'packed'; out.see = out.pack = r; out.chaal.reason = out.raise.reason = out.show.reason = r.reason; return out; }
+  out.inHand = true; out.status = p.status; out.myTurn = G.turn === id; out.activeCount = activeIds(G).length;
+  out.see = p.status === 'blind' ? { ok: true, reason: '' } : { ok: false, reason: 'You have already seen your cards.' };
+  const wait = out.myTurn ? '' : 'Wait for your turn.';
+  const cc = chaalCost(G, id), rc = raiseCost(G, id);
+  out.chaal = { label: p.status === 'seen' ? 'Chaal' : 'Blind', cost: cc, ok: out.myTurn && p.chips >= cc, reason: wait || (p.chips >= cc ? '' : 'Not enough chips (need ' + cc + ').') };
+  const cap = G.stake * 2 <= G.maxStake;
+  out.raise = { cost: rc, ok: out.myTurn && cap && p.chips >= rc, reason: wait || (!cap ? 'Stake limit reached.' : p.chips >= rc ? '' : 'Not enough chips (need ' + rc + ').') };
+  const two = out.activeCount === 2;
+  out.show = { cost: cc, ok: out.myTurn && two && p.chips >= cc, reason: wait || (!two ? 'Show needs exactly two players left.' : p.chips >= cc ? '' : 'Not enough chips (need ' + cc + ').') };
+  out.pack = { ok: out.myTurn, reason: wait };
+  return out;
+}
+
+/* ---- starting a hand ---- */
+// participants: seated, eligible players in table order: [{id, name, bot, chips}].
+// prev: { handNo, order, dealerIdx } from the last state (or null).
+// Returns { G, hands } or { error }. hands maps id -> three cards.
+function startHand(o) {
+  const boot = o.boot, now = o.now, prev = o.prev || { handNo: 0, order: [], dealerIdx: 0 };
+  const E = o.participants.filter(p => p.chips >= boot);
+  if (E.length < 2) return { error: 'A hand needs at least two players with enough chips for the boot.' };
+  if (E.length > 6) return { error: 'At most six players can be dealt in.' };
+  // Dealer button moves to the next eligible player after the previous dealer.
+  const seq = o.participants.map(p => p.id), ids = E.map(p => p.id);
+  const prevDealer = prev.order && prev.order[prev.dealerIdx];
+  let dealer = ids[0];
+  const at = seq.indexOf(prevDealer);
+  if (at >= 0) for (let k = 1; k <= seq.length; k++) { const c = seq[(at + k) % seq.length]; if (ids.includes(c)) { dealer = c; break; } }
+  const di = ids.indexOf(dealer);
+  const order = ids.slice(di + 1).concat(ids.slice(0, di + 1));     // first to act is left of the dealer; dealer acts last
+  const deck = shuffle(newDeck(), o.rnd), n = order.length, hands = {};
+  order.forEach((id, i) => { hands[id] = [deck[i], deck[i + n], deck[i + 2 * n]]; });
+  const players = {};
+  for (const id of order) {
+    const p = E.find(x => x.id === id);
+    players[id] = { name: p.name, bot: !!p.bot, chips: p.chips - boot, status: 'blind', invested: boot };
+  }
+  const handNo = (prev.handNo || 0) + 1;
+  const G = {
+    phase: 'playing', handNo, handId: o.tableId + '-' + handNo, boot, stake: boot, maxStake: boot * ENGINE.STAKE_CAP_MULT,
+    pot: boot * n, order, turn: order[0], dealerIdx: n - 1, turnEndsAt: now + GAME_CONFIG.turnMs, players, result: null, log: [], dealtAt: now
+  };
+  addLog(G, 'Hand ' + handNo + ' dealt. Boot ' + boot + ' each.');
+  return { G, hands };
+}
+
+/* ---- applying moves ---- */
+function advanceTurn(G, now) {
+  const i = G.order.indexOf(G.turn);
+  for (let k = 1; k <= G.order.length; k++) {
+    const id = G.order[(i + k) % G.order.length];
+    if (G.players[id].status !== 'packed') { G.turn = id; G.turnEndsAt = now + GAME_CONFIG.turnMs; return; }
+  }
+}
+function pay(G, id, cost) { const p = G.players[id]; p.chips -= cost; p.invested += cost; G.pot += cost; }
+
+// Ends the hand and hands out the pot. winners are ids; ties share equally.
+function finishHand(G, winners, reason, reveal, rank) {
+  const ordered = G.order.filter(id => winners.includes(id));
+  const base = Math.floor(G.pot / ordered.length), rem = G.pot - base * ordered.length, shares = {};
+  ordered.forEach((id, i) => { shares[id] = base + (i < rem ? 1 : 0); G.players[id].chips += shares[id]; });
+  G.result = { handId: G.handId, winners: ordered, amount: G.pot, shares, reason, rank: rank || '', reveal: reveal || {} };
+  G.phase = 'result'; G.pot = 0; G.turn = ''; G.turnEndsAt = 0;
+  const names = ordered.map(id => G.players[id].name).join(' and ');
+  addLog(G, names + (ordered.length > 1 ? ' split ' : ' won ') + G.result.amount + (rank ? ' with ' + rank : '') + '.');
+}
+
+function showdown(G, hands) {
+  const ids = activeIds(G);
+  const scores = ids.map(id => scoreHand(hands[id]));
+  let best = [0];
+  for (let i = 1; i < ids.length; i++) if (compareScores(scores[i], scores[best[0]]) > 0) best = [i]; else if (compareScores(scores[i], scores[best[0]]) === 0) best.push(i);
+  const winners = best.map(i => ids[i]), reveal = {};
+  ids.forEach(id => { reveal[id] = hands[id].slice(); });
+  finishHand(G, winners, 'show', reveal, ENGINE.HAND_NAMES[scores[best[0]][0]]);
+}
+
+// A packed-out or timed-out player leaves the hand. Used by pack, timeout and stand-up.
+function forcePack(G0, id, now) {
+  if (!inHand(G0, id)) return G0;
+  const G = cloneState(G0);
+  const wasTurn = G.turn === id;
+  G.players[id].status = 'packed';
+  const left = activeIds(G);
+  if (left.length === 1) { finishHand(G, left, 'fold', {}, ''); }
+  else if (wasTurn) advanceTurn(G, now);
+  return G;
+}
+
+// The single entry point for a move. Returns { ok, G } or { ok:false, error }.
+function applyAction(G0, id, type, now, hands) {
+  const bad = error => ({ ok: false, error });
+  if (!G0 || G0.phase !== 'playing') return bad('No hand in progress.');
+  if (!inHand(G0, id)) return bad('You are not in this hand.');
+  const lm = legalMoves(G0, id);
+  const G = cloneState(G0), p = G.players[id];
+  if (type === 'see') {
+    if (!lm.see.ok) return bad(lm.see.reason);
+    p.status = 'seen'; addLog(G, p.name + ' looked at their cards.');
+    return { ok: true, G };
+  }
+  if (G.turn !== id) return bad('Not your turn.');
+  if (type === 'pack') {
+    addLog(G, p.name + ' packed.');
+    return { ok: true, G: forcePack(G, id, now) };
+  }
+  if (type === 'chaal') {
+    if (!lm.chaal.ok) return bad(lm.chaal.reason);
+    const c = lm.chaal.cost; pay(G, id, c);
+    addLog(G, p.name + (p.status === 'seen' ? ' plays chaal ' : ' plays blind ') + c + '.');
+    advanceTurn(G, now); return { ok: true, G };
+  }
+  if (type === 'raise') {
+    if (!lm.raise.ok) return bad(lm.raise.reason);
+    G.stake *= 2; const c = raiseCost({ stake: G.stake / 2, players: G.players }, id); pay(G, id, c);
+    addLog(G, p.name + ' raises to ' + G.stake + ' (paid ' + c + ').');
+    advanceTurn(G, now); return { ok: true, G };
+  }
+  if (type === 'show') {
+    if (!lm.show.ok) return bad(lm.show.reason);
+    if (!hands || !G.order.every(k => G.players[k].status === 'packed' || (hands[k] && hands[k].length === 3))) return bad('The dealer does not hold the cards for this hand.');
+    const c = lm.show.cost; pay(G, id, c);
+    addLog(G, p.name + ' asks for a show (paid ' + c + ').');
+    showdown(G, hands); return { ok: true, G };
+  }
+  return bad('Unknown move.');
+}
+
+// Chips to write back to the member documents when a hand ends.
+// A player with fewer chips than the boot, or who asked to stand, becomes standing.
+function settlementPlan(G) {
+  const plan = {};
+  for (const id of G.order) {
+    const p = G.players[id];
+    plan[id] = { stack: p.chips, seatState: (p.chips < G.boot || p.standAfter) ? 'standing' : 'seated' };
+  }
+  return plan;
+}
+
+// The between-hands state: keeps who dealt last so the button can move on.
+function idleState(G) {
+  return { phase: 'idle', handNo: G.handNo, handId: G.handId, boot: G.boot, stake: 0, maxStake: 0, pot: 0, order: G.order, turn: '', dealerIdx: G.dealerIdx, turnEndsAt: 0, players: {}, result: null, log: G.log || [], dealtAt: 0 };
+}
+//#ENGINE-END
+
+/* ==========================================================================
+   SECTION 30 - APPLICATION INITIALIZATION
    ========================================================================== */
 function showFatal(text) {
   $('screen').replaceChildren(h('div', { class: 'card auth' }, h('h2', { text: 'Teen Patti Club cannot start' }), h('p', { class: 'muted', text }),
