@@ -199,9 +199,7 @@ button.busy:after{content:"";position:absolute;inset:0;margin:auto;width:18px;he
 .myhand.small{margin:4px 0;gap:6px}.myhand.small .pcard{width:34px;height:48px;font-size:13px}
 .moves{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .moves button:first-child,.moves #packBtn{grid-column:auto}
-.turnline{display:flex;justify-content:space-between;margin:10px 0;font-weight:600}
 .timer{font-variant-numeric:tabular-nums;color:#d8b45a}
-.gp.turn{outline:2px solid #d8b45a}.gp.out{opacity:.5}
 .result{margin-top:12px;padding:12px;border-radius:12px;border:1px solid #d8b45a;text-align:center}
 .revealrow{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
 .glog{margin-top:12px;font-size:12px;color:#9aa4b2;display:grid;gap:2px}
@@ -221,6 +219,78 @@ button.busy:after{content:"";position:absolute;inset:0;margin:auto;width:18px;he
 .avopt{background:rgba(255,255,255,.55);border-color:rgba(90,62,8,.25)}
 .avopt.on{background:#fff;border-color:#8a5a00;box-shadow:0 0 0 2px rgba(138,90,0,.45)}
 .profile .btn-ghost{color:#3d2a05;border-color:rgba(90,62,8,.45)}
+
+/* ==========================================================================
+   SECTION 13 - TABLE FELT, SEATS, CARDS, EFFECTS (Phase 6)
+   ========================================================================== */
+.felt-card{padding:14px 10px 16px;overflow:hidden}
+.felthead{display:flex;align-items:center;justify-content:space-between;margin:0 6px 6px}
+.stakeline{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.stakeline b{color:var(--gold);font-size:15px;font-family:var(--serif);letter-spacing:0}
+.felt{position:relative;width:100%;aspect-ratio:7/8;max-height:540px;margin:34px auto 10px}
+.felt .surface{position:absolute;inset:11% 9% 13%;border-radius:50%;
+  background:radial-gradient(ellipse at 50% 42%,#1f8a63 0,#136a4c 48%,#0b4733 100%);
+  border:5px solid #5a3a14;box-shadow:0 0 0 2px var(--gold-2),0 0 0 7px #2a1a08,0 18px 36px rgba(0,0,0,.55),inset 0 0 40px rgba(0,0,0,.45),inset 0 0 0 2px rgba(255,233,166,.18)}
+.felt .surface:after{content:"";position:absolute;inset:7%;border-radius:50%;border:1.5px dashed rgba(255,233,166,.22)}
+.centre{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);width:46%;display:flex;flex-direction:column;align-items:center;text-align:center;pointer-events:none}
+.potlabel{font-size:10px;letter-spacing:3px;font-weight:800;color:#bfe9d3;margin-top:3px}
+.potnum{margin:0;font-size:34px;line-height:1.05;text-shadow:0 2px 8px rgba(0,0,0,.6);font-variant-numeric:tabular-nums}
+.idletext{margin:6px 0 0;font-size:12.5px;line-height:1.35;color:#cfe9db;max-width:150px}
+.chipstack{position:relative;width:34px;height:30px}
+.chipstack i{position:absolute;left:3px;width:28px;height:11px;border-radius:50%;background:radial-gradient(ellipse at 50% 40%,#ffe9a6,#c99a2e);border:1.5px solid #8a6314;box-shadow:0 1px 0 #6e4d0c}
+.chipstack i:nth-child(1){bottom:0}.chipstack i:nth-child(2){bottom:5px}.chipstack i:nth-child(3){bottom:10px}.chipstack i:nth-child(4){bottom:15px}
+.chipstack.idle{opacity:.55}
+.winbanner{margin-top:6px;padding:5px 14px;border-radius:20px;font:800 14px var(--serif);color:var(--gold-ink);background:var(--gold-grad);box-shadow:0 4px 14px rgba(0,0,0,.5),0 0 18px rgba(242,199,92,.5);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.seat{position:absolute;width:92px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;text-align:center;z-index:2}
+.seat .ring{position:relative;display:grid;place-items:center;width:50px;height:50px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#1c6a52,#0a3025);border:2px solid var(--gold-2);box-shadow:0 4px 10px rgba(0,0,0,.5)}
+.seat.me .ring{border-color:var(--purple)}
+.seat .ava{font-size:26px;line-height:1}
+.seat.turn .ring{box-shadow:0 0 0 3px rgba(242,199,92,.95),0 0 20px 6px rgba(242,199,92,.65)}
+.seat.win .ring{border-color:var(--green);box-shadow:0 0 0 3px rgba(46,229,157,.95),0 0 22px 8px rgba(46,229,157,.65)}
+.seat .dbtn{position:absolute;right:-6px;bottom:-3px;width:19px;height:19px;border-radius:50%;display:grid;place-items:center;font:800 11px var(--serif);color:var(--gold-ink);background:var(--gold-grad);box-shadow:0 2px 4px rgba(0,0,0,.5)}
+.seat .sname{max-width:92px;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:800;text-shadow:0 1px 3px #000}
+.seat .schips{margin-top:1px;padding:1px 9px;border-radius:12px;background:rgba(0,0,0,.5);font-size:11.5px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums;border:1px solid rgba(242,199,92,.25)}
+.seat.out{opacity:.5}
+.slabel{margin-top:3px;padding:0 8px;border-radius:10px;font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;background:#0b2a20;color:#9cf0c6;border:1px solid var(--line)}
+.slabel.seen{background:#3a1f5a;color:#e6c6ff;border-color:rgba(192,75,255,.5)}
+.slabel.out{background:#3a2430;color:#ffb3c1;border-color:rgba(255,77,109,.4)}
+.mcs{display:flex;justify-content:center;margin-top:4px}
+.mc{width:22px;height:31px;margin:0 -3px;border-radius:4px;box-shadow:0 2px 4px rgba(0,0,0,.55);transform:rotate(calc((var(--r,0)) * 1deg))}
+.mc:nth-child(1){--r:-9}.mc:nth-child(3){--r:9}
+.mc.back{background:repeating-linear-gradient(45deg,#7a1f2b,#7a1f2b 3px,#5c1620 3px,#5c1620 6px);border:1.5px solid #d8b45a}
+.mc.face{background:#f7f3e8;color:#14181f;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;line-height:1}
+.mc.face.red{color:#b3261e}
+.mc.face b{font-size:11px}
+
+/* cards in your hand */
+.pcard{width:62px;height:88px;border-radius:9px;font-size:24px;border:1px solid #cfc6aa;background:linear-gradient(160deg,#fffdf5,#efe8d3);position:relative}
+.pcard span{font-size:26px}
+.pcard.back{border:2px solid #d8b45a;box-shadow:0 4px 10px rgba(0,0,0,.5),inset 0 0 0 3px #5c1620}
+.myhand{gap:12px;margin:8px 0 12px;perspective:600px}
+.myhand.small .pcard{width:34px;height:48px;font-size:13px}
+
+/* turn bar */
+.turnline{display:block;margin:2px 6px 8px;font-weight:700}
+.tl-row{display:flex;justify-content:space-between;align-items:baseline}
+.turnline.mine #turnName{color:var(--gold)}
+.timer{font:800 18px var(--serif);color:var(--gold);transition:color .3s}
+.timer.low{color:#ff6b86}
+.tbar{height:5px;margin-top:5px;border-radius:5px;background:rgba(0,0,0,.4);overflow:hidden}
+.tbar i{display:block;height:100%;transform-origin:left;background:linear-gradient(90deg,#c99a2e,#ffe9a6);transition:transform .5s linear;border-radius:5px}
+
+/* move buttons: the main move is the biggest */
+.moves{grid-template-areas:"chaal chaal" "raise show" "see pack";gap:10px;margin-top:6px}
+#chaalBtn{grid-area:chaal;min-height:56px;font-size:17px}
+#raiseBtn{grid-area:raise}#showBtn{grid-area:show}#seeBtn{grid-area:see}#packBtn{grid-area:pack}
+.result{margin:12px 6px 0}
+.glog{margin:12px 6px 0}
+
+/* effects layer */
+#fxLayer{position:fixed;inset:0;z-index:60;pointer-events:none;overflow:hidden}
+.fxchip{position:fixed;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe9a6,#c99a2e);border:2px dashed #8a6314;box-shadow:0 2px 4px rgba(0,0,0,.5)}
+.confetti{position:fixed;width:8px;height:12px;border-radius:2px}
+@media(max-width:360px){.seat{width:78px}.seat .ring{width:44px;height:44px}.seat .sname{max-width:78px}.potnum{font-size:28px}}
 
 </style>
 </head>
@@ -246,6 +316,7 @@ button.busy:after{content:"";position:absolute;inset:0;margin:auto;width:18px;he
     <p class="fine" style="text-align:center">Play chips only. Your buy-in comes out of your wallet and returns when you leave.</p>
   </div>
 </div>
+<div id="fxLayer" aria-hidden="true"></div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -536,6 +607,18 @@ const Repo = {
     });
   },
 
+  // Admin removes a player: member deleted and the stack returned to that player's wallet.
+  // Rules: members delete (admin, no live hand or standing) + users update (validWalletLeave).
+  adminRemoveMember(uid, tableId) {
+    const uref = Repo.userRef(uid), mref = Repo.membersCol(tableId).doc(uid);
+    return db.runTransaction(async tx => {
+      const us = await tx.get(uref), ms = await tx.get(mref);
+      if (!ms.exists) return;
+      if (us.exists && us.data().tableId === tableId) tx.update(uref, { chips: us.data().chips + ms.data().stack, tableId: '', updatedAt: FV.serverTimestamp() });
+      tx.delete(mref);
+    });
+  },
+
   /* ---- requests to the dealer (rules: actions create) ---- */
   sendAction(uid, tableId, type, handNo) {
     return Repo.actionsCol(tableId).add({ uid, type, handNo: handNo || 0, createdAt: FV.serverTimestamp() });
@@ -699,6 +782,7 @@ function desiredRoute() {
   if (S.loadError) return { name: 'error' };
   if (S.isAdmin) {
     const h0 = parseHash();
+    if (h0.name === 'table' && TABLE_BY_ID[h0.id]) return { name: 'table', tableId: h0.id };
     return { name: 'admin' };
   }
   if (!S.profile) return { name: 'loading' };
@@ -779,6 +863,11 @@ function standBlockReason(R, me) {
   if (!hostLive(R.doc)) return 'Connecting to the table… try again in a moment.';
   return '';
 }
+// Admin can remove a player who is standing, or anyone between hands.
+function removeBlockReason(R, m) {
+  if (m.seatState === 'seated' && liveHand(R)) return 'A hand is in progress. Try again when it ends.';
+  return '';
+}
 function leaveBlockReason(R, me) {
   if (!me) return '';
   if (me.seatState === 'seated' && liveHand(R)) return 'A hand is in progress. Stand up first, then leave once it ends.';
@@ -818,6 +907,7 @@ function render() {
   }
   if (enter) node.classList.add('enter');
   $('screen').replaceChildren(node);
+  if (r.name === 'table') Fx.after(); else Fx.leave();
 }
 
 function renderLoading() {
@@ -922,7 +1012,8 @@ function renderAdmin() {
       h('div', { class: 'muted', text: 'Buy-in ' + fmt(t.min) + ' - ' + fmt(t.max) }),
       h('div', { class: 'astats' },
         h('div', {}, h('b', { text: doc ? String(on ? (doc.seated || 0) : 0) : '-' }), h('span', { text: 'Seated' })),
-        h('div', {}, h('b', { text: doc ? doc.status : '-' }), h('span', { text: 'Status' }))));
+        h('div', {}, h('b', { text: doc ? doc.status : '-' }), h('span', { text: 'Status' }))),
+      h('button', { class: 'btn-secondary btn-small', type: 'button', 'data-enter': t.id, text: 'Enter table', disabled: !doc, style: 'margin-top:10px;width:100%', onclick: () => { location.hash = '#/table/' + t.id; } }));
   });
   const missing = TABLES.filter(t => S.roomsLoaded[t.id] && !S.rooms[t.id]).length;
   return h('div', {},
@@ -947,10 +1038,12 @@ function renderTable() {
   const header = h('div', { class: 'card' },
     h('div', { class: 'row' },
       h('div', {},
-        h('div', { class: 'eyebrow', text: 'You are at' }),
+        h('div', { class: 'eyebrow', text: S.isAdmin ? 'Admin view' : 'You are at' }),
         h('div', { class: 'tname', id: 'roomTitle', text: tableName(cfg) }),
         h('div', { class: 'muted', id: 'roomStake', text: tableStake(cfg) + ' \u00B7 Buy-in ' + fmt(cfg.min) + ' to ' + fmt(cfg.max) + ' play chips' })),
-      h('button', { id: 'leaveBtn', class: 'btn-ghost btn-small' + (S.busy.leave ? ' busy' : ''), type: 'button', text: 'Leave table', disabled: !!S.busy.leave, onclick: handleLeave })),
+      S.isAdmin
+        ? h('button', { id: 'backBtn', class: 'btn-ghost btn-small', type: 'button', text: 'Back', onclick: () => { location.hash = '#/admin'; } })
+        : h('button', { id: 'leaveBtn', class: 'btn-ghost btn-small' + (S.busy.leave ? ' busy' : ''), type: 'button', text: 'Leave table', disabled: !!S.busy.leave, onclick: handleLeave })),
     h('div', { class: 'dlr', style: 'margin-top:10px' },
       h('span', { class: 'dot' + (online ? ' on' : '') }),
       h('span', { id: 'tableState', text: online ? (Dealer.active ? 'Table live \u00B7 your phone is running it' : 'Table live') : 'Connecting to the table\u2026' })));
@@ -959,7 +1052,7 @@ function renderTable() {
   const nodes = [header];
   if (!ready) { nodes.push(renderLoading()); return h('div', {}, nodes); }
   if (R.doc === null) nodes.push(h('div', { class: 'msg err', role: 'alert', text: 'This table is not set up. The admin needs to set up the tables.' }));
-  if (!me && !S.busy.leave) nodes.push(h('div', { class: 'msg err', role: 'alert', text: 'Your seat record could not be found at this table. Contact the admin.' }));
+  if (!me && !S.busy.leave && !S.isAdmin) nodes.push(h('div', { class: 'msg err', role: 'alert', text: 'Your seat record could not be found at this table. Contact the admin.' }));
 
   /* status card */
   const status = h('div', { class: 'card tight', id: 'statusCard' });
@@ -978,7 +1071,7 @@ function renderTable() {
   /* roster */
   const roster = h('div', { class: 'card' },
     h('div', { class: 'row' }, h('h3', { text: 'At this table' }), h('span', { class: 'pill', id: 'countPill', text: R.members.length + (R.members.length === 1 ? ' player' : ' players') })),
-    R.members.length ? h('div', { id: 'roster' }, R.members.map(m => seatRow(m, me && m.uid === me.uid)).concat((R.bots || []).filter(b => b.seatState === 'seated').map(b =>
+    R.members.length ? h('div', { id: 'roster' }, R.members.map(m => seatRow(m, me && m.uid === me.uid, S.isAdmin ? R : null)).concat((R.bots || []).filter(b => b.seatState === 'seated').map(b =>
       h('div', { class: 'seatrow', 'data-bot': b.botId }, h('div', { class: 'av', text: avatarEmoji('bot') }), h('div', { class: 'nm' }, h('b', { text: b.name }), h('span', { text: fmt(b.stack) + ' chips' })), h('span', { class: 'pill gold', text: 'Test bot' }))))) : h('p', { class: 'muted', text: 'No players yet.' }));
   nodes.push(roster);
 
@@ -999,11 +1092,13 @@ function renderTable() {
   return h('div', {}, nodes);
 }
 
-function seatRow(m, isMe) {
+function seatRow(m, isMe, adminR) {
+  const why = adminR ? removeBlockReason(adminR, m) : '';
   return h('div', { class: 'seatrow' + (isMe ? ' me' : ''), 'data-uid': m.uid },
     h('div', { class: 'av', text: avatarEmoji(m.avatar) }),
     h('div', { class: 'nm' }, h('b', { text: m.name + (isMe ? ' (you)' : '') }), h('span', { text: fmt(m.stack) + ' chips' })),
-    h('span', { class: 'pill ' + (m.seatState === 'seated' ? '' : 'gold'), text: m.seatState === 'seated' ? 'Seated' : 'Standing' }));
+    h('span', { class: 'pill ' + (m.seatState === 'seated' ? '' : 'gold'), text: m.seatState === 'seated' ? 'Seated' : 'Standing' }),
+    adminR ? h('button', { class: 'btn-ghost btn-small', type: 'button', 'data-remove': m.uid, text: 'Remove', disabled: !!why || !!S.busy['rm' + m.uid], title: why, onclick: () => handleAdminRemove(m) }) : null);
 }
 
 
@@ -1016,52 +1111,99 @@ function cardNode(c, faceDown) {
 function fmtSecs(ms) { return Math.max(0, Math.ceil(ms / 1000)) + 's'; }
 function updateTimer() {
   const el = $('turnTimer'), G = S.room && S.room.game;
-  if (el && G && G.phase === 'playing') el.textContent = fmtSecs(G.turnEndsAt - Date.now());
+  if (el && G && G.phase === 'playing') {
+    const left = G.turnEndsAt - Date.now();
+    el.textContent = fmtSecs(left);
+    el.classList.toggle('low', left < 6000);
+    const bar = document.querySelector('#turnBar i');
+    if (bar) bar.style.transform = 'scaleX(' + Math.max(0, Math.min(1, (left - 500) / GAME_CONFIG.turnMs)) + ')';
+  }
+}
+
+/* Who sits where: the players of the live hand, or the seated players between hands. */
+function seatList(R, G, live) {
+  if (live) return G.order.map(id => { const p = G.players[id]; return { id, name: p.name, avatar: p.avatar, chips: p.chips, status: p.status, bot: !!p.bot, dealer: G.order[G.dealerIdx] === id }; });
+  const list = R.members.filter(m => m.seatState === 'seated').map(m => ({ id: m.uid, name: m.name, avatar: m.avatar, chips: m.stack, status: '', bot: false, dealer: false }));
+  (R.bots || []).filter(b => b.seatState === 'seated').forEach(b => list.push({ id: b.botId, name: b.name, avatar: 'bot', chips: b.stack, status: '', bot: true, dealer: false }));
+  return list;
+}
+// Seat k of n around the oval; seat 0 (you) is at the bottom, play runs clockwise.
+function seatXY(k, n) {
+  const a = Math.PI / 2 + k * 2 * Math.PI / n;
+  return { x: 50 + 37 * Math.cos(a), y: 49 + 37 * Math.sin(a) };
+}
+function miniCard(c, i) {
+  if (!c) return h('div', { class: 'mc back', 'data-i': i });
+  return h('div', { class: 'mc face' + (isRed(c) ? ' red' : ''), 'data-i': i, 'aria-label': c }, h('b', { text: c.slice(0, -1) }), h('span', { text: c.slice(-1) }));
 }
 
 function renderGame(R, me) {
   const G = R.game, uid = S.user && S.user.uid;
-  const card = h('div', { class: 'card', id: 'gameCard' });
-  if (!G || G.phase === 'idle') {
-    const el = readyHumans(R).length + readyBots(R).length;
-    card.appendChild(h('h3', { text: 'Table' }));
-    card.appendChild(h('p', { id: 'idleNote', class: 'muted', text: !hostLive(R.doc) ? 'Connecting to the table…' : readyHumans(R).length === 0 ? 'Sit down to play. A bot will keep you company.' : 'The next hand is about to be dealt.' }));
-    if (G && G.log && G.log.length) card.appendChild(logNode(G));
-    return card;
-  }
-  if (!Array.isArray(G.order) || !G.players) {
+  const card = h('div', { class: 'card felt-card', id: 'gameCard' });
+  const live = !!(G && G.phase !== 'idle' && Array.isArray(G.order) && G.players);
+  if (G && G.phase !== 'idle' && !live) {
     card.appendChild(h('h3', { text: 'Table' }));
     card.appendChild(h('p', { id: 'idleNote', class: 'muted', text: 'The hand state is not readable. Hang on.' }));
     return card;
   }
-  const playing = G.phase === 'playing';
-  const turnName = playing && G.players[G.turn] ? G.players[G.turn].name : '';
-  card.appendChild(h('div', { class: 'row' },
-    h('div', {}, h('div', { class: 'muted', text: 'Pot' }), h('div', { class: 'tname', id: 'potAmt', text: fmt(G.phase === 'result' && G.result ? G.result.amount : G.pot) })),
-    h('div', {}, h('div', { class: 'muted', text: 'Stake' }), h('div', { class: 'tname', id: 'stakeAmt', text: fmt(G.stake) })),
-    h('span', { class: 'pill', id: 'handNo', text: 'Hand ' + G.handNo })));
-  if (playing) card.appendChild(h('div', { class: 'turnline', id: 'turnLine' },
-    h('span', { id: 'turnName', text: G.turn === uid ? 'Your turn' : turnName + ' to act' }),
-    h('span', { id: 'turnTimer', class: 'timer', text: fmtSecs(G.turnEndsAt - Date.now()) })));
-  card.appendChild(h('div', { id: 'gamePlayers' }, G.order.map((id, i) => {
-    const p = G.players[id];
-    const st = p.status === 'packed' ? 'Packed' : p.status === 'seen' ? 'Seen' : 'Blind';
-    return h('div', { class: 'seatrow gp' + (G.turn === id ? ' turn' : '') + (p.status === 'packed' ? ' out' : '') + (id === uid ? ' me' : ''), 'data-uid': id },
-      h('div', { class: 'av', text: avatarEmoji(p.avatar) }),
-      h('div', { class: 'nm' }, h('b', { text: p.name + (id === uid ? ' (you)' : '') + (i === G.dealerIdx ? ' · D' : '') }), h('span', { text: fmt(p.chips) + ' chips' })),
-      h('span', { class: 'pill ' + (p.status === 'packed' ? 'gold' : ''), text: st }));
-  })));
-  // my cards and moves
-  const mine = uid && G.players[uid];
+  const playing = live && G.phase === 'playing', result = live && G.phase === 'result' && G.result;
+  const seats = seatList(R, G, live);
+  const mi = seats.findIndex(x => x.id === uid);
+  const ordered = mi > 0 ? seats.slice(mi).concat(seats.slice(0, mi)) : seats;
+  const reveal = (result && G.result.reveal) || {};
+  const winners = result ? G.result.winners : [];
+
+  if (live) {
+    card.appendChild(h('div', { class: 'felthead' },
+      h('span', { class: 'pill', id: 'handNo', text: 'Hand ' + G.handNo }),
+      h('span', { class: 'stakeline' }, 'Stake ', h('b', { id: 'stakeAmt', text: fmt(G.stake) }))));
+  }
+  if (playing) {
+    const turnName = G.players[G.turn] ? G.players[G.turn].name : '';
+    const left = Math.max(0, G.turnEndsAt - Date.now()), frac = Math.min(1, left / GAME_CONFIG.turnMs);
+    card.appendChild(h('div', { class: 'turnline' + (G.turn === uid ? ' mine' : ''), id: 'turnLine' },
+      h('div', { class: 'tl-row' },
+        h('span', { id: 'turnName', text: G.turn === uid ? 'Your turn' : turnName + ' to act' }),
+        h('span', { id: 'turnTimer', class: 'timer', text: fmtSecs(left) })),
+      h('div', { class: 'tbar', id: 'turnBar' }, h('i', { style: 'transform:scaleX(' + frac + ')' }))));
+  }
+
+  const potVal = result ? G.result.amount : (live ? G.pot : 0);
+  const centre = h('div', { class: 'centre' });
+  if (live) {
+    centre.appendChild(h('div', { class: 'chipstack', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'), h('i')));
+    centre.appendChild(h('div', { class: 'potlabel', text: result ? 'WON' : 'POT' }));
+    centre.appendChild(h('div', { class: 'tname potnum', id: 'potAmt', text: fmt(potVal) }));
+    if (result) centre.appendChild(h('div', { class: 'winbanner', id: 'winBanner', text: winners.map(id => G.players[id].name).join(' & ') }));
+  } else {
+    centre.appendChild(h('div', { class: 'chipstack idle', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')));
+    centre.appendChild(h('p', { id: 'idleNote', class: 'idletext', text: !hostLive(R.doc) ? 'Connecting to the table…' : readyHumans(R).length === 0 ? 'Sit down to play. A bot will keep you company.' : 'The next hand is about to be dealt.' }));
+  }
+
+  const felt = h('div', { class: 'felt' }, h('div', { class: 'surface' }), centre,
+    h('div', { id: 'gamePlayers' }, ordered.map((sp, k) => {
+      const pos = seatXY(k, ordered.length), isMe = sp.id === uid, out = sp.status === 'packed';
+      const cards = live && !isMe && !out ? h('div', { class: 'mcs' }, [0, 1, 2].map(i => miniCard(reveal[sp.id] ? reveal[sp.id][i] : '', i))) : null;
+      const label = out ? 'Packed' : sp.status === 'seen' ? 'Seen' : sp.status === 'blind' ? 'Blind' : '';
+      return h('div', { class: 'seat gp' + (playing && G.turn === sp.id ? ' turn' : '') + (out ? ' out' : '') + (isMe ? ' me' : '') + (winners.includes(sp.id) ? ' win' : ''), 'data-uid': sp.id, style: 'left:' + pos.x.toFixed(1) + '%;top:' + pos.y.toFixed(1) + '%' },
+        h('div', { class: 'ring' }, h('span', { class: 'ava', text: avatarEmoji(sp.avatar) }), sp.dealer ? h('span', { class: 'dbtn', title: 'Dealer', text: 'D' }) : null),
+        h('div', { class: 'sname', text: isMe ? 'You' : sp.name }),
+        h('div', { class: 'schips', text: fmt(sp.chips) }),
+        cards,
+        label ? h('div', { class: 'slabel ' + (out ? 'out' : sp.status), text: label }) : null);
+    })));
+  card.appendChild(felt);
+
+  const mine = uid && live && G.players[uid];
   if (mine) {
     const hd = R.myHand && R.myHand.handId === G.handId ? R.myHand.cards : null;
     const hidden = mine.status === 'blind' || !hd;
     card.appendChild(h('div', { class: 'myhand', id: 'myCards' }, [0, 1, 2].map(i => cardNode(hd && !hidden ? hd[i] : '', hidden))));
     if (mine.status === 'blind') card.appendChild(h('p', { class: 'muted', style: 'text-align:center;margin:4px 0', text: 'You are playing blind. Look at your cards any time.' }));
     if (playing) card.appendChild(renderMoves(G, uid));
-  } else if (playing) card.appendChild(h('p', { class: 'muted', text: 'You are watching this hand.' }));
-  if (G.phase === 'result' && G.result) card.appendChild(renderResult(G));
-  card.appendChild(logNode(G));
+  } else if (playing) card.appendChild(h('p', { class: 'muted', style: 'text-align:center', text: S.isAdmin ? 'You are watching this hand.' : 'You are watching this hand.' }));
+  if (result) card.appendChild(renderResult(G));
+  if (G && G.log && G.log.length) card.appendChild(logNode(G));
   return card;
 }
 
@@ -1269,6 +1411,15 @@ function handleGameAction(type) {
 }
 
 /* ---- admin ---- */
+function handleAdminRemove(m) {
+  const R = S.room, why = removeBlockReason(R, m);
+  if (why) return toast(why, 'err');
+  if (!confirm('Remove ' + m.name + ' from this table? Their ' + fmt(m.stack) + ' chips go back to their wallet.')) return;
+  return withBusy('rm' + m.uid, 'remove player', async () => {
+    await Repo.adminRemoveMember(m.uid, R.id);
+    toast(m.name + ' was removed from the table.');
+  });
+}
 function handleSetup() {
   return withBusy('setup', 'set up tables', async () => {
     const r = await Repo.setupTables();
@@ -1311,13 +1462,13 @@ const Hosting = {
 const Dealer = {
   sc: null, tableId: null, active: false, queue: [], running: false, seen: new Set(), lastSeated: -1, localN: 0,
   G: null, hands: {}, booted: false, chain: Promise.resolve(), wchain: Promise.resolve(),
-  resultAt: 0, eligSince: 0, lastCommitAt: 0, botKey: '', botDue: 0, botOp: { seat: null, at: 0 },
+  resultAt: 0, eligSince: 0, lastCommitAt: 0, botKey: '', botDue: 0, botOp: { seat: null, at: 0 }, missed: {},
 
   start(tableId) {
     if (Dealer.sc) Scopes.close(Dealer.sc);
     Dealer.tableId = tableId; Dealer.active = true;
     Dealer.seen = new Set(); Dealer.queue = []; Dealer.lastSeated = -1;
-    Dealer.G = null; Dealer.hands = {}; Dealer.booted = false;
+    Dealer.G = null; Dealer.hands = {}; Dealer.booted = false; Dealer.missed = {};
     Dealer.resultAt = 0; Dealer.eligSince = 0; Dealer.lastCommitAt = 0; Dealer.botKey = ''; Dealer.botOp = { seat: null, at: 0 };
     Dealer.chain = Promise.resolve(); Dealer.wchain = Promise.resolve();
     S.dealerInfo = { processed: 0, lastError: '' };
@@ -1501,6 +1652,14 @@ const Dealer = {
         let N = forcePack(G, who, now);
         if (N === G) return;
         N.log = (N.log || []).concat(nm + ' ran out of time and packed.').slice(-ENGINE.LOG_MAX);
+        // Two missed turns in a row: the player is stood up when the hand settles.
+        if (G.players[who] && !G.players[who].bot) {
+          Dealer.missed[who] = (Dealer.missed[who] || 0) + 1;
+          if (Dealer.missed[who] >= GAME_CONFIG.maxMissed && N.players[who]) {
+            N.players[who].standAfter = true; Dealer.missed[who] = 0;
+            N.log = N.log.concat(nm + ' missed two turns and was stood up.').slice(-ENGINE.LOG_MAX);
+          }
+        }
         Dealer.commit(N);
       }
       return;
@@ -1550,6 +1709,7 @@ const Dealer = {
     // Sit between hands, with chips for the boot and a free seat.
     async sit(member, a, R) {
       const cfg = TABLE_BY_ID[R.id];
+      Dealer.missed[member.uid] = 0;
       if (member.seatState === 'seated') return;       // sitting mid-hand is fine: you join the next deal
       if (member.stack < cfg.boot) return;
       if (seatedHumans(R) >= MAX_HUMAN_SEATS) return;
@@ -1584,7 +1744,149 @@ const Dealer = {
     if (!G || G.phase !== 'playing' || a.handNo !== G.handNo) return;
     const r = applyAction(G, member.uid, type, Date.now(), Dealer.hands);
     if (!r.ok) { console.warn('[TeenPatti] rejected', type, member.uid, r.error); return; }
+    Dealer.missed[member.uid] = 0;
     Dealer.commit(r.G);
+  }
+};
+
+/* ==========================================================================
+   SECTION 23 - TABLE EFFECTS (Phase 6)
+   The screen is rebuilt from state on every snapshot, so an effect can never
+   depend on a CSS animation attached to a node that may be replaced. Instead
+   Fx looks at the state after each render, remembers what it has already
+   played (by hand id), and plays each effect once with the Web Animations
+   API. If a re-render lands while an effect is still running, the effect is
+   re-applied part-way through (currentTime) so it carries on instead of
+   restarting or vanishing. Everything is skipped when the person has asked
+   for reduced motion.
+   ========================================================================== */
+const Fx = {
+  on: !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches),
+  hand: '', chips: {}, status: '', dealStart: 0, flipStart: 0, wonHand: '', winStart: 0,
+  shown: 0, target: 0, raf: 0,
+
+  leave() { Fx.hand = ''; Fx.chips = {}; Fx.status = ''; Fx.wonHand = ''; Fx.dealStart = Fx.flipStart = 0; },
+  centre(el) { const b = el.getBoundingClientRect(); return { x: b.left + b.width / 2, y: b.top + b.height / 2 }; },
+  seat(id) { return document.querySelector('#gamePlayers .seat[data-uid="' + id + '"] .ring'); },
+
+  after() {
+    const R = S.room, G = R && R.game, uid = S.user && S.user.uid;
+    if (!G || G.phase === 'idle' || !Array.isArray(G.order) || !G.players) { Fx.hand = ''; Fx.chips = {}; Fx.status = ''; Fx.shown = 0; Fx.target = 0; return; }
+    const now = performance.now(), result = G.phase === 'result' && G.result;
+    const fresh = Math.abs(Date.now() - (G.dealtAt || 0)) < 8000;
+    const mine = uid && G.players[uid];
+    const isNew = G.handId !== Fx.hand;
+    const cur = {}; G.order.forEach(id => { cur[id] = G.players[id].chips; });
+
+    if (isNew) {
+      Fx.hand = G.handId; Fx.wonHand = '';
+      Fx.dealStart = Fx.on && fresh && G.phase === 'playing' ? now : 0;
+      Fx.shown = Fx.dealStart ? 0 : (result ? G.result.amount : G.pot);
+      Fx.status = mine ? mine.status : '';
+      if (Fx.dealStart) G.order.forEach(id => Fx.fly(Fx.seat(id), $('potAmt'), 2, 650));      // the boot goes in
+    } else if (Fx.on) {
+      G.order.forEach(id => { if (Fx.chips[id] !== undefined && cur[id] < Fx.chips[id]) Fx.fly(Fx.seat(id), $('potAmt'), Math.min(5, Math.max(1, Math.round((Fx.chips[id] - cur[id]) / Math.max(1, G.stake)))), 0); });
+      if (mine && Fx.status === 'blind' && mine.status === 'seen') Fx.flipStart = now;
+      Fx.status = mine ? mine.status : '';
+    }
+    Fx.chips = cur;
+
+    // pot count-up (the number shown survives a re-render)
+    Fx.target = result ? G.result.amount : G.pot;
+    if (!Fx.on) Fx.shown = Fx.target;
+    Fx.paint();
+    if (Fx.shown !== Fx.target && !Fx.raf) Fx.raf = requestAnimationFrame(Fx.step);
+
+    if (!Fx.on) return;
+    if (Fx.dealStart && now - Fx.dealStart < 2400) Fx.deal(now - Fx.dealStart);
+    if (Fx.flipStart && now - Fx.flipStart < 700) Fx.flip(now - Fx.flipStart);
+    Fx.glow();
+    if (result && Fx.wonHand !== G.handId) { Fx.wonHand = G.handId; Fx.winStart = now; Fx.celebrate(G); }
+    const wb = $('winBanner');
+    if (wb && Fx.winStart && now - Fx.winStart < 700) wb.animate([{ transform: 'scale(.5)', opacity: 0 }, { transform: 'scale(1.12)', opacity: 1, offset: .65 }, { transform: 'scale(1)', opacity: 1 }], { duration: 520, easing: 'ease-out', fill: 'backwards' }).currentTime = now - Fx.winStart;
+  },
+
+  paint() { const el = $('potAmt'); if (el) el.textContent = fmt(Fx.shown); },
+  step() {
+    Fx.raf = 0;
+    const d = Fx.target - Fx.shown;
+    if (!Fx.on || Math.abs(d) <= 1) Fx.shown = Fx.target; else Fx.shown += Math.sign(d) * Math.max(1, Math.round(Math.abs(d) * .2));
+    Fx.paint();
+    if (Fx.shown !== Fx.target) Fx.raf = requestAnimationFrame(Fx.step);
+  },
+
+  // Cards come off the middle of the table one at a time, round the table, three rounds.
+  deal(elapsed) {
+    const pot = $('potAmt'); if (!pot) return;
+    const c = Fx.centre(pot), seats = [...document.querySelectorAll('#gamePlayers .seat')];
+    let k = 0;
+    for (let r = 0; r < 3; r++) seats.forEach(s => {
+      const el = s.classList.contains('me') ? document.querySelectorAll('#myCards .pcard')[r] : s.querySelector('.mc[data-i="' + r + '"]');
+      if (!el) return;
+      const b = el.getBoundingClientRect();
+      const a = el.animate([
+        { transform: 'translate(' + (c.x - b.left - b.width / 2) + 'px,' + (c.y - b.top - b.height / 2) + 'px) scale(.45) rotate(-120deg)', opacity: 0 },
+        { opacity: 1, offset: .2 },
+        { transform: 'none', opacity: 1 }], { duration: 380, delay: k++ * 110, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' });
+      a.currentTime = elapsed;
+    });
+  },
+
+  // Looking at your cards turns them over.
+  flip(elapsed) {
+    document.querySelectorAll('#myCards .pcard').forEach((el, i) => {
+      const a = el.animate([{ transform: 'rotateY(90deg) scale(.9)' }, { transform: 'rotateY(0) scale(1)' }], { duration: 320, delay: i * 90, easing: 'ease-out', fill: 'backwards' });
+      a.currentTime = elapsed;
+    });
+  },
+
+  // Whose turn it is, and who won, glow; the phase is tied to the clock so a re-render does not restart the pulse.
+  glow() {
+    document.querySelectorAll('#gamePlayers .seat.turn .ring, #gamePlayers .seat.win .ring').forEach(el => {
+      const win = el.parentNode.classList.contains('win'), col = win ? '46,229,157' : '242,199,92';
+      const a = el.animate([
+        { boxShadow: '0 0 0 2px rgba(' + col + ',.9),0 0 6px 1px rgba(' + col + ',.35)' },
+        { boxShadow: '0 0 0 3px rgba(' + col + ',1),0 0 22px 8px rgba(' + col + ',.8)' }], { duration: 750, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' });
+      a.currentTime = Date.now() % 1500;
+    });
+  },
+
+  // A few chips slide from one place to another.
+  fly(from, to, count, delay) {
+    const L = $('fxLayer'); if (!Fx.on || !L || !from || !to) return;
+    const a = Fx.centre(from), b = Fx.centre(to);
+    for (let i = 0; i < count; i++) {
+      const chip = h('div', { class: 'fxchip' });
+      chip.style.left = (a.x - 8) + 'px'; chip.style.top = (a.y - 8) + 'px';
+      L.appendChild(chip);
+      const dx = b.x - a.x + (i % 3 - 1) * 5, dy = b.y - a.y + (i % 2) * 4;
+      const an = chip.animate([
+        { transform: 'translate(0,0) scale(.6)', opacity: 0 },
+        { opacity: 1, offset: .15 },
+        { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(1)', opacity: 1, offset: .88 },
+        { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.7)', opacity: 0 }], { duration: 560, delay: delay + i * 70, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'both' });
+      an.onfinish = () => chip.remove();
+    }
+  },
+
+  // Once per hand: the pot slides to the winner and a little confetti goes up.
+  celebrate(G) {
+    const pot = $('potAmt'), win = G.result.winners;
+    win.forEach(id => Fx.fly(pot, Fx.seat(id), 6, 150));
+    const L = $('fxLayer'), src = Fx.seat(win[0]);
+    if (!L || !src) return;
+    const o = Fx.centre(src), cols = ['#f2c75c', '#ffe9a6', '#2ee59d', '#ffffff', '#ff4d6d'];
+    for (let i = 0; i < 30; i++) {
+      const p = h('i', { class: 'confetti' });
+      p.style.left = o.x + 'px'; p.style.top = o.y + 'px'; p.style.background = cols[i % cols.length];
+      L.appendChild(p);
+      const dx = (Math.random() - .5) * 280, up = 90 + Math.random() * 150, fall = 60 + Math.random() * 120;
+      const an = p.animate([
+        { transform: 'translate(0,0) rotate(0)', opacity: 1 },
+        { transform: 'translate(' + dx * .6 + 'px,' + -up + 'px) rotate(' + (Math.random() * 540) + 'deg)', opacity: 1, offset: .45 },
+        { transform: 'translate(' + dx + 'px,' + fall + 'px) rotate(' + (Math.random() * 900) + 'deg)', opacity: 0 }], { duration: 1300 + Math.random() * 900, delay: 200 + Math.random() * 150, easing: 'cubic-bezier(.2,.7,.4,1)', fill: 'both' });
+      an.onfinish = () => p.remove();
+    }
   }
 };
 
@@ -1626,7 +1928,7 @@ const ENGINE = {
   LOG_MAX: 20,
   BOT_STACK_MULT: 50
 };
-const GAME_CONFIG = { turnMs: 20000, resultMs: 6000, autoDealMs: 3000 };
+const GAME_CONFIG = { turnMs: 20000, resultMs: 6000, autoDealMs: 3000, maxMissed: 2 };
 
 /* ---- deck and randomness ---- */
 function secureRandInt(n) {
