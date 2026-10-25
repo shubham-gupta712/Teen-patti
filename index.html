@@ -545,10 +545,15 @@ const Repo = {
   // Rule: members update (seatState, stack, updatedAt only) + game update
   settle(t, G, plan) {
     const b = db.batch();
-    for (const id of Object.keys(plan)) b.update(Repo.membersCol(t).doc(id), { stack: plan[id].stack, seatState: plan[id].seatState, updatedAt: FV.serverTimestamp() });
+    for (const id of Object.keys(plan)) {
+      if (G.players[id] && G.players[id].bot) b.set(Repo.botsCol(t).doc(id), { botId: id, name: G.players[id].name, seatState: plan[id].seatState, stack: plan[id].stack, updatedAt: FV.serverTimestamp() });   // Rule: bots create/update (validBot)
+      else b.update(Repo.membersCol(t).doc(id), { stack: plan[id].stack, seatState: plan[id].seatState, updatedAt: FV.serverTimestamp() });
+    }
     b.set(Repo.gameRef(t), Repo._game(G));
     return b.commit();
   },
+  // Rule: bots create/update (admin, fixed IDs bot_dealer / bot_lucky)
+  setBot: (t, id, name, seatState, stack) => Repo.botsCol(t).doc(id).set({ botId: id, name, seatState, stack, updatedAt: FV.serverTimestamp() }),
   // Rule: hands delete (admin), list (admin)
   async getHands(t) { const s = await Repo.handsCol(t).get(); const o = {}; s.docs.forEach(d => { o[d.id] = d.data(); }); return o; },
   async clearHands(t, ids) { const b = db.batch(); ids.forEach(id => b.delete(Repo.handsCol(t).doc(id))); return b.commit(); },
@@ -722,6 +727,9 @@ function openRoomScope(tableId) {
 const dealerOnline = doc => !!doc && tsMs(doc.dealerAt) > 0 && Date.now() - tsMs(doc.dealerAt) < DEALER_FRESH_MS;
 const liveHand = R => !!(R && R.game && R.game.phase && R.game.phase !== 'idle');
 const myMember = R => (R && S.user) ? R.members.find(m => m.uid === S.user.uid) || null : null;
+// Everyone who could be dealt in: seated humans with the boot, plus seated test bots.
+const readyHumans = R => R.members.filter(m => m.seatState === 'seated' && m.stack >= TABLE_BY_ID[R.id].boot);
+const readyBots = R => (R.bots || []).filter(b => b.seatState === 'seated' && b.stack >= TABLE_BY_ID[R.id].boot);
 const seatedHumans = R => R.members.filter(m => m.seatState === 'seated').length;
 
 /* Why Sit Down is unavailable, as a sentence. Empty string means allowed. */
@@ -925,11 +933,13 @@ function renderTable(asDealer) {
   if (asDealer) {
     status.appendChild(h('h3', { text: 'You are the dealer' }));
     status.appendChild(h('p', { class: 'muted', text: 'Keep this page open. This phone shuffles, deals, checks every move and settles chips. Requests handled: ' + S.dealerInfo.processed + '.' }));
-    const el = Dealer.eligible ? Dealer.eligible().length : 0;
+    const el = Dealer.eligible().length;
     status.appendChild(h('div', { class: 'controls' },
       h('button', { id: 'dealBtn', class: 'btn-primary', type: 'button', text: 'Deal hand now', disabled: !Dealer.canDeal(), onclick: () => Dealer.dealNow() }),
       h('button', { id: 'autoBtn', class: 'btn-secondary', type: 'button', text: 'Auto-deal: ' + (Dealer.autoDeal ? 'On' : 'Off'), onclick: () => Dealer.setAutoDeal(!Dealer.autoDeal) })));
-    status.appendChild(h('p', { id: 'dealNote', class: 'muted', style: 'font-size:13px', text: Dealer.halted ? 'Dealing is stopped.' : !Dealer.booted ? 'Starting…' : R.game && R.game.phase !== 'idle' ? 'A hand is in progress.' : el < 2 ? 'Waiting for two seated players with enough chips (' + el + ' ready).' : Dealer.autoDeal ? 'Next hand deals automatically.' : 'Ready to deal.' }));
+    status.appendChild(h('div', { class: 'controls', style: 'margin-top:8px' }, Dealer.BOTS.map(b =>
+      h('button', { id: b.id + 'Btn', class: 'btn-secondary btn-small', type: 'button', text: b.name + ': ' + (Dealer.botOn(b.id) ? 'Seated' : 'Off'), disabled: !Dealer.booted || !Dealer.G || Dealer.G.phase !== 'idle', onclick: () => Dealer.toggleBot(b.id) }))));
+    status.appendChild(h('p', { id: 'dealNote', class: 'muted', style: 'font-size:13px', text: Dealer.halted ? 'Dealing is stopped.' : !Dealer.booted ? 'Starting…' : R.game && R.game.phase !== 'idle' ? 'A hand is in progress.' : !Dealer.canDeal() ? 'Waiting for a seated player plus one more player or bot (' + el + ' ready).' : Dealer.autoDeal ? 'Next hand deals automatically.' : 'Ready to deal.' }));
     if (S.dealerInfo.lastError) status.appendChild(h('div', { class: 'msg err', role: 'alert', text: S.dealerInfo.lastError }));
   } else if (me) {
     status.appendChild(h('div', { class: 'row' },
@@ -946,7 +956,8 @@ function renderTable(asDealer) {
   /* roster */
   const roster = h('div', { class: 'card' },
     h('div', { class: 'row' }, h('h3', { text: 'At this table' }), h('span', { class: 'pill', id: 'countPill', text: R.members.length + (R.members.length === 1 ? ' player' : ' players') })),
-    R.members.length ? h('div', { id: 'roster' }, R.members.map(m => seatRow(m, !asDealer && me && m.uid === me.uid))) : h('p', { class: 'muted', text: 'No players yet.' }));
+    R.members.length ? h('div', { id: 'roster' }, R.members.map(m => seatRow(m, !asDealer && me && m.uid === me.uid)).concat((R.bots || []).filter(b => b.seatState === 'seated').map(b =>
+      h('div', { class: 'seatrow', 'data-bot': b.botId }, h('div', { class: 'av', text: '\u2699' }), h('div', { class: 'nm' }, h('b', { text: b.name }), h('span', { text: fmt(b.stack) + ' chips' })), h('span', { class: 'pill gold', text: 'Test bot' }))))) : h('p', { class: 'muted', text: 'No players yet.' }));
   nodes.push(roster);
 
   /* controls */
@@ -990,7 +1001,7 @@ function renderGame(R, asDealer, me) {
   const G = R.game, uid = S.user && S.user.uid;
   const card = h('div', { class: 'card', id: 'gameCard' });
   if (!G || G.phase === 'idle') {
-    const el = R.members.filter(m => m.seatState === 'seated' && m.stack >= TABLE_BY_ID[R.id].boot).length;
+    const el = readyHumans(R).length + readyBots(R).length;
     card.appendChild(h('h3', { text: 'Table' }));
     card.appendChild(h('p', { id: 'idleNote', class: 'muted', text: !dealerOnline(R.doc) ? 'Waiting for the dealer.' : el < 2 ? 'Waiting for at least two seated players.' : 'The next hand is about to be dealt.' }));
     if (G && G.log && G.log.length) card.appendChild(logNode(G));
@@ -1257,7 +1268,7 @@ function handleSetup() {
 const Dealer = {
   sc: null, tableId: null, queue: [], running: false, seen: new Set(), lastSeated: -1,
   G: null, hands: {}, booted: false, halted: false, autoDeal: true, chain: Promise.resolve(),
-  resultAt: 0, eligSince: 0, lastCommitAt: 0,
+  resultAt: 0, eligSince: 0, lastCommitAt: 0, botKey: '', botDue: 0,
 
   start(tableId) {
     Dealer.stop();
@@ -1351,11 +1362,33 @@ const Dealer = {
     return (Dealer.chain = Dealer.chain.then(run, run));
   },
 
-  eligible() {
-    const R = S.room, boot = TABLE_BY_ID[R.id].boot;
-    return R.members.filter(m => m.seatState === 'seated' && m.stack >= boot).slice(0, MAX_HUMAN_SEATS);
+  // Humans first (at least one is required), then any seated test bots.
+  eligible() { const R = S.room; return readyHumans(R).slice(0, MAX_HUMAN_SEATS).concat(readyBots(R)); },
+  canDeal() { return Dealer.booted && !Dealer.halted && Dealer.G && Dealer.G.phase === 'idle' && readyHumans(S.room).length >= 1 && Dealer.eligible().length >= 2; },
+  BOTS: [{ id: 'bot_dealer', name: 'Dealer Bot' }, { id: 'bot_lucky', name: 'Lucky Bot' }],
+  botOn: id => !!(S.room && (S.room.bots || []).find(b => b.botId === id && b.seatState === 'seated')),
+  // Seat or remove a test bot (between hands only).
+  toggleBot(id) {
+    return Dealer.exclusive(async () => {
+      if (!Dealer.G || Dealer.G.phase !== 'idle') return;
+      const R = S.room, cfg = TABLE_BY_ID[R.id], b = Dealer.BOTS.find(x => x.id === id), cur = (R.bots || []).find(x => x.botId === id);
+      const on = !(cur && cur.seatState === 'seated');
+      await Repo.setBot(R.id, id, b.name, on ? 'seated' : 'standing', on ? Math.max(cur ? cur.stack : 0, cfg.boot * ENGINE.BOT_STACK_MULT) : (cur ? cur.stack : 0));
+    });
   },
-  canDeal() { return Dealer.booted && !Dealer.halted && Dealer.G && Dealer.G.phase === 'idle' && Dealer.eligible().length >= 2; },
+  // A bot acts a second or two after its turn starts, like a person would.
+  async botTurn(G, now) {
+    const id = G.turn, p = G.players[id];
+    if (!p || !p.bot) { Dealer.botKey = ''; return false; }
+    const key = G.handNo + '|' + id + '|' + (G.log || []).length;
+    if (Dealer.botKey !== key) { Dealer.botKey = key; Dealer.botDue = now + 1000 + secureRandInt(1500); return true; }
+    if (now < Dealer.botDue) return true;
+    const mv = botMove(G, id, Dealer.hands[id] || [], secureRandInt);
+    if (!mv) return true;
+    const r = applyAction(G, id, mv, now, Dealer.hands);
+    await Dealer.commit(r.ok ? r.G : forcePack(G, id, now));
+    return true;
+  },
 
   /* ---- the single write path for the game ---- */
   // Writes the new state; a finished hand is settled in the same batch.
@@ -1373,7 +1406,8 @@ const Dealer = {
   async deal() {
     if (!Dealer.canDeal()) return;
     const R = S.room, cfg = TABLE_BY_ID[R.id], prev = Dealer.G;
-    const parts = R.members.filter(m => m.seatState === 'seated').map(m => ({ id: m.uid, name: m.name, chips: m.stack }));
+    const parts = R.members.filter(m => m.seatState === 'seated').slice(0, MAX_HUMAN_SEATS).map(m => ({ id: m.uid, name: m.name, chips: m.stack }))
+      .concat(readyBots(R).map(b => ({ id: b.botId, name: b.name, chips: b.stack, bot: true })));
     const r = startHand({ tableId: R.id, boot: cfg.boot, participants: parts, prev, now: Date.now(), rnd: secureRandInt });
     if (r.error) { S.dealerInfo.lastError = r.error; scheduleRender(); return; }
     S.dealerInfo.lastError = '';
@@ -1397,6 +1431,7 @@ const Dealer = {
       scheduleRender(); return;
     }
     if (G.phase === 'playing') {
+      if (await Dealer.botTurn(G, now)) return;
       if (now > G.turnEndsAt) {
         const who = G.turn, nm = G.players[who] && G.players[who].name;
         let N = forcePack(G, who, now);
@@ -1417,7 +1452,7 @@ const Dealer = {
       return;
     }
     // idle
-    if (Dealer.autoDeal && Dealer.eligible().length >= 2) {
+    if (Dealer.autoDeal && Dealer.canDeal()) {
       if (!Dealer.eligSince) Dealer.eligSince = now;
       if (now - Dealer.eligSince >= GAME_CONFIG.autoDealMs) { Dealer.eligSince = 0; await Dealer.deal(); }
     } else Dealer.eligSince = 0;
@@ -1523,7 +1558,8 @@ const ENGINE = {
   SUITS: ['♠', '♥', '♦', '♣'],
   HAND_NAMES: ['', 'High card', 'Pair', 'Color', 'Sequence', 'Pure sequence', 'Trail'],
   STAKE_CAP_MULT: 64,
-  LOG_MAX: 20
+  LOG_MAX: 20,
+  BOT_STACK_MULT: 50
 };
 const GAME_CONFIG = { turnMs: 20000, resultMs: 8000, autoDealMs: 5000 };
 
@@ -1732,7 +1768,9 @@ function settlementPlan(G) {
   const plan = {};
   for (const id of G.order) {
     const p = G.players[id];
-    plan[id] = { stack: p.chips, seatState: (p.chips < G.boot || p.standAfter) ? 'standing' : 'seated' };
+    // Bots are test players with play chips from nowhere: they are topped up and stay seated.
+    if (p.bot) plan[id] = { stack: p.chips < G.boot * 20 ? G.boot * ENGINE.BOT_STACK_MULT : p.chips, seatState: 'seated' };
+    else plan[id] = { stack: p.chips, seatState: (p.chips < G.boot || p.standAfter) ? 'standing' : 'seated' };
   }
   return plan;
 }
@@ -1740,6 +1778,29 @@ function settlementPlan(G) {
 // The between-hands state: keeps who dealt last so the button can move on.
 function idleState(G) {
   return { phase: 'idle', handNo: G.handNo, handId: G.handId, boot: G.boot, stake: 0, maxStake: 0, pot: 0, order: G.order, turn: '', dealerIdx: G.dealerIdx, turnEndsAt: 0, players: {}, result: null, log: G.log || [], dealtAt: 0 };
+}
+
+/* ---- test bot brain ----
+   Deliberately simple and a little random. It only ever picks a move that
+   legalMoves() says is allowed, and falls back to Pack. rnd(n) -> 0..n-1. */
+function botMove(G, id, cards, rnd) {
+  const lm = legalMoves(G, id), r = rnd(100);
+  if (!lm.inHand || !lm.myTurn) return null;
+  const sc = scoreHand(cards), cat = sc[0];
+  if (lm.status === 'blind') {
+    if (lm.see.ok && r < 35) return 'see';
+    if (lm.raise.ok && r >= 92) return 'raise';
+    return lm.chaal.ok ? 'chaal' : 'pack';
+  }
+  const strong = cat >= 3 || (cat === 2 && sc[1] >= 9);
+  if (strong) {
+    if (lm.show.ok && r < 50) return 'show';
+    if (lm.raise.ok && r < 70) return 'raise';
+    return lm.chaal.ok ? 'chaal' : 'pack';
+  }
+  if (r < 45) return 'pack';
+  if (lm.show.ok && r < 55) return 'show';
+  return lm.chaal.ok ? 'chaal' : 'pack';
 }
 //#ENGINE-END
 
