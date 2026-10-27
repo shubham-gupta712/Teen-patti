@@ -1233,6 +1233,50 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .sheetback .roster,.sheetback #roster{display:block}
 .msg.err{background:#4d2230;color:#ffd5dc}
 
+/* ===== 26. Pop-ups sit on the left and leave the table visible; round close button ===== */
+.sheetback{background:transparent;display:flex;align-items:flex-start;justify-content:flex-start;padding:8px;pointer-events:none}
+.sheetback .sheet{pointer-events:auto;width:min(46vw,400px);max-height:calc(var(--vh) - 16px);box-shadow:0 10px 36px rgba(0,0,0,.7)}
+.sheetback .shead{padding:8px 12px 8px 16px;font-size:17px}
+.sheetback .sclose{flex:none;display:grid;place-items:center;width:34px;height:34px;min-width:34px;min-height:34px;max-width:34px;max-height:34px;padding:0;border-radius:50%;aspect-ratio:1/1;line-height:1;font-size:16px}
+/* buy-in: compact panel on the left so the keyboard and the lobby stay visible */
+#buyModal{background:transparent;align-items:flex-start;justify-content:flex-start;padding:8px;pointer-events:none}
+#buyModal .sheet{pointer-events:auto;width:min(56vw,470px);padding:10px 14px 10px;max-height:calc(var(--vh) - 16px)}
+#buyModal .eyebrow{display:inline;font-size:10px;margin-right:8px}
+#buyModal h2{display:inline;font-size:18px;margin:0}
+#buyModal #buyHelp{margin:4px 0 6px;font-size:12px;line-height:1.3}
+#buyModal .quick{margin:0 0 6px}
+#buyModal .quick button{min-height:34px;padding:4px;font-size:12px}
+#buyModal .field{margin:0 0 6px}
+#buyModal .field label{font-size:10px}
+#buyModal .field input{min-height:36px;padding:4px 10px}
+#buyModal .two button{min-height:36px;padding:4px 10px}
+#buyModal .fine{display:none}
+#buyModal .msg{margin:0 0 6px;padding:5px 8px;font-size:12px}
+/* how to play */
+.howto .qh{margin:10px 0 4px;font:700 14px var(--serif);color:#f2c75c}
+.howto .qh:first-child{margin-top:2px}
+.qrow{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center;padding:6px 0;font-size:13px;line-height:1.35;color:#e8dfca}
+.qrow b{color:#fff3c4}
+.qth{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(242,199,92,.14);border:1px solid rgba(214,172,92,.55);color:#f2c75c}
+.qth svg{width:18px;height:18px}
+.qth.chip{background:radial-gradient(circle,#c0392b 0 38%,#f5ead0 39% 48%,#c0392b 49%);border-color:#f5ead0}
+.qth.back{border-radius:6px;width:26px;height:34px;justify-self:center;background:repeating-linear-gradient(45deg,#7a1f1f 0 3px,#5a1414 3px 6px);border:2px solid #f5ead0}
+.qth.x2{font:800 13px var(--serif)}
+.qth.timer{font:800 12px var(--serif)}
+#buyModal .sheet{width:min(62vw,520px);padding:8px 12px}
+#buyModal #buyHelp{margin:2px 0 5px;font-size:11.5px;line-height:1.25}
+#buyModal .buyrow{display:flex;gap:8px;align-items:flex-end}
+#buyModal .buyrow .field{flex:1.2;margin:0}
+#buyModal .buyrow .field label{display:none}
+#buyModal .buyrow .two{flex:1.4;display:flex;gap:6px;margin:0}
+#buyModal .buyrow .two button{flex:1;min-height:36px;padding:2px 6px;font-size:13px}
+#buyModal .field input{min-height:36px;font-size:16px}
+#buyModal .quick{margin:0 0 5px}
+#buyModal .quick button{min-height:30px}
+.tbstage .tbexit{position:absolute;z-index:6;transform:translate(-50%,-50%);width:calc(var(--u) * 92);height:calc(var(--u) * 92);min-width:34px;min-height:34px;padding:0;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 50% 35%,#2a1a0d,#120a05);border:max(1.5px,calc(var(--u) * 4)) solid rgba(214,172,92,.9);color:#f1cf94;box-shadow:0 calc(var(--u) * 4) calc(var(--u) * 10) rgba(0,0,0,.55)}
+.tbstage .tbexit .ico{width:max(17px,calc(var(--u) * 44));height:max(17px,calc(var(--u) * 44))}
+.tbstage .tbexit:active{filter:brightness(1.3)}
+
 </style>
 </head>
 <body>
@@ -1251,9 +1295,9 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
     <h2 id="buyHead">Take a seat</h2>
     <p class="muted" id="buyHelp" style="font-size:13px"></p>
     <div class="quick" id="buyQuick"></div>
-    <div class="field"><label for="buyInput">YOUR BUY-IN (PLAY CHIPS)</label><input id="buyInput" type="number" inputmode="numeric" min="0" step="1"></div>
+    <div class="buyrow"><div class="field"><label for="buyInput">YOUR BUY-IN (PLAY CHIPS)</label><input id="buyInput" type="number" inputmode="numeric" min="0" step="1"></div>
+    <div class="two"><button class="btn-ghost" id="buyCancel" type="button">Cancel</button><button class="btn-primary" id="buySend" type="button">Take seat</button></div></div>
     <div class="msg err" id="buyErr" role="alert" hidden></div>
-    <div class="two"><button class="btn-ghost" id="buyCancel" type="button">Cancel</button><button class="btn-primary" id="buySend" type="button">Take seat</button></div>
     <p class="fine" style="text-align:center">Play chips only. Your buy-in comes out of your wallet and returns when you leave.</p>
   </div>
 </div>
@@ -2055,7 +2099,7 @@ function removeBlockReason(R, m) {
 }
 function leaveBlockReason(R, me) {
   if (!me) return '';
-  if (me.seatState === 'seated' && liveHand(R)) return 'A hand is in progress. Stand up first, then leave once it ends.';
+  if (me.seatState === 'seated' && liveHand(R)) return 'A hand is in progress. You can leave once it ends.';
   return '';
 }
 
@@ -2391,10 +2435,10 @@ function renderFelt(R, me, msgs) {
   const online = hostLive(R.doc), seated = !!me && me.seatState === 'seated';
   const stage = h('div', { class: 'tbstage', id: 'tbStage' });
 
-  /* top left: the crown opens the menu; the pill says which room this is and how many seats are taken */
+  /* top left: the crown is replaced by an exit button to the lobby; the pill says which room this is and how many seats are taken */
   stage.appendChild(S.isAdmin
-    ? h('button', { id: 'backBtn', class: 'tbhit', type: 'button', 'aria-label': 'Back to the dashboard', style: tbBox(46, 18, 134, 98), onclick: () => { location.hash = '#/admin'; } })
-    : h('button', { id: 'menuBtn', class: 'tbhit', type: 'button', 'aria-label': 'Menu', style: tbBox(46, 18, 134, 98), onclick: () => Sheets.menu() }));
+    ? h('button', { id: 'backBtn', class: 'tbexit', type: 'button', 'aria-label': 'Back to the dashboard', style: tbAt(90, 58), onclick: () => { location.hash = '#/admin'; } }, icon('logout'))
+    : h('button', { id: 'leaveBtn', class: 'tbexit', type: 'button', 'aria-label': 'Exit to the lobby', style: tbAt(90, 58), onclick: () => handleLeave() }, icon('logout')));
   stage.appendChild(h('div', { class: 'tbpatch tbroom', style: tbBox(144, 27, 326, 88) },
     h('div', { class: 'r1', text: 'Room: ' + cfg.room }),
     h('div', { class: 'r2' }, h('i', { class: 'dot' + (online ? ' on' : '') }), h('span', { text: seats.length + '/6 Seats' }))));
@@ -3385,7 +3429,7 @@ const Sheets = {
     Sheets.close();
     const back = h('div', { class: 'sheetback', id: id, onclick: e => { if (e.target === back) Sheets.close(); } },
       h('div', { class: 'sheet', role: 'dialog', 'aria-label': title },
-        h('div', { class: 'shead' }, h('b', { text: title }), h('button', { type: 'button', class: 'sclose', id: 'sheetClose', 'aria-label': 'Close', text: '✕', onclick: Sheets.close })),
+        h('div', { class: 'shead' }, h('b', { text: title }), h('button', { type: 'button', class: 'sclose', id: 'sheetClose', 'aria-label': 'Close', text: '\u2715', onclick: Sheets.close })),
         h('div', { class: 'sbodyx' }, body)));
     document.body.appendChild(back); Sheets.el = back;
   },
@@ -3407,21 +3451,26 @@ const Sheets = {
       h('div', { class: 'hrk', text: String(i + 1) }),
       h('div', { class: 'hmain' }, h('b', { text: r[0] }), h('span', { text: r[1] }), h('em', { text: r[3] })),
       h('div', { class: 'hcards' }, r[2].map(Sheets.card)))));
+    const th = (cls, inner) => h('span', { class: 'qth ' + cls }, inner);
+    const row = (cls, inner, ...txt) => h('div', { class: 'qrow' }, th(cls, inner), h('div', {}, ...txt));
+    const B = t => h('b', { text: t });
     const how = h('div', { class: 'howto' },
-      h('h4', { text: 'The rules' }),
-      h('ol', {}, [
-        'Everyone puts in the boot to start the hand and gets three cards face down.',
-        'On your turn you can play Blind (without looking) or Seen (after you look at your cards).',
-        'Chaal keeps you in. Blind pays the stake, Seen pays double the stake. Raise doubles the stake.',
-        'Blind play is limited: after two blind moves your cards turn face up.',
-        'Once nobody is blind, betting runs in rounds (chaal or raise). After three completed rounds the table shows all hands and the best hand wins.',
-        'Pack folds your hand and you lose what you put in. Seeing your cards is free.',
-        'When only two players are left, either can ask for a Show. The better hand takes the pot.',
-        'Short of chips? Tap the + next to your chips to add more from your wallet between hands.',
-        'If everyone else packs, the last player wins without showing.',
-        'You have 30 seconds a turn. Miss two turns in a row and you are stood up.'
-      ].map(t => h('li', { text: t }))),
-      h('h4', { text: 'Winning hands, best to lowest' }));
+      h('div', { class: 'qh', text: 'Quick rules' }),
+      h('div', { class: 'qh', text: 'Setup' }),
+      row('chip', null, B('Pay the boot; '), 'get 3 cards face-down.'),
+      row('timer', '30s', B('30s per turn '), '(miss 2 = removed).'),
+      h('div', { class: 'qh', text: 'Turn actions' }),
+      row('', icon('eyeOff'), B('Blind: '), 'play without looking (pays normal stake). Max 2 blind moves, then cards flip face-up.'),
+      row('', icon('eye'), B('Seen: '), 'look for free, play (pays double stake).'),
+      row('x2', '2x', B('Raise: '), 'double the current stake.'),
+      row('back', null, B('Pack: '), 'fold and lose your chips.'),
+      h('div', { class: 'qh', text: 'Winning / ending' }),
+      row('', icon('crown'), B('Last player left '), 'wins instantly if everyone else folds.'),
+      row('', icon('users'), B('2 players left: '), 'either can ask for a Show to compare hands.'),
+      row('', icon('trophy'), 'After ', B('3 complete rounds '), 'with no blind players, all hands show. Best hand wins.'),
+      h('div', { class: 'qh', text: 'Chips' }),
+      row('', icon('plus'), 'Tap ', B('+'), ' next to your chips between hands to add more.'),
+      h('div', { class: 'qh', text: 'Winning hands, best to lowest' }));
     Sheets.open('infoSheet', 'How to play', h('div', {}, how, table, h('p', { class: 'hnote', text: 'Same hand in a Show? The pot is split. Play chips only, no real money.' })));
   },
   topup() {
@@ -3447,14 +3496,6 @@ const Sheets = {
       h('div', { class: 'quickrow' }, opts.map(v => h('button', { type: 'button', class: 'btn-secondary', text: '+' + fmt(v), onclick: () => { input.value = v; } }))),
       h('div', { class: 'field' }, h('label', { for: 'topupInput', text: 'CHIPS TO ADD' }), input),
       err, go));
-  },
-  menu() {
-    const row = (id, label, fn) => h('button', { type: 'button', id, class: 'setrow', onclick: fn }, h('span', { text: label }));
-    Sheets.open('menuSheet', 'Menu', h('div', { class: 'setlist' },
-      row('leaveBtn', 'Back to the lobby', () => { Sheets.close(); handleLeave(); }),
-      row('menuInfo', 'How to play', () => Sheets.info()),
-      row('menuSettings', 'Settings', () => Sheets.settings()),
-      h('p', { class: 'hnote', text: 'Version ' + BUILD_TAG })));
   },
   player(sp) {
     const isMe = !!(S.user && sp.id === S.user.uid);
