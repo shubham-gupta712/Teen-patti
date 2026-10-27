@@ -919,6 +919,9 @@ body[data-screen=lobby]{background:linear-gradient(180deg,rgba(255,248,232,.9),r
 .v3 .showcall b{font:800 13px/1.1 var(--serif);letter-spacing:1.5px}.v3 .showcall span{font:600 8.5px system-ui;letter-spacing:.3px}
 .tscreen.v3 .v3s.empty .plate{width:52px;left:-26px}
 .v2 .vbuild{margin:12px 0 0;text-align:center;font:10px system-ui;color:#7d6c48}
+.myseatbar{display:flex;align-items:center;gap:10px;justify-content:space-between;margin:10px 0;padding:10px 12px;border-radius:14px;background:#fff3cf;border:1px solid #d9b862;color:#2c2010}
+.myseatbar b{display:block;font-size:14px}.myseatbar span{display:block;font-size:12px;color:#6b5a40;margin-top:2px}
+.myseatbar .btn-small{flex:none}
 
 </style>
 </head>
@@ -1676,6 +1679,9 @@ function renderLobby() {
   return h('div', {},
     profile,
     h('div', { class: 'row' }, h('div', {}, h('div', { class: 'eyebrow', text: 'Live tables' }), h('h2', { text: 'Choose your boot' }))),
+    p.tableId && TABLE_BY_ID[p.tableId] ? h('div', { class: 'myseatbar', id: 'mySeatBar' },
+      h('div', {}, h('b', { text: 'You have a seat at ' + tableName(TABLE_BY_ID[p.tableId]) }), h('span', { text: 'Your chips are on that table. Return to play or leave it from the menu.' })),
+      h('button', { class: 'btn-small', type: 'button', id: 'returnSeat', text: 'Return', onclick: () => { S.forceLobby = false; go(); } })) : null,
     h('p', { class: 'muted', text: 'Take a seat instantly, any time. Pick a buy-in, then sit down. A friendly bot plays with you until another player joins.' }),
     h('div', { class: 'table-grid', id: 'tableGrid' }, tiles));
 }
@@ -2247,6 +2253,7 @@ function handleRename() {
 function openBuyIn(tableId) {
   const cfg = TABLE_BY_ID[tableId], p = S.profile;
   if (!cfg || !p) return;
+  if (p.tableId && TABLE_BY_ID[p.tableId] && p.tableId !== tableId) { toast('You already have a seat at ' + tableName(TABLE_BY_ID[p.tableId]) + '. Return to it, then use the menu to go back to the lobby and leave.', 'err'); return; }
   S.buy = { tableId };
   $('buyTitle').textContent = tableName(cfg) + ' table';
   $('buyHelp').textContent = 'Choose how many play chips to bring. Allowed: ' + fmt(cfg.min) + ' to ' + fmt(cfg.max) + '. You have ' + fmt(p.chips) + '.';
