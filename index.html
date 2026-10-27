@@ -672,7 +672,7 @@ body[data-screen=lobby]{background:linear-gradient(180deg,rgba(255,248,232,.9),r
 .v2 .vphoto{position:relative;width:100%;height:max(min(calc(100dvh - 186px),calc(min(100vw,520px) * 1.6)),calc(min(100vw,520px) * 1.25));background:var(--i-photo) center bottom/cover no-repeat;overflow:hidden}
 .v2 .vstage{position:absolute;inset:0}
 /* header */
-.vhead{position:absolute;top:0;left:0;right:0;z-index:8;display:flex;gap:6px;align-items:stretch;padding:max(8px,env(safe-area-inset-top)) 8px 0}
+.vhead{position:relative;z-index:8;display:flex;gap:6px;align-items:stretch;padding:max(8px,env(safe-area-inset-top)) 8px 8px;background:linear-gradient(180deg,#1b1108,#0d0905)}
 .vbrand,.vtable,.vconn,.vicon{height:42px;border-radius:12px;border:1.5px solid rgba(233,195,106,.7);background:linear-gradient(180deg,rgba(40,26,12,.88),rgba(14,9,4,.9));box-shadow:0 3px 8px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.12);color:#f6e7b8}
 .vbrand{width:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px;min-height:0}
 .vbrand img{width:24px;height:auto;display:block}.vbrand span{font:800 7.5px/1 system-ui;letter-spacing:.8px}
@@ -752,7 +752,7 @@ body[data-screen=lobby]{background:linear-gradient(180deg,rgba(255,248,232,.9),r
 .avimg{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;-webkit-user-drag:none;user-select:none}
 .tscreen.v2.pick{background:#0d0905;display:block;overflow-x:hidden;overflow-y:auto}
 .v2 .tfelt.pickview{flex:none}
-.v2 .tview{position:relative;width:100%;height:max(min(calc(100dvh - 186px),calc(min(100vw,520px) * 1.6)),calc(min(100vw,520px) * 1.25));background:var(--i-topview) center/cover no-repeat;overflow:hidden}
+.v2 .tview{position:relative;width:100%;height:max(min(calc(100dvh - 250px),calc(min(100vw,520px) * 1.6)),calc(min(100vw,520px) * 1.25));background:var(--i-topview) center/cover no-repeat;overflow:hidden}
 .v2 .tvpot{position:absolute;left:50%;top:54.6%;transform:translate(-50%,-50%);width:30%;padding:4px 6px 5px;border-radius:12px;background:linear-gradient(180deg,rgba(40,27,12,.94),rgba(12,8,3,.96));border:1.5px solid rgba(233,195,106,.8);box-shadow:0 3px 8px rgba(0,0,0,.6);text-align:center;z-index:3}
 .v2 .tvpot .potlabel{margin:0;font:700 9px/1 system-ui;letter-spacing:2px;color:#d9c48a}
 .v2 .tvpot .potnum{margin:2px 0 0;font:700 22px/1.05 var(--serif);color:#fff3c9;text-shadow:none}
@@ -914,6 +914,10 @@ body[data-screen=lobby]{background:linear-gradient(180deg,rgba(255,248,232,.9),r
 .v3 .v3round{position:absolute;transform:translate(-50%,-50%);width:30px;height:30px;padding:0;border-radius:50%;display:grid;place-items:center;color:#f2d27a;background:linear-gradient(180deg,#2b1e0f,#130c05);border:1px solid rgba(233,195,106,.6);min-height:0;z-index:7;box-shadow:0 1px 4px rgba(0,0,0,.6)}
 .v3 .v3round svg{width:18px;height:18px}
 .v3 .v3round:active{filter:brightness(1.25)}
+
+.v3 .showcall{margin-top:4px;padding:3px 12px 4px;border-radius:10px;background:linear-gradient(180deg,#f6d77f,#c79a35);color:#2a1a02;text-align:center;box-shadow:0 3px 8px rgba(0,0,0,.6);display:grid}
+.v3 .showcall b{font:800 13px/1.1 var(--serif);letter-spacing:1.5px}.v3 .showcall span{font:600 8.5px system-ui;letter-spacing:.3px}
+.tscreen.v3 .v3s.empty .plate{width:52px;left:-26px}
 
 </style>
 </head>
@@ -1972,7 +1976,6 @@ function renderHeadV2(R, cfg, me, ready, online, live) {
         h('span', { class: 'sr', id: 'tableState', text: online ? 'Table live' : 'Connecting…' }),
         live ? h('span', { class: 'sr', id: 'handNo', text: 'Hand ' + G.handNo }) : null,
         me && ready ? h('span', { class: 'sr', id: 'mySeatState', text: seated ? 'Seated' : 'Standing' }) : null)),
-    h('div', { class: 'vconn' + (online ? '' : ' off'), 'aria-label': online ? 'Table live' : 'Connecting' }, bars, h('b', { text: online ? 'LIVE' : '…' })),
     h('button', { id: 'setBtn', class: 'vicon', type: 'button', 'aria-label': 'Settings', text: '⚙', onclick: () => Sheets.settings() }),
     h('button', { id: 'infoBtn', class: 'vicon', type: 'button', 'aria-label': 'How to play', text: 'i', onclick: () => Sheets.info() }));
 }
@@ -1980,7 +1983,7 @@ function renderHeadV2(R, cfg, me, ready, online, live) {
 /* ---- the table screen: the supplied artwork is the whole screen; everything live is drawn on its outlines ---- */
 // Positions are in pixels of the 1086 x 1448 artwork and are turned into percentages of the picture.
 const V3_AV  = { TL: [143, 515], TR: [940, 515], ML: [101, 722], MR: [984, 722], BL: [228, 920], BR: [857, 920], ME: [541, 1030] };   // avatar centres
-const V3_GRP = { TL: [143, 657], TR: [940, 657], ML: [101, 864], MR: [984, 864], BL: [228, 1062], BR: [857, 1062], ME: [543, 1205] };  // the three card slots of each seat
+const V3_GRP = { TL: [318, 598], TR: [768, 598], ML: [276, 806], MR: [810, 806], BL: [396, 1004], BR: [690, 1004], ME: [543, 1205] };  // the three card slots of each seat
 const V3_ORDER = { 1: ['TR'], 2: ['TL', 'TR'], 3: ['TL', 'TR', 'ML'], 4: ['TL', 'TR', 'ML', 'MR'], 5: ['TL', 'TR', 'ML', 'MR', 'BL'] };
 /* the artwork is 1086 wide; its felt band (y 600-1130) is stretched by 200 px, so every y goes through V3_Y */
 const V3_Y0 = 600, V3_Y1 = 1130, V3_EX = 200, V3_H = 1448 + V3_EX;
@@ -2029,7 +2032,7 @@ function renderFeltV3(R, me, msgs) {
   const seats = seatList(R, G, live);
   const meSeat = me && me.seatState === 'seated' ? seats.find(x => x.id === me.uid) || null : null;
   const reveal = (result && G.result.reveal) || {}, winners = result ? G.result.winners : [];
-  const showMoves = !!(mine && playing);
+  const showMoves = !!(mine && playing && G.turn);
   const ctx = { R, G, me, uid, live, playing, reveal, winners };
   const others = seats.filter(x => !(me && x.id === me.uid)).slice(0, 5);
   const slots = V3_ORDER[others.length] || [];
@@ -2042,7 +2045,7 @@ function renderFeltV3(R, me, msgs) {
     : h('button', { id: 'menuBtn', class: 'hit', type: 'button', 'aria-label': 'Menu', style: px(45, 62) + ';--w:46px;--h:46px', onclick: () => Sheets.menu() }));
   stage.appendChild(h('div', { class: 'v3title' },
     h('div', { class: 'tname', id: 'roomTitle', text: tableName(cfg) }),
-    h('div', { class: 'vsub' }, h('span', { class: 'dot' + (online ? ' on' : '') }), h('span', { text: online ? 'Table live' : 'Connecting…' }),
+    h('div', { class: 'vsub' }, h('span', { class: 'dot' + (online ? ' on' : '') }), h('span', { text: online ? 'Boot ' + rupee(cfg.boot) : 'Connecting…' }),
       h('span', { class: 'sr', id: 'tableState', text: online ? 'Table live' : 'Connecting…' }),
       live ? h('span', { class: 'sr', id: 'handNo', text: 'Hand ' + G.handNo }) : null,
       me ? h('span', { class: 'sr', id: 'mySeatState', text: seated ? 'Seated' : 'Standing' }) : null)));
@@ -2063,6 +2066,7 @@ function renderFeltV3(R, me, msgs) {
   if (result) centre.appendChild(h('div', { id: 'resultCard', role: 'status' },
     h('div', { class: 'winbanner', id: 'winBanner', text: winners.map(id => G.players[id].name).join(' & ') }),
     h('div', { class: 'whyline', id: 'resultWhy', text: G.result.reason === 'fold' ? 'Everyone else packed' : G.result.rank })));
+  else if (live && !G.turn) centre.appendChild(h('div', { class: 'showcall', role: 'status', id: 'showCall' }, h('b', { text: 'SHOW!' }), h('span', { text: 'Cards are being opened…' })));
   else if (live) centre.appendChild(h('div', { class: 'stakeline' }, 'Stake ', h('b', { id: 'stakeAmt', text: fmt(G.stake) })));
   else centre.appendChild(h('p', { id: 'idleNote', class: 'idletext', text: !online ? 'Connecting to the table…' : 'The next hand is about to be dealt.' }));
   stage.appendChild(centre);
@@ -2421,13 +2425,13 @@ const Hosting = {
 const Dealer = {
   sc: null, tableId: null, active: false, queue: [], running: false, seen: new Set(), lastSeated: -1, localN: 0,
   G: null, hands: {}, booted: false, chain: Promise.resolve(), wchain: Promise.resolve(),
-  resultAt: 0, eligSince: 0, lastCommitAt: 0, botKey: '', botDue: 0, botOp: { seat: null, at: 0 }, missed: {},
+  resultAt: 0, eligSince: 0, lastCommitAt: 0, pending: null, pendingAt: 0, releasing: false, botKey: '', botDue: 0, botOp: { seat: null, at: 0 }, missed: {},
 
   start(tableId) {
     if (Dealer.sc) Scopes.close(Dealer.sc);
     Dealer.tableId = tableId; Dealer.active = true;
     Dealer.seen = new Set(); Dealer.queue = []; Dealer.lastSeated = -1;
-    Dealer.G = null; Dealer.hands = {}; Dealer.booted = false; Dealer.missed = {};
+    Dealer.G = null; Dealer.hands = {}; Dealer.booted = false; Dealer.missed = {}; Dealer.pending = null;
     Dealer.resultAt = 0; Dealer.eligSince = 0; Dealer.lastCommitAt = 0; Dealer.botKey = ''; Dealer.botOp = { seat: null, at: 0 };
     Dealer.chain = Promise.resolve(); Dealer.wchain = Promise.resolve();
     S.dealerInfo = { processed: 0, lastError: '' };
@@ -2551,7 +2555,7 @@ const Dealer = {
     const id = G.turn, p = G.players[id];
     if (!p || !p.bot) { Dealer.botKey = ''; return false; }
     const key = G.handNo + '|' + id + '|' + (G.log || []).length;
-    if (Dealer.botKey !== key) { Dealer.botKey = key; Dealer.botDue = Math.max(now, (G.dealtAt || 0) + GAME_CONFIG.dealPadMs) + 700 + secureRandInt(1100); return true; }
+    if (Dealer.botKey !== key) { Dealer.botKey = key; Dealer.botDue = Math.max(now, (G.dealtAt || 0) + GAME_CONFIG.dealPadMs) + GAME_CONFIG.botMs + secureRandInt(1600); return true; }
     if (now < Dealer.botDue) return true;
     const mv = botMove(G, id, Dealer.hands[id] || [], secureRandInt);
     if (!mv) return true;
@@ -2578,6 +2582,15 @@ const Dealer = {
   },
   commit(G, hands) {
     const t = Dealer.tableId;
+    /* A show: first the table stands still on "show called" with every card face down, then the cards turn over. */
+    if (G.phase === 'result' && G.result && G.result.reason === 'show' && !Dealer.releasing && GAME_CONFIG.showHoldMs > 0) {
+      const H = cloneState(G), now = Date.now();
+      Object.keys(G.result.shares || {}).forEach(id => { H.players[id].chips -= G.result.shares[id]; });
+      H.pot = G.result.amount; H.phase = 'playing'; H.result = null; H.turn = ''; H.turnEndsAt = now + GAME_CONFIG.showHoldMs + 120000;
+      H.log = (G.log || []).slice(0, -1);
+      Dealer.pending = G; Dealer.pendingAt = now + GAME_CONFIG.showHoldMs;
+      G = H;
+    }
     Dealer.G = G; if (hands) Dealer.hands = hands;
     Dealer.lastCommitAt = Date.now();
     if (G.phase === 'result') Dealer.resultAt = Date.now() + GAME_CONFIG.resultMs;
@@ -2607,6 +2620,14 @@ const Dealer = {
     const G = Dealer.G, now = Date.now();
     Sweep.tick();
     if (G.phase === 'playing') {
+      if (!G.turn && !Dealer.pending && Dealer.hands && G.order && G.order.every(k => G.players[k].status === 'packed' || (Dealer.hands[k] && Dealer.hands[k].length === 3))) {
+        // a show was called and the host reloaded before the cards were turned: finish it
+        const N = cloneState(G); showdown(N, Dealer.hands); Dealer.pending = N; Dealer.pendingAt = now + 1500;
+      }
+      if (Dealer.pending) {
+        if (now >= Dealer.pendingAt) { const P = Dealer.pending; Dealer.pending = null; Dealer.releasing = true; try { Dealer.commit(P); } finally { Dealer.releasing = false; } }
+        return;
+      }
       if (await Dealer.botTurn(G, now)) return;
       if (now > G.turnEndsAt) {
         const who = G.turn, nm = G.players[who] && G.players[who].name;
@@ -2680,6 +2701,7 @@ const Dealer = {
     // and is stood up in the same batch that settles the hand.
     async stand(member, a, R) {
       const G = Dealer.G;
+      if (Dealer.pending) return;
       if (inHand(G, member.uid)) {
         let N = forcePack(G, member.uid, Date.now(), Dealer.hands);
         N.players[member.uid].standAfter = true;
@@ -2702,7 +2724,7 @@ const Dealer = {
   // (the player's screen already shows why they were not available).
   async play(member, a, type) {
     const G = Dealer.G;
-    if (!G || G.phase !== 'playing' || a.handNo !== G.handNo) return;
+    if (!G || G.phase !== 'playing' || a.handNo !== G.handNo || Dealer.pending) return;
     const r = applyAction(G, member.uid, type, Date.now(), Dealer.hands);
     if (!r.ok) { console.warn('[TeenPatti] rejected', type, member.uid, r.error); return; }
     Dealer.missed[member.uid] = 0;
@@ -3076,7 +3098,7 @@ const ENGINE = {
   LOG_MAX: 20,
   BOT_STACK_MULT: 50
 };
-const GAME_CONFIG = { turnMs: 30000, resultMs: 6000, autoDealMs: 3000, maxMissed: 2, dealPadMs: 2600 };
+const GAME_CONFIG = { turnMs: 30000, resultMs: 7000, autoDealMs: 4000, maxMissed: 2, dealPadMs: 2600, showHoldMs: 4000, botMs: 1500 };
 
 /* ---- deck and randomness ---- */
 function secureRandInt(n) {
