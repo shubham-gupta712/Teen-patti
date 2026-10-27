@@ -918,6 +918,7 @@ body[data-screen=lobby]{background:linear-gradient(180deg,rgba(255,248,232,.9),r
 .v3 .showcall{margin-top:4px;padding:3px 12px 4px;border-radius:10px;background:linear-gradient(180deg,#f6d77f,#c79a35);color:#2a1a02;text-align:center;box-shadow:0 3px 8px rgba(0,0,0,.6);display:grid}
 .v3 .showcall b{font:800 13px/1.1 var(--serif);letter-spacing:1.5px}.v3 .showcall span{font:600 8.5px system-ui;letter-spacing:.3px}
 .tscreen.v3 .v3s.empty .plate{width:52px;left:-26px}
+.v2 .vbuild{margin:12px 0 0;text-align:center;font:10px system-ui;color:#7d6c48}
 
 </style>
 </head>
@@ -1110,6 +1111,8 @@ function setConnection(online) {
   c.textContent = online ? '● Connected' : '● Offline';
   c.className = 'conn' + (online ? '' : ' off');
 }
+
+const BUILD_TAG = '2026-10-27 e';
 
 /* ==========================================================================
    SECTION 12 - FIREBASE INITIALIZATION
@@ -1416,7 +1419,8 @@ async function onAuthChange(user) {
   closeAllScopes();
   S.user = user; S.profile = null; S.isAdmin = false; S.loadError = '';
   S.room = null; S.rooms = {}; S.roomsLoaded = {}; S.route = { name: 'loading' };
-  if (!user) { S.authReady = true; go(); return; }
+  if (!user) { try { sessionStorage.removeItem('tp_uid'); } catch (e) { /* private mode */ } S.forceLobby = false; S.authReady = true; go(); return; }
+  { let seen = ''; try { seen = sessionStorage.getItem('tp_uid') || ''; sessionStorage.setItem('tp_uid', user.uid); } catch (e) { /* private mode */ } S.forceLobby = seen !== user.uid; }   // a fresh sign-in starts in the lobby; a reload in the same tab goes back to your table
   S.isAdmin = user.uid === ADMIN_UID;
   if (S.isAdmin) { S.authReady = true; go(); return; }
   S.authReady = false; go();
@@ -1460,7 +1464,7 @@ function desiredRoute() {
     return { name: 'admin' };
   }
   if (!S.profile) return { name: 'loading' };
-  if (S.profile.tableId && TABLE_BY_ID[S.profile.tableId]) return { name: 'table', tableId: S.profile.tableId };
+  if (S.profile.tableId && TABLE_BY_ID[S.profile.tableId] && !S.forceLobby) return { name: 'table', tableId: S.profile.tableId };
   return { name: 'lobby' };
 }
 
@@ -1686,10 +1690,11 @@ function tableTile(t) {
   else {
     usable = true;
     const n = hostLive(doc) ? (doc.seated || 0) : 0;
-    badge = h('span', { class: 'badge on', text: 'Open' });
-    meta = n ? n + ' seated now' : 'Seats free \u00B7 play anytime';
+    const mine = S.profile && S.profile.tableId === t.id;
+    badge = h('span', { class: 'badge on', text: mine ? 'Your seat' : 'Open' });
+    meta = mine ? 'Tap to return to your seat' : (n ? n + ' seated now' : 'Seats free \u00B7 play anytime');
   }
-  return h('button', { class: 'tile', type: 'button', 'data-table': t.id, disabled: !usable, onclick: () => openBuyIn(t.id) },
+  return h('button', { class: 'tile', type: 'button', 'data-table': t.id, disabled: !usable, onclick: () => { if (S.profile && S.profile.tableId === t.id) { S.forceLobby = false; go(); } else openBuyIn(t.id); } },
     h('div', { class: 'timg', style: 'background-image:var(--i-' + (TILE_IMG[t.id] || 't_dhaba') + ')' }),
     h('div', { class: 'top' }, h('strong', { text: tableName(t) }), badge),
     h('div', { class: 'tier', text: t.tier }),
@@ -2081,9 +2086,10 @@ function renderFeltV3(R, me, msgs) {
   /* your cards, on your three slots */
   if (mine) {
     const hd = R.myHand && R.myHand.handId === G.handId ? R.myHand.cards : null;
-    const hidden = mine.status === 'blind' || !hd;
+    const rv = result && G.result.reveal && G.result.reveal[uid];   // at a show everyone's cards turn over, yours too
+    const hidden = !rv && (mine.status === 'blind' || !hd);
     const canSee = playing && mine.status === 'blind';
-    stage.appendChild(h('div', { class: 'v3hand' + (canSee ? ' tappable' : ''), id: 'myCards', style: px(...V3_GRP.ME), onclick: canSee ? () => handleGameAction('see') : null }, [0, 1, 2].map(i => cardNode(hd && !hidden ? hd[i] : '', hidden))));
+    stage.appendChild(h('div', { class: 'v3hand' + (canSee ? ' tappable' : ''), id: 'myCards', style: px(...V3_GRP.ME), onclick: canSee ? () => handleGameAction('see') : null }, [0, 1, 2].map(i => cardNode(rv ? rv[i] : hd && !hidden ? hd[i] : '', hidden))));
   }
 
   /* the action row, drawn on the artwork's own buttons */
@@ -2155,7 +2161,8 @@ function renderSeatPicker(R, me, msgs) {
       me ? h('div', { class: 'tmine' }, h('span', { text: 'Your chips here' }), h('b', { text: rupee(me.stack) }), h('button', { id: 'addChipsBtn', class: 'addchip', type: 'button', 'aria-label': 'Add chips', text: '+', onclick: () => Sheets.topup() })) : null),
     h('p', { id: 'idleNote', class: 'thint', text: !hostLive(R.doc) ? 'Connecting to the table\u2026' : 'Tap Sit Down on any empty seat to join the next hand.' }),
     msgs.length ? h('div', { class: 'vnotes' }, msgs) : null,
-    logEl);
+    logEl,
+    h('p', { class: 'vbuild', text: 'Version ' + BUILD_TAG }));
   return h('div', { class: 'tfelt pickview', id: 'gameCard' }, view, info);
 }
 
@@ -2266,7 +2273,7 @@ async function submitBuyIn() {
     $('buyErr').textContent = 'Buy-in must be a whole number from ' + fmt(cfg.min) + ' to ' + fmt(cfg.max) + '.';
     $('buyErr').hidden = false; return;
   }
-  S.busy.join = true; setBtnBusy('buySend', true); $('buyErr').hidden = true;
+  S.busy.join = true; setBtnBusy('buySend', true); $('buyErr').hidden = true; S.forceLobby = false;
   try {
     const result = await Repo.joinTable(S.user.uid, tableId, n);
     closeBuyIn();
@@ -3030,7 +3037,8 @@ const Sheets = {
     Sheets.open('menuSheet', 'Menu', h('div', { class: 'setlist' },
       row('leaveBtn', 'Back to the lobby', () => { Sheets.close(); handleLeave(); }),
       row('menuInfo', 'How to play', () => Sheets.info()),
-      row('menuSettings', 'Settings', () => Sheets.settings())));
+      row('menuSettings', 'Settings', () => Sheets.settings()),
+      h('p', { class: 'hnote', text: 'Version ' + BUILD_TAG })));
   },
   player(sp) {
     const isMe = !!(S.user && sp.id === S.user.uid);
