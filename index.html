@@ -1277,6 +1277,53 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .tbstage .tbexit .ico{width:max(17px,calc(var(--u) * 44));height:max(17px,calc(var(--u) * 44))}
 .tbstage .tbexit:active{filter:brightness(1.3)}
 
+/* ===== 27. Sideshow, tip, auto-play, card peel, battle ===== */
+.tbstage .tbtip{position:absolute;z-index:6;transform:translate(-50%,-50%);display:flex;align-items:center;gap:calc(var(--u) * 6);min-height:0;padding:calc(var(--u) * 8) calc(var(--u) * 16) calc(var(--u) * 8) calc(var(--u) * 12);border-radius:99px;background:linear-gradient(180deg,#f6d77a,#b98a24);color:#2a1a05;border:max(1px,calc(var(--u) * 2.5)) solid #fff0b8;box-shadow:0 calc(var(--u) * 4) calc(var(--u) * 10) rgba(0,0,0,.55);font:800 max(9px,calc(var(--u) * 21))/1 system-ui;letter-spacing:.5px}
+.tbtip .ico{width:max(12px,calc(var(--u) * 28));height:max(12px,calc(var(--u) * 28))}
+.tbtip:active{filter:brightness(1.15)}
+.tbtip{animation:tipglow 2.6s ease-in-out infinite}
+@keyframes tipglow{0%,100%{box-shadow:0 4px 10px rgba(0,0,0,.55)}50%{box-shadow:0 0 14px 3px rgba(246,215,122,.7)}}
+.tipdealer{display:flex;gap:10px;align-items:center}
+.tipav{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#2c1d0e;color:#f2c75c;border:2px solid #d6ac5c}.tipav .ico{width:24px;height:24px}
+.tbauto{position:absolute;z-index:7;transform:translate(-50%,-50%);display:flex;align-items:center;gap:calc(var(--u) * 8);padding:calc(var(--u) * 7) calc(var(--u) * 16) calc(var(--u) * 7) calc(var(--u) * 10);border-radius:99px;background:rgba(18,10,5,.82);border:max(1px,calc(var(--u) * 2.5)) solid rgba(214,172,92,.7);color:#f1cf94;font:700 max(9px,calc(var(--u) * 20))/1 system-ui;pointer-events:auto;cursor:pointer;white-space:nowrap}
+.tbauto input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.tbauto .bx{display:grid;place-items:center;width:calc(var(--u) * 28);height:calc(var(--u) * 28);min-width:14px;min-height:14px;border-radius:calc(var(--u) * 7);border:max(1px,calc(var(--u) * 2.5)) solid #d6ac5c;background:#120a05;color:transparent}
+.tbauto .bx .ico{width:80%;height:80%}
+.tbauto.on{background:rgba(46,100,60,.85);border-color:#2ee59d;color:#d9ffe9}
+.tbauto.on .bx{background:#2ee59d;color:#08301d;border-color:#2ee59d}
+.tbside-ask{position:absolute;z-index:9;transform:translate(-50%,-50%);width:calc(var(--u) * 560);padding:calc(var(--u) * 16) calc(var(--u) * 22);border-radius:calc(var(--u) * 22);background:linear-gradient(180deg,#27190c,#130b05);border:max(1.5px,calc(var(--u) * 3.5)) solid #d6ac5c;box-shadow:0 10px 30px rgba(0,0,0,.7),0 0 24px rgba(246,215,122,.25);text-align:center;pointer-events:auto;color:#f3e9d0;animation:askpop .35s ease-out}
+@keyframes askpop{from{transform:translate(-50%,-40%) scale(.85);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+.sa-t{font:700 max(11px,calc(var(--u) * 30))/1.1 var(--serif);color:#f2c75c}.sa-t b{color:#fff3c4}
+.sa-s{margin:calc(var(--u) * 6) 0 calc(var(--u) * 12);font:500 max(9px,calc(var(--u) * 20))/1.25 system-ui;color:#cdbd98}
+.sa-b{display:flex;gap:calc(var(--u) * 14);justify-content:center}
+.tbstage .sa-b button{position:relative;flex:1;min-height:calc(var(--u) * 54);padding:calc(var(--u) * 12) 0;border-radius:calc(var(--u) * 14);font:800 max(10px,calc(var(--u) * 26))/1 system-ui}
+.sa-no{background:#2c1d0e;color:#f3d58a;border:1px solid rgba(214,172,92,.7)}
+.sa-yes{background:linear-gradient(180deg,#f6d77a,#b98a24);color:#2a1a05}
+.sa-c{position:absolute;top:calc(var(--u) * -18);right:calc(var(--u) * 20);min-width:calc(var(--u) * 54);padding:calc(var(--u) * 5) calc(var(--u) * 10);border-radius:99px;background:#120a05;border:1px solid #d6ac5c;font:800 max(9px,calc(var(--u) * 20))/1 system-ui;color:#ffb02e}
+.tbm.b-side{background:linear-gradient(180deg,#7a2bd6,#4a1590)!important;color:#fff}
+/* peel shadow on the cards */
+.tcard{overflow:hidden}
+.tcard .peelsh{position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 20%,rgba(0,0,0,.38) 48%,rgba(255,255,255,.16) 56%,transparent 78%);opacity:0}
+/* battle */
+.fxbattle{position:fixed;width:0;height:0;z-index:70;pointer-events:none}
+.fxbc{position:absolute;left:-26px;top:-37px;width:52px;height:74px;border-radius:7px;background:repeating-linear-gradient(45deg,#7a1f1f 0 4px,#5a1414 4px 8px);border:2.5px solid #f5ead0;box-shadow:0 6px 16px rgba(0,0,0,.65)}
+.fxbc.winaura{box-shadow:0 0 0 3px #2ee59d,0 0 26px 10px rgba(46,229,157,.85)}
+.fxbc.loseaura{box-shadow:0 0 0 3px #ff3b5c,0 0 26px 10px rgba(255,59,92,.8)}
+.fxspark{position:absolute;left:0;top:0;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,#fff 0,rgba(255,236,160,.95) 25%,rgba(255,140,40,.55) 50%,transparent 70%);opacity:0}
+.fxvs{position:absolute;left:0;top:-70px;transform:translateX(-50%);padding:4px 12px;border-radius:99px;background:rgba(10,6,3,.9);border:1px solid #d6ac5c;color:#f2c75c;font:800 12px system-ui;letter-spacing:1px;white-space:nowrap}
+.fxvs.win{color:#2ee59d;border-color:#2ee59d}.fxvs.lose{color:#ff6b86;border-color:#ff3b5c}
+.fxpeek{position:absolute;left:0;top:92px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 10px;border-radius:12px;background:rgba(10,6,3,.88);border:1px solid #d6ac5c}
+.fxpeek small{font:700 10px system-ui;color:#cdbd98;letter-spacing:.5px}
+.fxpeek>div{display:flex}
+.fxpeek .tcard{width:38px;height:54px;margin:0 -3px;border-radius:5px;font-size:13px}
+.bubble.tipthx{border-color:#f6d77a;color:#f6d77a}
+.lobstage .lbtabs{position:absolute;z-index:3;display:flex;align-items:center;gap:calc(var(--u) * 12);padding:calc(var(--u) * 6);border-radius:99px;background:rgba(14,8,4,.82);border:max(1px,calc(var(--u) * 2.5)) solid rgba(214,172,92,.55)}
+.lobstage .lbtab{position:relative;flex:1;height:100%;min-height:0;padding:0 calc(var(--u) * 6);border-radius:99px;background:transparent;color:#e0cfa5;font:700 max(9px,calc(var(--u) * 24))/1 system-ui;display:flex;align-items:center;justify-content:center;gap:calc(var(--u) * 6);white-space:nowrap}
+.lobstage .lbtab.on{background:linear-gradient(180deg,#f1dcae,#c4a068);color:#1d1308}
+.lobstage .lbtab i{font:800 max(6px,calc(var(--u) * 13))/1 system-ui;font-style:normal;letter-spacing:.5px;padding:calc(var(--u) * 3) calc(var(--u) * 6);border-radius:99px;background:rgba(214,172,92,.25);color:#f2c75c}
+.lobstage .lbtab.on i{background:rgba(29,19,8,.25);color:#1d1308}
+.lbcard.soonvar{opacity:.92}
+
 </style>
 </head>
 <body>
@@ -1506,7 +1553,7 @@ function setConnection(online) {
   c.className = 'conn' + (online ? '' : ' off');
 }
 
-const BUILD_TAG = '2026-10-28 landscape';
+const BUILD_TAG = '2026-10-28 sideshow';
 
 /* ==========================================================================
    SECTION 2b - LANDSCAPE
@@ -1761,6 +1808,22 @@ const Repo = {
     });
   },
 
+  // Tip the dealer: the wallet drops by the tip and the tip document records it, in one transaction.
+  // Rules: users update (validWalletTip) + tips create/update (validTip).
+  tip(uid, tableId, amount) {
+    if (!TABLE_BY_ID[tableId]) throw new AppError('Unknown table.');
+    if (!Number.isInteger(amount) || amount < 1 || amount > 1000) throw new AppError('A tip is 1 to 1,000 chips.');
+    const uref = Repo.userRef(uid), tref = Repo.roomRef(tableId).collection('tips').doc(uid);
+    return db.runTransaction(async tx => {
+      const us = await tx.get(uref);
+      if (!us.exists || us.data().tableId !== tableId) throw new AppError('You do not have a seat at this table.');
+      const u = us.data();
+      if (u.chips < amount) throw new AppError('You only have ' + fmt(u.chips) + ' chips in your wallet.');
+      tx.update(uref, { chips: u.chips - amount, updatedAt: FV.serverTimestamp() });
+      tx.set(tref, { uid, amount, updatedAt: FV.serverTimestamp() });
+    });
+  },
+
   // Presence heartbeat. Rule: members update (own document, seenAt only).
   presence: (t, uid) => Repo.membersCol(t).doc(uid).update({ seenAt: FV.serverTimestamp() }),
   // The table host removes a player whose page went silent; the stack goes back to
@@ -1814,6 +1877,12 @@ const Repo = {
     for (const id of Object.keys(hands)) b.set(Repo.handsCol(t).doc(id), { id, handId: G.handId, cards: hands[id], createdAt: FV.serverTimestamp() });
     b.set(Repo.gameRef(t), Repo._game(G));
     return b.commit();
+  },
+  // Sideshow: each of the two players gets to see the other's cards. Rule: hands update (validHand, optional peek).
+  writePeek(t, handId, a, ca, b, cb) {
+    const bt = db.batch();
+    [[a, ca, cb], [b, cb, ca]].forEach(([id, mine, theirs]) => { if (id && mine && theirs && !String(id).startsWith('bot_')) bt.set(Repo.handsCol(t).doc(id), { id, handId, cards: mine, peek: theirs, createdAt: FV.serverTimestamp() }); });
+    return bt.commit();
   },
   // One batch: the finished state and every player's new stack/seat state.
   // Rule: members update (seatState, stack, updatedAt only) + game update
@@ -1917,6 +1986,7 @@ const Repo = {
    ========================================================================== */
 const S = {
   authReady: false,
+  variant: 'classic',         // lobby filter tab
   user: null,                 // firebase user
   isAdmin: false,             // derived from the authenticated UID
   profile: null,              // users/{uid} document
@@ -2145,7 +2215,7 @@ function render() {
   document.body.classList.toggle('intable', land);
   document.body.classList.toggle('lobland', r.name === 'lobby');
   document.body.dataset.screen = r.name;
-  if (r.name === 'table') Fx.after(); else Fx.leave();
+  if (r.name === 'table') Fx.after(); else { Fx.leave(); Auto.stop(); }
 }
 
 function renderLoading() {
@@ -2249,17 +2319,23 @@ function seatRow(m, isMe, adminR) {
 }
 
 
+// Whose clock is running: the asked player while a sideshow is pending, otherwise the player to move.
+const sidePending = G => !!(G && G.side && G.side.state === 'ask');
+const turnOf = G => sidePending(G) ? G.side.to : G.turn;
+const turnSpan = G => sidePending(G) ? ENGINE.SIDE_MS : GAME_CONFIG.turnMs;
 function fmtSecs(ms) { return Math.max(0, Math.ceil(ms / 1000)) + 's'; }
 const TIMER_R = 33, TIMER_C = 2 * Math.PI * TIMER_R;
-const timerColor = f => f > .5 ? '#f2c75c' : f > .25 ? '#ff9f43' : '#ff4d6d';
+const timerColor = f => f > .5 ? '#2ee59d' : f > .25 ? '#ffb02e' : '#ff3b5c';   // green, then amber, then red
 // The turn timer lives on the player's picture: a ring that drains and glows harder as time runs out.
 function updateTimer() {
   const G = S.room && S.room.game;
+  Auto.check();
   if (!G || G.phase !== 'playing') return;
   const svg = document.querySelector('.tbseat.turn .tbtimer'), arc = document.querySelector('.tbseat.turn .tbprog');
   if (!svg || !arc) return;
-  const f = Math.max(0, Math.min(1, (G.turnEndsAt - Date.now() - 500) / GAME_CONFIG.turnMs)), col = timerColor(f);
+  const f = Math.max(0, Math.min(1, (G.turnEndsAt - Date.now() - 500) / turnSpan(G))), col = timerColor(f);
   arc.style.strokeDashoffset = String(TIMER_C * (1 - f)); arc.style.stroke = col; svg.style.color = col;
+  const sk = $('sideCount'); if (sk) sk.textContent = fmtSecs(G.turnEndsAt - Date.now());
   const dc = document.querySelector('.tbseat.turn .tbdisc'); if (dc) { dc.textContent = fmtSecs(G.turnEndsAt - Date.now() - 500); dc.style.color = col; }
 }
 
@@ -2341,11 +2417,11 @@ function tMini(c, i) {
 function tbSeat(sp, key, c) {
   const [ax, ay] = TB_SEATS[key], isMe = key === 'BL' && sp.id === c.uid, G = c.G;
   const mem = c.R.members.find(m => m.uid === sp.id), away = !isMe && !!mem && Presence.isAway(mem);
-  const out = sp.status === 'packed', turn = c.playing && G.turn === sp.id;
+  const out = sp.status === 'packed', turn = c.playing && turnOf(G) === sp.id;
   const stCls = away || out ? 'out' : sp.status || 'ready';
   let ring = null;
   if (turn) {
-    const f = Math.max(0, Math.min(1, (G.turnEndsAt - Date.now() - 500) / GAME_CONFIG.turnMs)), col = timerColor(f);
+    const f = Math.max(0, Math.min(1, (G.turnEndsAt - Date.now() - 500) / turnSpan(G))), col = timerColor(f);
     ring = h('svg', { class: 'tbtimer', viewBox: '0 0 76 76', style: 'color:' + col, 'aria-hidden': 'true' },
       h('circle', { cx: 38, cy: 38, r: TIMER_R, class: 'tbtrack' }),
       h('circle', { cx: 38, cy: 38, r: TIMER_R, class: 'tbprog', style: 'stroke:' + col + ';stroke-dasharray:' + TIMER_C + ';stroke-dashoffset:' + (TIMER_C * (1 - f)) }));
@@ -2413,13 +2489,46 @@ function renderMoves(G, uid, live) {
     ['chaalBtn', 'chaal', 'b-chaal', live ? lm.chaal.label.toUpperCase() : 'CHAAL', live ? lm.chaal.cost : 0, 'coin', () => handleGameAction('chaal'), live ? lm.chaal.ok : false],
     ['raiseBtn', 'raise', 'b-raise', 'DOUBLE', live ? lm.raise.cost : 0, 'up', () => handleGameAction('raise'), live ? lm.raise.ok : false],
     ['showBtn', 'show', 'b-show', 'SHOW', live ? lm.show.cost : 0, 'cards', () => handleGameAction('show'), live ? lm.show.ok : false]];
+  // With three or more players in, the fifth button is Sideshow (Show needs exactly two left).
+  if (live && lm.activeCount >= 3) defs[4] = ['sideBtn', 'sideshow', 'b-show b-side', 'SIDESHOW', lm.side.cost, 'cards', () => handleGameAction('sideshow'), lm.side.ok];
   const art = { fold: 'M6 6l12 12M18 6L6 18', up: 'M12 20V5M5 12l7-7 7 7', eye: 'M2 12c3-5 6-7.5 10-7.5S19 7 22 12c-3 5-6 7.5-10 7.5S5 17 2 12z', coin: 'M5 8h14v3H5zM5 13h14v3H5z', cards: 'M7 4h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM19 7l2 .6v12l-2 .6' };
   const ic = k => h('svg', { class: 'mi', viewBox: '0 0 24 24', 'aria-hidden': 'true', fill: k === 'coin' ? 'currentColor' : 'none', stroke: 'currentColor', 'stroke-width': 2.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, h('path', { d: art[k] }), k === 'eye' ? h('circle', { cx: 12, cy: 12, r: 3, fill: 'currentColor' }) : null);
   const xs = [428, 632, 836, 1040, 1244];
   return h('div', { class: 'tbmoves', id: live ? 'moves' : null },
     defs.map(([id, type, cls, text, cost, ik, fn, ok], i) => h('button', { id: live ? id : null, class: 'tbm ' + cls + (live ? '' : ' idle') + (S.act && S.act.type === type ? ' busy' : '') + (type === 'see' && live && lm.status === 'seen' ? ' gone' : ''), type: 'button', style: tbAt(xs[i], 890), disabled: !ok || busy || !live, onclick: fn },
       ic(ik), h('span', { class: 'ml' }, h('span', { class: 'lb', text: text }), cost > 0 ? h('span', { class: 'am', text: rupee(cost) }) : null))),
-    live ? h('p', { id: 'moveNote', class: 'tbnote', style: tbAt(836, 826), text: busy ? 'Sending…' : (lm.myTurn ? 'Your turn' : lm.inHand ? 'Wait for your turn.' : '') }) : null);
+    live ? h('p', { id: 'moveNote', class: 'tbnote', style: tbAt(836, 826), text: busy ? 'Sending…' : sideNote(G, uid, lm) }) : null,
+    live && lm.inHand ? autoPill(lm) : null,
+    live && lm.sideAsked ? sideAsk(G, uid) : null);
+}
+
+/* Sideshow wording for the note under your cards. */
+function sideNote(G, uid, lm) {
+  const sd = G.side;
+  if (sd && sd.state === 'ask') {
+    if (sd.from === uid) return 'Waiting for ' + G.players[sd.to].name + ' to answer your sideshow…';
+    if (sd.to === uid) return '';
+    return G.players[sd.from].name + ' asked ' + G.players[sd.to].name + ' for a sideshow.';
+  }
+  return lm.myTurn ? 'Your turn' : lm.inHand ? 'Wait for your turn.' : '';
+}
+/* Queue your next move: Auto Blind while you are blind, Auto Chaal once you have looked. It plays that one move for you each turn and never raises. */
+function autoPill(lm) {
+  const word = lm.status === 'seen' ? 'Auto Chaal' : 'Auto Blind';
+  return h('label', { class: 'tbauto' + (S.auto ? ' on' : ''), style: tbAt(1130, 800) },
+    h('input', { type: 'checkbox', id: 'autoChk', checked: !!S.auto, onchange: e => { S.auto = e.target.checked; Auto.reset(); scheduleRender(); if (S.auto) Auto.check(); } }),
+    h('span', { class: 'bx', 'aria-hidden': 'true' }, icon('check')), h('span', { id: 'autoLbl', text: word }));
+}
+/* The player asked for a sideshow: the table waits for them. */
+function sideAsk(G, uid) {
+  const sd = G.side, a = G.players[sd.from];
+  return h('div', { class: 'tbside-ask', id: 'sideAsk', style: tbAt(836, 470), role: 'alertdialog', 'aria-label': 'Sideshow request' },
+    h('div', { class: 'sa-t' }, h('b', { text: a.name }), ' asks for a sideshow'),
+    h('div', { class: 'sa-s', text: 'You two compare cards in secret. The lower hand packs. A tie goes against ' + a.name + '.' }),
+    h('div', { class: 'sa-b' },
+      h('button', { id: 'sideDeclineBtn', type: 'button', class: 'sa-no', text: 'Decline', onclick: () => handleGameAction('sidedecline') }),
+      h('button', { id: 'sideAcceptBtn', type: 'button', class: 'sa-yes', text: 'Accept', onclick: () => handleGameAction('sideaccept') })),
+    h('div', { class: 'sa-c', id: 'sideCount', text: fmtSecs(G.turnEndsAt - Date.now()) }));
 }
 
 function renderFelt(R, me, msgs) {
@@ -2460,6 +2569,8 @@ function renderFelt(R, me, msgs) {
 
   /* the dealer is in the picture; this is where dealt cards start from */
   stage.appendChild(h('div', { class: 'dealerfig', id: 'dealerFigure', style: tbAt(836, 322), 'aria-label': 'Dealer' }, h('div', { class: 'tbdeck', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'))));
+
+  if (me && !S.isAdmin) stage.appendChild(h('button', { id: 'tipBtn', class: 'tbtip', type: 'button', style: tbAt(1085, 228), 'aria-label': 'Tip the dealer', onclick: () => Sheets.tip() }, icon('gift'), h('span', { text: 'TIP' })));
 
   /* the pot, and a line of table talk under it */
   const potv = live ? (result ? G.result.amount : G.pot) : 0;
@@ -2526,6 +2637,13 @@ const LB_CARDS = [
   { id: 'boot_5',  rect: [527, 295, 713, 419] },      // left
   { id: 'boot_25', rect: [1361, 316, 1559, 443] }     // right
 ];
+// Variant tabs above the tables. Only Classic has tables for now.
+const LB_VARIANTS = [
+  { id: 'classic', name: 'Classic', live: true },
+  { id: 'muflis', name: 'Muflis', live: false, note: 'Lowball: the lowest hand wins.' },
+  { id: 'ak47', name: 'AK47', live: false, note: 'A, K, 4 and 7 are wild cards.' },
+  { id: 'joker', name: 'Joker', live: false, note: 'A joker card can stand for any card.' }
+];
 const LB_TABLE_IDS = LB_CARDS.map(c => c.id);
 
 /* What a table says about itself. Used by the lobby cards and the private-table check. */
@@ -2582,9 +2700,21 @@ function renderLobby() {
   parts.push(tap('lbBell', [1689, 20, 1761, 88], 'Notifications', () => Sheets.soon('Notifications', 'Table invites and updates will show up here.')));
   parts.push(tap('lbGear', [1774, 20, 1847, 88], 'Settings', () => Sheets.settings()));
 
+  /* variant filter tabs */
+  parts.push(h('div', { class: 'lbtabs', id: 'lbTabs', role: 'tablist', style: lbRect(300, 26, 1050, 86) }, LB_VARIANTS.map(v =>
+    h('button', { type: 'button', role: 'tab', class: 'lbtab' + (S.variant === v.id ? ' on' : '') + (v.live ? '' : ' soon'), 'data-variant': v.id, 'aria-selected': S.variant === v.id ? 'true' : 'false',
+      onclick: () => { S.variant = v.id; if (!v.live) toast(v.name + ' tables are coming soon. ' + v.note); scheduleRender(); } },
+      h('span', { text: v.name }), v.live ? null : h('i', { text: 'SOON' })))));
+  const vnow = LB_VARIANTS.find(v => v.id === S.variant) || LB_VARIANTS[0];
+
   /* the three join cards */
   LB_CARDS.forEach(({ id, rect }) => {
     const t = TABLE_BY_ID[id], st = tileState(t), [x0, y0, x1, y1] = rect;
+    if (!vnow.live) {      // another variant: the same cards say it is coming soon
+      parts.push(h('button', { class: 'lbcard off soonvar', type: 'button', 'data-table': id, style: lbRect(x0 + 7, y0 + 7, x1 - 7, y1 - 7), onclick: () => toast(vnow.name + ' tables are coming soon. ' + vnow.note), 'aria-label': vnow.name + ' coming soon' },
+        h('span', { class: 'rng', text: vnow.name }), h('span', { class: 'cnt' }, h('span', { text: 'No tables' })), h('span', { class: 'jn', text: 'SOON' })));
+      return;
+    }
     const full = st.usable && !st.mine && st.n >= MAX_HUMAN_SEATS;
     parts.push(h('button', { class: 'lbcard' + (st.mine ? ' mine' : '') + (st.usable && !full ? '' : ' off'), type: 'button', 'data-table': id, disabled: !st.usable, style: lbRect(x0 + 7, y0 + 7, x1 - 7, y1 - 7), onclick: () => tileClick(t), 'aria-label': tableName(t) + ' ' + tileLimitsText(t) },
       h('span', { class: 'rng', text: tileLimitsText(t) }),
@@ -2770,7 +2900,7 @@ const gameSig = G => G ? [G.handNo, G.phase, G.turn, G.pot, G.stake, (G.log || [
 function handleGameAction(type) {
   const R = S.room, G = R.game, uid = S.user.uid;
   if (!G || G.phase !== 'playing' || S.act) return;
-  const lm = legalMoves(G, uid), m = lm[type];
+  const lm = legalMoves(G, uid), m = type === 'sideshow' ? lm.side : (type === 'sideaccept' || type === 'sidedecline') ? { ok: lm.sideAsked, reason: 'There is no sideshow for you to answer.' } : lm[type];
   if (!m || !m.ok) return toast((m && m.reason) || 'That move is not available.', 'err');
   const sc = scopeRoom, key = gameSig(G);
   S.act = { key, type }; scheduleRender();
@@ -2778,6 +2908,29 @@ function handleGameAction(type) {
     sc.later(() => { if (S.act && S.act.key === key) { S.act = null; toast('The table did not respond. Try again.', 'err'); scheduleRender(); } }, ACTION_WAIT_MS);
   });
 }
+
+/* ---- Auto Blind / Auto Chaal: plays the plain chaal for you on each of your turns, until the hand ends ---- */
+const Auto = {
+  key: '', timer: 0,
+  reset() { Auto.key = ''; clearTimeout(Auto.timer); Auto.timer = 0; },
+  stop(msg) { if (!S.auto) return; S.auto = false; Auto.reset(); if (msg) toast(msg, 'err'); scheduleRender(); },
+  check() {
+    if (!S.auto) return;
+    const R = S.room, G = R && R.game, uid = S.user && S.user.uid;
+    if (!G || G.phase === 'idle' || !G.players || !G.players[uid]) return Auto.stop();
+    if (G.phase !== 'playing' || G.players[uid].status === 'packed') return Auto.stop();
+    const lm = legalMoves(G, uid);
+    if (!lm.myTurn || sidePending(G)) return;
+    if (!lm.chaal.ok) return Auto.stop('Auto play stopped: ' + lm.chaal.reason);
+    const key = G.handId + '|' + G.turnEndsAt + '|' + (G.log || []).length;
+    if (Auto.key === key) return;
+    Auto.key = key;
+    Auto.timer = setTimeout(() => {
+      const G2 = S.room && S.room.game;
+      if (S.auto && !S.act && G2 && G2.handId === G.handId && G2.turn === uid && !sidePending(G2)) handleGameAction('chaal');
+    }, 700);
+  }
+};
 
 /* ---- admin ---- */
 function handleAdminRemove(m) {
@@ -3094,6 +3247,7 @@ const Dealer = {
         if (now >= Dealer.pendingAt) { const P = Dealer.pending; Dealer.pending = null; Dealer.releasing = true; try { Dealer.commit(P); } finally { Dealer.releasing = false; } }
         return;
       }
+      if (await Dealer.sideTurn(G, now)) return;
       if (await Dealer.botTurn(G, now)) return;
       if (now > G.turnEndsAt) {
         const who = G.turn, nm = G.players[who] && G.players[who].name;
@@ -3183,7 +3337,10 @@ const Dealer = {
     chaal: (m, a) => Dealer.play(m, a, 'chaal'),
     raise: (m, a) => Dealer.play(m, a, 'raise'),
     pack: (m, a) => Dealer.play(m, a, 'pack'),
-    show: (m, a) => Dealer.play(m, a, 'show')
+    show: (m, a) => Dealer.play(m, a, 'show'),
+    sideshow: (m, a) => Dealer.play(m, a, 'sideshow'),
+    sideaccept: (m, a) => Dealer.play(m, a, 'sideaccept'),
+    sidedecline: (m, a) => Dealer.play(m, a, 'sidedecline')
   },
 
   // Every betting move: stale hand numbers and illegal moves are dropped silently
@@ -3193,8 +3350,35 @@ const Dealer = {
     if (!G || G.phase !== 'playing' || a.handNo !== G.handNo || Dealer.pending) return;
     const r = applyAction(G, member.uid, type, Date.now(), Dealer.hands);
     if (!r.ok) { console.warn('[TeenPatti] rejected', type, member.uid, r.error); return; }
-    Dealer.missed[member.uid] = 0;
+    if (type !== 'sideaccept' && type !== 'sidedecline') Dealer.missed[member.uid] = 0;
     Dealer.commit(r.G);
+    if (type === 'sideaccept') Dealer.revealSide(G.side, G.handId);
+  },
+  // After an accepted sideshow the two players (and only they) are shown each other's cards.
+  revealSide(sd, handId) {
+    const t = Dealer.tableId, H = Dealer.hands;
+    if (!sd || !H[sd.from] || !H[sd.to]) return;
+    Dealer.write(() => Repo.writePeek(t, handId, sd.from, H[sd.from].slice(), sd.to, H[sd.to].slice()));
+  },
+  // A sideshow waits for the player asked. A bot answers after a moment; a person who does not answer in time declines.
+  async sideTurn(G, now) {
+    const sd = G.side;
+    if (!sd || sd.state !== 'ask') return false;
+    const to = sd.to, tp = G.players[to];
+    if (tp && tp.bot) {
+      const key = 'side|' + G.handNo + '|' + (G.log || []).length;
+      if (Dealer.botKey !== key) { Dealer.botKey = key; Dealer.botDue = now + GAME_CONFIG.botMs + secureRandInt(1500); return true; }
+      if (now < Dealer.botDue) return true;
+      const sc = scoreHand(Dealer.hands[to] || []), take = sc[0] >= 3 || secureRandInt(100) < 40;
+      const r = applyAction(G, to, take ? 'sideaccept' : 'sidedecline', now, Dealer.hands);
+      if (r.ok) { Dealer.commit(r.G); if (take) Dealer.revealSide(sd, G.handId); }
+      return true;
+    }
+    if (now > G.turnEndsAt) {
+      const r = applyAction(G, to, 'sidedecline', now, Dealer.hands);
+      if (r.ok) { r.G.log = (r.G.log || []).concat(tp.name + ' did not answer in time.').slice(-ENGINE.LOG_MAX); Dealer.commit(r.G); }
+    }
+    return true;
   }
 };
 
@@ -3239,10 +3423,10 @@ document.addEventListener('pointerdown', () => Sfx.init(), { once: false, passiv
 
 const Fx = {
   on: !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches),
-  hand: '', chips: {}, status: '', dealStart: 0, flipStart: 0, wonHand: '', winStart: 0,
+  hand: '', sideKey: '', chips: {}, status: '', dealStart: 0, flipStart: 0, wonHand: '', winStart: 0,
   shown: 0, target: 0, raf: 0, pl: {}, stake: 0, turnKey: '',
 
-  leave() { Fx.hand = ''; Fx.chips = {}; Fx.status = ''; Fx.wonHand = ''; Fx.dealStart = Fx.flipStart = 0; Fx.pl = {}; Fx.turnKey = ''; },
+  leave() { Fx.sideKey = ''; const bt = $('fxBattle'); if (bt) bt.remove(); Fx.hand = ''; Fx.chips = {}; Fx.status = ''; Fx.wonHand = ''; Fx.dealStart = Fx.flipStart = 0; Fx.pl = {}; Fx.turnKey = ''; },
   // centres are in "page space": when the page is turned with CSS (Landscape.rot) screen coordinates are converted
   centre(el) { const b = el.getBoundingClientRect(), x = b.left + b.width / 2, y = b.top + b.height / 2; return Landscape.rot ? { x: y, y: window.innerWidth - x } : { x, y }; },
   seat(id) { return document.querySelector('#gamePlayers .tbseat[data-uid="' + id + '"] .tbring'); },
@@ -3296,9 +3480,13 @@ const Fx = {
 
     if (!Fx.on) return;
     if (Fx.dealStart && now - Fx.dealStart < 4400) Fx.deal(now - Fx.dealStart);
-    if (Fx.flipStart && now - Fx.flipStart < 700) Fx.flip(now - Fx.flipStart);
+    if (Fx.flipStart && now - Fx.flipStart < 1300) Fx.flip(now - Fx.flipStart);
     Fx.glow();
-    if (result && Fx.wonHand !== G.handId) { Fx.wonHand = G.handId; Fx.winStart = now; }
+    if (result && Fx.wonHand !== G.handId) { Fx.wonHand = G.handId; Fx.winStart = now; if (Math.abs(Date.now() - (R.doc && R.doc.dealerAt || 0)) < 600000) Fx.celebrate(G); }
+    // a sideshow: the clash is shown only to the two players involved
+    const sd = G.side, sk = sd ? G.handId + '|' + sd.at + '|' + sd.state : '';
+    if (sd && uid && (sd.from === uid || sd.to === uid) && sk !== Fx.sideKey && Math.abs(Date.now() - sd.at) < 20000) { Fx.sideKey = sk; Fx.battle(G, sd, uid); }
+    else if (!sd) Fx.sideKey = '';
     const wb = $('winBanner');
     if (wb && Fx.winStart && now - Fx.winStart < 700) wb.animate([{ transform: 'scale(.5)', opacity: 0 }, { transform: 'scale(1.12)', opacity: 1, offset: .65 }, { transform: 'scale(1)', opacity: 1 }], { duration: 520, easing: 'ease-out', fill: 'backwards' }).currentTime = now - Fx.winStart;
   },
@@ -3334,11 +3522,26 @@ const Fx = {
     if (dk) { const a = dk.animate([{ transform: 'translateX(0) rotate(0)' }, { transform: 'translateX(-6px) rotate(-10deg)' }, { transform: 'translateX(6px) rotate(8deg)' }, { transform: 'translateX(-4px) rotate(-6deg)' }, { transform: 'translateX(0) rotate(0)' }], { duration: 650, easing: 'ease-in-out' }); a.currentTime = elapsed; }
   },
 
-  // Looking at your cards turns them over.
+  // Looking at your cards: each card is lifted at its corner and peeled back, with a soft shadow sweeping across it.
   flip(elapsed) {
     document.querySelectorAll('#myCards .tcard').forEach((el, i) => {
-      const a = el.animate([{ transform: 'rotateY(90deg) scale(.9)' }, { transform: 'rotateY(0) scale(1)' }], { duration: 320, delay: i * 90, easing: 'ease-out', fill: 'backwards' });
+      el.style.transformOrigin = '0% 100%';
+      const d = i * 110, T = 'perspective(520px) ';
+      const a = el.animate([
+        { transform: T + 'rotateX(0) rotateY(0) rotateZ(0) translateY(0) scale(1)', filter: 'drop-shadow(0 2px 3px rgba(0,0,0,.4))' },
+        { transform: T + 'rotateX(52deg) rotateY(-8deg) rotateZ(-3deg) translateY(-14px) scale(1.05)', filter: 'drop-shadow(0 16px 12px rgba(0,0,0,.55))', offset: .38 },
+        { transform: T + 'rotateX(52deg) rotateY(-8deg) rotateZ(-3deg) translateY(-14px) scale(1.05)', filter: 'drop-shadow(0 16px 12px rgba(0,0,0,.55))', offset: .5 },
+        { transform: T + 'rotateX(-9deg) rotateY(3deg) translateY(-4px) scale(1.03)', filter: 'drop-shadow(0 8px 8px rgba(0,0,0,.45))', offset: .8 },
+        { transform: T + 'rotateX(0) rotateY(0) translateY(0) scale(1)', filter: 'drop-shadow(0 2px 3px rgba(0,0,0,.4))' }], { duration: 900, delay: d, easing: 'cubic-bezier(.3,.7,.3,1)', fill: 'backwards' });
       a.currentTime = elapsed;
+      let sh = el.querySelector('.peelsh');
+      if (!sh) { sh = h('i', { class: 'peelsh', 'aria-hidden': 'true' }); el.appendChild(sh); }
+      const b = sh.animate([
+        { opacity: 0, transform: 'translateX(-70%)' },
+        { opacity: 1, transform: 'translateX(-10%)', offset: .35 },
+        { opacity: .8, transform: 'translateX(20%)', offset: .6 },
+        { opacity: 0, transform: 'translateX(90%)' }], { duration: 900, delay: d, easing: 'ease-in-out', fill: 'both' });
+      b.currentTime = elapsed;
     });
   },
 
@@ -3355,7 +3558,7 @@ const Fx = {
     if (cb) { const a = cb.animate([{ boxShadow: '0 0 0 rgba(242,199,92,0)' }, { boxShadow: '0 0 18px 3px rgba(242,199,92,.65)' }], { duration: 900, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' }); a.currentTime = Date.now() % 1800; }
     const G = S.room && S.room.game, svg = document.querySelector('.tbseat.turn .tbtimer');
     if (svg && G && G.phase === 'playing') {
-      const f = Math.max(0, Math.min(1, (G.turnEndsAt - Date.now()) / GAME_CONFIG.turnMs));
+      const f = Math.max(0, Math.min(1, (G.turnEndsAt - Date.now()) / turnSpan(G)));
       const dur = f > .5 ? 1400 : f > .25 ? 900 : 480, strong = f > .5 ? 7 : f > .25 ? 11 : 16;
       const a = svg.animate([
         { filter: 'drop-shadow(0 0 2px currentColor)', opacity: .8 },
@@ -3377,28 +3580,112 @@ const Fx = {
     an.onfinish = () => b.remove();
   },
 
-  // A few chips slide from one place to another.
-  fly(from, to, count, delay) {
+  // A few chips slide from one place to another, rising a little on the way (an arc) and landing with a tiny bounce.
+  fly(from, to, count, delay, burst) {
     const L = $('fxLayer'); if (!Fx.on || !L || !from || !to) return;
     const a = Fx.centre(from), b = Fx.centre(to);
     for (let i = 0; i < count; i++) {
       const chip = h('div', { class: 'fxchip' });
-      chip.style.left = (a.x - 8) + 'px'; chip.style.top = (a.y - 8) + 'px';
+      chip.style.left = (a.x - 9) + 'px'; chip.style.top = (a.y - 9) + 'px';
       L.appendChild(chip);
-      const dx = b.x - a.x + (i % 3 - 1) * 5, dy = b.y - a.y + (i % 2) * 4;
-      const an = chip.animate([
-        { transform: 'translate(0,0) scale(.6)', opacity: 0 },
-        { opacity: 1, offset: .15 },
-        { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(1)', opacity: 1, offset: .88 },
-        { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.7)', opacity: 0 }], { duration: 560, delay: delay + i * 70, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'both' });
+      const dx = b.x - a.x + (i % 3 - 1) * 6, dy = b.y - a.y + (i % 2) * 5, lift = Math.min(70, Math.hypot(dx, dy) * .25) + (i % 4) * 5;
+      const ang = Math.random() * Math.PI * 2, bx = burst ? Math.cos(ang) * (30 + Math.random() * 50) : 0, by = burst ? Math.sin(ang) * (24 + Math.random() * 40) : 0;
+      const frames = burst
+        ? [{ transform: 'translate(0,0) scale(.6)', opacity: 0 }, { transform: 'translate(' + bx + 'px,' + by + 'px) scale(1.15) rotate(180deg)', opacity: 1, offset: .22 },
+           { transform: 'translate(' + (bx * 1.05) + 'px,' + (by * 1.05) + 'px) scale(1.1) rotate(220deg)', opacity: 1, offset: .38 },
+           { transform: 'translate(' + (dx * .6 + bx * .3) + 'px,' + (dy * .6 - lift) + 'px) scale(1) rotate(420deg)', opacity: 1, offset: .7 },
+           { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(1) rotate(560deg)', opacity: 1, offset: .92 },
+           { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.6)', opacity: 0 }]
+        : [{ transform: 'translate(0,0) scale(.6)', opacity: 0 }, { opacity: 1, offset: .12 },
+           { transform: 'translate(' + (dx * .5) + 'px,' + (dy * .5 - lift) + 'px) scale(1.1) rotate(200deg)', opacity: 1, offset: .55 },
+           { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(1) rotate(360deg)', opacity: 1, offset: .88 },
+           { transform: 'translate(' + dx + 'px,' + (dy - 3) + 'px) scale(.72)', opacity: 0 }];
+      const an = chip.animate(frames, { duration: burst ? 1150 : 640, delay: delay + i * (burst ? 45 : 70), easing: 'cubic-bezier(.4,0,.2,1)', fill: 'both' });
       an.onfinish = () => chip.remove();
     }
+  },
+
+  // Tipping the dealer: chips go from you to the dealer, who nods and says thanks.
+  tip(amt) {
+    const dealer = $('dealerFigure'), from = Fx.seat(S.user && S.user.uid) || $('tipBtn');
+    toast('Thank you! The dealer appreciates it.');
+    if (!Fx.on || !dealer) return;
+    Sfx.chip(); setTimeout(() => Sfx.chip(), 200);
+    Fx.fly(from, dealer, Math.min(8, 3 + Math.round(amt / Math.max(1, (S.room && TABLE_BY_ID[S.room.id].boot) || 1) / 4)), 0);
+    const dr = dealer.querySelector('.dring'), L = $('fxLayer');
+    if (dr) dr.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.18) rotate(-6deg)' }, { transform: 'scale(1)' }, { transform: 'scale(1.12) rotate(5deg)' }, { transform: 'scale(1)' }], { duration: 700, delay: 500 });
+    if (L) {
+      const c = Fx.centre(dealer), b = h('div', { class: 'bubble tipthx' }, h('span', { text: 'Thank you!' }), h('b', { text: '\u2665' }));
+      b.style.left = c.x + 'px'; b.style.top = (c.y - 50) + 'px'; L.appendChild(b);
+      const an = b.animate([{ transform: 'translate(-50%,8px) scale(.6)', opacity: 0 }, { transform: 'translate(-50%,-6px) scale(1.08)', opacity: 1, offset: .2 }, { transform: 'translate(-50%,-24px) scale(1)', opacity: 1, offset: .75 }, { transform: 'translate(-50%,-40px) scale(.96)', opacity: 0 }], { duration: 1800, delay: 650, easing: 'ease-out', fill: 'both' });
+      an.onfinish = () => b.remove();
+    }
+  },
+
+  // Sideshow clash, for the two players only: two card backs fly together and strike, then the outcome shows as a green or red aura
+  // and each player sees the other's cards.
+  battle(G, sd, uid) {
+    const L = $('fxLayer'), pot = $('potAmt'); if (!Fx.on || !L || !pot) return;
+    const pc = Fx.centre(pot), c = { x: pc.x, y: pc.y - 130 };
+    let B = $('fxBattle');
+    const place = (el, p) => { el.style.left = '0px'; el.style.top = '0px'; el.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)'; };
+    if (sd.state === 'ask') {
+      if (B) B.remove();
+      B = h('div', { id: 'fxBattle', class: 'fxbattle' }, h('div', { class: 'fxbc a' }), h('div', { class: 'fxbc b' }), h('i', { class: 'fxspark' }), h('div', { class: 'fxvs', text: 'SIDESHOW' }));
+      B.style.left = c.x + 'px'; B.style.top = c.y + 'px'; L.appendChild(B);
+      const A = B.querySelector('.a'), Bc = B.querySelector('.b');
+      [[A, sd.from, -30, -10], [Bc, sd.to, 30, 10]].forEach(([el, id, ex, rot]) => {
+        const s = Fx.seat(id), sc = s ? Fx.centre(s) : { x: c.x + ex * 8, y: c.y };
+        const sx = sc.x - c.x, sy = sc.y - c.y;
+        el.animate([{ transform: 'translate(' + sx + 'px,' + sy + 'px) rotate(' + (ex * -3) + 'deg) scale(.5)', opacity: 0 }, { opacity: 1, offset: .2 },
+          { transform: 'translate(' + (ex * 2.1) + 'px,0) rotate(' + rot * 1.4 + 'deg) scale(1.08)', offset: .72 },
+          { transform: 'translate(' + ex + 'px,0) rotate(' + rot + 'deg) scale(1)' }], { duration: 760, easing: 'cubic-bezier(.3,.8,.3,1)', fill: 'both' });
+      });
+      const sp = B.querySelector('.fxspark');
+      sp.animate([{ transform: 'translate(-50%,-50%) scale(.2)', opacity: 0 }, { transform: 'translate(-50%,-50%) scale(1.5)', opacity: 1, offset: .35 }, { transform: 'translate(-50%,-50%) scale(2.4)', opacity: 0 }], { duration: 520, delay: 700, easing: 'ease-out', fill: 'both' });
+      B.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(-4px,2px)' }, { transform: 'translate(4px,-2px)' }, { transform: 'translate(-2px,1px)' }, { transform: 'translate(0,0)' }], { duration: 260, delay: 720 });
+      Sfx.card(.1); Sfx.tone(180, .16, 'sawtooth', .05, .72); Sfx.buzz([20, 30, 40]);
+      return;
+    }
+    // the answer
+    if (!B) {
+      B = h('div', { id: 'fxBattle', class: 'fxbattle' }, h('div', { class: 'fxbc a' }), h('div', { class: 'fxbc b' }), h('div', { class: 'fxvs', text: 'SIDESHOW' }));
+      B.style.left = c.x + 'px'; B.style.top = c.y + 'px'; L.appendChild(B);
+      place(B.querySelector('.a'), { x: -30, y: 0 }); place(B.querySelector('.b'), { x: 30, y: 0 });
+    }
+    const A = B.querySelector('.a'), Bc = B.querySelector('.b'), vs = B.querySelector('.fxvs'), sp = B.querySelector('.fxspark');
+    if (sp) sp.remove();
+    const done = ms => setTimeout(() => { const t = $('fxBattle'); if (t === B) { B.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 400, fill: 'forwards' }).onfinish = () => B.remove(); } }, ms);
+    if (sd.declined) {
+      vs.textContent = 'DECLINED';
+      [[A, -30], [Bc, 30]].forEach(([el, ex]) => el.animate([{ transform: 'translate(' + ex + 'px,0) scale(1)', opacity: 1 }, { transform: 'translate(' + ex * 5 + 'px,0) scale(.8)', opacity: 0 }], { duration: 700, fill: 'forwards' }));
+      done(1400); return;
+    }
+    const winEl = sd.winner === sd.from ? A : Bc, loseEl = sd.loser === sd.from ? A : Bc, wx = winEl === A ? -30 : 30, lx = loseEl === A ? -30 : 30;
+    const iWon = sd.winner === uid;
+    vs.textContent = iWon ? 'YOU WIN THE SIDESHOW' : 'YOU LOSE THE SIDESHOW'; vs.classList.add(iWon ? 'win' : 'lose');
+    winEl.classList.add('winaura'); loseEl.classList.add('loseaura');
+    winEl.animate([{ transform: 'translate(' + wx + 'px,0) scale(1)' }, { transform: 'translate(' + wx + 'px,-10px) scale(1.18)' }, { transform: 'translate(' + wx + 'px,-4px) scale(1.1)' }], { duration: 600, fill: 'forwards', easing: 'ease-out' });
+    loseEl.animate([{ transform: 'translate(' + lx + 'px,0) rotate(0)' }, { transform: 'translate(' + (lx - 6) + 'px,0) rotate(-6deg)' }, { transform: 'translate(' + (lx + 6) + 'px,0) rotate(6deg)' }, { transform: 'translate(' + lx + 'px,14px) rotate(0) scale(.85)', opacity: .55 }], { duration: 800, fill: 'forwards' });
+    // the other player's cards arrive in my hand document a moment after the result, so keep looking for them
+    let tries = 0;
+    const showPeek = () => {
+      const pk = S.room && S.room.myHand && S.room.myHand.handId === G.handId ? S.room.myHand.peek : null;
+      if (!$('fxBattle') || $('fxBattle') !== B || B.querySelector('.fxpeek')) return;
+      if (!pk) { if (++tries < 12) setTimeout(showPeek, 300); return; }
+      const row = h('div', { class: 'fxpeek' }, h('small', { text: 'Their cards' }), h('div', {}, pk.map(cd => tCard(cd, false))));
+      B.appendChild(row); row.animate([{ opacity: 0, transform: 'translate(-50%,10px)' }, { opacity: 1, transform: 'translate(-50%,0)' }], { duration: 400, fill: 'both' });
+    };
+    showPeek();
+    if (iWon) { Sfx.win(); Sfx.buzz([40, 40, 40]); } else { Sfx.tone(160, .3, 'sawtooth', .05); Sfx.buzz([120]); }
+    done(4600);
   },
 
   // Once per hand: the pot slides to the winner and a little confetti goes up.
   celebrate(G) {
     const pot = $('potAmt'), win = G.result.winners;
-    win.forEach(id => Fx.fly(pot, Fx.seat(id), 8, 150));
+    win.forEach(id => Fx.fly(pot, Fx.seat(id), 14, 150, true));       // chips burst out of the pot, then sweep to the winner
+    if (pot && Fx.on) pot.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.5)' }, { transform: 'scale(1)' }], { duration: 400 });
     if (win.includes(S.user && S.user.uid)) { Sfx.win(); Sfx.buzz([40, 50, 40, 50, 80]); }
     const L = $('fxLayer'), src = Fx.seat(win[0]);
     if (!L || !src) return;
@@ -3472,6 +3759,20 @@ const Sheets = {
       row('', icon('plus'), 'Tap ', B('+'), ' next to your chips between hands to add more.'),
       h('div', { class: 'qh', text: 'Winning hands, best to lowest' }));
     Sheets.open('infoSheet', 'How to play', h('div', {}, how, table, h('p', { class: 'hnote', text: 'Same hand in a Show? The pot is split. Play chips only, no real money.' })));
+  },
+  // Tip the dealer: chips come out of the wallet and the dealer says thank you.
+  tip() {
+    const p = S.profile, R = S.room, cfg = R && TABLE_BY_ID[R.id]; if (!p || !cfg) return;
+    const opts = [2, 5, 10, 25].map(m => Math.min(1000, Math.max(1, cfg.boot * m)));
+    const err = h('div', { id: 'tipErr', class: 'msg err', role: 'alert', hidden: true });
+    const give = amt => withBusy('tip', 'tip the dealer', async () => {
+      try { await Repo.tip(S.user.uid, R.id, amt); Sheets.close(); Fx.tip(amt); }
+      catch (e) { err.textContent = friendlyError(e); err.hidden = false; }
+    });
+    Sheets.open('tipSheet', 'Tip the dealer', h('div', { class: 'setlist' },
+      h('div', { class: 'tipdealer' }, h('div', { class: 'tipav', 'aria-hidden': 'true' }, icon('crown')), h('p', { class: 'hnote', style: 'font-size:14px;text-align:left', text: 'A little something for a good deal. Tips come out of your wallet (' + fmt(p.chips) + ').' })),
+      h('div', { class: 'quickrow' }, opts.map(v => h('button', { type: 'button', class: 'btn-secondary tipopt', 'data-tip': v, text: '\u20B9' + fmt(v), disabled: v > p.chips, onclick: () => give(v) }))),
+      err));
   },
   topup() {
     const R = S.room, me = myMember(R), cfg = R && TABLE_BY_ID[R.id], wallet = S.profile ? S.profile.chips : 0;
@@ -3681,7 +3982,8 @@ const ENGINE = {
   ROUNDS_AFTER_BLINDS: 3,                  // completed betting rounds once every blind is over, then a forced show
   BLIND_LIMIT: 2,                          // a player may play blind twice, then must look at the cards
   LOG_MAX: 20,
-  BOT_STACK_MULT: 50
+  BOT_STACK_MULT: 50,
+  SIDE_MS: 15000                           // how long the player before you has to answer a sideshow
 };
 const GAME_CONFIG = { turnMs: 30000, resultMs: 8000, autoDealMs: 4000, maxMissed: 2, dealPadMs: 2600, showHoldMs: 4000, botMs: 1500 };
 
@@ -3749,6 +4051,16 @@ function raiseCost(G, id) {
   return G.players[id].status === 'seen' ? 2 * ns : ns;
 }
 
+// The player sitting just before id (still in the hand), if they have looked at their cards.
+function sideTarget(G, id) {
+  const i = G.order.indexOf(id);
+  for (let k = 1; k < G.order.length; k++) {
+    const c = G.order[(i - k + G.order.length * 2) % G.order.length];
+    if (G.players[c] && G.players[c].status !== 'packed') return G.players[c].status === 'seen' ? c : '';
+  }
+  return '';
+}
+
 // Everything the screen and the dealer need to know about one player's options.
 function legalMoves(G, id) {
   const none = { ok: false, reason: 'No hand in progress.' };
@@ -3766,6 +4078,19 @@ function legalMoves(G, id) {
   const two = out.activeCount === 2;
   out.show = { cost: cc, ok: out.myTurn && two && p.chips >= cc, reason: wait || (!two ? 'Show needs exactly two players left.' : p.chips >= cc ? '' : 'Not enough chips (need ' + cc + ').') };
   out.pack = { ok: out.myTurn, reason: wait };
+  // Sideshow: ask the player just before you (still in the hand) to compare cards with you in secret.
+  const tgt = sideTarget(G, id), sideWhy = G.side && G.side.state === 'ask' ? 'A sideshow is being decided.' : '';
+  out.side = { label: 'Sideshow', cost: cc, target: tgt, ok: false, reason: '' };
+  if (!out.myTurn) out.side.reason = 'Wait for your turn.';
+  else if (p.status !== 'seen') out.side.reason = 'Look at your cards first.';
+  else if (out.activeCount < 3) out.side.reason = 'With two players left, ask for a Show.';
+  else if (!tgt) out.side.reason = 'The player before you has not looked at their cards.';
+  else if (sideWhy) out.side.reason = sideWhy;
+  else if (p.chips < cc) out.side.reason = 'Not enough chips (need ' + cc + ').';
+  else out.side.ok = true;
+  if (sideWhy) for (const k of ['chaal', 'raise', 'show', 'pack']) { out[k] = Object.assign({}, out[k], { ok: false, reason: sideWhy }); }
+  if (sideWhy && out.see.ok) out.see = { ok: false, reason: sideWhy };
+  out.sideAsked = !!(G.side && G.side.state === 'ask' && G.side.to === id);
   const rd = roundsOf(G);
   out.finalRound = rd !== undefined && rd >= ENGINE.ROUNDS_AFTER_BLINDS - 1;
   out.round = rd === undefined ? 0 : rd + 1;
@@ -3868,10 +4193,16 @@ function forcePack(G0, id, now, hands) {
   if (!inHand(G0, id)) return G0;
   const G = cloneState(G0);
   const wasTurn = G.turn === id;
+  const sideLeft = G.side && G.side.state === 'ask' && (G.side.from === id || G.side.to === id) ? G.side : null;
+  if (sideLeft) G.side = null;
   G.players[id].status = 'packed';
   const left = activeIds(G);
   if (left.length === 1) { finishHand(G, left, 'fold', {}, ''); }
-  else { if (wasTurn) advanceTurn(G, now); maybeFinalShow(G, hands); }
+  else {
+    if (wasTurn) advanceTurn(G, now);
+    else if (sideLeft && sideLeft.to === id && G.turn === sideLeft.from) advanceTurn(G, now);   // the player asked packed: the asker's turn is over
+    maybeFinalShow(G, hands);
+  }
   return G;
 }
 
@@ -3889,6 +4220,27 @@ function applyAction(G0, id, type, now, hands) {
   if (!inHand(G0, id)) return bad('You are not in this hand.');
   const lm = legalMoves(G0, id);
   const G = cloneState(G0), p = G.players[id];
+  if (G.side && G.side.state === 'done') G.side = null;       // the last sideshow's result has been shown
+  if (type === 'sideaccept' || type === 'sidedecline') {
+    const sd = G.side;
+    if (!sd || sd.state !== 'ask' || sd.to !== id) return bad('There is no sideshow for you to answer.');
+    const from = sd.from, a = G.players[from], b = p;
+    if (type === 'sidedecline') {
+      addLog(G, b.name + ' declined the sideshow.');
+      G.side = { from, to: id, state: 'done', declined: true, at: now };
+      advanceTurn(G, now); maybeFinalShow(G, hands); return { ok: true, G };
+    }
+    if (!hands || !hands[from] || !hands[id]) return bad('The dealer does not hold the cards for this hand.');
+    const cmp = compareScores(scoreHand(hands[from]), scoreHand(hands[id]));
+    const loser = cmp > 0 ? id : from, winner = loser === id ? from : id;      // a tie goes against the asker
+    G.side = { from, to: id, state: 'done', loser, winner, at: now };
+    addLog(G, a.name + ' and ' + b.name + ' compared cards in a sideshow. ' + G.players[loser].name + ' packed.');
+    G.players[loser].status = 'packed';
+    const left = activeIds(G);
+    if (left.length === 1) finishHand(G, left, 'fold', {}, '');
+    else { advanceTurn(G, now); maybeFinalShow(G, hands); }
+    return { ok: true, G };
+  }
   if (type === 'see') {
     if (!lm.see.ok) return bad(lm.see.reason);
     p.status = 'seen'; addLog(G, p.name + ' looked at their cards.');
@@ -3897,6 +4249,7 @@ function applyAction(G0, id, type, now, hands) {
   }
   if (G.turn !== id) return bad('Not your turn.');
   if (type === 'pack') {
+    if (G.side && G.side.state === 'ask') return bad('A sideshow is being decided.');
     addLog(G, p.name + ' packed.');
     return { ok: true, G: forcePack(G, id, now, hands) };
   }
@@ -3914,6 +4267,14 @@ function applyAction(G0, id, type, now, hands) {
     addLog(G, p.name + (wasBlind ? ' doubles the blind.' : ' doubles the chaal.'));
     noteBlind(G, id, wasBlind); delete p.owe;
     advanceTurn(G, now); maybeFinalShow(G, hands); return { ok: true, G };
+  }
+  if (type === 'sideshow') {
+    if (!lm.side.ok) return bad(lm.side.reason);
+    pay(G, id, lm.side.cost); delete p.owe;
+    G.side = { from: id, to: lm.side.target, state: 'ask', at: now };
+    G.turnEndsAt = now + ENGINE.SIDE_MS;
+    addLog(G, p.name + ' asks ' + G.players[lm.side.target].name + ' for a sideshow.');
+    return { ok: true, G };
   }
   if (type === 'show') {
     if (!lm.show.ok) return bad(lm.show.reason);
