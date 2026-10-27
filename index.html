@@ -923,6 +923,31 @@ body[data-screen=lobby]{background:linear-gradient(180deg,rgba(255,248,232,.9),r
 .myseatbar b{display:block;font-size:14px}.myseatbar span{display:block;font-size:12px;color:#6b5a40;margin-top:2px}
 .myseatbar .btn-small{flex:none}
 
+.tscreen.v3 .v3s.win .ring{box-shadow:0 0 0 1.5px #140c04,0 3px 7px rgba(0,0,0,.6)}
+/* result panel */
+.v3 .rv{position:absolute;inset:0;z-index:12;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:34px 10px 28px;background:radial-gradient(ellipse at 50% 38%,rgba(10,6,2,.55),rgba(6,3,1,.84));-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);animation:rvin .35s ease both;text-align:center}
+@keyframes rvin{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+.v3 .rv-head{display:flex;flex-direction:column;align-items:center;gap:1px}
+.v3 .rv-crown{width:34px;height:34px;color:#f2c75c;filter:drop-shadow(0 2px 6px rgba(242,199,92,.6))}
+.v3 .rv-title{font:800 11px system-ui;letter-spacing:4px;color:#f2c75c}
+.v3 .rv-names{font:700 22px/1.15 var(--serif);color:#fff3c9;max-width:92%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v3 .rv-amt{margin-top:2px;color:#d9c48a;font:12px system-ui}.v3 .rv-amt b{font:700 24px var(--serif);color:#ffe9a6;margin-left:4px}
+.v3 .rv-why{font:600 12px system-ui;color:#f6ecd0;letter-spacing:.3px;margin-top:2px}
+.v3 .rv-list{width:100%;max-width:372px;display:grid;gap:5px;margin-top:4px}
+.v3 .rv-cap{font:700 9px system-ui;letter-spacing:2px;color:#b9a56f;text-transform:uppercase;text-align:left;padding-left:4px}
+.v3 .rv-row{display:grid;grid-template-columns:30px minmax(0,1fr) auto 52px;align-items:center;gap:8px;padding:5px 8px;border-radius:12px;background:rgba(20,13,6,.72);border:1px solid rgba(233,195,106,.25)}
+.v3 .rv-row.win{background:linear-gradient(90deg,rgba(90,64,12,.78),rgba(20,13,6,.78));border-color:#e9c36a;box-shadow:0 0 12px rgba(242,199,92,.35)}
+.v3 .rv-av{width:30px;height:30px;border-radius:50%;border:1.5px solid #e9c36a;overflow:hidden;display:grid;place-items:center;background:#2a1b0c}
+.v3 .rv-av .ava{font-size:16px;line-height:1}
+.v3 .rv-who{text-align:left;min-width:0}.v3 .rv-who b{display:block;font:700 12px system-ui;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v3 .rv-who span{display:block;font:600 10px system-ui;color:#e9c36a}
+.v3 .rv-cards{display:flex;gap:2px}
+.v3 .rv-cards .pcard{width:26px;height:37px;margin:0;border-radius:4px;font-size:10px;box-shadow:0 2px 4px rgba(0,0,0,.6)}
+.v3 .rv-cards .pcard b{left:3px;top:2px;font-size:11px}.v3 .rv-cards .pcard span{font-size:15px;top:58%}.v3 .rv-cards .pcard:after{display:none}
+.v3 .rv-net{font:700 12px var(--serif);text-align:right}.v3 .rv-net.up{color:#6fe0a0}.v3 .rv-net.down{color:#ff8a8a}
+.v3 .rv-me{margin-top:4px;padding:4px 14px;border-radius:12px;font:700 12px system-ui;border:1px solid}
+.v3 .rv-me.up{color:#6fe0a0;border-color:rgba(111,224,160,.6);background:rgba(20,70,40,.5)}.v3 .rv-me.down{color:#ffb0b0;border-color:rgba(255,138,138,.5);background:rgba(80,20,20,.5)}
+
 </style>
 </head>
 <body>
@@ -2035,6 +2060,37 @@ function v3Empty(key) {
     h('div', { class: 'plate' }, h('div', { class: 'pname', text: 'Open seat' })));
 }
 
+/* The end-of-hand screen: a see-through panel over the table for five seconds. Everyone still in the hand turns their cards
+   over, the winner is named, and each player's gain or loss is listed. If everyone else packed there is nobody to show. */
+const RESULT_MS = 5000;
+function renderResultV3(G, uid) {
+  const rs = G.result, win = new Set(rs.winners);
+  const ids = G.order.filter(id => rs.reveal && rs.reveal[id]);                       // only players who were still in the hand at the show
+  const sorted = ids.slice().sort((a, b) => (win.has(b) ? 1 : 0) - (win.has(a) ? 1 : 0));
+  const net = id => (rs.shares[id] || 0) - (G.players[id].invested || 0);
+  const winners = rs.winners.map(id => G.players[id]);
+  const iWon = !!uid && win.has(uid), iPlayed = !!uid && G.players[uid] && (G.players[uid].invested || 0) > 0;
+  const mini = (c) => cardNode(c, false);
+  const row = id => {
+    const p = G.players[id], w = win.has(id), n = net(id);
+    return h('div', { class: 'rv-row' + (w ? ' win' : ''), 'data-uid': id },
+      h('div', { class: 'rv-av' }, avatarNode(p.avatar)),
+      h('div', { class: 'rv-who' }, h('b', { text: id === uid ? 'You' : p.name }), h('span', { text: handName(rs.reveal[id]) })),
+      h('div', { class: 'rv-cards' }, rs.reveal[id].map(mini)),
+      h('div', { class: 'rv-net ' + (n >= 0 ? 'up' : 'down'), text: (n >= 0 ? '+' : '\u2212') + rupee(Math.abs(n)) }));
+  };
+  const folded = rs.reason === 'fold';
+  const head = h('div', { class: 'rv-head' },
+    h('svg', { viewBox: '0 0 24 24', class: 'rv-crown', 'aria-hidden': 'true' }, h('path', { d: 'M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z', fill: 'currentColor' })),
+    h('div', { class: 'rv-title', text: winners.length > 1 ? 'SPLIT POT' : 'WINNER' }),
+    h('div', { class: 'rv-names', text: winners.map(p => p.name).join(' & ') }),
+    h('div', { class: 'rv-amt' }, h('small', { text: winners.length > 1 ? 'share of ' : 'wins ' }), h('b', { text: rupee(rs.amount) })),
+    h('div', { class: 'rv-why', text: folded ? 'Everyone else packed. No show needed.' : (rs.rank ? 'with ' + rs.rank : '') }));
+  const mine = iPlayed ? h('div', { class: 'rv-me ' + (iWon ? 'up' : 'down'), text: iWon ? 'You won ' + rupee(net(uid)) + ' this hand' : 'You lost ' + rupee(Math.abs(net(uid))) + ' this hand' }) : null;
+  return h('div', { class: 'rv', id: 'resultOverlay', role: 'status', onclick: () => { if (S.ov) { S.ov.closed = true; scheduleRender(); } } },
+    head, folded ? null : h('div', { class: 'rv-list' }, h('div', { class: 'rv-cap', text: 'Hands at the show' }), sorted.map(row)), mine);
+}
+
 function renderFeltV3(R, me, msgs) {
   const G = R.game, uid = S.user && S.user.uid, cfg = TABLE_BY_ID[R.id];
   const live = !!(G && G.phase !== 'idle' && Array.isArray(G.order) && G.players);
@@ -2096,6 +2152,12 @@ function renderFeltV3(R, me, msgs) {
     const hidden = !rv && (mine.status === 'blind' || !hd);
     const canSee = playing && mine.status === 'blind';
     stage.appendChild(h('div', { class: 'v3hand' + (canSee ? ' tappable' : ''), id: 'myCards', style: px(...V3_GRP.ME), onclick: canSee ? () => handleGameAction('see') : null }, [0, 1, 2].map(i => cardNode(rv ? rv[i] : hd && !hidden ? hd[i] : '', hidden))));
+  }
+
+  /* end of hand: the result panel, five seconds from when this phone first sees the result */
+  if (result) {
+    if (!S.ov || S.ov.handId !== G.handId) { S.ov = { handId: G.handId, until: Date.now() + RESULT_MS, closed: false }; setTimeout(scheduleRender, RESULT_MS + 80); }
+    if (!S.ov.closed && Date.now() < S.ov.until) stage.appendChild(renderResultV3(G, uid));
   }
 
   /* the action row, drawn on the artwork's own buttons */
@@ -2845,7 +2907,7 @@ const Fx = {
     if (Fx.dealStart && now - Fx.dealStart < 4400) Fx.deal(now - Fx.dealStart);
     if (Fx.flipStart && now - Fx.flipStart < 700) Fx.flip(now - Fx.flipStart);
     Fx.glow();
-    if (result && Fx.wonHand !== G.handId) { Fx.wonHand = G.handId; Fx.winStart = now; Fx.celebrate(G); }
+    if (result && Fx.wonHand !== G.handId) { Fx.wonHand = G.handId; Fx.winStart = now; }
     const wb = $('winBanner');
     if (wb && Fx.winStart && now - Fx.winStart < 700) wb.animate([{ transform: 'scale(.5)', opacity: 0 }, { transform: 'scale(1.12)', opacity: 1, offset: .65 }, { transform: 'scale(1)', opacity: 1 }], { duration: 520, easing: 'ease-out', fill: 'backwards' }).currentTime = now - Fx.winStart;
   },
@@ -3113,7 +3175,7 @@ const ENGINE = {
   LOG_MAX: 20,
   BOT_STACK_MULT: 50
 };
-const GAME_CONFIG = { turnMs: 30000, resultMs: 7000, autoDealMs: 4000, maxMissed: 2, dealPadMs: 2600, showHoldMs: 4000, botMs: 1500 };
+const GAME_CONFIG = { turnMs: 30000, resultMs: 8000, autoDealMs: 4000, maxMissed: 2, dealPadMs: 2600, showHoldMs: 4000, botMs: 1500 };
 
 /* ---- deck and randomness ---- */
 function secureRandInt(n) {
