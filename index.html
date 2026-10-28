@@ -1101,7 +1101,7 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .tbseat.me .tbring{border-color:#e6c0ff}
 .tbseat.turn .tbring{border-color:#ffe9a6}
 .tbseat.win .tbring{border-color:#2ee59d;box-shadow:0 0 0 calc(var(--u) * 4) rgba(46,229,157,.95),0 0 calc(var(--u) * 26) calc(var(--u) * 8) rgba(46,229,157,.65)}
-.tbseat.out .tbring,.tbseat.out .tbplate{opacity:.55}
+.tbseat.out .tbring,.tbseat.out .tbplate{filter:brightness(.62) saturate(.7)}
 .tbtimer{position:absolute;left:-15%;top:-15%;width:130%;height:130%;transform:rotate(-90deg);pointer-events:none;overflow:visible}
 .tbtimer circle{fill:none;stroke-width:4;stroke-linecap:round}
 .tbtimer .tbtrack{stroke:rgba(0,0,0,.5)}
@@ -1312,7 +1312,7 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .fxspark{position:absolute;left:0;top:0;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,#fff 0,rgba(255,236,160,.95) 25%,rgba(255,140,40,.55) 50%,transparent 70%);opacity:0}
 .fxvs{position:absolute;left:0;top:-70px;transform:translateX(-50%);padding:4px 12px;border-radius:99px;background:rgba(10,6,3,.9);border:1px solid #d6ac5c;color:#f2c75c;font:800 12px system-ui;letter-spacing:1px;white-space:nowrap}
 .fxvs.win{color:#2ee59d;border-color:#2ee59d}.fxvs.lose{color:#ff6b86;border-color:#ff3b5c}
-.fxpeek{position:absolute;left:0;top:92px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 10px;border-radius:12px;background:rgba(10,6,3,.88);border:1px solid #d6ac5c}
+.fxpeek{position:absolute;left:0;top:-14px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 10px;border-radius:12px;background:rgba(10,6,3,.88);border:1px solid #d6ac5c}
 .fxpeek small{font:700 10px system-ui;color:#cdbd98;letter-spacing:.5px}
 .fxpeek>div{display:flex}
 .fxpeek .tcard{width:38px;height:54px;margin:0 -3px;border-radius:5px;font-size:13px}
@@ -1355,6 +1355,56 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .sheetback .vdetail{padding:12px;border-radius:12px;background:rgba(20,15,10,.6);color:#e6d7b3;font-size:14px}
 .sheetback .vdetail b{color:#f2c75c}
 .sheetback .vdetail p{margin:6px 0 0}
+.fxbattle .fxpeek .tcard{width:38px!important;height:54px!important;min-width:0!important;font-size:13px!important;margin:0 -3px!important}
+
+/* ---- 29. SOUND/LED/DEALER/SOCIAL/HISTORY ---- */
+.tbstage .tbglow{position:absolute;border-radius:50%;pointer-events:none;mix-blend-mode:screen;animation:glowp 3s ease-in-out infinite alternate}
+.tbglow.t0{border:calc(var(--u) * 4) solid rgba(46,229,157,.3);box-shadow:0 0 calc(var(--u) * 16) rgba(46,229,157,.25),inset 0 0 calc(var(--u) * 16) rgba(46,229,157,.18)}
+.tbglow.t1{border:calc(var(--u) * 6) solid rgba(80,255,170,.6);box-shadow:0 0 calc(var(--u) * 30) rgba(46,229,157,.55),inset 0 0 calc(var(--u) * 30) rgba(46,229,157,.4)}
+.tbglow.t2{border:calc(var(--u) * 7) solid rgba(242,199,92,.75);box-shadow:0 0 calc(var(--u) * 40) rgba(242,199,92,.65),inset 0 0 calc(var(--u) * 36) rgba(242,199,92,.45)}
+.tbglow.t3{border:calc(var(--u) * 9) solid rgba(255,226,140,.95);box-shadow:0 0 calc(var(--u) * 60) rgba(255,205,80,.9),inset 0 0 calc(var(--u) * 50) rgba(255,205,80,.6);animation-duration:1.6s}
+@keyframes glowp{from{opacity:.7}to{opacity:1}}
+.tbstage .dealerlife{position:absolute;pointer-events:none;background:var(--i-tablebg) 50.3% 0/557.3% 285.2% no-repeat;-webkit-mask-image:radial-gradient(ellipse 50% 56% at 50% 46%,#000 58%,transparent 100%);mask-image:radial-gradient(ellipse 50% 56% at 50% 46%,#000 58%,transparent 100%);transform-origin:50% 100%}
+.tbstage .dealerlife.idle{animation:dbreath 6s ease-in-out infinite}
+@keyframes dbreath{0%,100%{transform:translateY(0) scale(1) rotate(0)}40%{transform:translateY(-1.6px) scale(1.012) rotate(.18deg)}75%{transform:translateY(-.6px) scale(1.006) rotate(-.15deg)}}
+.rs-row.win .tcard,.tbseat.win .tmini,.tbstage.iwon #myCards .tcard{box-shadow:0 0 0 2px #f2c75c,0 0 14px 4px rgba(242,199,92,.8);animation:winshine 1.5s ease-in-out infinite alternate}
+@keyframes winshine{from{box-shadow:0 0 0 2px #f2c75c,0 0 8px 2px rgba(242,199,92,.5)}to{box-shadow:0 0 0 3px #ffe9a6,0 0 20px 7px rgba(242,199,92,.95)}}
+.saybub{position:fixed;z-index:65;transform:translate(-50%,0);pointer-events:none;padding:5px 12px;border-radius:14px;background:rgba(16,10,5,.92);border:1px solid #d6ac5c;color:#f6e3b0;font:700 12px system-ui;white-space:nowrap}
+.saybub.big{padding:2px 8px;font-size:30px;background:transparent;border:0}
+.giftfly{position:fixed;z-index:66;pointer-events:none;font-size:30px;line-height:1}
+.tbstage .tbprop{position:absolute;transform:translate(-50%,-50%);font-size:calc(var(--u) * 46);line-height:1;pointer-events:none;filter:drop-shadow(0 3px 4px rgba(0,0,0,.6));animation:propbob 2.6s ease-in-out infinite}
+@keyframes propbob{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-58%)}}
+.vip{display:inline-block;padding:2px 10px;border-radius:99px;background:linear-gradient(180deg,#f1dcae,#c4a068);color:#1d1308;font:800 11px system-ui;letter-spacing:1px}
+.pgrid{flex-wrap:wrap}
+.giftrow{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.sheetback .giftbtn{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 10px;min-width:62px;border-radius:12px;border:1px solid rgba(214,172,92,.5);background:rgba(20,15,10,.7);color:#f4ead3}
+.giftbtn span{font-size:26px;line-height:1.1}.giftbtn small{font:600 10px system-ui;color:#cdb98f}
+.giftwho{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.sheetback .gwho{position:relative;padding:8px 14px;border-radius:99px;border:1px solid rgba(214,172,92,.5);background:rgba(20,15,10,.7);color:#f4ead3;font:700 13px system-ui}
+.sheetback .gwho.on{background:linear-gradient(180deg,#f1dcae,#c4a068);color:#1d1308}
+.chatlog{max-height:120px;overflow:auto;display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:12px;background:rgba(20,15,10,.6);margin-bottom:10px}
+.chatmsg{display:flex;gap:8px;align-items:baseline;font-size:13px;color:#e6d7b3}.chatmsg b{color:#f2c75c;font-size:12px}.chatmsg.big span{font-size:24px}
+.chatq{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.sheetback .chatbtn{position:relative;padding:8px 12px;border-radius:99px;border:1px solid rgba(214,172,92,.55);background:rgba(20,15,10,.7);color:#f6e3b0;font:700 13px system-ui}
+.stkrow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sheetback .stkbtn{position:relative;padding:6px 0;border-radius:12px;border:1px solid rgba(214,172,92,.4);background:rgba(20,15,10,.7);font-size:26px;line-height:1.2}
+.hist .htabs{display:flex;gap:6px;overflow:auto;margin-bottom:8px}
+.sheetback .htab{position:relative;flex:none;padding:6px 12px;border-radius:99px;border:1px solid rgba(214,172,92,.5);background:rgba(20,15,10,.7);color:#e6d7b3;font:700 12px system-ui}
+.sheetback .htab.on{background:linear-gradient(180deg,#f1dcae,#c4a068);color:#1d1308}
+.hsum{margin:6px 0 8px;font-size:13px;color:#f6e3b0}
+.hsteps{display:flex;flex-direction:column;gap:5px;max-height:150px;overflow:auto;margin-top:8px}
+.hstep{display:grid;grid-template-columns:62px 1fr auto auto;gap:8px;align-items:center;padding:6px 10px;border-radius:10px;background:rgba(20,15,10,.65);border:1px solid rgba(214,172,92,.25);font-size:12px;color:#e6d7b3}
+.hstep.note{grid-template-columns:1fr auto;color:#cdb98f}
+.hstep .hw{font:800 10px system-ui;letter-spacing:.5px;padding:3px 6px;border-radius:99px;text-align:center;background:rgba(214,172,92,.25);color:#f2c75c}
+.hstep.k-blind .hw{background:#1c3f8a;color:#cfe0ff}.hstep.k-chaal .hw{background:#7a5a1a;color:#ffe9a6}.hstep.k-double .hw{background:#1a6a4a;color:#c9ffe6}.hstep.k-pack .hw{background:#6b1f2a;color:#ffd0d6}.hstep.k-show .hw{background:#5a2a8a;color:#ecd6ff}
+.hstep em{font-style:normal;color:#f2c75c;font-weight:700}.hstep i{font-style:normal;color:#9d8e6c}
+.hstep.hid{display:none}.hstep.cur{border-color:#f2c75c;box-shadow:0 0 10px rgba(242,199,92,.5)}
+.rklist{display:flex;flex-direction:column;gap:4px;margin:4px 0}
+.rkrow{display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:center;padding:3px 10px;border-radius:12px;background:rgba(20,15,10,.65);border:1px solid rgba(214,172,92,.25);color:#f6e3b0}
+.rkn{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#f2c75c;color:#1d1308;font:800 12px system-ui}
+.rkhead{font:700 12px system-ui;color:#cdb98f;letter-spacing:.5px}
+.sheetback .sheet{animation:sheetin .2s ease-out}
+@keyframes sheetin{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
 
 </style>
 </head>
@@ -1586,7 +1636,7 @@ function setConnection(online) {
   c.className = 'conn' + (online ? '' : ' off');
 }
 
-const BUILD_TAG = '2026-10-28 modes';
+const BUILD_TAG = '2026-10-28 social';
 
 /* ==========================================================================
    SECTION 2b - LANDSCAPE
@@ -1755,6 +1805,7 @@ const Repo = {
   roomRef: t => db.collection('rooms').doc(t),
   membersCol: t => db.collection('rooms').doc(t).collection('members'),
   botsCol: t => db.collection('rooms').doc(t).collection('bots'),
+  feedCol: t => db.collection('rooms').doc(t).collection('feed'),
   gameRef: t => db.collection('rooms').doc(t).collection('game').doc('state'),
   actionsCol: t => db.collection('rooms').doc(t).collection('actions'),
   handsCol: t => db.collection('rooms').doc(t).collection('hands'),
@@ -1888,6 +1939,18 @@ const Repo = {
   watchProfile: (sc, uid, cb) => sc.listen(Repo.userRef(uid), s => cb(s.exists ? s.data() : null)),
   watchRoom: (sc, t, cb) => sc.listen(Repo.roomRef(t), s => { const d = s.exists ? s.data() : null; if (t === PRIVATE_ID) applyPrivateCfg(d); cb(d); }),
   watchMembers: (sc, t, cb) => sc.listen(Repo.membersCol(t), s => cb(s.docs.map(d => d.data()))),
+  watchFeed: (sc, t, cb) => sc.listen(Repo.feedCol(t), s => cb(s.docs.map(d => d.data()))),
+  sendFeed: (t, uid, kind, code, to, seq) => Repo.feedCol(t).doc(uid).set({ uid, kind, code, to: to || '', seq, updatedAt: FV.serverTimestamp() }),
+  getStats: uid => db.collection('stats').doc(uid).get().then(d => d.exists ? d.data() : null),
+  // One more hand for this player: played always, won when they took the pot. The streak counts wins in a row.
+  bumpStats: (uid, won) => {
+    const ref = db.collection('stats').doc(uid);
+    return db.runTransaction(async tx => {
+      const d = await tx.get(ref), o = d.exists ? d.data() : { hands: 0, wins: 0, streak: 0 };
+      const wins = o.wins + (won ? 1 : 0), streak = won ? o.streak + 1 : 0;
+      tx.set(ref, { uid, hands: o.hands + 1, wins, streak: Math.min(streak, wins), updatedAt: FV.serverTimestamp() });
+    });
+  },
   watchBots: (sc, t, cb) => sc.listen(Repo.botsCol(t), s => cb(s.docs.map(d => d.data()))),
   // Rule: hands get (only the document whose ID is my UID)
   watchHand: (sc, t, uid, cb) => sc.listen(Repo.handsCol(t).doc(uid), s => cb(s.exists ? s.data() : null)),
@@ -2140,7 +2203,7 @@ function openRoomsScope() {
 
 /* Live data for one table. */
 function openRoomScope(tableId) {
-  const R = { id: tableId, doc: undefined, members: [], bots: [], game: null, myHand: null, loaded: {} };
+  const R = { id: tableId, doc: undefined, members: [], bots: [], feed: [], game: null, myHand: null, loaded: {} };
   S.room = R;
   const sc = scopeRoom = Scopes.open('room:' + tableId);
   Repo.watchRoom(sc, tableId, d => { R.doc = d; R.loaded.doc = true; setConnection(true); scheduleRender(); });
@@ -2159,6 +2222,7 @@ function openRoomScope(tableId) {
     scheduleRender();
   });
   Repo.watchBots(sc, tableId, list => { R.bots = list; R.loaded.bots = true; scheduleRender(); });
+  Repo.watchFeed(sc, tableId, list => { R.feed = list; Social.incoming(R); });
   Repo.watchGame(sc, tableId, g => { R.game = g; R.loaded.game = true; scheduleRender(); });
   if (!S.isAdmin && S.user) Repo.watchHand(sc, tableId, S.user.uid, hd => { R.myHand = hd; scheduleRender(); });
   sc.every(scheduleRender, 15000);
@@ -2363,6 +2427,7 @@ const timerColor = f => f > .5 ? '#2ee59d' : f > .25 ? '#ffb02e' : '#ff3b5c';   
 function updateTimer() {
   const G = S.room && S.room.game;
   Auto.check();
+  if (G && S.user) Fx.heart(G, S.user.uid);
   if (!G || G.phase !== 'playing') return;
   const svg = document.querySelector('.tbseat.turn .tbtimer'), arc = document.querySelector('.tbseat.turn .tbprog');
   if (!svg || !arc) return;
@@ -2467,6 +2532,7 @@ function tbSeat(sp, key, c) {
       h('div', { class: 'tbpname', text: isMe ? 'You' : sp.name }),
       h('div', { class: 'tbpchips' }, h('span', { text: rupee(sp.chips) }), isMe && c.me ? h('button', { id: 'addChipsBtn', class: 'tbadd', type: 'button', 'aria-label': 'Add chips', text: '+', onclick: e => { e.stopPropagation(); Sheets.topup(); } }) : null),
       label ? h('div', { class: 'tbpst ' + (away || out ? 'out' : sp.status), text: label }) : null),
+    Social.prop(sp.id) ? h('div', { class: 'tbprop', style: tbAt(ax + 74, ay + 30), title: GIFTS[Social.prop(sp.id).code].name, text: GIFTS[Social.prop(sp.id).code].icon }) : null,
     turn ? h('div', { class: 'tbdisc', style: tbAt(ax + 52, ay - 46), text: fmtSecs(G.turnEndsAt - Date.now() - 500) }) : null];
   if (!isMe) {
     const [gx, gy, rot] = TB_CARDS[key], show = c.live && !out;
@@ -2575,7 +2641,13 @@ function renderFelt(R, me, msgs) {
   const ctx = { R, G, me, uid, live, playing, reveal, winners };
   const others = seats.filter(x => !(me && x.id === me.uid)).slice(0, meSeat ? 5 : 6);
   const online = hostLive(R.doc), seated = !!me && me.seatState === 'seated';
-  const stage = h('div', { class: 'tbstage', id: 'tbStage' });
+  const stage = h('div', { class: 'tbstage' + (result && uid && G.result.winners.includes(uid) ? ' iwon' : ''), id: 'tbStage' });
+  // LED rim light round the felt: it brightens and turns from green to gold as the pot grows (measured in boots).
+  const potNow = live ? (result ? G.result.amount : G.pot) : 0, ratio = cfg && cfg.boot ? potNow / cfg.boot : 0;
+  const tier = ratio >= 120 ? 3 : ratio >= 40 ? 2 : ratio >= 12 ? 1 : 0;
+  stage.appendChild(h('div', { class: 'tbglow t' + tier, id: 'tbGlow', 'aria-hidden': 'true', style: tbBox(96, 262, 1576, 766) + ';animation-delay:-' + ((Date.now() / 1000) % 3).toFixed(2) + 's' }));
+  // The dealer is part of the picture; between hands a copy of that patch breathes and sways a little so the screen is never still.
+  stage.appendChild(h('div', { class: 'dealerlife' + (!live || result ? ' idle' : ''), 'aria-hidden': 'true', style: tbBox(690, 0, 990, 330) + ';animation-delay:-' + ((Date.now() / 1000) % 6).toFixed(2) + 's' }));
 
   /* top left: the crown is replaced by an exit button to the lobby; the pill says which room this is and how many seats are taken */
   stage.appendChild(S.isAdmin
@@ -2589,16 +2661,16 @@ function renderFelt(R, me, msgs) {
 
   /* top right and the left rail: live buttons drawn over the picture's own */
   const tb = (id, label, ic, x, fn, cls) => h('button', { id, class: 'tbtop' + (cls ? ' ' + cls : ''), type: 'button', 'aria-label': label, style: tbAt(x, 54), onclick: fn }, icon(ic));
-  stage.appendChild(tb('giftBtn', 'Gifts', 'gift', 1335, () => Sheets.soon('Gifts', 'Send a gift to a friend at the table, and claim daily bonuses.')));
+  stage.appendChild(tb('giftBtn', 'Gifts', 'gift', 1335, () => Sheets.gift()));
   stage.appendChild(tb('inviteBtn', 'Invite friends', 'mail', 1426, () => Sheets.invite()));
   stage.appendChild(tb('soundBtn', Sfx.on ? 'Sound on' : 'Sound off', Sfx.on ? 'bell' : 'bellOff', 1518, () => { Sfx.toggle(); scheduleRender(); }, Sfx.on ? '' : 'off'));
   stage.appendChild(tb('setBtn', 'Settings', 'gear', 1610, () => Sheets.settings()));
   const rail = (id, label, ic, fn) => h('button', { id, class: 'tbri', type: 'button', 'aria-label': label, onclick: fn }, icon(ic));
   stage.appendChild(h('div', { class: 'tbrail' },
-    rail('logBtn', 'Recent actions', 'list', () => Sheets.log()),
-    rail('chatBtn', 'Chat', 'chat', () => Sheets.soon('Table chat', 'Quick messages and emoji reactions for the table.')),
+    rail('logBtn', 'Hand history', 'list', () => Sheets.history()),
+    rail('chatBtn', 'Chat', 'chat', () => Sheets.chat()),
     rail('playersBtn', 'Players', 'users', () => Sheets.players()),
-    rail('infoBtn', 'How to play', 'stats', () => Sheets.info())));
+    rail('infoBtn', 'Hand ranks', 'stats', () => Sheets.ranks())));
 
   /* the dealer is in the picture; this is where dealt cards start from */
   stage.appendChild(h('div', { class: 'dealerfig', id: 'dealerFigure', style: tbAt(836, 322), 'aria-label': 'Dealer' }, h('div', { class: 'tbdeck', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'))));
@@ -3450,16 +3522,33 @@ const Sfx = {
   chip() { Sfx.tone(1760, .09, 'triangle', .045); Sfx.tone(2350, .07, 'triangle', .03, .05); },
   ping() { Sfx.tone(880, .12, 'sine', .06); Sfx.tone(1320, .18, 'sine', .05, .1); },
   win() { [523, 659, 784, 1047].forEach((f, i) => Sfx.tone(f, .22, 'triangle', .06, i * .1)); },
+  // Interface sounds: a soft metallic click, a quick sweep for a slide-out panel and a two-note chime for a pop-up window.
+  click() { Sfx.tone(2400, .035, 'square', .012); Sfx.tone(3600, .05, 'triangle', .02, .004); Sfx.tone(1500, .06, 'sine', .02, .01); },
+  sweep() {
+    if (!Sfx.on || !Sfx.ctx || Sfx.ctx.state !== 'running') return;
+    try {
+      const c = Sfx.ctx, t = c.currentTime, o = c.createOscillator(), g = c.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(260, t); o.frequency.exponentialRampToValueAtTime(1500, t + .16);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(.035, t + .04); g.gain.exponentialRampToValueAtTime(0.0001, t + .2);
+      o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + .23);
+    } catch (e) { /* audio is optional */ }
+  },
+  chime(at) { Sfx.tone(988, .16, 'sine', .05, at || 0); Sfx.tone(1568, .3, 'sine', .04, (at || 0) + .09); },
+  thump() { Sfx.tone(70, .14, 'sine', .07); Sfx.tone(60, .12, 'sine', .05, .13); },
   buzz(p) { try { if (Fx.on && Sfx.vibOn && navigator.vibrate) navigator.vibrate(p); } catch (e) { /* not supported */ } }
 };
-document.addEventListener('pointerdown', () => Sfx.init(), { once: false, passive: true });
+document.addEventListener('pointerdown', e => {
+  Sfx.init();
+  const b = e.target && e.target.closest ? e.target.closest('button') : null;
+  if (b && !b.disabled) Sfx.click();
+}, { passive: true });
 
 const Fx = {
   on: !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches),
   hand: '', sideKey: '', chips: {}, status: '', dealStart: 0, flipStart: 0, wonHand: '', winStart: 0,
   shown: 0, target: 0, raf: 0, pl: {}, stake: 0, turnKey: '',
 
-  leave() { Fx.sideKey = ''; const bt = $('fxBattle'); if (bt) bt.remove(); Fx.hand = ''; Fx.chips = {}; Fx.status = ''; Fx.wonHand = ''; Fx.dealStart = Fx.flipStart = 0; Fx.pl = {}; Fx.turnKey = ''; },
+  leave() { Social.reset(); History.reset(); Fx.heartAt = 0; Fx.statHand = ''; Fx.sideKey = ''; const bt = $('fxBattle'); if (bt) bt.remove(); Fx.hand = ''; Fx.chips = {}; Fx.status = ''; Fx.wonHand = ''; Fx.dealStart = Fx.flipStart = 0; Fx.pl = {}; Fx.turnKey = ''; },
   // centres are in "page space": when the page is turned with CSS (Landscape.rot) screen coordinates are converted
   centre(el) { const b = el.getBoundingClientRect(), x = b.left + b.width / 2, y = b.top + b.height / 2; return Landscape.rot ? { x: y, y: window.innerWidth - x } : { x, y }; },
   seat(id) { return document.querySelector('#gamePlayers .tbseat[data-uid="' + id + '"] .tbring'); },
@@ -3479,6 +3568,7 @@ const Fx = {
       Fx.shown = Fx.dealStart ? 0 : (result ? G.result.amount : G.pot);
       Fx.status = mine ? mine.status : '';
       Fx.pl = {}; Fx.stake = G.stake;
+      if (G.phase === 'playing') History.start(G);
       if (Fx.dealStart) {
         G.order.forEach(id => Fx.fly(Fx.seat(id), $('potAmt'), 2, 1500));      // the boot goes in once the cards are out
         for (let i = 0; i < G.order.length * 3; i++) Sfx.card(i * .22);
@@ -3492,7 +3582,7 @@ const Fx = {
         else if (paid > 0 && result && G.result.reason === 'show') word = 'Show';
         else if (paid > 0) word = G.stake > Fx.stake ? 'Double' : (p.status === 'seen' ? 'Chaal' : 'Blind');
         else if (p.status === 'seen' && pv.status === 'blind') word = 'Seen';
-        if (word) { Fx.bubble(id, word, paid > 0 ? paid : 0); if (paid > 0) Sfx.chip(); }
+        if (word) { Fx.bubble(id, word, paid > 0 ? paid : 0); if (paid > 0) Sfx.chip(); History.step(G, id, word, Math.max(paid, 0)); }
       });
       if (mine && Fx.status === 'blind' && mine.status === 'seen') Fx.flipStart = now;
       Fx.status = mine ? mine.status : '';
@@ -3501,7 +3591,7 @@ const Fx = {
     G.order.forEach(id => { Fx.pl[id] = { chips: G.players[id].chips, status: G.players[id].status }; });
     // my turn: a ping and a buzz, once
     const tk = G.handId + '|' + G.turn + '|' + G.pot;
-    if (G.phase === 'playing' && G.turn === uid && tk !== Fx.turnKey) { Fx.turnKey = tk; if (!isNew || !fresh) { Sfx.ping(); Sfx.buzz([30, 40, 30]); } }
+    if (G.phase === 'playing' && G.turn === uid && tk !== Fx.turnKey) { Fx.turnKey = tk; if (!isNew || !fresh) { Sfx.ping(); Sfx.buzz([90, 70, 90]); } }
     if (G.turn !== uid) Fx.turnKey = G.phase === 'playing' ? Fx.turnKey : '';
 
     // pot count-up (the number shown survives a re-render)
@@ -3515,11 +3605,14 @@ const Fx = {
     if (Fx.dealStart && now - Fx.dealStart < 4400) Fx.deal(now - Fx.dealStart);
     if (Fx.flipStart && now - Fx.flipStart < 1300) Fx.flip(now - Fx.flipStart);
     Fx.glow();
+    if (result) { History.finish(G); if (Fx.statHand !== G.handId && Math.abs(Date.now() - (G.result.at || G.dealtAt || Date.now())) < 600000) { Fx.statHand = G.handId; Stats.record(G, uid); } }
     if (result && Fx.wonHand !== G.handId) { Fx.wonHand = G.handId; Fx.winStart = now; if (Math.abs(Date.now() - (R.doc && R.doc.dealerAt || 0)) < 600000) Fx.celebrate(G); }
     // a sideshow: the clash is shown only to the two players involved
     const sd = G.side, sk = sd ? G.handId + '|' + sd.at + '|' + sd.state : '';
     if (sd && uid && (sd.from === uid || sd.to === uid) && sk !== Fx.sideKey && Math.abs(Date.now() - sd.at) < 20000) { Fx.sideKey = sk; Fx.battle(G, sd, uid); }
     else if (!sd) Fx.sideKey = '';
+    if (sd && sk !== Fx.sideLog) { Fx.sideLog = sk; const nm = id => (G.players[id] && G.players[id].name) || 'Player'; History.note(G, sd.state === 'ask' ? nm(sd.from) + ' asks ' + nm(sd.to) + ' for a sideshow (' + fmt(sd.cost || G.stake) + ')' : sd.declined ? nm(sd.to) + ' declines the sideshow' : nm(sd.loser) + ' packs after the sideshow'); }
+    Fx.heart(G, uid);
     const wb = $('winBanner');
     if (wb && Fx.winStart && now - Fx.winStart < 700) wb.animate([{ transform: 'scale(.5)', opacity: 0 }, { transform: 'scale(1.12)', opacity: 1, offset: .65 }, { transform: 'scale(1)', opacity: 1 }], { duration: 520, easing: 'ease-out', fill: 'backwards' }).currentTime = now - Fx.winStart;
   },
@@ -3533,48 +3626,23 @@ const Fx = {
     if (Fx.shown !== Fx.target) Fx.raf = requestAnimationFrame(Fx.step);
   },
 
-  // Cards come off the middle of the table one at a time, round the table, three rounds.
+  // Cards appear quietly, one after another (no flying or spinning).
   deal(elapsed) {
-    const src = $('dealerFigure'); if (!src) return;
-    const c = Fx.centre(src), seats = [...document.querySelectorAll('#gamePlayers .tbseat')];
+    const seats = [...document.querySelectorAll('#gamePlayers .tbseat')];
     let k = 0;
     for (let r = 0; r < 3; r++) seats.forEach(s => {
       const el = s.classList.contains('me') ? document.querySelectorAll('#myCards .tcard')[r] : s.querySelector('.tmini[data-i="' + r + '"]');
       if (!el) return;
-      const e = Fx.centre(el);
-      const a = el.animate([
-        { transform: 'translate(' + (c.x - e.x) + 'px,' + (c.y - e.y) + 'px) scale(.45) rotate(-120deg)', opacity: 0 },
-        { opacity: 1, offset: .2 },
-        { transform: 'none', opacity: 1 }], { duration: 620, delay: 700 + k++ * 220, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' });
+      const a = el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, delay: 500 + k++ * 140, easing: 'ease-out', fill: 'backwards' });
       a.currentTime = elapsed;
     });
-    // the dealer nods at every card
-    const dr = src.querySelector('.dring');
-    if (dr) for (let i = 0; i < k; i++) { const a = dr.animate([{ transform: 'scale(1) rotate(0)' }, { transform: 'scale(1.16) rotate(-8deg)' }, { transform: 'scale(1) rotate(0)' }], { duration: 200, delay: 700 + i * 220 }); a.currentTime = elapsed; }
-    const dk = src.querySelector('.tbdeck');
-    if (dk) { const a = dk.animate([{ transform: 'translateX(0) rotate(0)' }, { transform: 'translateX(-6px) rotate(-10deg)' }, { transform: 'translateX(6px) rotate(8deg)' }, { transform: 'translateX(-4px) rotate(-6deg)' }, { transform: 'translateX(0) rotate(0)' }], { duration: 650, easing: 'ease-in-out' }); a.currentTime = elapsed; }
   },
 
-  // Looking at your cards: each card is lifted at its corner and peeled back, with a soft shadow sweeping across it.
+  // Looking at your cards: a short fade, nothing more.
   flip(elapsed) {
     document.querySelectorAll('#myCards .tcard').forEach((el, i) => {
-      el.style.transformOrigin = '0% 100%';
-      const d = i * 110, T = 'perspective(520px) ';
-      const a = el.animate([
-        { transform: T + 'rotateX(0) rotateY(0) rotateZ(0) translateY(0) scale(1)', filter: 'drop-shadow(0 2px 3px rgba(0,0,0,.4))' },
-        { transform: T + 'rotateX(52deg) rotateY(-8deg) rotateZ(-3deg) translateY(-14px) scale(1.05)', filter: 'drop-shadow(0 16px 12px rgba(0,0,0,.55))', offset: .38 },
-        { transform: T + 'rotateX(52deg) rotateY(-8deg) rotateZ(-3deg) translateY(-14px) scale(1.05)', filter: 'drop-shadow(0 16px 12px rgba(0,0,0,.55))', offset: .5 },
-        { transform: T + 'rotateX(-9deg) rotateY(3deg) translateY(-4px) scale(1.03)', filter: 'drop-shadow(0 8px 8px rgba(0,0,0,.45))', offset: .8 },
-        { transform: T + 'rotateX(0) rotateY(0) translateY(0) scale(1)', filter: 'drop-shadow(0 2px 3px rgba(0,0,0,.4))' }], { duration: 900, delay: d, easing: 'cubic-bezier(.3,.7,.3,1)', fill: 'backwards' });
+      const a = el.animate([{ opacity: .25 }, { opacity: 1 }], { duration: 280, delay: i * 70, easing: 'ease-out', fill: 'backwards' });
       a.currentTime = elapsed;
-      let sh = el.querySelector('.peelsh');
-      if (!sh) { sh = h('i', { class: 'peelsh', 'aria-hidden': 'true' }); el.appendChild(sh); }
-      const b = sh.animate([
-        { opacity: 0, transform: 'translateX(-70%)' },
-        { opacity: 1, transform: 'translateX(-10%)', offset: .35 },
-        { opacity: .8, transform: 'translateX(20%)', offset: .6 },
-        { opacity: 0, transform: 'translateX(90%)' }], { duration: 900, delay: d, easing: 'ease-in-out', fill: 'both' });
-      b.currentTime = elapsed;
     });
   },
 
@@ -3655,51 +3723,19 @@ const Fx = {
     }
   },
 
-  // Sideshow clash, for the two players only: two card backs fly together and strike, then the outcome shows as a green or red aura
-  // and each player sees the other's cards.
+  // Sideshow, for the two players only: a plain banner says what happened, and the loser or winner sees the other hand.
   battle(G, sd, uid) {
     const L = $('fxLayer'), pot = $('potAmt'); if (!Fx.on || !L || !pot) return;
     const pc = Fx.centre(pot), c = { x: pc.x, y: pc.y - 130 };
-    let B = $('fxBattle');
-    const place = (el, p) => { el.style.left = '0px'; el.style.top = '0px'; el.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)'; };
-    if (sd.state === 'ask') {
-      if (B) B.remove();
-      B = h('div', { id: 'fxBattle', class: 'fxbattle' }, h('div', { class: 'fxbc a' }), h('div', { class: 'fxbc b' }), h('i', { class: 'fxspark' }), h('div', { class: 'fxvs', text: 'SIDESHOW' }));
-      B.style.left = c.x + 'px'; B.style.top = c.y + 'px'; L.appendChild(B);
-      const A = B.querySelector('.a'), Bc = B.querySelector('.b');
-      [[A, sd.from, -30, -10], [Bc, sd.to, 30, 10]].forEach(([el, id, ex, rot]) => {
-        const s = Fx.seat(id), sc = s ? Fx.centre(s) : { x: c.x + ex * 8, y: c.y };
-        const sx = sc.x - c.x, sy = sc.y - c.y;
-        el.animate([{ transform: 'translate(' + sx + 'px,' + sy + 'px) rotate(' + (ex * -3) + 'deg) scale(.5)', opacity: 0 }, { opacity: 1, offset: .2 },
-          { transform: 'translate(' + (ex * 2.1) + 'px,0) rotate(' + rot * 1.4 + 'deg) scale(1.08)', offset: .72 },
-          { transform: 'translate(' + ex + 'px,0) rotate(' + rot + 'deg) scale(1)' }], { duration: 760, easing: 'cubic-bezier(.3,.8,.3,1)', fill: 'both' });
-      });
-      const sp = B.querySelector('.fxspark');
-      sp.animate([{ transform: 'translate(-50%,-50%) scale(.2)', opacity: 0 }, { transform: 'translate(-50%,-50%) scale(1.5)', opacity: 1, offset: .35 }, { transform: 'translate(-50%,-50%) scale(2.4)', opacity: 0 }], { duration: 520, delay: 700, easing: 'ease-out', fill: 'both' });
-      B.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(-4px,2px)' }, { transform: 'translate(4px,-2px)' }, { transform: 'translate(-2px,1px)' }, { transform: 'translate(0,0)' }], { duration: 260, delay: 720 });
-      Sfx.card(.1); Sfx.tone(180, .16, 'sawtooth', .05, .72); Sfx.buzz([20, 30, 40]);
-      return;
-    }
-    // the answer
-    if (!B) {
-      B = h('div', { id: 'fxBattle', class: 'fxbattle' }, h('div', { class: 'fxbc a' }), h('div', { class: 'fxbc b' }), h('div', { class: 'fxvs', text: 'SIDESHOW' }));
-      B.style.left = c.x + 'px'; B.style.top = c.y + 'px'; L.appendChild(B);
-      place(B.querySelector('.a'), { x: -30, y: 0 }); place(B.querySelector('.b'), { x: 30, y: 0 });
-    }
-    const A = B.querySelector('.a'), Bc = B.querySelector('.b'), vs = B.querySelector('.fxvs'), sp = B.querySelector('.fxspark');
-    if (sp) sp.remove();
-    const done = ms => setTimeout(() => { const t = $('fxBattle'); if (t === B) { B.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 400, fill: 'forwards' }).onfinish = () => B.remove(); } }, ms);
-    if (sd.declined) {
-      vs.textContent = 'DECLINED';
-      [[A, -30], [Bc, 30]].forEach(([el, ex]) => el.animate([{ transform: 'translate(' + ex + 'px,0) scale(1)', opacity: 1 }, { transform: 'translate(' + ex * 5 + 'px,0) scale(.8)', opacity: 0 }], { duration: 700, fill: 'forwards' }));
-      done(1400); return;
-    }
-    const winEl = sd.winner === sd.from ? A : Bc, loseEl = sd.loser === sd.from ? A : Bc, wx = winEl === A ? -30 : 30, lx = loseEl === A ? -30 : 30;
+    const old = $('fxBattle'); if (old) old.remove();
+    const B = h('div', { id: 'fxBattle', class: 'fxbattle' }, h('div', { class: 'fxvs', text: 'SIDESHOW' }));
+    B.style.left = c.x + 'px'; B.style.top = c.y + 'px'; L.appendChild(B);
+    const vs = B.querySelector('.fxvs');
+    const done = ms => setTimeout(() => { if ($('fxBattle') === B) B.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 400, fill: 'forwards' }).onfinish = () => B.remove(); }, ms);
+    if (sd.state === 'ask') { Sfx.card(.1); done(15000); return; }
+    if (sd.declined) { vs.textContent = 'DECLINED'; done(1800); return; }
     const iWon = sd.winner === uid;
     vs.textContent = iWon ? 'YOU WIN THE SIDESHOW' : 'YOU LOSE THE SIDESHOW'; vs.classList.add(iWon ? 'win' : 'lose');
-    winEl.classList.add('winaura'); loseEl.classList.add('loseaura');
-    winEl.animate([{ transform: 'translate(' + wx + 'px,0) scale(1)' }, { transform: 'translate(' + wx + 'px,-10px) scale(1.18)' }, { transform: 'translate(' + wx + 'px,-4px) scale(1.1)' }], { duration: 600, fill: 'forwards', easing: 'ease-out' });
-    loseEl.animate([{ transform: 'translate(' + lx + 'px,0) rotate(0)' }, { transform: 'translate(' + (lx - 6) + 'px,0) rotate(-6deg)' }, { transform: 'translate(' + (lx + 6) + 'px,0) rotate(6deg)' }, { transform: 'translate(' + lx + 'px,14px) rotate(0) scale(.85)', opacity: .55 }], { duration: 800, fill: 'forwards' });
     // the other player's cards arrive in my hand document a moment after the result, so keep looking for them
     let tries = 0;
     const showPeek = () => {
@@ -3710,16 +3746,142 @@ const Fx = {
       B.appendChild(row); row.animate([{ opacity: 0, transform: 'translate(-50%,10px)' }, { opacity: 1, transform: 'translate(-50%,0)' }], { duration: 400, fill: 'both' });
     };
     showPeek();
-    if (iWon) { Sfx.win(); Sfx.buzz([40, 40, 40]); } else { Sfx.tone(160, .3, 'sawtooth', .05); Sfx.buzz([120]); }
+    if (iWon) Sfx.win(); else Sfx.tone(160, .3, 'sawtooth', .05);
     done(4600);
+  },
+
+  // A quick phrase or sticker above a player's picture.
+  say(id, text, big) {
+    const L = $('fxLayer'), ring = Fx.seat(id); if (!L || !ring || !text) return;
+    const c = Fx.centre(ring), b = h('div', { class: 'saybub' + (big ? ' big' : ''), text });
+    b.style.left = c.x + 'px'; b.style.top = (c.y - 52) + 'px'; L.appendChild(b);
+    if (!Fx.on) { setTimeout(() => b.remove(), 2600); return; }
+    b.animate([{ transform: 'translate(-50%,8px) scale(.7)', opacity: 0 }, { transform: 'translate(-50%,0) scale(1)', opacity: 1, offset: .15 }, { transform: 'translate(-50%,-6px) scale(1)', opacity: 1, offset: .85 }, { transform: 'translate(-50%,-14px) scale(.97)', opacity: 0 }],
+      { duration: big ? 2600 : 3200, easing: 'ease-out', fill: 'both' }).onfinish = () => b.remove();
+  },
+  // A gift slides from the sender to the receiver's seat; the prop that stays there is drawn by the seat itself.
+  gift(from, to, icon) {
+    const L = $('fxLayer'), a = Fx.seat(from), z = Fx.seat(to); if (!Fx.on || !L || !a || !z) return;
+    const p = h('div', { class: 'giftfly', text: icon }), ca = Fx.centre(a), cz = Fx.centre(z);
+    p.style.left = ca.x + 'px'; p.style.top = ca.y + 'px'; L.appendChild(p);
+    p.animate([{ transform: 'translate(-50%,-50%) scale(.6)', opacity: 0 }, { opacity: 1, offset: .15 }, { transform: 'translate(calc(-50% + ' + (cz.x - ca.x) + 'px),calc(-50% + ' + (cz.y - ca.y) + 'px)) scale(1)', opacity: 1 }], { duration: 900, easing: 'ease-in-out', fill: 'forwards' }).onfinish = () => p.remove();
+  },
+  // The last ten seconds of my turn: a heartbeat in the hand and a low thump that quickens as time runs out.
+  heartAt: 0, statHand: '', sideLog: '',
+  heart(G, uid) {
+    if (!uid || G.phase !== 'playing' || G.turn !== uid) { Fx.heartAt = 0; return; }
+    const rem = (G.turnEndsAt - Date.now()) / 1000;
+    if (rem > 10 || rem <= 0) { Fx.heartAt = 0; return; }
+    const n = performance.now();
+    if (n < Fx.heartAt) return;
+    Fx.heartAt = n + (rem > 6 ? 1000 : rem > 3 ? 720 : 470);
+    Sfx.buzz([22, 70, 26]); Sfx.thump();
   },
 
   // Once per hand: the pot slides to the winner.
   celebrate(G) {
     const pot = $('potAmt'), win = G.result.winners;
     win.forEach(id => Fx.fly(pot, Fx.seat(id), 14, 150, true));       // chips burst out of the pot, then sweep to the winner
-    if (pot && Fx.on) pot.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.5)' }, { transform: 'scale(1)' }], { duration: 400 });
+    if (pot && Fx.on) pot.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.12)' }, { transform: 'scale(1)' }], { duration: 500 });
     if (win.includes(S.user && S.user.uid)) { Sfx.win(); Sfx.buzz([40, 50, 40, 50, 80]); }
+  }
+};
+
+/* ==========================================================================
+   SECTION 8b - TABLE SOCIAL, HAND HISTORY AND PLAYER STATS
+   Chat phrases, stickers and gifts travel as short fixed codes in /rooms/{t}/feed/{uid} (never free text).
+   History is kept on this phone for the last five hands it watched. Stats are one small document per player.
+   ========================================================================== */
+const CHAT_PHRASES = { gg: 'Good game', bluff: 'Nice bluff', lucky: 'Too lucky', wow: 'Wow!', thanks: 'Thanks', hurry: 'Hurry up', again: 'Play again?', oops: 'Oops' };
+const STICKERS = { clap: '👏', fire: '🔥', laugh: '😂', cry: '😭', cool: '😎', heart: '❤️', sleep: '😴', think: '🤔' };
+const GIFTS = {
+  whiskey: { icon: '🥃', name: 'Whiskey' },
+  cigar: { icon: '🚬', name: 'Cigar' },
+  charm: { icon: '🍀', name: 'Lucky charm' },
+  rose: { icon: '🌹', name: 'Rose' }
+};
+const PROP_MS = 60000;
+
+const Social = {
+  log: [], seen: null, props: {}, lastSend: 0, tableId: '',
+  reset() { Social.log = []; Social.seen = null; Social.props = {}; Social.tableId = ''; },
+  nameOf(id) {
+    const R = S.room; if (!R) return 'Player';
+    const m = R.members.find(x => x.uid === id) || (R.bots || []).find(x => x.botId === id);
+    return m ? m.name : 'Player';
+  },
+  // Called whenever the feed listener delivers: only messages newer than the ones already seen are shown.
+  incoming(R) {
+    if (Social.tableId !== R.id) { Social.reset(); Social.tableId = R.id; }
+    const first = Social.seen === null; if (first) Social.seen = {};
+    (R.feed || []).forEach(d => {
+      const had = Social.seen[d.uid] || 0;
+      if (d.seq <= had) return;
+      Social.seen[d.uid] = d.seq;
+      const ms = d.updatedAt && d.updatedAt.toMillis ? d.updatedAt.toMillis() : Date.now();
+      if (first || Date.now() - ms > 20000) { if (d.kind === 'gift' && Date.now() - ms < PROP_MS) Social.props[d.to] = { code: d.code, from: d.uid, at: ms }; return; }
+      Social.receive(d, ms);
+    });
+    if (Social.onLog) Social.onLog();
+  },
+  receive(d, ms) {
+    const mine = S.user && d.uid === S.user.uid;
+    if (d.kind === 'chat') {
+      Social.log.push({ uid: d.uid, name: Social.nameOf(d.uid), text: CHAT_PHRASES[d.code] || '', at: ms }); Social.log = Social.log.slice(-40);
+      Fx.say(d.uid, CHAT_PHRASES[d.code] || '', false); if (!mine) Sfx.chime(.5);
+    } else if (d.kind === 'sticker') {
+      Social.log.push({ uid: d.uid, name: Social.nameOf(d.uid), text: STICKERS[d.code] || '', at: ms, big: true }); Social.log = Social.log.slice(-40);
+      Fx.say(d.uid, STICKERS[d.code] || '', true);
+    } else if (d.kind === 'gift') {
+      const g = GIFTS[d.code]; if (!g) return;
+      Social.props[d.to] = { code: d.code, from: d.uid, at: ms };
+      Social.log.push({ uid: d.uid, name: Social.nameOf(d.uid), text: 'sent ' + g.name + ' ' + g.icon + ' to ' + Social.nameOf(d.to), at: ms }); Social.log = Social.log.slice(-40);
+      Fx.gift(d.uid, d.to, g.icon); scheduleRender();
+    }
+  },
+  send(kind, code, to) {
+    const R = S.room, uid = S.user && S.user.uid;
+    if (!R || !uid || S.isAdmin) return;
+    if (!R.members.some(m => m.uid === uid)) { toast('Take a seat first to chat.', 'err'); return; }
+    if (Date.now() - Social.lastSend < 1300) { toast('Slow down a little.'); return; }
+    Social.lastSend = Date.now();
+    const mine = (R.feed || []).find(d => d.uid === uid), seq = mine ? mine.seq + 1 : 1;
+    Repo.sendFeed(R.id, uid, kind, code, to, seq).catch(e => { console.error('[TeenPatti] feed', e && e.code); toast('Could not send that.', 'err'); });
+  },
+  prop(id) { const p = Social.props[id]; return p && Date.now() - p.at < PROP_MS && GIFTS[p.code] ? p : null; }
+};
+
+/* The last five hands this phone watched, move by move. */
+const History = {
+  hands: [], cur: null,
+  reset() { History.hands = []; History.cur = null; },
+  start(G) {
+    History.cur = { handNo: G.handNo, handId: G.handId, boot: G.boot, steps: [], pot: G.pot, result: null, names: {} };
+    G.order.forEach(id => { History.cur.names[id] = G.players[id].name; });
+    History.cur.steps.push({ kind: 'boot', text: 'Boot ' + fmt(G.boot) + ' from each of ' + G.order.length + ' players', paid: G.pot, pot: G.pot });
+    History.hands.push(History.cur); History.hands = History.hands.slice(-5);
+  },
+  step(G, id, word, paid) {
+    const c = History.cur; if (!c || c.handId !== G.handId) return;
+    c.pot += paid; c.steps.push({ kind: word.toLowerCase(), id, name: c.names[id] || 'Player', word, paid, pot: c.pot });
+  },
+  note(G, text) { const c = History.cur; if (!c || c.handId !== G.handId) return; c.steps.push({ kind: 'side', text, paid: 0, pot: c.pot }); },
+  finish(G) {
+    const c = History.cur; if (!c || c.handId !== G.handId || c.result) return;
+    const rs = G.result;
+    c.result = { winners: rs.winners.map(id => c.names[id] || 'Player'), amount: rs.amount, rank: rs.rank || '', reason: rs.reason };
+  }
+};
+
+/* Hands played, won and the current winning streak, kept by the player's own phone. */
+const Stats = {
+  tier(hands) { return hands >= 1000 ? 'Diamond' : hands >= 300 ? 'Platinum' : hands >= 100 ? 'Gold' : hands >= 25 ? 'Silver' : 'Bronze'; },
+  record(G, uid) {
+    if (!uid || S.isAdmin || !G.players[uid] || !(G.players[uid].invested > 0)) return;
+    let last = ''; try { last = localStorage.getItem('tp_stat_hand_' + uid) || ''; } catch (e) { /* private window */ }
+    if (last === G.handId) return;
+    try { localStorage.setItem('tp_stat_hand_' + uid, G.handId); } catch (e) { /* private window */ }
+    Repo.bumpStats(uid, G.result.winners.includes(uid)).catch(e => console.warn('[TeenPatti] stats', e && e.code));
   }
 };
 
@@ -3730,7 +3892,8 @@ const Fx = {
    ========================================================================== */
 const Sheets = {
   el: null,
-  close() { if (Sheets.el) { Sheets.el.remove(); Sheets.el = null; } },
+  DRAWERS: new Set(['logSheet', 'historySheet', 'playersSheet', 'chatSheet', 'ranksSheet', 'infoSheet', 'setSheet', 'classicSheet', 'variantSheet', 'walletSheet']),
+  close() { if (Sheets.el) { Sheets.el.remove(); Sheets.el = null; } Social.onLog = null; clearTimeout(Sheets.replayT); },
   open(id, title, body) {
     Sheets.close();
     const back = h('div', { class: 'sheetback', id: id, onclick: e => { if (e.target === back) Sheets.close(); } },
@@ -3738,6 +3901,7 @@ const Sheets = {
         h('div', { class: 'shead' }, h('b', { text: title }), h('button', { type: 'button', class: 'sclose', id: 'sheetClose', 'aria-label': 'Close', text: '\u2715', onclick: Sheets.close })),
         h('div', { class: 'sbodyx' }, body)));
     document.body.appendChild(back); Sheets.el = back;
+    if (Sheets.DRAWERS.has(id)) Sfx.sweep(); else Sfx.chime();
   },
   card(t) {
     const r = t.slice(0, -1), s = t.slice(-1), red = s === '♥' || s === '♦';
@@ -3818,16 +3982,97 @@ const Sheets = {
       err, go));
   },
   player(sp) {
-    const isMe = !!(S.user && sp.id === S.user.uid);
-    const stat = (k, v) => h('div', { class: 'pstat2' }, h('b', { text: v }), h('span', { text: k }));
+    const isMe = !!(S.user && sp.id === S.user.uid), R = S.room;
+    const stat = (k, v, id) => h('div', { class: 'pstat2' }, h('b', { id, text: v }), h('span', { text: k }));
     const state = sp.standing ? 'Standing' : sp.status === 'packed' ? 'Packed' : sp.status === 'seen' ? 'Playing (seen)' : sp.status === 'blind' ? 'Playing (blind)' : 'Seated';
-    Sheets.open('playerSheet', isMe ? 'Your profile' : 'Player profile', h('div', { class: 'pprofile' },
+    const canGift = !isMe && !S.isAdmin && R && S.user && R.members.some(m => m.uid === S.user.uid);
+    Sheets.open('playerSheet', isMe ? 'Your player card' : 'Player card', h('div', { class: 'pprofile' },
       h('div', { class: 'pbig' }, avatarNode(sp.avatar)),
       h('h3', { text: sp.name }),
-      h('p', { class: 'hnote', text: (sp.bot ? 'House bot' : isMe ? 'You' : 'Player') + (sp.dealer ? ' \u00B7 Dealer button' : '') }),
+      h('p', { class: 'hnote' }, h('span', { class: 'vip', id: 'pcVip', text: sp.bot ? 'HOUSE BOT' : 'BRONZE' }), (sp.dealer ? ' \u00B7 Dealer button' : '')),
       h('div', { class: 'pgrid' }, stat('At this table', rupee(sp.chips)), stat('Now', state)),
-      h('div', { class: 'pgrid' }, stat('Hands played', '\u2014'), stat('Hands won', '\u2014'), stat('Best hand', '\u2014')),
-      h('p', { class: 'hnote', text: 'Lifetime stats are not tracked yet.' })));
+      h('div', { class: 'pgrid' }, stat('Hands played', sp.bot ? '\u2014' : '...', 'pcHands'), stat('Win rate', sp.bot ? '\u2014' : '...', 'pcRate'), stat('Win streak', sp.bot ? '\u2014' : '...', 'pcStreak')),
+      canGift ? h('div', { class: 'giftrow' }, Object.keys(GIFTS).map(k => h('button', { type: 'button', class: 'giftbtn', 'data-gift': k, 'aria-label': 'Send ' + GIFTS[k].name,
+        onclick: () => { Social.send('gift', k, sp.id); Sheets.close(); } }, h('span', { text: GIFTS[k].icon }), h('small', { text: GIFTS[k].name })))) : null));
+    if (!sp.bot) Repo.getStats(sp.id).then(st => {
+      const set = (id, v) => { const e = $(id); if (e) e.textContent = v; };
+      const hands = st ? st.hands : 0;
+      set('pcHands', String(hands)); set('pcRate', hands ? Math.round(st.wins / hands * 100) + '%' : '\u2014'); set('pcStreak', String(st ? st.streak : 0)); set('pcVip', Stats.tier(hands).toUpperCase());
+    }).catch(() => { ['pcHands', 'pcRate', 'pcStreak'].forEach(id => { const e = $(id); if (e) e.textContent = '\u2014'; }); });
+  },
+  // Quick phrases and stickers.
+  chat() {
+    const list = h('div', { class: 'chatlog', id: 'chatLog' });
+    const draw = () => {
+      list.replaceChildren(...(Social.log.length ? Social.log.slice(-14).map(m => h('div', { class: 'chatmsg' + (m.big ? ' big' : '') }, h('b', { text: m.name }), h('span', { text: m.text }))) : [h('p', { class: 'hnote', text: 'No messages yet. Tap a phrase or a sticker.' })]));
+      list.scrollTop = list.scrollHeight;
+    };
+    draw(); Social.onLog = () => { if ($('chatLog')) draw(); };
+    Sheets.open('chatSheet', 'Table chat', h('div', { class: 'setlist' }, list,
+      h('div', { class: 'chatq' }, Object.keys(CHAT_PHRASES).map(k => h('button', { type: 'button', class: 'chatbtn', 'data-code': k, text: CHAT_PHRASES[k], onclick: () => Social.send('chat', k, '') }))),
+      h('div', { class: 'stkrow' }, Object.keys(STICKERS).map(k => h('button', { type: 'button', class: 'stkbtn', 'data-code': k, 'aria-label': k, text: STICKERS[k], onclick: () => Social.send('sticker', k, '') })))));
+    Social.onLog = () => { if ($('chatLog')) draw(); };
+  },
+  // Send a gift to someone at the table.
+  gift() {
+    const R = S.room, uid = S.user && S.user.uid; if (!R) return;
+    const me = R.members.some(m => m.uid === uid);
+    const others = R.members.filter(m => m.uid !== uid && m.seatState === 'seated').map(m => ({ id: m.uid, name: m.name }))
+      .concat((R.bots || []).filter(b => b.seatState === 'seated').map(b => ({ id: b.botId, name: b.name })));
+    if (!me) { Sheets.soon('Gifts', 'Take a seat at a table to send gifts.'); return; }
+    if (!others.length) { Sheets.soon('Gifts', 'Nobody else is seated yet.'); return; }
+    let to = others[0].id;
+    const who = h('div', { class: 'giftwho' });
+    const drawWho = () => who.replaceChildren(...others.map(o => h('button', { type: 'button', class: 'gwho' + (o.id === to ? ' on' : ''), 'data-to': o.id, text: o.name, onclick: () => { to = o.id; drawWho(); } })));
+    drawWho();
+    Sheets.open('giftSheet', 'Send a gift', h('div', { class: 'setlist' },
+      h('p', { class: 'hnote', style: 'text-align:left', text: 'A small prop appears at their seat for a minute.' }), who,
+      h('div', { class: 'giftrow' }, Object.keys(GIFTS).map(k => h('button', { type: 'button', class: 'giftbtn', 'data-gift': k, onclick: () => { Social.send('gift', k, to); Sheets.close(); } }, h('span', { text: GIFTS[k].icon }), h('small', { text: GIFTS[k].name }))))));
+  },
+  // The last five hands this phone watched, with a step-by-step replay of the betting.
+  history() {
+    const hands = History.hands.slice().reverse();
+    let pick = 0;
+    const box = h('div', { class: 'hist' });
+    const stepRow = (st, i) => st.kind === 'boot' || st.kind === 'side'
+      ? h('div', { class: 'hstep note', 'data-i': i }, h('span', { text: st.text }), st.kind === 'boot' ? h('i', { text: 'pot ' + fmt(st.pot) }) : null)
+      : h('div', { class: 'hstep k-' + st.kind, 'data-i': i }, h('span', { class: 'hw', text: st.word }), h('b', { text: st.name }), h('em', { text: st.paid ? '+' + fmt(st.paid) : '' }), h('i', { text: 'pot ' + fmt(st.pot) }));
+    const draw = (replayUpTo) => {
+      box.replaceChildren();
+      if (!hands.length) { box.appendChild(h('p', { class: 'hnote', style: 'font-size:14px', text: 'No hands yet. They show here as you watch them.' })); return; }
+      box.appendChild(h('div', { class: 'htabs' }, hands.map((hd, i) => h('button', { type: 'button', class: 'htab' + (i === pick ? ' on' : ''), 'data-i': i, text: 'Hand ' + hd.handNo, onclick: () => { clearTimeout(Sheets.replayT); pick = i; draw(); } }))));
+      const hd = hands[pick];
+      box.appendChild(h('div', { class: 'hsum', text: hd.result ? (hd.result.reason === 'fold' ? hd.result.winners.join(' & ') + ' won ' + fmt(hd.result.amount) + ' (everyone packed)' : hd.result.winners.join(' & ') + ' won ' + fmt(hd.result.amount) + (hd.result.rank ? ' with ' + hd.result.rank : '')) : 'In progress' }));
+      box.appendChild(h('button', { type: 'button', class: 'btn-secondary', id: 'replayBtn', text: '\u25B6 Replay', onclick: () => replay(hd) }));
+      const rows = h('div', { class: 'hsteps', id: 'hSteps' }, hd.steps.map((st, i) => stepRow(st, i)));
+      if (replayUpTo !== undefined) [...rows.children].forEach((r, i) => { if (i > replayUpTo) r.classList.add('hid'); });
+      box.appendChild(rows);
+    };
+    const replay = hd => {
+      clearTimeout(Sheets.replayT);
+      let i = -1;
+      const tick = () => {
+        if (!$('hSteps')) return;
+        i++;
+        [...$('hSteps').children].forEach((r, k) => { r.classList.toggle('hid', k > i); r.classList.toggle('cur', k === i); });
+        const cur = $('hSteps').children[i]; if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: 'nearest' });
+        if (i < hd.steps.length) Sheets.replayT = setTimeout(tick, 750);
+      };
+      tick();
+    };
+    draw();
+    Sheets.open('historySheet', 'Hand history', h('div', { class: 'setlist' }, box));
+  },
+  // Hand ranks, best first.
+  ranks() {
+    const H = '\u2665', S_ = '\u2660', D = '\u2666', C = '\u2663';
+    const rows = [
+      ['Trail (Trio)', ['A' + S_, 'A' + H, 'A' + D]], ['Pure sequence', ['Q' + H, 'K' + H, 'A' + H]], ['Sequence', ['9' + C, '10' + D, 'J' + S_]],
+      ['Color', ['2' + S_, '8' + S_, 'K' + S_]], ['Pair', ['7' + H, '7' + C, 'K' + D]], ['High card', ['A' + D, '9' + C, '4' + S_]]];
+    Sheets.open('ranksSheet', 'Hand ranks', h('div', { class: 'setlist' },
+      h('div', { class: 'rkhead', text: 'Best to lowest' }),
+      h('div', { class: 'rklist' }, rows.map((r, i) => h('div', { class: 'rkrow' }, h('span', { class: 'rkn', text: String(i + 1) }), h('b', { text: r[0] }), h('span', { class: 'hcards' }, r[1].map(Sheets.card))))),
+      h('button', { type: 'button', class: 'btn-secondary', id: 'fullRulesBtn', text: 'Full rules', onclick: () => Sheets.info() })));
   },
   settings() {
     const row = (id, label, on, fn) => h('button', { type: 'button', id: id, class: 'setrow', onclick: () => { fn(); Sheets.settings(); } },
