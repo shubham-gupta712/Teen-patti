@@ -1162,7 +1162,7 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .tbm:disabled{opacity:.4;filter:saturate(.55);cursor:default}
 .tbm.idle{opacity:.28}
 .tbm.gone{opacity:.28}
-.tbm:not(:disabled):active{transform:translate(-50%,calc(-50% + 2px));box-shadow:0 calc(var(--u) * 2) 0 rgba(0,0,0,.5)}
+.tbm:not(:disabled):active{filter:brightness(1.18)}
 .tbm.busy .ml,.tbm.busy .mi{opacity:.15}
 .tbnote{position:absolute;transform:translate(-50%,-50%);margin:0;font:600 max(8px,calc(var(--u) * 19))/1 system-ui;color:#f6ecd2;text-shadow:0 1px 3px #000;white-space:nowrap;pointer-events:none}
 .tbwatch{position:absolute;transform:translate(-50%,-50%);z-index:6;margin:0;padding:calc(var(--u) * 10) calc(var(--u) * 28);border-radius:99px;background:rgba(10,6,4,.75);border:1px solid rgba(214,172,92,.45);font:600 max(9px,calc(var(--u) * 22))/1.2 system-ui;color:#f6ecd2;white-space:nowrap;text-align:center}
@@ -1406,6 +1406,26 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .sheetback .sheet{animation:sheetin .2s ease-out}
 @keyframes sheetin{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
 
+/* ---- 30. STILL BUTTONS, SEAT SPACING, NAME PLATE, GLOSSY MODE CARDS ---- */
+/* Buttons never move when touched (the old global press-down shifted the ones that are centred with a transform). */
+.tbstage button:active:not(:disabled),.lobstage button:active:not(:disabled){transform:none}
+.tbstage .tbm:active:not(:disabled),.tbstage .tbtop:active:not(:disabled),.tbstage .tbexit:active:not(:disabled),.tbstage .tbtip:active:not(:disabled){transform:translate(-50%,-50%)}
+/* name plate: two lines when the name is long */
+.lbpatch.lbname{padding:0 calc(var(--u) * 4);justify-content:center;background:linear-gradient(180deg,#1c150d,#120c07);border-radius:calc(var(--u) * 14)}
+.lbname b{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u) * 1);width:100%;white-space:normal;overflow:hidden;text-overflow:clip;font:600 1em/1.04 Georgia,'Times New Roman',serif;letter-spacing:.02em;text-align:center}
+.lbname b span{display:block;max-width:100%;white-space:nowrap;background:linear-gradient(180deg,#fff6dc,#e6c88f 70%,#cfa95e);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.lbname b .l2{font-size:.9em;opacity:.95}
+/* glossy glass tiles on the three tables */
+.lobstage .lbmode{background:linear-gradient(155deg,rgba(255,255,255,.2) 0%,rgba(255,236,190,.07) 34%,rgba(18,12,6,.42) 100%),rgba(22,15,8,.36);-webkit-backdrop-filter:blur(calc(var(--u) * 12)) saturate(1.35);backdrop-filter:blur(calc(var(--u) * 12)) saturate(1.35);border:max(1px,calc(var(--u) * 2)) solid rgba(255,232,170,.6);box-shadow:inset 0 max(1px,calc(var(--u) * 2)) 0 rgba(255,255,255,.55),inset 0 calc(var(--u) * -14) calc(var(--u) * 28) rgba(0,0,0,.28),0 calc(var(--u) * 14) calc(var(--u) * 34) rgba(0,0,0,.5);overflow:hidden}
+.lobstage .lbmode:before{content:"";position:absolute;left:-10%;right:-10%;top:0;height:46%;background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,.04));border-radius:0 0 50% 50%/0 0 100% 100%;pointer-events:none}
+.lobstage .lbmode:after{content:"";position:absolute;top:-30%;bottom:-30%;left:-40%;width:28%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.22),transparent);transform:rotate(14deg);pointer-events:none;animation:glossSweep 7s ease-in-out infinite}
+@keyframes glossSweep{0%,62%{left:-45%}100%{left:130%}}
+.lobstage .lbmode>*{position:relative;z-index:1}
+.lobstage .lbmode.m-quick{border-color:rgba(255,222,130,.95);box-shadow:inset 0 max(1px,calc(var(--u) * 2)) 0 rgba(255,255,255,.7),inset 0 calc(var(--u) * -14) calc(var(--u) * 28) rgba(0,0,0,.25),0 0 calc(var(--u) * 36) rgba(242,199,92,.55),0 calc(var(--u) * 14) calc(var(--u) * 34) rgba(0,0,0,.5)}
+.lbmode .mtitle,.lbmode .msub{text-shadow:0 1px 3px rgba(0,0,0,.8)}
+.lbmode .msub{color:#ecdcb4}
+.lobstage .lbmode .mbtn{background:rgba(255,236,190,.14);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+
 </style>
 </head>
 <body>
@@ -1636,7 +1656,7 @@ function setConnection(online) {
   c.className = 'conn' + (online ? '' : ' off');
 }
 
-const BUILD_TAG = '2026-10-28 social';
+const BUILD_TAG = '2026-10-28 glass';
 
 /* ==========================================================================
    SECTION 2b - LANDSCAPE
@@ -2528,12 +2548,12 @@ function tbSeat(sp, key, c) {
   const label = away ? 'Away' : out ? 'Packed' : sp.status === 'seen' ? 'Seen' : sp.status === 'blind' ? 'Blind' : '';
   const kids = [
     h('div', { class: 'tbring', style: tbAt(ax, ay), onclick: open }, avatarNode(sp.avatar), ring, sp.dealer ? h('span', { class: 'tbdealer', title: 'Dealer button', text: 'D' }) : null, h('span', { class: away ? 'tbaway' : 'tbonline', title: away ? 'Away' : 'Online' })),
-    h('div', { class: 'tbplate', style: tbAt(ax, ay + 66), onclick: open },
+    h('div', { class: 'tbplate', style: tbAt(ax, ay + 86), onclick: open },
       h('div', { class: 'tbpname', text: isMe ? 'You' : sp.name }),
       h('div', { class: 'tbpchips' }, h('span', { text: rupee(sp.chips) }), isMe && c.me ? h('button', { id: 'addChipsBtn', class: 'tbadd', type: 'button', 'aria-label': 'Add chips', text: '+', onclick: e => { e.stopPropagation(); Sheets.topup(); } }) : null),
       label ? h('div', { class: 'tbpst ' + (away || out ? 'out' : sp.status), text: label }) : null),
-    Social.prop(sp.id) ? h('div', { class: 'tbprop', style: tbAt(ax + 74, ay + 30), title: GIFTS[Social.prop(sp.id).code].name, text: GIFTS[Social.prop(sp.id).code].icon }) : null,
-    turn ? h('div', { class: 'tbdisc', style: tbAt(ax + 52, ay - 46), text: fmtSecs(G.turnEndsAt - Date.now() - 500) }) : null];
+    Social.prop(sp.id) ? h('div', { class: 'tbprop', style: tbAt(ax + (ax < 836 ? -100 : 100), ay + 6), title: GIFTS[Social.prop(sp.id).code].name, text: GIFTS[Social.prop(sp.id).code].icon }) : null,
+    turn ? h('div', { class: 'tbdisc', style: tbAt(ax + 76, ay - 66), text: fmtSecs(G.turnEndsAt - Date.now() - 500) }) : null];
   if (!isMe) {
     const [gx, gy, rot] = TB_CARDS[key], show = c.live && !out;
     kids.push(h('div', { class: 'tbmcs', style: tbAt(gx, gy) + ';--rot:' + rot + 'deg' }, [0, 1, 2].map(i => h('div', { class: 'tbslot' }, show ? tMini(c.reveal[sp.id] ? c.reveal[sp.id][i] : '', i) : null))));
@@ -2736,11 +2756,11 @@ function renderFelt(R, me, msgs) {
 const LB_W = 1870, LB_H = 841;
 const lbPct = (v, of) => (v / of * 100).toFixed(3);
 const lbRect = (x0, y0, x1, y1) => 'left:' + lbPct(x0, LB_W) + '%;top:' + lbPct(y0, LB_H) + '%;width:' + lbPct(x1 - x0, LB_W) + '%;height:' + lbPct(y1 - y0, LB_H) + '%';
-// The three game-mode cards sit along the lower centre of the picture (outer edges, picture pixels).
+// The three game-mode cards sit on the three tables of the picture, centred on each table (outer edges, picture pixels).
 const LB_MODES = [
-  { id: 'classic',  rect: [381, 575, 711, 805] },
-  { id: 'quick',    rect: [735, 535, 1135, 805] },
-  { id: 'variants', rect: [1159, 575, 1489, 805] }
+  { id: 'classic',  rect: [460, 255, 780, 460] },       // over the left table
+  { id: 'quick',    rect: [867, 553, 1267, 803] },      // over the big table in front
+  { id: 'variants', rect: [1300, 277, 1620, 482] }     // over the right table
 ];
 // Variants. Only Classic has tables for now.
 const LB_VARIANTS = [
@@ -2791,10 +2811,17 @@ function renderLobby() {
   parts.push(tap('lbBoard', [56, 292, 262, 354], 'Leaderboard', () => Sheets.soon('Leaderboard', 'Who has won the most chips. This arrives once lifetime stats are tracked.')));
 
   /* top: your picture and name, wallet, gift, mail, bell, settings */
-  const nm = p.name, art = Math.max(13, Math.min(26, 94 / (0.68 * Math.max(nm.length, 1))));
+  const nm = p.name;
+  // Short names sit on one line; longer ones break onto two (at a space if there is one) so the whole name always shows.
+  let lines = [nm];
+  if (nm.length > 7) {
+    const sp = nm.indexOf(' ', 2), cut = sp > 1 && sp < nm.length - 2 ? sp : Math.ceil(nm.length / 2);
+    lines = [nm.slice(0, cut).trim(), nm.slice(cut).trim()];
+  }
+  const widest = Math.max(...lines.map(l => l.length), 1), art = Math.max(11, Math.min(lines.length > 1 ? 23 : 27, 90 / (0.6 * widest)));
   parts.push(h('div', { class: 'lbav', style: lbRect(1081, 17, 1157, 93) }, avatarNode(p.avatar)));
-  parts.push(h('div', { class: 'lbpatch lbname', style: lbRect(1158, 32, 1254, 78) }, h('b', { id: 'lbName', text: nm, style: 'font-size:max(8px,calc(var(--u) * ' + art.toFixed(1) + '))' })));
-  parts.push(h('div', { class: 'lbpatch lbpen', style: lbRect(1254, 32, 1276, 78) }, icon('pencil')));
+  parts.push(h('div', { class: 'lbpatch lbname', style: lbRect(1158, 24, 1258, 86) }, h('b', { id: 'lbName', title: nm, style: 'font-size:max(8px,calc(var(--u) * ' + art.toFixed(1) + '))' }, ...lines.map((l, i) => h('span', { text: l, class: i ? 'l2' : 'l1' })))));
+  parts.push(h('div', { class: 'lbpatch lbpen', style: lbRect(1258, 32, 1278, 78) }, icon('pencil')));
   parts.push(h('div', { class: 'lbpatch lbcash', style: lbRect(1352, 32, 1446, 78) }, h('b', { id: 'walletBal', text: fmt(p.chips), style: 'font-size:max(9px,calc(var(--u) * ' + (String(p.chips).length > 6 ? 21 : 27) + '))' })));
   parts.push(tap('lbProfile', [1081, 17, 1276, 93], 'Your profile', () => Sheets.profileEdit()));
   parts.push(tap('lbWallet', [1290, 20, 1504, 88], 'Wallet and add chips', () => Sheets.wallet()));
