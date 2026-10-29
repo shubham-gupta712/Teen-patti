@@ -1036,10 +1036,10 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 
 /* lobby */
 .lobstage{--sw:min(var(--vw),calc(var(--vh) * 2.2235));--u:calc(var(--sw) / 1870);position:relative;flex:none;width:var(--sw);height:calc(var(--sw) / 2.2235);background:var(--i-lobbybg) center/100% 100% no-repeat;overflow:hidden;color:#f6ecd2;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;user-select:none;-webkit-user-select:none}
-.lobstage button{position:absolute;margin:0;padding:0;min-height:0;border:0;box-shadow:none;font-family:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:rgba(242,199,92,.25)}
-.lobstage .ico{width:100%;height:100%;display:block}
-.lobstage .lbhit{z-index:3;border-radius:calc(var(--u) * 26);background:transparent}
-.lobstage .lbhit:active{background:rgba(242,199,92,.16)}
+.lobstage button,.lobedge button{position:absolute;margin:0;padding:0;min-height:0;border:0;box-shadow:none;font-family:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:rgba(242,199,92,.25)}
+.lobstage .ico,.lobedge .ico{width:100%;height:100%;display:block}
+.lobstage .lbhit,.lobedge .lbhit{z-index:3;border-radius:calc(var(--u) * 26);background:transparent}
+.lobstage .lbhit:active,.lobedge .lbhit:active{background:rgba(242,199,92,.16)}
 .lbpatch{position:absolute;display:flex;align-items:center;background:linear-gradient(180deg,#19130c,#150f09);color:#f4ead3}
 .lbpatch b{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:system-ui}
 .lbname{padding-left:calc(var(--u) * 2)}
@@ -1049,7 +1049,7 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .lbav{position:absolute;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#2a1b0c;border:max(1px,calc(var(--u) * 3)) solid #d9b972;box-shadow:0 0 0 max(1px,calc(var(--u) * 2)) #1a1109}
 .lbav .avimg{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .lbav .ava{font-size:calc(var(--u) * 46);line-height:1}
-.lobstage .lbcard{display:block;border-radius:calc(var(--u) * 20);background:linear-gradient(180deg,#271a0e,#190e08);color:#fff;text-align:center;overflow:hidden;z-index:2}
+.lobstage .lbcard,.lobedge .lbcard{display:block;border-radius:calc(var(--u) * 20);background:linear-gradient(180deg,#271a0e,#190e08);color:#fff;text-align:center;overflow:hidden;z-index:2}
 .lbcard{--k:1}
 .lbcard[data-table="boot_25"]{--k:1.07}
 .lbcard[data-table="boot_1"]{--k:1.33}
@@ -1321,11 +1321,11 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .fxpeek>div{display:flex}
 .fxpeek .tcard{width:38px;height:54px;margin:0 -3px;border-radius:5px;font-size:13px}
 .bubble.tipthx{border-color:#f6d77a;color:#f6d77a}
-.lobstage .lbtabs{position:absolute;z-index:3;display:flex;align-items:center;gap:calc(var(--u) * 12);padding:calc(var(--u) * 6);border-radius:99px;background:rgba(14,8,4,.82);border:max(1px,calc(var(--u) * 2.5)) solid rgba(214,172,92,.55)}
-.lobstage .lbtab{position:relative;flex:1;height:100%;min-height:0;padding:0 calc(var(--u) * 6);border-radius:99px;background:transparent;color:#e0cfa5;font:700 max(9px,calc(var(--u) * 24))/1 system-ui;display:flex;align-items:center;justify-content:center;gap:calc(var(--u) * 6);white-space:nowrap}
-.lobstage .lbtab.on{background:linear-gradient(180deg,#f1dcae,#c4a068);color:#1d1308}
-.lobstage .lbtab i{font:800 max(6px,calc(var(--u) * 13))/1 system-ui;font-style:normal;letter-spacing:.5px;padding:calc(var(--u) * 3) calc(var(--u) * 6);border-radius:99px;background:rgba(214,172,92,.25);color:#f2c75c}
-.lobstage .lbtab.on i{background:rgba(29,19,8,.25);color:#1d1308}
+.lobstage .lbtabs,.lobedge .lbtabs{position:absolute;z-index:3;display:flex;align-items:center;gap:calc(var(--u) * 12);padding:calc(var(--u) * 6);border-radius:99px;background:rgba(14,8,4,.82);border:max(1px,calc(var(--u) * 2.5)) solid rgba(214,172,92,.55)}
+.lobstage .lbtab,.lobedge .lbtab{position:relative;flex:1;height:100%;min-height:0;padding:0 calc(var(--u) * 6);border-radius:99px;background:transparent;color:#e0cfa5;font:700 max(9px,calc(var(--u) * 24))/1 system-ui;display:flex;align-items:center;justify-content:center;gap:calc(var(--u) * 6);white-space:nowrap}
+.lobstage .lbtab.on,.lobedge .lbtab.on{background:linear-gradient(180deg,#f1dcae,#c4a068);color:#1d1308}
+.lobstage .lbtab i,.lobedge .lbtab i{font:800 max(6px,calc(var(--u) * 13))/1 system-ui;font-style:normal;letter-spacing:.5px;padding:calc(var(--u) * 3) calc(var(--u) * 6);border-radius:99px;background:rgba(214,172,92,.25);color:#f2c75c}
+.lobstage .lbtab.on i,.lobedge .lbtab.on i{background:rgba(29,19,8,.25);color:#1d1308}
 .lbcard.soonvar{opacity:.92}
 
 /* ---- 28. LOBBY GAME-MODE CARDS (Quick Play / Classic / Variants) ---- */
@@ -1399,7 +1399,7 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 
 /* ---- 30. STILL BUTTONS, SEAT SPACING, NAME PLATE, GLOSSY MODE CARDS ---- */
 /* Buttons never move when touched (the old global press-down shifted the ones that are centred with a transform). */
-.tbstage button:active:not(:disabled),.lobstage button:active:not(:disabled){transform:none}
+.tbstage button:active:not(:disabled),.lobstage button:active:not(:disabled),.tbstage button:active:not(:disabled),.lobedge button:active:not(:disabled){transform:none}
 .tbstage .tbm:active:not(:disabled),.tbstage .tbtop:active:not(:disabled),.tbstage .tbexit:active:not(:disabled),.tbstage .tbtip:active:not(:disabled){transform:translate(-50%,-50%)}
 /* name plate: two lines when the name is long */
 .lbpatch.lbname{padding:0 calc(var(--u) * 3);justify-content:center;background:linear-gradient(180deg,#1c150d,#120c07);border-radius:calc(var(--u) * 14)}
@@ -1422,8 +1422,8 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
    ========================================================================== */
 .lobstage{--sw:min(var(--vw),calc(var(--vh) * 1.7768));--u:calc(var(--sw) / 1672);width:var(--sw);height:calc(var(--sw) / 1.7768)}
 .lbscrim{position:absolute;left:0;right:0;top:0;height:13%;background:linear-gradient(180deg,rgba(8,5,3,.82),rgba(8,5,3,.5) 55%,transparent);pointer-events:none;z-index:1}
-.lobstage .lbpill{z-index:4;display:flex;align-items:center;justify-content:center;gap:calc(var(--u) * 10);box-sizing:border-box;border-radius:calc(var(--u) * 18);background:linear-gradient(180deg,rgba(34,24,14,.9),rgba(16,10,6,.9));border:max(1px,calc(var(--u) * 2)) solid rgba(214,172,92,.62);box-shadow:0 calc(var(--u) * 4) calc(var(--u) * 14) rgba(0,0,0,.55),inset 0 1px 0 rgba(255,236,190,.18);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#f1dfb0;white-space:nowrap}
-.lobstage .lbpill:active{filter:brightness(1.18)}
+.lobstage .lbpill,.lobedge .lbpill{z-index:4;display:flex;align-items:center;justify-content:center;gap:calc(var(--u) * 10);box-sizing:border-box;border-radius:calc(var(--u) * 18);background:linear-gradient(180deg,rgba(34,24,14,.9),rgba(16,10,6,.9));border:max(1px,calc(var(--u) * 2)) solid rgba(214,172,92,.62);box-shadow:0 calc(var(--u) * 4) calc(var(--u) * 14) rgba(0,0,0,.55),inset 0 1px 0 rgba(255,236,190,.18);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#f1dfb0;white-space:nowrap}
+.lobstage .lbpill:active,.lobedge .lbpill:active{filter:brightness(1.18)}
 .lbpill .ico{width:calc(var(--u) * 28);height:calc(var(--u) * 28);flex:none;color:#e9c978}
 .lbico .ico{width:calc(var(--u) * 30);height:calc(var(--u) * 30)}
 .lbnav span{font:700 max(8px,calc(var(--u) * 22))/1 system-ui;letter-spacing:.3px}
@@ -1449,7 +1449,7 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .hb-variant,.m-variant{--hr:255,196,120}
 .hb-classic,.m-classic{--hr:110,255,190}
 .hb-tournament,.m-tournament{--hr:130,190,255}
-.lobstage .lbmode.holo{position:absolute;z-index:3;display:block;color:#f3fbff;perspective:calc(var(--u) * 1100);filter:drop-shadow(0 0 calc(var(--u) * 14) rgba(var(--hr),.55))}
+.lobstage .lbmode.holo,.lobedge .lbmode.holo{position:absolute;z-index:3;display:block;color:#f3fbff;perspective:calc(var(--u) * 1100);filter:drop-shadow(0 0 calc(var(--u) * 14) rgba(var(--hr),.55))}
 .holo .hpanel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;box-sizing:border-box;padding:calc(var(--u) * 12) calc(var(--u) * 20) calc(var(--u) * 14);text-align:center;transform:rotateX(9deg);transform-origin:50% 100%;border-radius:calc(var(--u) * 20);overflow:hidden;
   background:linear-gradient(180deg,rgba(var(--hr),.2),rgba(var(--hr),.07) 55%,rgba(var(--hr),.15)),rgba(8,14,20,.3);
   border:max(1px,calc(var(--u) * 2)) solid rgba(var(--hr),.78);box-shadow:inset 0 0 calc(var(--u) * 34) rgba(var(--hr),.22),0 0 calc(var(--u) * 26) rgba(var(--hr),.32);-webkit-backdrop-filter:blur(3px) saturate(1.3);backdrop-filter:blur(3px) saturate(1.3)}
@@ -1468,11 +1468,11 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .m-classic .hlrow{font-size:max(9px,calc(var(--u) * 21))}
 .holo .hlrow b{font-weight:700;color:#fff;text-align:right}
 .holo .hchips{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u) * 6);margin-bottom:calc(var(--u) * 4)}
-.lobstage .holo .hchip{position:relative;height:calc(var(--u) * 30);border-radius:calc(var(--u) * 10);background:rgba(var(--hr),.18);border:max(1px,calc(var(--u) * 1.5)) solid rgba(var(--hr),.6);color:#fff;font:700 max(7px,calc(var(--u) * 15))/1 system-ui;white-space:nowrap}
-.lobstage .holo .hchip:active{filter:brightness(1.4)}
-.lobstage .holo .mbtn{position:relative;width:100%;height:calc(var(--u) * 40);flex:none;margin-top:calc(var(--u) * 6);border-radius:99px;font:800 max(8px,calc(var(--u) * 17))/1 system-ui;letter-spacing:.14em;color:#fff;background:linear-gradient(180deg,rgba(var(--hr),.5),rgba(var(--hr),.22));border:max(1px,calc(var(--u) * 2)) solid rgba(var(--hr),.95);box-shadow:0 0 calc(var(--u) * 14) rgba(var(--hr),.55),inset 0 1px 0 rgba(255,255,255,.4);text-shadow:0 1px 3px rgba(0,0,0,.7)}
-.lobstage .holo.m-classic .mbtn{height:calc(var(--u) * 52);font-size:max(10px,calc(var(--u) * 22))}
-.lobstage .holo .mbtn:active{filter:brightness(1.3)}
+.lobstage .holo .hchip,.lobedge .holo .hchip{position:relative;height:calc(var(--u) * 30);border-radius:calc(var(--u) * 10);background:rgba(var(--hr),.18);border:max(1px,calc(var(--u) * 1.5)) solid rgba(var(--hr),.6);color:#fff;font:700 max(7px,calc(var(--u) * 15))/1 system-ui;white-space:nowrap}
+.lobstage .holo .hchip:active,.lobedge .holo .hchip:active{filter:brightness(1.4)}
+.lobstage .holo .mbtn,.lobedge .holo .mbtn{position:relative;width:100%;height:calc(var(--u) * 40);flex:none;margin-top:calc(var(--u) * 6);border-radius:99px;font:800 max(8px,calc(var(--u) * 17))/1 system-ui;letter-spacing:.14em;color:#fff;background:linear-gradient(180deg,rgba(var(--hr),.5),rgba(var(--hr),.22));border:max(1px,calc(var(--u) * 2)) solid rgba(var(--hr),.95);box-shadow:0 0 calc(var(--u) * 14) rgba(var(--hr),.55),inset 0 1px 0 rgba(255,255,255,.4);text-shadow:0 1px 3px rgba(0,0,0,.7)}
+.lobstage .holo.m-classic .mbtn,.lobedge .holo.m-classic .mbtn{height:calc(var(--u) * 52);font-size:max(10px,calc(var(--u) * 22))}
+.lobstage .holo .mbtn:active,.lobedge .holo .mbtn:active{filter:brightness(1.3)}
 
 /* variant sheet, table badge, wild cards */
 .sheetback .vdetail .vtag{display:block;margin-top:2px;font:700 11px system-ui;letter-spacing:.08em;color:#cdb98f;text-transform:uppercase}
@@ -1494,7 +1494,7 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .sheetback .vdetail .btn-primary{margin-top:8px}
 
 /* ---- lobby v3: side menu, tiles that grow upward from the table, never cut off ---- */
-.lobstage .lbside{justify-content:flex-start;gap:calc(var(--u) * 12);padding:0 calc(var(--u) * 12);text-align:left}
+.lobstage .lbside,.lobedge .lbside{justify-content:flex-start;gap:calc(var(--u) * 12);padding:0 calc(var(--u) * 12);text-align:left}
 .lbside .ico{width:calc(var(--u) * 30);height:calc(var(--u) * 30)}
 .lbside .lbl{display:flex;flex-direction:column;gap:calc(var(--u) * 3);min-width:0;align-items:flex-start}
 .lbside .lbl b{font:700 max(8px,calc(var(--u) * 21))/1 system-ui;letter-spacing:.2px;white-space:nowrap}
@@ -1502,19 +1502,19 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .lbside.on{background:linear-gradient(180deg,rgba(241,220,174,.95),rgba(196,160,104,.95));border-color:#fff1c8;color:#1d1308}
 .lbside.on .ico{color:#2a1b0c}.lbside.on .lbl i{color:#4a3512}
 .lbside.off{opacity:.8}.lbside.off .lbl i{color:#b9a27a}
-.lobstage .lbmode.holo{height:auto}
+.lobstage .lbmode.holo,.lobedge .lbmode.holo{height:auto}
 .holo .hpanel{position:relative;inset:auto;gap:calc(var(--u) * 6);justify-content:flex-start;padding:calc(var(--u) * 12) calc(var(--u) * 18) calc(var(--u) * 14)}
 .holo .hpanel>.hbody{margin-top:calc(var(--u) * 2)}
 .holo .hdesc{margin:0 0 calc(var(--u) * 2)}
 .holobeam{position:absolute;z-index:1;pointer-events:none;background:linear-gradient(0deg,rgba(var(--hr),.5),rgba(var(--hr),.04));clip-path:polygon(0 0,100% 0,72% 100%,28% 100%);filter:blur(1px)}
 .holobase{z-index:2}
 .holo .hchips{margin-bottom:0}
-.lobstage .holo .hchip{height:calc(var(--u) * 26)}
+.lobstage .holo .hchip,.lobedge .holo .hchip{height:calc(var(--u) * 26)}
 .holo .hlrow{padding:calc(var(--u) * 2) calc(var(--u) * 6)}
 .holo .htitle{font-size:max(11px,calc(var(--u) * 36))}
 .m-classic .htitle{font-size:max(13px,calc(var(--u) * 46))}
-.lobstage .holo .mbtn{height:calc(var(--u) * 36);margin-top:calc(var(--u) * 4)}
-.lobstage .holo.m-classic .mbtn{height:calc(var(--u) * 44)}
+.lobstage .holo .mbtn,.lobedge .holo .mbtn{height:calc(var(--u) * 36);margin-top:calc(var(--u) * 4)}
+.lobstage .holo.m-classic .mbtn,.lobedge .holo.m-classic .mbtn{height:calc(var(--u) * 44)}
 
 .holo .hpanel>.hscan{position:absolute}
 /* wide screens (iPhones in landscape): the picture is continued left and right by its own mirror image instead of a blurred strip */
@@ -1525,7 +1525,7 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .lobstage{z-index:1}
 
 .lbscrim{height:11%}
-.lobstage .lbside{padding:0 calc(var(--u) * 10);gap:calc(var(--u) * 8)}
+.lobstage .lbside,.lobedge .lbside{padding:0 calc(var(--u) * 10);gap:calc(var(--u) * 8)}
 .lbside .ico{width:calc(var(--u) * 26);height:calc(var(--u) * 26)}
 .lbside .lbl b{font-size:max(8px,calc(var(--u) * 18))}
 .lbside .lbl i{font-size:max(6px,calc(var(--u) * 13))}
@@ -1534,7 +1534,7 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .holo .hkick{letter-spacing:.1em;font-size:max(6px,calc(var(--u) * 14));white-space:nowrap}
 .holo .htitle{font-size:max(11px,calc(var(--u) * 34))}
 .m-classic .htitle{font-size:max(13px,calc(var(--u) * 44))}
-.lobstage .holo .mbtn{height:calc(var(--u) * 34);margin-top:calc(var(--u) * 2)}
+.lobstage .holo .mbtn,.lobedge .holo .mbtn{height:calc(var(--u) * 34);margin-top:calc(var(--u) * 2)}
 .holo .hlrow{padding:calc(var(--u) * 1) calc(var(--u) * 6)}
 
 .lbside .lbl b{font-size:max(7px,calc(var(--u) * 17))}
@@ -1551,10 +1551,10 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
   box-shadow:0 calc(var(--u) * 4) 0 var(--cd),0 calc(var(--u) * 6) calc(var(--u) * 4) rgba(0,0,0,.45);border:max(1px,calc(var(--u) * 1.5)) solid var(--cd)}
 
 /* ===== 33. lobby v4: side menu, profile plate, boot picker ===== */
-.lobstage .lbmenu{position:absolute;z-index:5;display:flex;flex-direction:column;box-sizing:border-box;padding:calc(var(--u) * 6) calc(var(--u) * 8) calc(var(--u) * 10);border-radius:calc(var(--u) * 46);background:linear-gradient(180deg,rgba(38,27,20,.97),rgba(22,15,11,.97) 55%,rgba(16,10,7,.97));border:max(1px,calc(var(--u) * 2)) solid rgba(214,172,92,.42);box-shadow:0 calc(var(--u) * 6) calc(var(--u) * 20) rgba(0,0,0,.65),inset 0 1px 0 rgba(255,232,190,.14)}
+.lobstage .lbmenu,.lobedge .lbmenu{position:absolute;z-index:5;display:flex;flex-direction:column;box-sizing:border-box;padding:calc(var(--u) * 6) calc(var(--u) * 8) calc(var(--u) * 10);border-radius:calc(var(--u) * 46);background:linear-gradient(180deg,rgba(38,27,20,.97),rgba(22,15,11,.97) 55%,rgba(16,10,7,.97));border:max(1px,calc(var(--u) * 2)) solid rgba(214,172,92,.42);box-shadow:0 calc(var(--u) * 6) calc(var(--u) * 20) rgba(0,0,0,.65),inset 0 1px 0 rgba(255,232,190,.14)}
 .lbmenu .lbcrown{flex:none;height:calc(var(--u) * 64);display:grid;place-items:center;color:#ecd9a8}
 .lbmenu .lbcrown .ico{width:calc(var(--u) * 46);height:calc(var(--u) * 46);filter:drop-shadow(0 0 calc(var(--u) * 6) rgba(255,214,130,.45))}
-.lobstage .lbmenu .lbm{position:relative;flex:1;display:flex;align-items:center;justify-content:flex-start;gap:calc(var(--u) * 9);margin:0;padding:0 calc(var(--u) * 10);border:0;border-radius:calc(var(--u) * 40);background:transparent;color:#e6d4a4;text-align:left;white-space:nowrap;box-shadow:none}
+.lobstage .lbmenu .lbm,.lobedge .lbmenu .lbm{position:relative;flex:1;display:flex;align-items:center;justify-content:flex-start;gap:calc(var(--u) * 9);margin:0;padding:0 calc(var(--u) * 10);border:0;border-radius:calc(var(--u) * 40);background:transparent;color:#e6d4a4;text-align:left;white-space:nowrap;box-shadow:none}
 .lbmenu .lbm + .lbm:before{content:"";position:absolute;left:12%;right:12%;top:0;height:max(1px,calc(var(--u) * 1.5));background:linear-gradient(90deg,transparent,rgba(214,172,92,.38),transparent)}
 .lbmenu .lbm.on + .lbm:before,.lbmenu .lbm.on:before{display:none}
 .lbmenu .lbm .ico{width:calc(var(--u) * 30);height:calc(var(--u) * 30);flex:none;color:#ead8a8}
@@ -1563,18 +1563,18 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .lbmenu .lbm.on .ico,.lbmenu .lbm.on span{color:#2a1b0c}
 .lbmenu .lbm.off{opacity:.62}
 .lbmenu .lbm:active{filter:brightness(1.2)}
-.lobstage .lbprof{position:absolute;z-index:5;display:block;padding:0;border:0;background:var(--i-profileplate) center/100% 100% no-repeat;filter:drop-shadow(0 calc(var(--u) * 5) calc(var(--u) * 9) rgba(0,0,0,.6));color:#f1dfb0}
-.lobstage .lbprof:active{filter:brightness(1.15) drop-shadow(0 calc(var(--u) * 5) calc(var(--u) * 9) rgba(0,0,0,.6))}
-.lobstage .lbprof .lbav{position:absolute;left:9.2%;top:16.1%;width:19.2%;height:66%;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#1b130c;border:0}
+.lobstage .lbprof,.lobedge .lbprof{position:absolute;z-index:5;display:block;padding:0;border:0;background:var(--i-profileplate) center/100% 100% no-repeat;filter:drop-shadow(0 calc(var(--u) * 5) calc(var(--u) * 9) rgba(0,0,0,.6));color:#f1dfb0}
+.lobstage .lbprof:active,.lobedge .lbprof:active{filter:brightness(1.15) drop-shadow(0 calc(var(--u) * 5) calc(var(--u) * 9) rgba(0,0,0,.6))}
+.lobstage .lbprof .lbav,.lobedge .lbprof .lbav{position:absolute;left:9.2%;top:16.1%;width:19.2%;height:66%;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#1b130c;border:0}
 .lbprof .lbav .avimg{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .lbprof .lbav .ava{font-size:calc(var(--u) * 40);line-height:1}
-.lobstage .lbprof .lbname{position:absolute;left:33.6%;top:27%;width:58.6%;height:42%;display:flex;align-items:center;justify-content:center;padding:0;background:none;border:0}
+.lobstage .lbprof .lbname,.lobedge .lbprof .lbname{position:absolute;left:33.6%;top:27%;width:58.6%;height:42%;display:flex;align-items:center;justify-content:center;padding:0;background:none;border:0}
 .lbprof .lbname b{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;font:600 1em/1 Georgia,'Times New Roman',serif}
 .lbprof .lbname b span{display:block;max-width:100%;white-space:nowrap;background:linear-gradient(180deg,#fff6dc,#e6c88f 70%,#cfa95e);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 .lbprof .lbname b .l2{font-size:.9em;opacity:.95}
 /* the Tournament tile is not open yet */
 .holo.soon .hpanel{filter:saturate(.45) brightness(.9)}
-.lobstage .holo.soon .mbtn{background:rgba(255,255,255,.12);color:rgba(255,255,255,.72);border-color:rgba(255,255,255,.28);box-shadow:none}
+.lobstage .holo.soon .mbtn,.lobedge .holo.soon .mbtn{background:rgba(255,255,255,.12);color:rgba(255,255,255,.72);border-color:rgba(255,255,255,.28);box-shadow:none}
 /* the boot picker (Classic and Variant tables) */
 #bootSheet .sheet{width:min(660px,calc(100% - 16px))}
 .blist{display:flex;flex-direction:column;gap:6px}
@@ -1601,12 +1601,12 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 @keyframes annin{0%{opacity:0;transform:translate(-50%,-50%) scale(.85)}8%{opacity:1;transform:translate(-50%,-50%) scale(1)}86%{opacity:1}100%{opacity:0}}
 
 /* 34. lobby symmetry: the two side tiles are the same shape, the profile plate is double size */
-.lobstage .holo.side .hpanel{padding:calc(var(--u) * 10) calc(var(--u) * 18) calc(var(--u) * 12);gap:calc(var(--u) * 4)}
-.lobstage .holo.side .htitle{font-size:max(11px,calc(var(--u) * 34))}
-.lobstage .holo.side .hbody{flex:1;display:flex;align-items:center;justify-content:center}
-.lobstage .holo.side .hdesc{margin:0}
-.lobstage .holo.side .mbtn{height:calc(var(--u) * 34);margin-top:0}
-.lobstage .lbmenu .lbm{min-height:0}
+.lobstage .holo.side .hpanel,.lobedge .holo.side .hpanel{padding:calc(var(--u) * 10) calc(var(--u) * 18) calc(var(--u) * 12);gap:calc(var(--u) * 4)}
+.lobstage .holo.side .htitle,.lobedge .holo.side .htitle{font-size:max(11px,calc(var(--u) * 34))}
+.lobstage .holo.side .hbody,.lobedge .holo.side .hbody{flex:1;display:flex;align-items:center;justify-content:center}
+.lobstage .holo.side .hdesc,.lobedge .holo.side .hdesc{margin:0}
+.lobstage .holo.side .mbtn,.lobedge .holo.side .mbtn{height:calc(var(--u) * 34);margin-top:0}
+.lobstage .lbmenu .lbm,.lobedge .lbmenu .lbm{min-height:0}
 
 /* 35. profile sheet, trophies, look, clubs, inspect, themes */
 .pframe{display:inline-grid;place-items:center;width:100%;height:100%;border-radius:50%;box-sizing:border-box;border:3px solid var(--fc,transparent);box-shadow:0 0 0 2px rgba(0,0,0,.4),0 0 14px var(--fc,transparent)}
@@ -1652,6 +1652,13 @@ html[data-ptheme="mahogany"] .vip,html[data-ptheme="mahogany"] .ptab.on,html[dat
 #myProfileSheet .pprofile h3{font-size:17px}
 #myProfileSheet .pprofile .hnote{margin:2px 0}
 #myProfileSheet .ptabs{margin:6px 0}
+
+/* 36. the left and right clusters sit at the very edges of the screen (outside the picture), the right one 50% bigger */
+.lobwrap{--su:calc(var(--sw) / 1672)}
+.lobedge{position:absolute;z-index:6;top:0;--u:var(--su);color:#f6ecd2;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;user-select:none}
+.lobedge.left{left:0;width:calc(var(--su) * 420);height:100%}
+.lobedge.right{right:calc(var(--su) * 8);--u:calc(var(--su) * 1.5);width:calc(var(--u) * 440);height:calc(var(--u) * 70)}
+.lobedge .lbscrimless{display:none}
 
 </style>
 </head>
@@ -3120,6 +3127,8 @@ const LB_MODES = [
   { id: 'tournament', x: [1166, 1466], bottom: 278, base: [1190, 262, 1442, 300] }    // back right
 ];
 // a box that grows upward from a fixed bottom edge, so the content can never be cut off
+// a rect in picture units from the edge container's corner (the edge containers sit at the screen edges)
+const ue = (x0, y0, x1, y1) => 'left:calc(var(--u) * ' + x0 + ');top:calc(var(--u) * ' + y0 + ');width:calc(var(--u) * ' + (x1 - x0) + ');height:calc(var(--u) * ' + (y1 - y0) + ')';
 const lbBottom = (x0, x1, bottom) => 'left:' + lbPct(x0, LB_W) + '%;width:' + lbPct(x1 - x0, LB_W) + '%;bottom:' + lbPct(LB_H - bottom, LB_H) + '%';
 const LB_CLASSIC_IDS = BOOTS.map(b => 'boot_' + b), LB_VARIANT_IDS = BOOTS.map(b => 'v_' + b);
 const LB_PLATE = 3.39;                          // the profile plate picture is this many times wider than tall
@@ -3155,8 +3164,9 @@ function openPrivateEntry() {
 
 function renderLobby() {
   const p = S.profile;
-  const parts = [];
-  const btn = (id, cls, rect, label, fn, ...kids) => h('button', { id, class: cls, type: 'button', style: lbRect(...rect), 'aria-label': label, onclick: fn }, ...kids);
+  const parts = [], left = [], right = [];
+  const edge = r => { r.edge = true; return r; };
+  const btn = (id, cls, rect, label, fn, ...kids) => h('button', { id, class: cls, type: 'button', style: (rect.edge ? ue : lbRect)(...rect), 'aria-label': label, onclick: fn }, ...kids);
 
   /* ---- the top bar: brand, wallet, gifts / messages / notifications, and your profile plate in the top-right corner ---- */
   parts.push(h('div', { class: 'lbscrim' }));
@@ -3172,23 +3182,23 @@ function renderLobby() {
   }
   const widest = Math.max(...lines.map(l => l.length), 1), art = Math.max(18, Math.min(lines.length > 1 ? 28 : 44, 224 / (0.62 * widest)));
   const PW = 388;                                              // the plate is 316 wide and 316 / LB_PLATE tall, in picture pixels
-  parts.push(btn('lbProfile', 'lbprof', [10, 4, 10 + PW, 4 + PW / LB_PLATE], 'Your profile', () => Sheets.profile(),
+  left.push(btn('lbProfile', 'lbprof', edge([6, 4, 6 + PW, 4 + PW / LB_PLATE]), 'Your profile', () => Sheets.profile(),
     h('span', { class: 'lbav' }, avatarNode(p.avatar)),
     h('span', { class: 'lbname' }, h('b', { id: 'lbName', title: nm, style: 'font-size:max(7px,calc(var(--u) * ' + art.toFixed(1) + '))' }, ...lines.map((l, i) => h('span', { text: l, class: i ? 'l2' : 'l1' }))))));
   parts.push(h('div', { class: 'lbbrand', style: lbRect(640, 10, 1040, 66) }, h('b', { text: 'TEEN PATTI' }), h('span', { text: 'CLUB' })));
-  parts.push(btn('lbWallet', 'lbpill lbcash', [1236, 22, 1466, 78], 'Wallet and add chips', () => Sheets.wallet(),
+  right.push(btn('lbWallet', 'lbpill lbcash', edge([0, 0, 230, 56]), 'Wallet and add chips', () => Sheets.wallet(),
     h('img', { class: 'lbcoin', src: IMG.chip_gold, alt: '' }),
     h('b', { id: 'walletBal', text: fmt(p.chips), style: 'font-size:max(9px,calc(var(--u) * ' + (String(p.chips).length > 6 ? 26 : 32) + '))' }),
     h('span', { class: 'lbplus' }, icon('plus'))));
-  [['lbGift', 'Gifts', 'gift', 1484, () => Sheets.soon('Gifts', 'Daily bonuses and gifts from friends.')],
-   ['lbMail', 'Messages', 'mail', 1548, () => Sheets.soon('Messages', 'Messages from the club and your friends.')],
-   ['lbBell', 'Notifications', 'bell', 1612, () => Sheets.soon('Notifications', 'Table invites and updates will show up here.')]
-  ].forEach(([id, label, ic, x, fn]) => parts.push(btn(id, 'lbpill lbico', [x, 24, x + 52, 76], label, fn, icon(ic))));
+  [['lbGift', 'Gifts', 'gift', 248, () => Sheets.soon('Gifts', 'Daily bonuses and gifts from friends.')],
+   ['lbMail', 'Messages', 'mail', 312, () => Sheets.soon('Messages', 'Messages from the club and your friends.')],
+   ['lbBell', 'Notifications', 'bell', 376, () => Sheets.soon('Notifications', 'Table invites and updates will show up here.')]
+  ].forEach(([id, label, ic, x, fn]) => right.push(btn(id, 'lbpill lbico', edge([x, 2, x + 52, 54]), label, fn, icon(ic))));
 
   /* ---- the side menu, down the left: crown, Teen Patti (where you are), Private Table, LeaderBoard, Settings ---- */
   const pst = tileState(PRIVATE_CFG), pOpen = pst.usable;
   const mi = (id, cls, label, ic, fn) => h('button', { id, type: 'button', class: 'lbm ' + cls, 'aria-label': label, onclick: fn }, iconF(ic), h('span', { text: label }));
-  parts.push(h('nav', { class: 'lbmenu', style: lbRect(14, 128, 206, 664), 'aria-label': 'Menu' },
+  left.push(h('nav', { class: 'lbmenu', style: ue(8, 128, 200, 664), 'aria-label': 'Menu' },
     h('div', { class: 'lbcrown' }, iconF('crown')),
     mi('lbTeenPatti', 'on', 'Teen Patti', 'spade', () => toast('Pick a table in the middle to play Teen Patti.')),
     mi('lbPrivate', pOpen || pst.mine ? '' : 'off', 'Private Table', 'people', () => tileClick(PRIVATE_CFG)),
@@ -3226,7 +3236,7 @@ function renderLobby() {
     h('div', { class: 'hbody' }, h('p', { class: 'hdesc', text: 'Knockout events, big prizes' })),
     'COMING SOON', () => Sheets.soon('Tournament', 'Knockout tournaments with leaderboards and prizes. Not open yet.'), true));
 
-  return h('div', { class: 'lobwrap' }, h('div', { class: 'lobstage', id: 'lobStage' }, parts));
+  return h('div', { class: 'lobwrap' }, h('div', { class: 'lobstage', id: 'lobStage' }, parts), h('div', { class: 'lobedge left' }, left), h('div', { class: 'lobedge right', style: 'top:calc(var(--su) * 10)' }, right));
 }
 
 /* ==========================================================================
