@@ -1660,6 +1660,12 @@ html[data-ptheme="mahogany"] .vip,html[data-ptheme="mahogany"] .ptab.on,html[dat
 .lobedge.right{right:calc(var(--su) * 8);--u:calc(var(--su) * 1.5);width:calc(var(--u) * 440);height:calc(var(--u) * 70)}
 .lobedge .lbscrimless{display:none}
 
+/* 37. variant medallion on the felt; seats without the blurry halo: a solid bezel hides the soft patch in the picture */
+.tbvar .vico{width:calc(var(--u) * 74);height:calc(var(--u) * 74);font-size:max(10px,calc(var(--u) * 27))}
+.tbvar span{font-size:max(7px,calc(var(--u) * 17));text-shadow:0 1px 2px #000,0 0 6px rgba(0,0,0,.8)}
+.tbring{box-shadow:0 0 0 calc(var(--u) * 3) #1a0f06,0 0 0 calc(var(--u) * 31) #1b110a,0 0 0 calc(var(--u) * 34) rgba(214,172,92,.5)}
+.tbseat.win .tbring{box-shadow:0 0 0 calc(var(--u) * 3) #1a0f06,0 0 0 calc(var(--u) * 31) #1b110a,0 0 0 calc(var(--u) * 35) rgba(46,229,157,.95)}
+
 </style>
 </head>
 <body>
@@ -1775,7 +1781,7 @@ const CLUB_MAX = 50;                                              // members in 
 const CREST = ['\uD83E\uDD81', '\uD83D\uDC2F', '\uD83E\uDD85', '\uD83D\uDC09', '\uD83D\uDC3A', '\uD83E\uDD82', '\uD83D\uDC51', '\u2660\uFE0F', '\u2665\uFE0F', '\u2666\uFE0F', '\u2663\uFE0F', '\uD83D\uDD25'];
 const crestOf = id => CREST[Math.max(0, parseInt(String(id || 'c0').slice(1), 10) || 0)] || CREST[0];
 const BOOTS = [1, 2, 5, 10, 20, 50];
-const bootInfo = b => ({ boot: b, min: b * 20, max: b * 100, blind: b * 16, chaal: b * 64, pot: b * 512 });
+const bootInfo = b => ({ boot: b, min: b * 100, max: b * 500, blind: b * 16, chaal: b * 64, pot: b * 512 });
 const TABLES = [
   // Classic (Quick Play): standard rules, one table per boot
   ...BOOTS.map(b => Object.assign(bootInfo(b), { id: 'boot_' + b, title: 'Classic Table', tier: 'Classic', mode: 'classic', room: 'TP10' + String(b).padStart(2, '0') })),
@@ -3052,7 +3058,7 @@ function renderFelt(R, me, msgs) {
   const ABBR = { classic: 'CL', ak47: 'AK', joker: 'JK', muflis: 'ML', n999: '999', lowjoker: 'LJ', highjoker: 'HJ' };
   if (!fresh && (cfgV.id !== 'classic' || cfg.random)) {
     const wildRank = G && G.joker && G.phase !== 'idle' ? G.joker : '';
-    stage.appendChild(h('button', { id: 'variantBadge', type: 'button', class: 'tbvar', style: tbAt(836, 58), 'aria-label': 'Game: ' + cfgV.name + '. Tap for the rules', onclick: () => Sheets.ranks() },
+    stage.appendChild(h('button', { id: 'variantBadge', type: 'button', class: 'tbvar', style: tbAt(548, 482), 'aria-label': 'Game: ' + cfgV.name + '. Tap for the rules', onclick: () => Sheets.ranks() },
       h('i', { class: 'vico', text: ABBR[cfgV.id] || '?' }), h('span', { text: wildRank ? 'WILD ' + wildRank : cfgV.name.toUpperCase() })));
   }
   /* a Variant table tells every player which game this hand is, for a few seconds when the hand is dealt */
