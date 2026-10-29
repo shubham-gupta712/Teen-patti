@@ -1552,8 +1552,8 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 
 /* ===== 33. lobby v4: side menu, profile plate, boot picker ===== */
 .lobstage .lbmenu{position:absolute;z-index:5;display:flex;flex-direction:column;box-sizing:border-box;padding:calc(var(--u) * 6) calc(var(--u) * 8) calc(var(--u) * 10);border-radius:calc(var(--u) * 46);background:linear-gradient(180deg,rgba(38,27,20,.97),rgba(22,15,11,.97) 55%,rgba(16,10,7,.97));border:max(1px,calc(var(--u) * 2)) solid rgba(214,172,92,.42);box-shadow:0 calc(var(--u) * 6) calc(var(--u) * 20) rgba(0,0,0,.65),inset 0 1px 0 rgba(255,232,190,.14)}
-.lbmenu .lbcrown{flex:none;height:calc(var(--u) * 86);display:grid;place-items:center;color:#ecd9a8}
-.lbmenu .lbcrown .ico{width:calc(var(--u) * 58);height:calc(var(--u) * 58);filter:drop-shadow(0 0 calc(var(--u) * 6) rgba(255,214,130,.45))}
+.lbmenu .lbcrown{flex:none;height:calc(var(--u) * 64);display:grid;place-items:center;color:#ecd9a8}
+.lbmenu .lbcrown .ico{width:calc(var(--u) * 46);height:calc(var(--u) * 46);filter:drop-shadow(0 0 calc(var(--u) * 6) rgba(255,214,130,.45))}
 .lobstage .lbmenu .lbm{position:relative;flex:1;display:flex;align-items:center;justify-content:flex-start;gap:calc(var(--u) * 9);margin:0;padding:0 calc(var(--u) * 10);border:0;border-radius:calc(var(--u) * 40);background:transparent;color:#e6d4a4;text-align:left;white-space:nowrap;box-shadow:none}
 .lbmenu .lbm + .lbm:before{content:"";position:absolute;left:12%;right:12%;top:0;height:max(1px,calc(var(--u) * 1.5));background:linear-gradient(90deg,transparent,rgba(214,172,92,.38),transparent)}
 .lbmenu .lbm.on + .lbm:before,.lbmenu .lbm.on:before{display:none}
@@ -1589,6 +1589,16 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .sheetback .brow.trow{padding:2px 10px;min-height:0}
 .sheetback .brow.trow .tgo{padding:5px 10px}
 .sheetback .bnote{font-size:12px;margin:0 0 6px;line-height:1.3}
+/* the small game icon on a variant table, and the announcement when a hand is dealt */
+.tbstage .tbvar{padding:0;gap:calc(var(--u) * 3);background:none;border:0;box-shadow:none;border-radius:0}
+.tbvar .vico{display:grid;place-items:center;width:calc(var(--u) * 58);height:calc(var(--u) * 58);border-radius:50%;font:800 max(9px,calc(var(--u) * 21))/1 Georgia,serif;font-style:normal;letter-spacing:0;color:#2a1b0c;background:radial-gradient(circle at 35% 30%,#fff1c4,#d9b266 60%,#a47a34);border:max(1px,calc(var(--u) * 2)) solid #fff0c0;box-shadow:0 0 calc(var(--u) * 12) rgba(255,205,110,.55),0 calc(var(--u) * 3) calc(var(--u) * 6) rgba(0,0,0,.55)}
+.tbvar span{font:800 max(6.5px,calc(var(--u) * 14))/1 system-ui;letter-spacing:.1em;color:#ffe9a8;text-shadow:0 1px 3px #000}
+.tbvar .jk{font-size:inherit}
+.tbstage .tbann{position:absolute;transform:translate(-50%,-50%);z-index:30;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:calc(var(--u) * 6);padding:calc(var(--u) * 14) calc(var(--u) * 50);border-radius:calc(var(--u) * 22);background:linear-gradient(180deg,rgba(40,28,14,.93),rgba(14,9,5,.93));border:max(1px,calc(var(--u) * 2.5)) solid #e6c36e;box-shadow:0 0 calc(var(--u) * 30) rgba(255,200,100,.45);animation:annin 4.2s both}
+.tbann small{font:700 max(7px,calc(var(--u) * 15))/1 system-ui;letter-spacing:.3em;color:#cdb98f}
+.tbann b{font:800 max(14px,calc(var(--u) * 52))/1 Georgia,serif;letter-spacing:.08em;color:#ffe9a8;text-shadow:0 0 calc(var(--u) * 14) rgba(255,200,100,.6)}
+.tbann span{font:600 max(8px,calc(var(--u) * 20))/1 system-ui;color:#f1dfb0}
+@keyframes annin{0%{opacity:0;transform:translate(-50%,-50%) scale(.85)}8%{opacity:1;transform:translate(-50%,-50%) scale(1)}86%{opacity:1}100%{opacity:0}}
 
 </style>
 </head>
@@ -1838,7 +1848,7 @@ function setConnection(online) {
   c.className = 'conn' + (online ? '' : ' off');
 }
 
-const BUILD_TAG = '2026-10-30 boots';
+const BUILD_TAG = '2026-10-30 layout';
 
 /* ==========================================================================
    SECTION 2b - LANDSCAPE
@@ -2227,6 +2237,13 @@ const Repo = {
   setSeatState: (t, uid, seatState) =>
     Repo.membersCol(t).doc(uid).update({ seatState, updatedAt: FV.serverTimestamp() }),
 
+  // Any signed-in player may create a public table that does not exist yet, exactly as configured (rules: rooms create).
+  async ensureRoom(t) {
+    const ref = Repo.roomRef(t.id), snap = await ref.get();
+    if (snap.exists) return false;
+    await ref.set({ tableId: t.id, name: tableName(t), boot: t.boot, minBuyIn: t.min, maxBuyIn: t.max, permanent: true, adminUid: ADMIN_UID, status: 'open', dealerAt: 0, seated: 0, createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
+    return true;
+  },
   // Idempotent: fixed IDs, create only what is missing, repair only what differs.
   async setupTables() {
     const out = { created: 0, repaired: 0, unchanged: 0 };
@@ -2410,12 +2427,14 @@ function go() {
 
 /* Live data for the lobby and the admin dashboard: the six fixed table
    documents, read one by one. No collection query decides which tables exist. */
+const ensuring = {};                       // public tables this session has already tried to create
 function openRoomsScope() {
   S.rooms = {}; S.roomsLoaded = {};
   scopeRooms = Scopes.open('rooms');
   for (const t of TABLES) {
     Repo.watchRoom(scopeRooms, t.id, d => {
       S.rooms[t.id] = d; S.roomsLoaded[t.id] = true; setConnection(true); scheduleRender();
+      if (!d && !t.private && !S.isAdmin && !ensuring[t.id]) { ensuring[t.id] = true; Repo.ensureRoom(t).catch(() => { ensuring[t.id] = false; }); }
     });
   }
   scopeRooms.every(scheduleRender, 15000);
@@ -2929,8 +2948,19 @@ function renderFelt(R, me, msgs) {
 
   /* which variant this table plays, and the joker rank when the hand has one */
   const cfgV = variantOfGame(cfg, G), fresh = cfg.random && !(G && G.handNo > 0);       // a Variant table has not dealt yet: no variant to show
-  if (cfgV.id !== 'classic' || cfg.random) stage.appendChild(h('button', { id: 'variantBadge', type: 'button', class: 'tbvar', style: tbAt(836, 52), 'aria-label': cfgV.name + ' rules', onclick: () => Sheets.ranks() },
-    h('b', { text: fresh ? 'VARIANT TABLE' : cfgV.name.toUpperCase() }), G && G.joker && G.phase !== 'idle' ? h('span', { class: 'jk', text: 'WILD RANK ' + G.joker }) : h('span', { text: fresh ? 'A new game every hand' : cfgV.tag })));
+  const ABBR = { classic: 'CL', ak47: 'AK', joker: 'JK', muflis: 'ML', n999: '999', lowjoker: 'LJ', highjoker: 'HJ' };
+  if (!fresh && (cfgV.id !== 'classic' || cfg.random)) {
+    const wildRank = G && G.joker && G.phase !== 'idle' ? G.joker : '';
+    stage.appendChild(h('button', { id: 'variantBadge', type: 'button', class: 'tbvar', style: tbAt(836, 58), 'aria-label': 'Game: ' + cfgV.name + '. Tap for the rules', onclick: () => Sheets.ranks() },
+      h('i', { class: 'vico', text: ABBR[cfgV.id] || '?' }), h('span', { text: wildRank ? 'WILD ' + wildRank : cfgV.name.toUpperCase() })));
+  }
+  /* a Variant table tells every player which game this hand is, for a few seconds when the hand is dealt */
+  if (cfg.random && G && G.phase === 'playing' && G.handId) {
+    if (S.annHand !== G.handId) { S.annHand = G.handId; S.annAt = Date.now(); setTimeout(scheduleRender, 4300); }
+    const el = (Date.now() - S.annAt) / 1000;
+    if (el < 4.2) stage.appendChild(h('div', { id: 'variantAnnounce', class: 'tbann', style: tbAt(836, 205) + ';animation-delay:-' + el.toFixed(2) + 's', role: 'status' },
+      h('small', { text: 'THIS HAND' }), h('b', { text: cfgV.name.toUpperCase() }), h('span', { text: G.joker ? 'Wild rank: ' + G.joker : cfgV.tag })));
+  }
 
   /* the pot, and a line of table talk under it */
   const potv = live ? (result ? G.result.amount : G.pot) : 0;
@@ -3046,25 +3076,25 @@ function renderLobby() {
     const cut = (sp.length ? sp : cuts).sort((x, y) => near(x) - near(y))[0] || Math.ceil(nm.length / 2);
     lines = [nm.slice(0, cut).trim(), nm.slice(cut).trim()];
   }
-  const widest = Math.max(...lines.map(l => l.length), 1), art = Math.max(10, Math.min(lines.length > 1 ? 21 : 30, 200 / (0.62 * widest)));
-  const PW = 346;                                              // the plate is 316 wide and 316 / LB_PLATE tall, in picture pixels
-  parts.push(btn('lbProfile', 'lbprof', [LB_W - 10 - PW, 4, LB_W - 10, 4 + PW / LB_PLATE], 'Your profile', () => Sheets.profileEdit(),
+  const widest = Math.max(...lines.map(l => l.length), 1), art = Math.max(10, Math.min(lines.length > 1 ? 14 : 22, 112 / (0.62 * widest)));
+  const PW = 194;                                              // the plate is 316 wide and 316 / LB_PLATE tall, in picture pixels
+  parts.push(btn('lbProfile', 'lbprof', [13, 6, 13 + PW, 6 + PW / LB_PLATE], 'Your profile', () => Sheets.profileEdit(),
     h('span', { class: 'lbav' }, avatarNode(p.avatar)),
     h('span', { class: 'lbname' }, h('b', { id: 'lbName', title: nm, style: 'font-size:max(7px,calc(var(--u) * ' + art.toFixed(1) + '))' }, ...lines.map((l, i) => h('span', { text: l, class: i ? 'l2' : 'l1' }))))));
-  parts.push(h('div', { class: 'lbbrand', style: lbRect(300, 10, 700, 66) }, h('b', { text: 'TEEN PATTI' }), h('span', { text: 'CLUB' })));
-  parts.push(btn('lbWallet', 'lbpill lbcash', [846, 22, 1086, 78], 'Wallet and add chips', () => Sheets.wallet(),
+  parts.push(h('div', { class: 'lbbrand', style: lbRect(640, 10, 1040, 66) }, h('b', { text: 'TEEN PATTI' }), h('span', { text: 'CLUB' })));
+  parts.push(btn('lbWallet', 'lbpill lbcash', [1236, 22, 1466, 78], 'Wallet and add chips', () => Sheets.wallet(),
     h('img', { class: 'lbcoin', src: IMG.chip_gold, alt: '' }),
     h('b', { id: 'walletBal', text: fmt(p.chips), style: 'font-size:max(9px,calc(var(--u) * ' + (String(p.chips).length > 6 ? 26 : 32) + '))' }),
     h('span', { class: 'lbplus' }, icon('plus'))));
-  [['lbGift', 'Gifts', 'gift', 1108, () => Sheets.soon('Gifts', 'Daily bonuses and gifts from friends.')],
-   ['lbMail', 'Messages', 'mail', 1172, () => Sheets.soon('Messages', 'Messages from the club and your friends.')],
-   ['lbBell', 'Notifications', 'bell', 1236, () => Sheets.soon('Notifications', 'Table invites and updates will show up here.')]
+  [['lbGift', 'Gifts', 'gift', 1484, () => Sheets.soon('Gifts', 'Daily bonuses and gifts from friends.')],
+   ['lbMail', 'Messages', 'mail', 1548, () => Sheets.soon('Messages', 'Messages from the club and your friends.')],
+   ['lbBell', 'Notifications', 'bell', 1612, () => Sheets.soon('Notifications', 'Table invites and updates will show up here.')]
   ].forEach(([id, label, ic, x, fn]) => parts.push(btn(id, 'lbpill lbico', [x, 24, x + 52, 76], label, fn, icon(ic))));
 
   /* ---- the side menu, down the left: crown, Teen Patti (where you are), Private Table, LeaderBoard, Settings ---- */
   const pst = tileState(PRIVATE_CFG), pOpen = pst.usable;
   const mi = (id, cls, label, ic, fn) => h('button', { id, type: 'button', class: 'lbm ' + cls, 'aria-label': label, onclick: fn }, iconF(ic), h('span', { text: label }));
-  parts.push(h('nav', { class: 'lbmenu', style: lbRect(14, 6, 204, 452), 'aria-label': 'Menu' },
+  parts.push(h('nav', { class: 'lbmenu', style: lbRect(14, 72, 204, 440), 'aria-label': 'Menu' },
     h('div', { class: 'lbcrown' }, iconF('crown')),
     mi('lbTeenPatti', 'on', 'Teen Patti', 'spade', () => toast('Pick a table in the middle to play Teen Patti.')),
     mi('lbPrivate', pOpen || pst.mine ? '' : 'off', 'Private Table', 'people', () => tileClick(PRIVATE_CFG)),
@@ -4242,7 +4272,7 @@ const Sheets = {
       row('chip', null, B('Pay the boot; '), 'get 3 cards face-down.'),
       row('timer', '30s', B('30s per turn '), '(miss 2 = removed).'),
       h('div', { class: 'qh', text: 'Turn actions' }),
-      row('', icon('eyeOff'), B('Blind: '), 'play without looking (pays normal stake). Max 2 blind moves, then cards flip face-up.'),
+      row('', icon('eyeOff'), B('Blind: '), 'play without looking (pays normal stake). Max 3 blind moves, then cards flip face-up.'),
       row('', icon('eye'), B('Seen: '), 'look for free, play (pays double stake).'),
       row('x2', '2x', B('Raise: '), 'double the current stake.'),
       row('back', null, B('Pack: '), 'fold and lose your chips.'),
@@ -4599,7 +4629,7 @@ window.addEventListener('hashchange', Sheets.close);
      Caps (x boot): max blind bet 16, max chaal bet 64 (so the stake itself stops at 32), pot limit 512.
                      A blind player never pays more than the blind cap, even when the stake is higher.
                      When the pot reaches the pot limit the table shows the hands.
-     Blind limit   : a blind player's cards are turned face up after their 2nd blind move
+     Blind limit   : a blind player's cards are turned face up after their 3rd blind move
      Rounds        : once nobody is blind, every player still in moves once per round (chaal or
                      raise). After the 3rd completed round the table forces a show of all hands
      Show          : only when exactly two players remain; costs the same as chaal
@@ -4617,7 +4647,7 @@ const ENGINE = {
   CHAAL_CAP_MULT: 64,                      // most a seen player pays for one move, in boots (so the stake stops at half of this)
   POT_CAP_MULT: 512,                       // when the pot reaches this many boots the table shows the hands
   ROUNDS_AFTER_BLINDS: 3,                  // completed betting rounds once every blind is over, then a forced show
-  BLIND_LIMIT: 2,                          // a player may play blind twice, then must look at the cards
+  BLIND_LIMIT: 3,                          // a player may play blind three times, then must look at the cards
   LOG_MAX: 20,
   BOT_STACK_MULT: 50,
   SIDE_MS: 15000                           // how long the player before you has to answer a sideshow
