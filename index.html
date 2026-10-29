@@ -1600,6 +1600,59 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .tbann span{font:600 max(8px,calc(var(--u) * 20))/1 system-ui;color:#f1dfb0}
 @keyframes annin{0%{opacity:0;transform:translate(-50%,-50%) scale(.85)}8%{opacity:1;transform:translate(-50%,-50%) scale(1)}86%{opacity:1}100%{opacity:0}}
 
+/* 34. lobby symmetry: the two side tiles are the same shape, the profile plate is double size */
+.lobstage .holo.side .hpanel{padding:calc(var(--u) * 10) calc(var(--u) * 18) calc(var(--u) * 12);gap:calc(var(--u) * 4)}
+.lobstage .holo.side .htitle{font-size:max(11px,calc(var(--u) * 34))}
+.lobstage .holo.side .hbody{flex:1;display:flex;align-items:center;justify-content:center}
+.lobstage .holo.side .hdesc{margin:0}
+.lobstage .holo.side .mbtn{height:calc(var(--u) * 34);margin-top:0}
+.lobstage .lbmenu .lbm{min-height:0}
+
+/* 35. profile sheet, trophies, look, clubs, inspect, themes */
+.pframe{display:inline-grid;place-items:center;width:100%;height:100%;border-radius:50%;box-sizing:border-box;border:3px solid var(--fc,transparent);box-shadow:0 0 0 2px rgba(0,0,0,.4),0 0 14px var(--fc,transparent)}
+.pframe[data-frame="none"]{border:0;box-shadow:none}
+.pframe .avimg,.pframe .ava{border-radius:50%}
+.pprofile .pbig2{width:96px;height:96px;margin:0 auto 8px;border-radius:50%;background:#2a1b0c;display:grid;place-items:center;overflow:hidden}
+.pprofile .pbig2 .ava{font-size:50px;line-height:1}
+.ptitle{margin:2px 0 4px;font:800 12px system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.plink{margin:6px auto 0;background:none;border:0;color:var(--gold);font:600 13px system-ui;text-decoration:underline}
+.ptabs{display:flex;gap:6px;margin:10px 0}
+.ptab{flex:1;min-height:34px;padding:0 6px;border-radius:99px;border:1px solid rgba(214,172,92,.45);background:transparent;color:#e6d4a4;font:700 13px system-ui}
+.ptab.on{background:linear-gradient(180deg,#f1dcae,#c4a068);color:#1d1308;border-color:transparent}
+.pbody .qh{margin:12px 0 6px;font:800 11px system-ui;letter-spacing:.14em;text-transform:uppercase;color:#cdbd98}
+.pbody .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,1fr));gap:8px}
+.pbody .pstat2{padding:8px 4px;border-radius:10px;text-align:center;background:rgba(255,255,255,.06);border:1px solid rgba(214,172,92,.35)}
+.pbody .pstat2 b{display:block;font:700 16px var(--serif);color:var(--gold)}.pbody .pstat2 span{font:11px system-ui;color:#cdbd98}
+.pstyle{margin:0 0 2px;font:700 17px var(--serif);color:#fff3d2;text-align:center}
+.ptrophy{display:flex;align-items:center;gap:10px;padding:8px 10px;margin-bottom:6px;border-radius:12px;border:1px solid rgba(214,172,92,.3);background:rgba(255,255,255,.04);opacity:.7}
+.ptrophy.got{opacity:1;border-color:var(--gold);background:rgba(242,199,92,.12)}
+.ptrophy .tico{font-size:26px}.ptrophy div{flex:1}.ptrophy b{display:block;font:700 14px system-ui}.ptrophy small{font:11px system-ui;color:#cdbd98}.ptrophy em{font:700 12px system-ui;font-style:normal;color:var(--gold)}
+.popts{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px}
+.popt{padding:8px 6px;border-radius:12px;border:1px solid rgba(214,172,92,.4);background:rgba(255,255,255,.05);color:#f3ead6;text-align:center}
+.popt b{display:block;font:700 13px system-ui}.popt small{display:block;font:10.5px system-ui;color:#cdbd98;margin-top:2px}
+.popt.on{border-color:var(--gold);background:rgba(242,199,92,.18)}.popt.locked{opacity:.55}
+.pinspectbox{margin-top:10px}
+.pcrest{font-weight:700}
+.cbadge,.crow2{display:flex;align-items:center;gap:10px;padding:8px 10px;margin-bottom:6px;border-radius:12px;border:1px solid rgba(214,172,92,.3);background:rgba(255,255,255,.05)}
+.cbadge div,.crow2 div{flex:1;text-align:left}.cbadge b,.crow2 b{display:block;font:700 14px system-ui}.cbadge small,.crow2 small{font:11px system-ui;color:#cdbd98}
+.ccrest{font-size:28px;line-height:1}
+.cjoin{min-height:32px;padding:0 14px;border-radius:99px;border:0;background:linear-gradient(180deg,#f1dcae,#c4a068);color:#1d1308;font:800 12px system-ui}.cjoin:disabled{opacity:.5}
+.clist{max-height:190px;overflow:auto;margin-bottom:6px}
+.crests{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:8px 0}
+.crestopt{aspect-ratio:1;border-radius:12px;border:1px solid rgba(214,172,92,.35);background:rgba(255,255,255,.05);font-size:22px;padding:0}.crestopt.on{border-color:var(--gold);background:rgba(242,199,92,.2)}
+.croster .crow{display:flex;justify-content:space-between;padding:5px 8px;border-bottom:1px solid rgba(214,172,92,.2);font:13px system-ui}.croster .crow em{font-style:normal;color:var(--gold);font-weight:700}
+html[data-ptheme="mahogany"]{--gold:#e6a066;--gold-2:#b8743a;--line:#6a3c24;--panel:rgba(48,22,12,.94)}
+html[data-ptheme="mahogany"] .sheetback .sheet{background:linear-gradient(180deg,#2a140c,#120804);border-color:#b8743a}
+html[data-ptheme="noir"]{--gold:#5be7ff;--gold-2:#25a6c2;--line:#1f4f66;--panel:rgba(8,20,34,.94)}
+html[data-ptheme="noir"] .sheetback .sheet{background:linear-gradient(180deg,#0a1626,#04080f);border-color:#25a6c2}
+html[data-ptheme="noir"] .vip,html[data-ptheme="noir"] .ptab.on,html[data-ptheme="noir"] .cjoin{background:linear-gradient(180deg,#8cf0ff,#25a6c2)}
+html[data-ptheme="mahogany"] .vip,html[data-ptheme="mahogany"] .ptab.on,html[data-ptheme="mahogany"] .cjoin{background:linear-gradient(180deg,#f0c08f,#b8743a)}
+#myProfileSheet .pprofile .pbig2{width:60px;height:60px;margin-bottom:2px}
+#myProfileSheet .pprofile .pbig2 .ava{font-size:34px}
+#myProfileSheet .pprofile h3{font-size:17px}
+#myProfileSheet .pprofile .hnote{margin:2px 0}
+#myProfileSheet .ptabs{margin:6px 0}
+
 </style>
 </head>
 <body>
@@ -1711,6 +1764,9 @@ const variantOfTable = t => VARIANT_BY_ID[(t && t.variant) || 'classic'];
 // The variant being played: a Variant Table picks a new one every hand, so its game state says which.
 const variantOfGame = (t, G) => (t && t.random) ? VARIANT_BY_ID[(G && G.variant) || 'classic'] : variantOfTable(t);
 /* The six boot amounts every public table comes in, and what each one means (all caps are multiples of the boot). */
+const CLUB_MAX = 50;                                              // members in one club (rules: clubMax)
+const CREST = ['\uD83E\uDD81', '\uD83D\uDC2F', '\uD83E\uDD85', '\uD83D\uDC09', '\uD83D\uDC3A', '\uD83E\uDD82', '\uD83D\uDC51', '\u2660\uFE0F', '\u2665\uFE0F', '\u2666\uFE0F', '\u2663\uFE0F', '\uD83D\uDD25'];
+const crestOf = id => CREST[Math.max(0, parseInt(String(id || 'c0').slice(1), 10) || 0)] || CREST[0];
 const BOOTS = [1, 2, 5, 10, 20, 50];
 const bootInfo = b => ({ boot: b, min: b * 20, max: b * 100, blind: b * 16, chaal: b * 64, pot: b * 512 });
 const TABLES = [
@@ -1848,7 +1904,7 @@ function setConnection(online) {
   c.className = 'conn' + (online ? '' : ' off');
 }
 
-const BUILD_TAG = '2026-10-30 layout';
+const BUILD_TAG = '2026-10-30 profile+clubs';
 
 /* ==========================================================================
    SECTION 2b - LANDSCAPE
@@ -1939,6 +1995,7 @@ const ICONF = {
   spade: ['M12 2C9 6.2 4 9 4 13.3c0 2.4 1.8 4.1 4.1 4.1 1.2 0 2.2-.5 3-1.4-.2 2.1-1 3.9-2.3 5.5h6.4c-1.3-1.6-2.1-3.4-2.3-5.5.8.9 1.8 1.4 3 1.4 2.3 0 4.1-1.7 4.1-4.1C20 9 15 6.2 12 2z'],
   people: ['M12 3.6a3.1 3.1 0 1 1 0 6.2 3.1 3.1 0 0 1 0-6.2z', 'M6.3 20.5c0-3.6 2.4-6 5.7-6s5.7 2.4 5.7 6z', 'M5.4 7.3a2.4 2.4 0 1 1 0 4.8 2.4 2.4 0 0 1 0-4.8z', 'M1.2 19c0-2.7 1.7-4.5 4.3-4.5.8 0 1.5.2 2.1.5-1.2 1.1-1.9 2.6-2 4z', 'M18.6 7.3a2.4 2.4 0 1 1 0 4.8 2.4 2.4 0 0 1 0-4.8z', 'M22.8 19c0-2.7-1.7-4.5-4.3-4.5-.8 0-1.5.2-2.1.5 1.2 1.1 1.9 2.6 2 4z'],
   trophy: ['M7 3h10v6.2a5 5 0 0 1-10 0V3z', 'M5.2 4.2H2v2.4c0 2.1 1.7 3.6 4.2 3.8-.7-1.1-1-2.3-1-3.6V4.2z', 'M18.8 4.2H22v2.4c0 2.1-1.7 3.6-4.2 3.8.7-1.1 1-2.3 1-3.6V4.2z', 'M10.8 14.4h2.4v3.4h3.3V21H7.5v-3.2h3.3z'],
+  shield: ['M12 2.2l8 3v6.2c0 5-3.3 8.6-8 10.4-4.7-1.8-8-5.4-8-10.4V5.2z'],
   crown: ['M3 18.2h18V21H3z', 'M3.3 7.6l4.5 3.7L12 4l4.2 7.3 4.5-3.7-1.9 8.8H5.2z'],
   gear: ['M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8z M10.4 2h3.2l.5 2.6c.6.2 1.2.5 1.8.9l2.5-.9 1.6 2.8-2 1.7c.1.6.1 1.3 0 1.9l2 1.7-1.6 2.8-2.5-.9c-.5.4-1.1.7-1.8.9l-.5 2.6h-3.2l-.5-2.6c-.6-.2-1.2-.5-1.8-.9l-2.5.9-1.6-2.8 2-1.7a6 6 0 0 1 0-1.9l-2-1.7 1.6-2.8 2.5.9c.5-.4 1.1-.7 1.8-.9z']
 };
@@ -2165,14 +2222,50 @@ const Repo = {
   watchFeed: (sc, t, cb) => sc.listen(Repo.feedCol(t), s => cb(s.docs.map(d => d.data()))),
   sendFeed: (t, uid, kind, code, to, seq) => Repo.feedCol(t).doc(uid).set({ uid, kind, code, to: to || '', seq, updatedAt: FV.serverTimestamp() }),
   getStats: uid => db.collection('stats').doc(uid).get().then(d => d.exists ? d.data() : null),
-  // One more hand for this player: played always, won when they took the pot. The streak counts wins in a row.
-  bumpStats: (uid, won) => {
+  // One more hand for this player (see Stats.apply). Cosmetic choices (frame, theme, title) ride along untouched.
+  bumpStats: (uid, delta) => {
+    const ref = db.collection('stats').doc(uid);
+    return db.runTransaction(async tx => {
+      const d = await tx.get(ref), o = d.exists ? d.data() : {}, n = Stats.apply(o, delta);
+      ['frame', 'theme', 'title'].forEach(k => { if (o[k] !== undefined) n[k] = o[k]; });
+      n.uid = uid; n.updatedAt = FV.serverTimestamp();
+      tx.set(ref, n);
+    });
+  },
+  // Rule: stats create/update (cosmetics only: counters stay as they are)
+  setLook: (uid, look) => {
     const ref = db.collection('stats').doc(uid);
     return db.runTransaction(async tx => {
       const d = await tx.get(ref), o = d.exists ? d.data() : { hands: 0, wins: 0, streak: 0 };
-      const wins = o.wins + (won ? 1 : 0), streak = won ? o.streak + 1 : 0;
-      tx.set(ref, { uid, hands: o.hands + 1, wins, streak: Math.min(streak, wins), updatedAt: FV.serverTimestamp() });
+      tx.set(ref, Object.assign({}, o, look, { uid, updatedAt: FV.serverTimestamp() }));
     });
+  },
+  /* ---- clubs (rules: clubs, clubMembers; create / join / leave are batches so memberCount always matches) ---- */
+  getMembership: uid => db.collection('clubMembers').doc(uid).get().then(d => d.exists ? d.data() : null),
+  getClub: id => db.collection('clubs').doc(id).get().then(d => d.exists ? Object.assign({ id: d.id }, d.data()) : null),
+  listClubs: () => db.collection('clubs').get().then(s => s.docs.map(d => Object.assign({ id: d.id }, d.data())).sort((a, b) => b.memberCount - a.memberCount || String(a.name).localeCompare(b.name))),
+  clubRoster: id => db.collection('clubMembers').where('clubId', '==', id).get().then(s => s.docs.map(d => d.data()).sort((a, b) => (a.kind === 'owner' ? -1 : 0) - (b.kind === 'owner' ? -1 : 0) || String(a.name).localeCompare(b.name))),
+  createClub: (uid, name, crest, ownerName) => {
+    const b = db.batch(), now = FV.serverTimestamp();
+    b.set(db.collection('clubs').doc(uid), { name, crest, ownerUid: uid, ownerName, memberCount: 1, createdAt: now, updatedAt: now });
+    b.set(db.collection('clubMembers').doc(uid), { uid, clubId: uid, name: ownerName, kind: 'owner', joinedAt: now });
+    return b.commit();
+  },
+  joinClub: async (uid, name, clubId) => {
+    const c = await Repo.getClub(clubId);
+    if (!c) throw new Error('That club no longer exists.');
+    if (c.memberCount >= CLUB_MAX) throw new Error('That club is full (' + CLUB_MAX + ' members).');
+    const b = db.batch(), now = FV.serverTimestamp();
+    b.set(db.collection('clubMembers').doc(uid), { uid, clubId, name, kind: 'member', joinedAt: now });
+    b.update(db.collection('clubs').doc(clubId), { memberCount: c.memberCount + 1, updatedAt: now });
+    return b.commit();
+  },
+  leaveClub: async (uid, m) => {
+    const c = await Repo.getClub(m.clubId), b = db.batch(), now = FV.serverTimestamp();
+    b.delete(db.collection('clubMembers').doc(uid));
+    if (m.kind === 'owner') b.delete(db.collection('clubs').doc(uid));                       // the founder closes an empty club
+    else if (c) b.update(db.collection('clubs').doc(m.clubId), { memberCount: Math.max(1, c.memberCount - 1), updatedAt: now });
+    return b.commit();
   },
   watchBots: (sc, t, cb) => sc.listen(Repo.botsCol(t), s => cb(s.docs.map(d => d.data()))),
   // Rule: hands get (only the document whose ID is my UID)
@@ -2363,7 +2456,7 @@ async function onAuthChange(user) {
   closeAllScopes();
   S.user = user; S.profile = null; S.isAdmin = false; S.loadError = '';
   S.room = null; S.rooms = {}; S.roomsLoaded = {}; S.route = { name: 'loading' };
-  if (!user) { try { sessionStorage.removeItem('tp_uid'); } catch (e) { /* private mode */ } S.forceLobby = false; S.authReady = true; go(); return; }
+  if (!user) { try { sessionStorage.removeItem('tp_uid'); } catch (e) { /* private mode */ } S.forceLobby = false; S.authReady = true; S.myStats = null; S.myClub = null; Stats.applyTheme('velvet'); go(); return; }
   { let seen = ''; try { seen = sessionStorage.getItem('tp_uid') || ''; sessionStorage.setItem('tp_uid', user.uid); } catch (e) { /* private mode */ } S.forceLobby = seen !== user.uid; }   // a fresh sign-in starts in the lobby; a reload in the same tab goes back to your table
   S.isAdmin = user.uid === ADMIN_UID;
   if (S.isAdmin) { S.authReady = true; go(); return; }
@@ -2372,6 +2465,7 @@ async function onAuthChange(user) {
     const prof = await Repo.ensureProfile(user);
     if (seq !== authSeq) return;                 // a newer sign-in replaced this one
     S.profile = prof;
+    Stats.load(user.uid);
     scopeProfile = Scopes.open('profile');
     Repo.watchProfile(scopeProfile, user.uid, p => { S.profile = p; setConnection(true); go(); });
     S.authReady = true; go();
@@ -3021,9 +3115,9 @@ const lbRect = (x0, y0, x1, y1) => 'left:' + lbPct(x0, LB_W) + '%;top:' + lbPct(
 // The three hologram tiles float above the dark inlay in the middle of each table (picture pixels). `base` is that inlay.
 // Left: Variant Table. Middle (the big one in front): Classic Table, i.e. Quick Play. Right: Tournament (coming soon).
 const LB_MODES = [
-  { id: 'variant',    x: [224, 524],   bottom: 262, base: [236, 258, 508, 296] },     // back left
+  { id: 'variant',    x: [224, 524],   bottom: 278, base: [236, 258, 508, 296] },     // back left
   { id: 'classic',    x: [598, 1088],  bottom: 482, base: [575, 488, 1115, 606] },    // in front
-  { id: 'tournament', x: [1158, 1458], bottom: 262, base: [1190, 262, 1442, 300] }    // back right
+  { id: 'tournament', x: [1166, 1466], bottom: 278, base: [1190, 262, 1442, 300] }    // back right
 ];
 // a box that grows upward from a fixed bottom edge, so the content can never be cut off
 const lbBottom = (x0, x1, bottom) => 'left:' + lbPct(x0, LB_W) + '%;width:' + lbPct(x1 - x0, LB_W) + '%;bottom:' + lbPct(LB_H - bottom, LB_H) + '%';
@@ -3076,9 +3170,9 @@ function renderLobby() {
     const cut = (sp.length ? sp : cuts).sort((x, y) => near(x) - near(y))[0] || Math.ceil(nm.length / 2);
     lines = [nm.slice(0, cut).trim(), nm.slice(cut).trim()];
   }
-  const widest = Math.max(...lines.map(l => l.length), 1), art = Math.max(10, Math.min(lines.length > 1 ? 14 : 22, 112 / (0.62 * widest)));
-  const PW = 194;                                              // the plate is 316 wide and 316 / LB_PLATE tall, in picture pixels
-  parts.push(btn('lbProfile', 'lbprof', [13, 6, 13 + PW, 6 + PW / LB_PLATE], 'Your profile', () => Sheets.profileEdit(),
+  const widest = Math.max(...lines.map(l => l.length), 1), art = Math.max(18, Math.min(lines.length > 1 ? 28 : 44, 224 / (0.62 * widest)));
+  const PW = 388;                                              // the plate is 316 wide and 316 / LB_PLATE tall, in picture pixels
+  parts.push(btn('lbProfile', 'lbprof', [10, 4, 10 + PW, 4 + PW / LB_PLATE], 'Your profile', () => Sheets.profile(),
     h('span', { class: 'lbav' }, avatarNode(p.avatar)),
     h('span', { class: 'lbname' }, h('b', { id: 'lbName', title: nm, style: 'font-size:max(7px,calc(var(--u) * ' + art.toFixed(1) + '))' }, ...lines.map((l, i) => h('span', { text: l, class: i ? 'l2' : 'l1' }))))));
   parts.push(h('div', { class: 'lbbrand', style: lbRect(640, 10, 1040, 66) }, h('b', { text: 'TEEN PATTI' }), h('span', { text: 'CLUB' })));
@@ -3094,10 +3188,11 @@ function renderLobby() {
   /* ---- the side menu, down the left: crown, Teen Patti (where you are), Private Table, LeaderBoard, Settings ---- */
   const pst = tileState(PRIVATE_CFG), pOpen = pst.usable;
   const mi = (id, cls, label, ic, fn) => h('button', { id, type: 'button', class: 'lbm ' + cls, 'aria-label': label, onclick: fn }, iconF(ic), h('span', { text: label }));
-  parts.push(h('nav', { class: 'lbmenu', style: lbRect(14, 72, 204, 440), 'aria-label': 'Menu' },
+  parts.push(h('nav', { class: 'lbmenu', style: lbRect(14, 128, 206, 664), 'aria-label': 'Menu' },
     h('div', { class: 'lbcrown' }, iconF('crown')),
     mi('lbTeenPatti', 'on', 'Teen Patti', 'spade', () => toast('Pick a table in the middle to play Teen Patti.')),
     mi('lbPrivate', pOpen || pst.mine ? '' : 'off', 'Private Table', 'people', () => tileClick(PRIVATE_CFG)),
+    mi('lbClub', '', 'Club', 'shield', () => Sheets.club()),
     mi('lbBoard', '', 'LeaderBoard', 'trophy', () => Sheets.soon('Leaderboard', 'Who has won the most chips. This arrives once lifetime stats are tracked.')),
     mi('lbGear', '', 'Settings', 'gear', () => Sheets.settings())));
 
@@ -3110,7 +3205,7 @@ function renderLobby() {
     return [
       h('div', { class: 'holobase hb-' + id, style: lbRect(...m.base) }),
       id === 'classic' ? h('div', { class: 'holobeam hb-' + id, style: lbRect(m.x[0] + 70, m.bottom - 4, m.x[1] - 70, m.base[1] + 70) }) : null,
-      h('div', { class: 'lbmode holo m-' + id + (soon ? ' soon' : ''), id: 'mode_' + id, style: lbBottom(m.x[0], m.x[1], m.bottom) },
+      h('div', { class: 'lbmode holo m-' + id + (soon ? ' soon' : '') + (id === 'classic' ? '' : ' side'), id: 'mode_' + id, style: lbBottom(m.x[0], m.x[1], m.bottom) },
         h('div', { class: 'hpanel' },
           h('i', { class: 'hscan', style: sweep() }),
           h('span', { class: 'hkick', text: kicker }), h('b', { class: 'htitle', text: title }), body,
@@ -3121,8 +3216,7 @@ function renderLobby() {
   const myMode = mySeat && mySeat.mode;
   const lowest = bootInfo(BOOTS[0]), highest = bootInfo(BOOTS[BOOTS.length - 1]);
   parts.push(...holo('variant', 'RANDOM GAME • ' + seatedAt(LB_VARIANT_IDS) + ' PLAYING', 'Variant Table',
-    h('div', { class: 'hbody' }, h('p', { class: 'hdesc', text: 'A different game every hand' }),
-      row('Boot', fmt(lowest.boot) + ' - ' + fmt(highest.boot)), row('Games', '7 variants')),
+    h('div', { class: 'hbody' }, h('p', { class: 'hdesc', text: 'A different game every hand' })),
     myMode === 'variant' ? 'RETURN' : 'SELECT BOOT', () => myMode === 'variant' ? tileClick(mySeat) : Sheets.boots('variant')));
   parts.push(...holo('classic', 'QUICK PLAY • ' + seatedAt(LB_CLASSIC_IDS) + ' PLAYING', 'Classic Table',
     h('div', { class: 'hbody' }, h('p', { class: 'hdesc', text: 'Standard Teen Patti, play now' }),
@@ -4217,13 +4311,74 @@ const History = {
 /* Hands played, won and the current winning streak, kept by the player's own phone. */
 const Stats = {
   tier(hands) { return hands >= 1000 ? 'Diamond' : hands >= 300 ? 'Platinum' : hands >= 100 ? 'Gold' : hands >= 25 ? 'Silver' : 'Bronze'; },
+  // What one finished hand adds to the player's record. Counters grow by at most one; bigPot and peak only ever go up.
+  delta(G, uid) {
+    const me = G.players[uid], R = G.result, won = R.winners.includes(uid), shown = R.reason === 'show';
+    const d = { won, packs: me.status === 'packed' ? 1 : 0, blindHands: me.status === 'blind' ? 1 : 0, night: new Date().getHours() < 5 ? 1 : 0, peak: me.chips, bigPot: won ? (R.shares[uid] || 0) : 0 };
+    d.showWin = won && shown ? 1 : 0; d.foldWin = won && !shown ? 1 : 0;
+    const cat = won && shown ? { 'Trail': 'trail', 'Pure sequence': 'pseq', 'Sequence': 'seq', 'Color': 'color', 'Pair': 'pair' }[R.rank] || '' : '';
+    d.cat = cat; d.aces = cat === 'trail' && (R.reveal[uid] || []).every(c => c.slice(0, -1) === 'A') ? 1 : 0;
+    d.low = (me.chips - (R.shares[uid] || 0) + me.invested) < G.boot * 10;     // stack before the hand was small
+    return d;
+  },
+  // Pure: the new stats document from the old one and the hand's delta (so it can be tested without a database).
+  apply(o, d) {
+    const n = Object.assign({ hands: 0, wins: 0, streak: 0, best: 0, showWins: 0, foldWins: 0, packs: 0, blindHands: 0, trail: 0, pseq: 0, seq: 0, color: 0, pair: 0, aces: 0, night: 0, comeback: 0, houdini: 0, lowRun: 0, bigPot: 0, peak: 0 }, o);
+    n.hands += 1; n.packs += d.packs; n.blindHands += d.blindHands; n.night += d.night;
+    n.peak = Math.max(n.peak, d.peak);
+    if (d.won) {
+      n.wins += 1; n.streak = Math.min(n.streak + 1, n.wins); n.bigPot = Math.max(n.bigPot, d.bigPot);
+      n.showWins += d.showWin; n.foldWins += d.foldWin; if (d.cat) n[d.cat] += 1; n.aces += d.aces;
+      if (n.streak === 1) n.lowRun = d.low ? 1 : 0;
+      if (d.low) n.comeback += 1;
+      if (n.streak === 5 && n.lowRun) n.houdini += 1;
+    } else { n.streak = 0; n.lowRun = 0; }
+    n.best = Math.max(n.best, n.streak);
+    return n;
+  },
   record(G, uid) {
     if (!uid || S.isAdmin || !G.players[uid] || !(G.players[uid].invested > 0)) return;
     let last = ''; try { last = localStorage.getItem('tp_stat_hand_' + uid) || ''; } catch (e) { /* private window */ }
     if (last === G.handId) return;
     try { localStorage.setItem('tp_stat_hand_' + uid, G.handId); } catch (e) { /* private window */ }
-    Repo.bumpStats(uid, G.result.winners.includes(uid)).catch(e => console.warn('[TeenPatti] stats', e && e.code));
-  }
+    Repo.bumpStats(uid, Stats.delta(G, uid)).catch(e => console.warn('[TeenPatti] stats', e && e.code));
+  },
+  /* ---- what the numbers mean ---- */
+  style(st) {
+    const h = st ? st.hands : 0; if (h < 10) return 'New Player';
+    if ((st.blindHands || 0) / h > 0.25) return 'Bluff Heavy';
+    if ((st.packs || 0) / h > 0.5) return 'Cautious / Tight';
+    if (st.wins && (st.foldWins || 0) / st.wins > 0.4) return 'Aggressive';
+    return 'Calculated';
+  },
+  TITLES: {
+    highroller: { name: 'High Roller', how: 'Win a pot of 5,000 or more', ok: s => (s.bigPot || 0) >= 5000 },
+    bluffmaster: { name: 'Bluff Master', how: 'Win 15 hands without a showdown', ok: s => (s.foldWins || 0) >= 15 },
+    tactician: { name: 'Royal Tactician', how: 'Win 25 showdowns', ok: s => (s.showWins || 0) >= 25 },
+    ironnerve: { name: 'Iron Nerve', how: 'Win 5 hands in a row', ok: s => (s.best || 0) >= 5 }
+  },
+  FRAMES: {
+    none: { name: 'Plain', how: 'Always yours', ok: () => true, col: '' },
+    silver: { name: 'Silver', how: 'Play 25 hands', ok: s => s.hands >= 25, col: '#d5dbe6' },
+    gold: { name: 'Gold', how: 'Play 100 hands', ok: s => s.hands >= 100, col: '#f2c75c' },
+    diamond: { name: 'Diamond', how: 'Play 300 hands', ok: s => s.hands >= 300, col: '#7fe3ff' },
+    royal: { name: 'Royal', how: 'Win 5 hands in a row', ok: s => (s.best || 0) >= 5, col: '#c04bff' }
+  },
+  THEMES: {
+    velvet: { name: 'Midnight Velvet', how: 'Always yours', ok: () => true },
+    mahogany: { name: 'High-Stakes Mahogany', how: 'Play 50 hands', ok: s => s.hands >= 50 },
+    noir: { name: 'Cyber Noir', how: 'Win 10 hands', ok: s => s.wins >= 10 }
+  },
+  TROPHIES: [
+    { id: 'houdini', name: 'The Houdini', how: 'Win 5 hands in a row after starting on a short stack', ok: s => (s.houdini || 0) >= 1, n: s => s.houdini || 0 },
+    { id: 'king', name: 'Showdown King', how: 'Win 50 showdowns', ok: s => (s.showWins || 0) >= 50, n: s => (s.showWins || 0) + '/50' },
+    { id: 'owl', name: 'Night Owl', how: 'Play 100 hands after midnight', ok: s => (s.night || 0) >= 100, n: s => (s.night || 0) + '/100' }
+  ],
+  // The stats document with every counter present (old documents lack the new ones).
+  full(st) { return Object.assign({ hands: 0, wins: 0, streak: 0, best: 0, showWins: 0, foldWins: 0, packs: 0, blindHands: 0, trail: 0, pseq: 0, seq: 0, color: 0, pair: 0, aces: 0, night: 0, comeback: 0, houdini: 0, bigPot: 0, peak: 0, frame: 'none', theme: 'velvet', title: '' }, st || {}); },
+  // Fetch my own stats (look and numbers) and my club once after sign-in; the theme is applied at once.
+  load(uid) { Repo.getStats(uid).then(st => { S.myStats = Stats.full(st); Stats.applyTheme(S.myStats.theme); }).catch(() => {}); Clubs.load(uid); },
+  applyTheme(th) { document.documentElement.setAttribute('data-ptheme', th && Stats.THEMES[th] ? th : 'velvet'); }
 };
 
 /* ==========================================================================
@@ -4337,12 +4492,19 @@ const Sheets = {
       h('p', { class: 'hnote' }, h('span', { class: 'vip', id: 'pcVip', text: sp.bot ? 'HOUSE BOT' : 'BRONZE' }), (sp.dealer ? ' \u00B7 Dealer button' : '')),
       h('div', { class: 'pgrid' }, stat('At this table', rupee(sp.chips)), stat('Now', state)),
       h('div', { class: 'pgrid' }, stat('Hands played', sp.bot ? '\u2014' : '...', 'pcHands'), stat('Win rate', sp.bot ? '\u2014' : '...', 'pcRate'), stat('Win streak', sp.bot ? '\u2014' : '...', 'pcStreak')),
+      sp.bot ? null : h('div', { class: 'pinspectbox', id: 'pcInspect' }),
       canGift ? h('div', { class: 'giftrow' }, Object.keys(GIFTS).map(k => h('button', { type: 'button', class: 'giftbtn', 'data-gift': k, 'aria-label': 'Send ' + GIFTS[k].name,
         onclick: () => { Social.send('gift', k, sp.id); Sheets.close(); } }, h('span', { text: GIFTS[k].icon }), h('small', { text: GIFTS[k].name })))) : null));
     if (!sp.bot) Repo.getStats(sp.id).then(st => {
       const set = (id, v) => { const e = $(id); if (e) e.textContent = v; };
       const hands = st ? st.hands : 0;
       set('pcHands', String(hands)); set('pcRate', hands ? Math.round(st.wins / hands * 100) + '%' : '\u2014'); set('pcStreak', String(st ? st.streak : 0)); set('pcVip', Stats.tier(hands).toUpperCase());
+      const f = Stats.full(st), big = document.querySelector('#playerSheet .pbig'), box = $('pcInspect');
+      if (big && f.frame !== 'none') big.replaceChildren(framed(sp.avatar, f.frame));
+      if (box) {
+        box.replaceChildren(f.title && Stats.TITLES[f.title] ? h('p', { class: 'ptitle', id: 'iTitle', text: Stats.TITLES[f.title].name }) : null, Sheets.inspect(sp, st, null));
+        Repo.getMembership(sp.id).then(m => m && Repo.getClub(m.clubId)).then(c => { const b2 = $('pcInspect'); if (b2 && c) b2.appendChild(h('p', { class: 'hnote', id: 'iClub', text: 'Club: ' + Clubs.tag(c) })); }).catch(() => {});
+      }
     }).catch(() => { ['pcHands', 'pcRate', 'pcStreak'].forEach(id => { const e = $(id); if (e) e.textContent = '\u2014'; }); });
   },
   // Quick phrases and stickers.
@@ -4592,6 +4754,149 @@ const Sheets = {
   }
 };
 window.addEventListener('hashchange', Sheets.close);
+
+/* ==========================================================================
+   SECTION 24b - PLAYER PROFILE, TROPHIES, LOOK, CLUBS, INSPECT
+   Your own profile sheet (stats, trophies, titles / frames / themes), the Club sheet, and the card you get when
+   you tap another player. All numbers come from the one small stats document each player keeps (see Stats).
+   ========================================================================== */
+const Clubs = {
+  // my membership and club, loaded once after sign-in and refreshed after any change
+  load(uid) {
+    return Repo.getMembership(uid).then(m => m ? Repo.getClub(m.clubId).then(c => { S.myClub = c ? { m, c } : null; }) : (S.myClub = null)).catch(() => {});
+  },
+  tag: club => club ? crestOf(club.crest) + ' ' + club.name : ''
+};
+
+// The avatar with the frame this player has earned.
+const framed = (avatarId, frame) => {
+  const f = Stats.FRAMES[frame] || Stats.FRAMES.none;
+  return h('span', { class: 'pframe', 'data-frame': frame || 'none', style: f.col ? '--fc:' + f.col : '' }, avatarNode(avatarId));
+};
+const pctText = (a, b) => b ? Math.round(a / b * 100) + '%' : '—';
+
+Object.assign(Sheets, {
+  /* ---- my profile: three tabs ---- */
+  profile(tab) {
+    const p = S.profile; if (!p) return;
+    tab = tab || 'stats';
+    const st = Stats.full(S.myStats), mine = S.myClub;
+    const tabs = h('div', { class: 'ptabs', role: 'tablist' }, [['stats', 'Stats'], ['trophies', 'Trophies'], ['look', 'Look']].map(([id, t]) =>
+      h('button', { type: 'button', id: 'ptab_' + id, class: 'ptab' + (tab === id ? ' on' : ''), role: 'tab', 'aria-selected': tab === id ? 'true' : 'false', text: t, onclick: () => Sheets.profile(id) })));
+    const head = h('div', { class: 'pprofile' },
+      h('div', { class: 'pbig2' }, framed(p.avatar, st.frame)),
+      h('h3', { text: p.name }),
+      st.title && Stats.TITLES[st.title] ? h('p', { class: 'ptitle', id: 'pTitle', text: Stats.TITLES[st.title].name }) : null,
+      h('p', { class: 'hnote' }, h('span', { class: 'vip', text: Stats.tier(st.hands).toUpperCase() }), mine ? h('span', { class: 'pcrest', id: 'pClub', text: ' ' + Clubs.tag(mine.c) }) : null),
+      h('button', { type: 'button', class: 'plink', id: 'pEdit', text: 'Change name or picture', onclick: () => Sheets.profileEdit() }));
+    const box = (k, v, id) => h('div', { class: 'pstat2' }, h('b', { id, text: String(v) }), h('span', { text: k }));
+    const sec = (t, ...kids) => h('div', { class: 'psec' }, h('div', { class: 'qh', text: t }), ...kids);
+    let body;
+    if (tab === 'stats') {
+      body = h('div', { class: 'pbody' },
+        sec('Career', h('div', { class: 'pgrid' }, box('Hands', st.hands, 'sHands'), box('Win rate', pctText(st.wins, st.hands), 'sRate'), box('Showdown wins', st.showWins, 'sShow'))),
+        sec('Play style', h('p', { class: 'pstyle', id: 'sStyle', text: Stats.style(st) }), h('p', { class: 'hnote', text: st.hands < 10 ? 'Play 10 hands to reveal your style.' : 'Worked out from how often you pack, play blind and win without a showdown.' })),
+        sec('Best hands won', h('div', { class: 'pgrid' }, box('Trail', st.trail, 'sTrail'), box('Pure seq.', st.pseq, 'sPseq'), box('Sequence', st.seq, 'sSeq'), box('Color', st.color, 'sColor'), box('Pair', st.pair, 'sPair')),
+          st.aces ? h('p', { class: 'hnote', id: 'sAces', text: 'Trail of Aces: ' + st.aces + (st.aces === 1 ? ' time' : ' times') }) : null),
+        sec('Economy', h('div', { class: 'pgrid' }, box('Peak chips', fmt(st.peak), 'sPeak'), box('Biggest pot', fmt(st.bigPot), 'sPot')), h('p', { class: 'hnote', text: 'Rakeback: coming soon (there is no rake at the tables yet).' })),
+        sec('Streaks', h('div', { class: 'pgrid' }, box('Current', st.streak, 'sStreak'), box('Longest', st.best, 'sBest'), box('Comebacks', st.comeback, 'sComeback'))));
+    } else if (tab === 'trophies') {
+      const tr = Stats.TROPHIES.map(t => h('div', { class: 'ptrophy' + (t.ok(st) ? ' got' : ''), 'data-trophy': t.id },
+        h('span', { class: 'tico', text: t.ok(st) ? '🏆' : '🔒' }), h('div', {}, h('b', { text: t.name }), h('small', { text: t.how })), h('em', { text: t.ok(st) ? 'Won' : String(t.n(st)) })));
+      body = h('div', { class: 'pbody' }, sec('Trophy cabinet', ...tr),
+        sec('Season badges', h('div', { class: 'ptrophy' + (st.hands ? ' got' : ''), 'data-trophy': 'season1' }, h('span', { class: 'tico', text: st.hands ? '🎖️' : '🔒' }), h('div', {}, h('b', { text: 'Season 1 Founder' }), h('small', { text: 'Play a hand in the first season' })), h('em', { text: st.hands ? 'Won' : '' })),
+          h('p', { class: 'hnote', text: 'Season pass and more badges: coming soon.' })));
+    } else {
+      const pick = (kind, map, cur, extra) => h('div', { class: 'popts' }, Object.keys(map).map(k => {
+        const it = map[k], open = it.ok(st), on = (cur || '') === k;
+        return h('button', { type: 'button', class: 'popt' + (on ? ' on' : '') + (open ? '' : ' locked'), 'data-kind': kind, 'data-val': k, disabled: !open,
+          onclick: () => Sheets.setLook(kind, k) }, h('b', { text: it.name }), h('small', { text: open ? (on ? 'In use' : 'Tap to use') : '🔒 ' + it.how }));
+      }).concat(extra || []));
+      body = h('div', { class: 'pbody' },
+        sec('Title under your name', pick('title', Object.assign({ '': { name: 'None', how: '', ok: () => true } }, Stats.TITLES), st.title)),
+        sec('Avatar frame', pick('frame', Stats.FRAMES, st.frame)),
+        sec('Theme', pick('theme', Stats.THEMES, st.theme)),
+        sec('Coming soon', h('p', { class: 'hnote', text: 'Table felts, card backs and celebration animations.' })));
+    }
+    Sheets.open('myProfileSheet', 'Your profile', h('div', {}, head, tabs, body));
+  },
+  async setLook(kind, val) {
+    const uid = S.user && S.user.uid; if (!uid) return;
+    const st = Stats.full(S.myStats), map = { title: Stats.TITLES, frame: Stats.FRAMES, theme: Stats.THEMES }[kind];
+    if (val && !(map[val] && map[val].ok(st))) return;                // not earned yet
+    try {
+      await Repo.setLook(uid, { [kind]: val });
+      S.myStats = Object.assign(st, { [kind]: val }); if (kind === 'theme') Stats.applyTheme(val);
+      Sheets.profile('look');
+    } catch (e) { toast(friendlyError(e), 'err'); }
+  },
+
+  /* ---- clubs: Join / Create and My Club ---- */
+  club(tab) {
+    const p = S.profile; if (!p) return;
+    const mine = S.myClub;
+    tab = tab || (mine ? 'mine' : 'join');
+    const tabs = h('div', { class: 'ptabs', role: 'tablist' }, [['join', 'Join / Create'], ['mine', 'My Club']].map(([id, t]) =>
+      h('button', { type: 'button', id: 'ctab_' + id, class: 'ptab' + (tab === id ? ' on' : ''), role: 'tab', 'aria-selected': tab === id ? 'true' : 'false', text: t, onclick: () => Sheets.club(id) })));
+    const body = h('div', { class: 'pbody', id: 'clubBody' }, h('p', { class: 'hnote', text: 'Loading...' }));
+    Sheets.open('clubSheet', 'Clubs', h('div', {}, tabs, body));
+    const fail = e => { body.replaceChildren(h('p', { class: 'msg err', text: friendlyError(e) })); };
+    const refresh = async () => { await Clubs.load(S.user.uid); Sheets.club(S.myClub ? 'mine' : 'join'); };
+    if (tab === 'mine') {
+      if (!mine) { body.replaceChildren(h('p', { class: 'hnote', text: 'You are not in a club yet. Join one, or create your own, on the other tab.' })); return; }
+      const c = mine.c;
+      Repo.clubRoster(c.id).then(list => {
+        const leave = h('button', { type: 'button', class: 'btn-primary', id: 'clubLeave', text: mine.m.kind === 'owner' ? 'Close club' : 'Leave club', disabled: mine.m.kind === 'owner' && c.memberCount > 1 });
+        leave.onclick = async () => { leave.disabled = true; try { await Repo.leaveClub(S.user.uid, mine.m); toast(mine.m.kind === 'owner' ? 'Club closed.' : 'You left the club.'); await refresh(); } catch (e) { toast(friendlyError(e), 'err'); leave.disabled = false; } };
+        body.replaceChildren(
+          h('div', { class: 'cbadge' }, h('span', { class: 'ccrest', text: crestOf(c.crest) }), h('div', {}, h('b', { id: 'myClubName', text: c.name }), h('small', { id: 'myClubCount', text: c.memberCount + ' / ' + CLUB_MAX + ' members' }))),
+          h('div', { class: 'qh', text: 'Members' }),
+          h('div', { class: 'croster', id: 'clubRoster' }, list.map(m => h('div', { class: 'crow' }, h('span', { text: m.name }), m.kind === 'owner' ? h('em', { text: 'Founder' }) : null))),
+          h('p', { class: 'hnote', text: mine.m.kind === 'owner' && c.memberCount > 1 ? 'The founder can close the club once everyone else has left.' : 'Club tournaments: coming soon.' }),
+          leave);
+      }).catch(fail);
+      return;
+    }
+    if (mine) { body.replaceChildren(h('p', { class: 'hnote', text: 'You are in ' + Clubs.tag(mine.c) + '. Leave it from the My Club tab to join or create another.' })); return; }
+    // create
+    let crest = 'c0';
+    const name = h('input', { id: 'clubName', type: 'text', maxlength: 24, placeholder: 'Club name (3-24 letters)', autocomplete: 'off', 'aria-label': 'Club name' });
+    const crests = h('div', { class: 'crests', id: 'clubCrests' });
+    const drawCrests = () => crests.replaceChildren(...CREST.map((e, i) => h('button', { type: 'button', class: 'crestopt' + (crest === 'c' + i ? ' on' : ''), 'data-crest': 'c' + i, text: e, onclick: () => { crest = 'c' + i; drawCrests(); } })));
+    drawCrests();
+    const err = h('div', { id: 'clubErr', class: 'msg err', hidden: true });
+    const mk = h('button', { type: 'button', class: 'btn-primary', id: 'clubCreate', text: 'Create club' });
+    mk.onclick = async () => {
+      const nm = name.value.replace(/\s+/g, ' ').trim();
+      if (nm.length < 3 || nm.length > 24) { err.textContent = 'Give the club a name of 3 to 24 characters.'; err.hidden = false; return; }
+      mk.disabled = true; err.hidden = true;
+      try { await Repo.createClub(S.user.uid, nm, crest, p.name); toast('Club created.'); await refresh(); }
+      catch (e) { err.textContent = friendlyError(e); err.hidden = false; mk.disabled = false; }
+    };
+    const list = h('div', { class: 'clist', id: 'clubList' }, h('p', { class: 'hnote', text: 'Loading clubs...' }));
+    Repo.listClubs().then(cs => {
+      list.replaceChildren(...(cs.length ? cs.map(c => {
+        const full = c.memberCount >= CLUB_MAX;
+        const j = h('button', { type: 'button', class: 'cjoin', 'data-club': c.id, text: full ? 'Full' : 'Join', disabled: full });
+        j.onclick = async () => { j.disabled = true; try { await Repo.joinClub(S.user.uid, p.name, c.id); toast('Welcome to ' + c.name + '.'); await refresh(); } catch (e) { toast(friendlyError(e), 'err'); j.disabled = full; } };
+        return h('div', { class: 'crow2' }, h('span', { class: 'ccrest', text: crestOf(c.crest) }), h('div', {}, h('b', { text: c.name }), h('small', { text: c.memberCount + ' / ' + CLUB_MAX + ' · founder ' + c.ownerName })), j);
+      }) : [h('p', { class: 'hnote', text: 'No clubs yet. Be the first to create one.' })]));
+    }).catch(fail);
+    body.replaceChildren(h('div', { class: 'qh', text: 'Join a club' }), list, h('div', { class: 'qh', text: 'Create your own' }), name, crests, err, mk,
+      h('p', { class: 'hnote', text: 'A club holds up to ' + CLUB_MAX + ' players. Tournaments between clubs are coming soon.' }));
+  },
+
+  // Tap another player at the table: a short summary of how they play (the Inspect card).
+  inspect(sp, st, club) {
+    const f = Stats.full(st), has = f.hands > 0;
+    const fav = [['trail', 'Trail'], ['pseq', 'Pure sequence'], ['seq', 'Sequence'], ['color', 'Color'], ['pair', 'Pair']].sort((a, b) => f[b[0]] - f[a[0]])[0];
+    return h('div', { class: 'pinspect', id: 'pInspect' },
+      h('p', { class: 'pstyle', id: 'iStyle', text: has ? Stats.style(f) : 'No games recorded yet' }),
+      has && f[fav[0]] ? h('p', { class: 'hnote', id: 'iFav', text: 'Favourite win: ' + fav[1] + ' (' + f[fav[0]] + ')' }) : null,
+      has ? h('p', { class: 'hnote', text: 'Longest streak ' + f.best + ' · Biggest pot ' + fmt(f.bigPot) }) : null,
+      club ? h('p', { class: 'hnote', id: 'iClub', text: 'Club: ' + Clubs.tag(club) }) : null);
+  }
+});
 
 /* ==========================================================================
    SECTION 24 - GAME ENGINE
