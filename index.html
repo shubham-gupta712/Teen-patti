@@ -1666,6 +1666,30 @@ html[data-ptheme="mahogany"] .vip,html[data-ptheme="mahogany"] .ptab.on,html[dat
 .tbring{box-shadow:0 0 0 calc(var(--u) * 3) #1a0f06,0 0 0 calc(var(--u) * 31) #1b110a,0 0 0 calc(var(--u) * 34) rgba(214,172,92,.5)}
 .tbseat.win .tbring{box-shadow:0 0 0 calc(var(--u) * 3) #1a0f06,0 0 0 calc(var(--u) * 31) #1b110a,0 0 0 calc(var(--u) * 35) rgba(46,229,157,.95)}
 
+/* 38. the left panel: one full-height unit at the screen edge (profile card on top, menu rows, flourish), narrower than the space left of the Variant tile */
+.lobedge.lobpanel{top:0;bottom:0;height:auto;width:calc((var(--vw) - var(--sw)) / 2 + var(--su) * 212);--u:var(--su);box-sizing:border-box;display:flex;flex-direction:column;gap:calc(var(--su) * 10);padding:calc(var(--su) * 8) calc(var(--su) * 10) calc(var(--su) * 8) 0;border-radius:0 calc(var(--su) * 34) calc(var(--su) * 34) 0;background:linear-gradient(180deg,rgba(30,22,16,.96),rgba(12,8,5,.97));border:max(1px,calc(var(--su) * 3)) solid rgba(214,172,92,.75);border-left:0;box-shadow:0 0 calc(var(--su) * 24) rgba(0,0,0,.7)}
+.lobpanel .lbprof{position:relative;flex:none;width:100%;aspect-ratio:3.39;height:auto;container-type:inline-size;left:auto;top:auto}
+.lobpanel .lbmenu{position:relative;left:auto;top:auto;width:auto;height:auto;flex:1;min-height:0;display:flex;flex-direction:column;gap:calc(var(--su) * 8);padding:0;border:0;border-radius:0;background:none;box-shadow:none}
+.lobpanel .lbmenu .lbm{position:relative;flex:1;max-height:calc(var(--su) * 104);padding:0 calc(var(--su) * 12) 0 calc(var(--su) * 12);gap:calc(var(--su) * 12);border-radius:calc(var(--su) * 24);border:max(1px,calc(var(--su) * 2)) solid rgba(214,172,92,.38);background:linear-gradient(180deg,rgba(40,30,22,.9),rgba(18,12,8,.9))}
+.lobpanel .lbmenu .lbm:before{display:none}
+.lobpanel .lbmenu .lbm .ico{width:calc(var(--su) * 36);height:calc(var(--su) * 36)}
+.lobpanel .lbmenu .lbm span{font-size:max(9px,calc(var(--su) * 21));font-family:Georgia,'Times New Roman',serif;letter-spacing:.01em;flex:1;text-align:left}
+.lobpanel .lbmenu .lbm.on{border-color:#f1dcae;background:linear-gradient(180deg,#e9d6a6,#b99560)}
+.lobpanel .lbchev{display:grid;place-items:center;flex:none;width:calc(var(--su) * 22);height:calc(var(--su) * 22);color:#e6d4a4}
+.lobpanel .lbchev .ico{width:100%;height:100%}
+.lobpanel .lbm.on .lbchev{color:#2a1b0c}
+.lobpanel .lbfleur{flex:none;text-align:center;color:#d9b266;font:calc(var(--su) * 44)/1 Georgia,serif;opacity:.85;padding-bottom:calc(var(--su) * 2)}
+.lobpanel .lbmenu{justify-content:flex-start}
+.lobpanel .lbmenu .lbm{flex:none;height:calc(var(--su) * 104);max-height:none;padding-left:calc(var(--su) * 22)}
+.lobpanel .lbmenu .lbm span{font-size:max(9px,calc(var(--su) * 24))}
+.lobpanel .lbchev{align-self:center;margin-top:0}
+.lobpanel .lbm .lbchev{position:static}
+.lobpanel .lbfleur{margin-top:auto}
+.lobpanel .lbchev{display:flex;line-height:0;font-size:0;transform:none}
+.lobpanel .lbchev .ico{display:block;margin:0}
+.lobpanel .lbmenu .lbm{align-items:center}
+.lobpanel .lbmenu .lbm .lbchev{margin-top:calc(var(--su) * -2)}
+
 </style>
 </head>
 <body>
@@ -3188,9 +3212,9 @@ function renderLobby() {
   }
   const widest = Math.max(...lines.map(l => l.length), 1), art = Math.max(18, Math.min(lines.length > 1 ? 28 : 44, 224 / (0.62 * widest)));
   const PW = 388;                                              // the plate is 316 wide and 316 / LB_PLATE tall, in picture pixels
-  left.push(btn('lbProfile', 'lbprof', edge([6, 4, 6 + PW, 4 + PW / LB_PLATE]), 'Your profile', () => Sheets.profile(),
+  left.push(h('button', { id: 'lbProfile', class: 'lbprof', type: 'button', 'aria-label': 'Your profile', onclick: () => Sheets.profile() },
     h('span', { class: 'lbav' }, avatarNode(p.avatar)),
-    h('span', { class: 'lbname' }, h('b', { id: 'lbName', title: nm, style: 'font-size:max(7px,calc(var(--u) * ' + art.toFixed(1) + '))' }, ...lines.map((l, i) => h('span', { text: l, class: i ? 'l2' : 'l1' }))))));
+    h('span', { class: 'lbname' }, h('b', { id: 'lbName', title: nm, style: 'font-size:max(8px,' + (art / 388 * 100).toFixed(2) + 'cqw)' }, ...lines.map((l, i) => h('span', { text: l, class: i ? 'l2' : 'l1' }))))));
   parts.push(h('div', { class: 'lbbrand', style: lbRect(640, 10, 1040, 66) }, h('b', { text: 'TEEN PATTI' }), h('span', { text: 'CLUB' })));
   right.push(btn('lbWallet', 'lbpill lbcash', edge([0, 0, 230, 56]), 'Wallet and add chips', () => Sheets.wallet(),
     h('img', { class: 'lbcoin', src: IMG.chip_gold, alt: '' }),
@@ -3203,9 +3227,8 @@ function renderLobby() {
 
   /* ---- the side menu, down the left: crown, Teen Patti (where you are), Private Table, LeaderBoard, Settings ---- */
   const pst = tileState(PRIVATE_CFG), pOpen = pst.usable;
-  const mi = (id, cls, label, ic, fn) => h('button', { id, type: 'button', class: 'lbm ' + cls, 'aria-label': label, onclick: fn }, iconF(ic), h('span', { text: label }));
-  left.push(h('nav', { class: 'lbmenu', style: ue(8, 128, 200, 664), 'aria-label': 'Menu' },
-    h('div', { class: 'lbcrown' }, iconF('crown')),
+  const mi = (id, cls, label, ic, fn) => h('button', { id, type: 'button', class: 'lbm ' + cls, 'aria-label': label, onclick: fn }, iconF(ic), h('span', { text: label }), h('i', { class: 'lbchev' }, icon('chevron')));
+  left.push(h('nav', { class: 'lbmenu', 'aria-label': 'Menu' },
     mi('lbTeenPatti', 'on', 'Teen Patti', 'spade', () => toast('Pick a table in the middle to play Teen Patti.')),
     mi('lbPrivate', pOpen || pst.mine ? '' : 'off', 'Private Table', 'people', () => tileClick(PRIVATE_CFG)),
     mi('lbClub', '', 'Club', 'shield', () => Sheets.club()),
@@ -3242,7 +3265,7 @@ function renderLobby() {
     h('div', { class: 'hbody' }, h('p', { class: 'hdesc', text: 'Knockout events, big prizes' })),
     'COMING SOON', () => Sheets.soon('Tournament', 'Knockout tournaments with leaderboards and prizes. Not open yet.'), true));
 
-  return h('div', { class: 'lobwrap' }, h('div', { class: 'lobstage', id: 'lobStage' }, parts), h('div', { class: 'lobedge left' }, left), h('div', { class: 'lobedge right', style: 'top:calc(var(--su) * 10)' }, right));
+  return h('div', { class: 'lobwrap' }, h('div', { class: 'lobstage', id: 'lobStage' }, parts), h('div', { class: 'lobedge left lobpanel' }, left, h('div', { class: 'lbfleur', 'aria-hidden': 'true', text: '\u2767' })), h('div', { class: 'lobedge right', style: 'top:calc(var(--su) * 10)' }, right));
 }
 
 /* ==========================================================================
