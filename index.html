@@ -1824,6 +1824,7 @@ const HOST_UI_FRESH_MS = 30000;            // a table host counts as live if its
 const PRESENCE_MS = 15000;                 // each player stamps their seat this often while the page is open
 const AWAY_MS = 40000;                     // silent this long: shown as Away
 const KICK_MS = 90000;                     // silent this long: the table removes them (rules allow it after 75 s)
+const ABSENT_MS = 15 * 60 * 1000;           // away from a table this long (page closed): the seat is given up and the chips go back to the wallet
 const HEARTBEAT_MS = 5000;                // the host refreshes its claim this often (rules allow 20 s)
 const ACTION_STALE_MS = 60000;             // dealer ignores requests older than this
 const ACTION_WAIT_MS = 10000;              // player waits this long for the table host to answer
@@ -1994,7 +1995,7 @@ function setConnection(online) {
   c.className = 'conn' + (online ? '' : ' off');
 }
 
-const BUILD_TAG = '2026-10-31 table art 3';
+const BUILD_TAG = '2026-10-31 stale seat';
 
 /* ==========================================================================
    SECTION 2b - LANDSCAPE
@@ -2555,6 +2556,8 @@ async function onAuthChange(user) {
     const prof = await Repo.ensureProfile(user);
     if (seq !== authSeq) return;                 // a newer sign-in replaced this one
     S.profile = prof;
+    await StaleSeat.begin(user.uid, prof);       // a seat left idle for over 15 minutes is given up before anything is drawn
+    if (seq !== authSeq) return;
     Stats.load(user.uid);
     scopeProfile = Scopes.open('profile');
     Repo.watchProfile(scopeProfile, user.uid, p => { S.profile = p; setConnection(true); go(); });
@@ -2653,7 +2656,8 @@ function openRoomScope(tableId) {
   sc.every(updateTimer, 500);
   if (S.isAdmin) sc.every(Sweep.tick, 5000);
   else { Presence.beat(); sc.every(Presence.beat, PRESENCE_MS); }
-  sc.every(Hosting.check, 2000);                         // countdown text only; never re-draws the screen
+  sc.every(Hosting.check, 2000);
+  sc.every(StaleSeat.tick, 2000);                         // countdown text only; never re-draws the screen
 }
 
 /* Table facts derived from state. */
@@ -3297,7 +3301,7 @@ function renderLobby() {
     const cut = (sp.length ? sp : cuts).sort((x, y) => near(x) - near(y))[0] || Math.ceil(nm.length / 2);
     lines = [nm.slice(0, cut).trim(), nm.slice(cut).trim()];
   }
-  const widest = Math.max(...lines.map(l => l.length), 1), fs = Math.max(16, Math.min(lines.length > 1 ? 25 : 36, 150 / (0.6 * widest)));
+  const widest = Math.max(...lines.map(l => l.length), 1), fs = Math.max(14, Math.min(lines.length > 1 ? 25 : 32, 132 / (0.68 * widest)));
   parts.push(h('div', { class: 'nlav', style: nlBox(59, 60, 145, 146) }, avatarNode(p.avatar)));
   parts.push(h('div', { class: 'nlname', style: nlBox(166, 80, 318, 130) }, h('b', { id: 'lbName', title: nm, style: 'font-size:max(8px,calc(var(--u) * ' + fs.toFixed(1) + '))' }, ...lines.map((l, i) => h('span', { text: l, class: i ? 'l2' : 'l1' })))));
   parts.push(hit('lbProfile', [34, 36, 352, 172], 'Your profile', () => Sheets.profile()));
@@ -3654,6 +3658,35 @@ const Sweep = {
       .catch(e => console.warn('[TeenPatti] could not remove a silent player', e && e.code)).then(done, done);
   },
   tick() { const now = Date.now(); if (now - Sweep.last > 4000) { Sweep.last = now; Sweep.step(now); } }
+};
+
+/* A player who closed the page and comes back more than ABSENT_MS later lands in the lobby with their chips back. If the old hand is still open
+   (nobody was hosting), they are taken to the table so it can finish; they are packed out and leave the moment the table allows. */
+const StaleSeat = {
+  table: '', busy: false,
+  note(cfg, stack) { toast('You were away for over 15 minutes, so you left ' + tableName(cfg) + '. ' + fmt(stack) + ' chips are back in your wallet.'); },
+  async begin(uid, prof) {
+    StaleSeat.table = '';
+    if (!prof || !prof.tableId || uid === ADMIN_UID) return;
+    const t = prof.tableId, cfg = TABLE_BY_ID[t];
+    let m = null;
+    try { const snap = await Repo.membersCol(t).doc(uid).get(); m = snap.exists ? snap.data() : null; } catch (e) { return; }
+    if (!m || !cfg || Date.now() - Presence.lastSeen(m) <= ABSENT_MS) return;
+    StaleSeat.table = t;
+    try { await Repo.leaveTable(uid, t); StaleSeat.table = ''; S.forceLobby = true; prof.tableId = ''; prof.chips = (prof.chips || 0) + m.stack; StaleSeat.note(cfg, m.stack); }
+    catch (e) { S.forceLobby = false; toast('You were away for over 15 minutes. Settling your old seat…'); }
+  },
+  async tick() {
+    const R = S.room, t = StaleSeat.table;
+    if (!t || StaleSeat.busy || !R || R.id !== t || !R.loaded.members || !S.user) return;
+    const me = myMember(R);
+    if (!me) { StaleSeat.table = ''; return; }
+    if (leaveBlockReason(R, me)) return;
+    StaleSeat.busy = true;
+    try { await Repo.leaveTable(S.user.uid, t); StaleSeat.table = ''; S.forceLobby = true; StaleSeat.note(TABLE_BY_ID[t], me.stack); }
+    catch (e) { /* the table was not ready yet: try again on the next tick */ }
+    finally { StaleSeat.busy = false; }
+  }
 };
 
 const Hosting = {
