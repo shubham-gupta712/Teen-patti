@@ -1944,6 +1944,22 @@ body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
 #infoSheet .hnote{margin:0;font-size:11px;line-height:1.2}#infoSheet .howgrid .qrow{margin-bottom:0}#infoSheet .capsbar{margin-bottom:2px}
 #infoSheet .qth{width:30px;height:30px;min-width:30px}#infoSheet .howgrid .qh{margin:0 0 3px}
 
+/* 48. Auto buttons live in the action row; ranks as tiles */
+.tbm.hideb{display:none!important}
+.tbstage .tbm.tbautob{position:absolute;cursor:pointer;gap:calc(var(--u) * 10);width:calc(var(--u) * 184)}
+.tbautob input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.tbautob .bx{display:grid;place-items:center;flex:none;width:calc(var(--u) * 30);height:calc(var(--u) * 30);min-width:14px;min-height:14px;border-radius:calc(var(--u) * 8);border:max(1px,calc(var(--u) * 2.5)) solid rgba(255,255,255,.7);background:rgba(0,0,0,.25);color:transparent}
+.tbautob .bx .ico{width:80%;height:80%}
+.tbautob.on{box-shadow:0 0 0 max(1px,calc(var(--u) * 3)) #2ee59d,0 0 calc(var(--u) * 26) rgba(46,229,157,.7)}
+.tbautob.on .bx{background:#2ee59d;color:#08301d;border-color:#2ee59d}
+.rklist.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.rklist.tiles .rkrow{padding:6px 10px!important}
+.rklist.tiles .rkrow{display:grid;grid-template-columns:auto 1fr;grid-template-columns:22px 1fr;align-items:center;gap:6px 8px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}
+.rklist.tiles .rkrow>b{display:block}
+.rklist.tiles .rkn{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:50%;background:#d7b36f;color:#2a1d00;font-size:11px;font-weight:800;width:22px;height:22px}
+.rklist.tiles .hcards{margin:0;grid-column:1/-1;display:flex;gap:4px}
+.rklist.tiles.nines .rkrow{grid-template-columns:1fr}
+
 </style>
 </head>
 <body>
@@ -3288,12 +3304,16 @@ function renderMoves(G, uid, live) {
   const art = { fold: 'M6 6l12 12M18 6L6 18', up: 'M12 20V5M5 12l7-7 7 7', eye: 'M2 12c3-5 6-7.5 10-7.5S19 7 22 12c-3 5-6 7.5-10 7.5S5 17 2 12z', coin: 'M5 8h14v3H5zM5 13h14v3H5z', cards: 'M7 4h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM19 7l2 .6v12l-2 .6' };
   const ic = k => h('svg', { class: 'mi', viewBox: '0 0 24 24', 'aria-hidden': 'true', fill: k === 'coin' ? 'currentColor' : 'none', stroke: 'currentColor', 'stroke-width': 2.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, h('path', { d: art[k] }), k === 'eye' ? h('circle', { cx: 12, cy: 12, r: 3, fill: 'currentColor' }) : null);
   const xs = [518, 722, 926, 1130, 1334];
-  return h('div', { class: 'tbmoves', id: live ? 'moves' : null },
-    defs.map(([id, type, cls, text, cost, ik, fn, ok], i) => h('button', { id: live ? id : null, class: 'tbm ' + cls + (live ? '' : ' idle') + (S.act && S.act.type === type ? ' busy' : '') + (type === 'see' && live && lm.status === 'seen' ? ' gone' : ''), type: 'button', style: tbAt(xs[i], 808), disabled: !ok || busy || !live, onclick: fn },
+  // Off your turn (or with an Auto switched on) the row shows the two Auto switches; on your turn it shows the moves.
+  const showAutos = live && lm.inHand && (!lm.myTurn || S.auto || S.autoPack);
+  const seeStay = showAutos && lm.see.ok && lm.status !== 'seen';   // you may still look at your cards while waiting
+  if (seeStay) xs[1] = 722;
+  return h('div', { class: 'tbmoves' + (showAutos ? ' autos' : ''), id: live ? 'moves' : null },
+    defs.map(([id, type, cls, text, cost, ik, fn, ok], i) => h('button', { id: live ? id : null, class: 'tbm ' + cls + (live ? '' : ' idle') + (S.act && S.act.type === type ? ' busy' : '') + (showAutos && !(type === 'see' && seeStay) ? ' hideb' : '') + (type === 'see' && live && lm.status === 'seen' ? ' gone' : ''), type: 'button', style: tbAt(xs[i], 808), disabled: !ok || busy || !live, onclick: fn },
       ic(ik), h('span', { class: 'ml' }, h('span', { class: 'lb', text: text }), cost > 0 ? h('span', { class: 'am', text: rupee(cost) }) : null))),
     live ? h('p', { id: 'moveNote', class: 'tbnote', style: tbAt(926, 766), text: busy ? 'Sending…' : sideNote(G, uid, lm) }) : null,
-    live && lm.inHand ? autoPill(lm) : null,
-    live && lm.inHand ? autoPackPill() : null,
+    showAutos ? autoPackPill(seeStay ? 926 : 821) : null,
+    showAutos ? autoPill(lm, seeStay ? 1130 : 1031) : null,
     live && lm.sideAsked ? sideAsk(G, uid) : null);
 }
 
@@ -3308,17 +3328,17 @@ function sideNote(G, uid, lm) {
   return lm.myTurn ? 'Your turn' : lm.inHand ? 'Wait for your turn.' : '';
 }
 /* Queue your next move: Auto Blind while you are blind, Auto Chaal once you have looked. It plays that one move for you each turn and never raises. */
-function autoPill(lm) {
+function autoPill(lm, x) {
   const word = lm.status === 'seen' ? 'Auto Chaal' : 'Auto Blind';
-  return h('label', { class: 'tbauto' + (S.auto ? ' on' : ''), style: tbAt(1165, 700) },
+  return h('label', { class: 'tbm tbautob b-chaal' + (S.auto ? ' on' : ''), style: tbAt(x, 808) },
     h('input', { type: 'checkbox', id: 'autoChk', checked: !!S.auto, onchange: e => { S.auto = e.target.checked; if (S.auto) S.autoPack = false; Auto.reset(); scheduleRender(); if (S.auto) Auto.check(); } }),
-    h('span', { class: 'bx', 'aria-hidden': 'true' }, icon('check')), h('span', { id: 'autoLbl', text: word }));
+    h('span', { class: 'bx', 'aria-hidden': 'true' }, icon('check')), h('span', { class: 'ml' }, h('span', { class: 'lb', id: 'autoLbl', text: word })));
 }
 /* Auto Pack, on the left of your cards: packs on your next turn. It and Auto Chaal cannot both be on. */
-function autoPackPill() {
-  return h('label', { class: 'tbauto tbautopack' + (S.autoPack ? ' on' : ''), style: tbAt(688, 700) },
+function autoPackPill(x) {
+  return h('label', { class: 'tbm tbautob b-fold' + (S.autoPack ? ' on' : ''), style: tbAt(x, 808) },
     h('input', { type: 'checkbox', id: 'autoPackChk', checked: !!S.autoPack, onchange: e => { S.autoPack = e.target.checked; if (S.autoPack) S.auto = false; Auto.reset(); scheduleRender(); if (S.autoPack) Auto.check(); } }),
-    h('span', { class: 'bx', 'aria-hidden': 'true' }, icon('check')), h('span', { id: 'autoPackLbl', text: 'Auto Pack' }));
+    h('span', { class: 'bx', 'aria-hidden': 'true' }, icon('check')), h('span', { class: 'ml' }, h('span', { class: 'lb', id: 'autoPackLbl', text: 'Auto Pack' })));
 }
 /* The player asked for a sideshow: the table waits for them. */
 function sideAsk(G, uid) {
@@ -4973,11 +4993,11 @@ const Sheets = {
     const vbox = v.id === 'classic' ? null : h('div', { class: 'vdetail', id: 'variantRules' }, h('b', { text: v.name + ' rules' }), h('p', { text: v.rule }),
       v.id === 'joker' && G && G.joker ? h('p', { text: 'Joker this hand: ' + G.joker }) : null);
     const order = v.id === 'muflis' ? rows.slice().reverse() : rows;
-    const nines = h('div', { class: 'rklist' }, [['Ace', '1'], ['2 to 9', 'as printed'], ['10, J, Q, K', '0'], ['Score', 'last digit of the sum'], ['Best', '9'], ['Worst', '0']]
+    const nines = h('div', { class: 'rklist tiles nines' }, [['Ace', '1'], ['2 to 9', 'as printed'], ['10, J, Q, K', '0'], ['Score', 'last digit of the sum'], ['Best', '9'], ['Worst', '0']]
       .map(r => h('div', { class: 'rkrow' }, h('b', { text: r[0] }), h('span', { text: r[1] }))));
     Sheets.open('ranksSheet', 'Hand ranks', h('div', { class: 'setlist' }, vbox,
       v.id === 'n999' ? nines : h('div', { class: 'rkhead', text: v.id === 'muflis' ? 'Best (lowest) to worst' : 'Best to lowest' }),
-      v.id === 'n999' ? null : h('div', { class: 'rklist' }, order.map((r, i) => h('div', { class: 'rkrow' }, h('span', { class: 'rkn', text: String(i + 1) }), h('b', { text: r[0] }), h('span', { class: 'hcards' }, r[1].map(Sheets.card))))),
+      v.id === 'n999' ? null : h('div', { class: 'rklist tiles' }, order.map((r, i) => h('div', { class: 'rkrow' }, h('span', { class: 'rkn', text: String(i + 1) }), h('b', { text: r[0] }), h('span', { class: 'hcards' }, r[1].map(Sheets.card))))),
       h('button', { type: 'button', class: 'btn-secondary', id: 'fullRulesBtn', text: 'Full rules', onclick: () => Sheets.info() })));
   },
   settings() {
