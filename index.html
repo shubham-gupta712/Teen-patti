@@ -1138,7 +1138,7 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 
 /* your cards */
 .tbhand{position:absolute;z-index:6;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center}
-.tbhand .tcard{width:calc(var(--u) * 68);height:calc(var(--u) * 98);margin:0 calc(var(--u) * -6);border-radius:calc(var(--u) * 12);font-size:max(14px,calc(var(--u) * 32))}
+.tbhand .tcard{width:calc(var(--u) * 62);height:calc(var(--u) * 90);margin:0 calc(var(--u) * -6);border-radius:calc(var(--u) * 12);font-size:max(14px,calc(var(--u) * 32))}
 .tbhand .tcard:nth-child(1){transform:rotate(-8deg) translateY(calc(var(--u) * 10))}
 .tbhand .tcard:nth-child(3){transform:rotate(8deg) translateY(calc(var(--u) * 10))}
 .tcard b{position:absolute;left:.22em;top:.16em;font-size:1em}
@@ -1152,7 +1152,7 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 
 /* action row */
 .tbmoves{position:absolute;inset:0;pointer-events:none;z-index:7}
-.tbstage .tbm{pointer-events:auto;transform:translate(-50%,-50%);width:calc(var(--u) * 190);height:max(32px,calc(var(--u) * 60));display:flex;align-items:center;justify-content:center;gap:calc(var(--u) * 10);border-radius:calc(var(--u) * 26);color:#fff;border:max(1px,calc(var(--u) * 3)) solid rgba(255,255,255,.3);box-shadow:0 calc(var(--u) * 5) 0 rgba(0,0,0,.5),0 calc(var(--u) * 10) calc(var(--u) * 16) rgba(0,0,0,.45)}
+.tbstage .tbm{pointer-events:auto;transform:translate(-50%,-50%);width:calc(var(--u) * 190);height:max(28px,calc(var(--u) * 50));display:flex;align-items:center;justify-content:center;gap:calc(var(--u) * 10);border-radius:calc(var(--u) * 26);color:#fff;border:max(1px,calc(var(--u) * 3)) solid rgba(255,255,255,.3);box-shadow:0 calc(var(--u) * 5) 0 rgba(0,0,0,.5),0 calc(var(--u) * 10) calc(var(--u) * 16) rgba(0,0,0,.45)}
 .tbm .mi{flex:none;width:max(15px,calc(var(--u) * 36));height:max(15px,calc(var(--u) * 36))}
 .tbm .ml{display:flex;flex-direction:column;align-items:flex-start;line-height:1.05;min-width:0}
 .tbm .lb{font:800 max(10px,calc(var(--u) * 26))/1.05 system-ui;letter-spacing:.05em;white-space:nowrap}
@@ -1874,6 +1874,49 @@ input.kpon{border-color:#f2d27c!important;box-shadow:0 0 0 3px rgba(242,199,92,.
 #privSheet .pfrow input{min-height:46px}
 @media(max-height:380px){.kpk{height:28px}.kpad.num .kpk{height:34px}.kpad{padding-top:4px;gap:4px}}
 
+/* ===== 45. buy-in and numeric pop-ups join the number pad into one panel; rules in one screen ===== */
+body.kp-num #buyModal{align-items:flex-end;justify-content:center;padding:0 0 var(--kph);background:rgba(6,3,2,.55)}
+body.kp-num .sheetback.tile{align-items:end;align-content:end;justify-items:center;padding:0 0 var(--kph)}
+body.kp-num #buyModal .sheet,body.kp-num .sheetback.tile .sheet{width:min(100vw,780px)!important;max-width:100vw;border-radius:18px 18px 0 0;border-bottom:0;box-shadow:none;padding:10px 14px 8px;background:linear-gradient(155deg,rgba(66,48,26,.97),rgba(40,29,15,.98))}
+body.kp-num #buyModal .sheet{border:1.5px solid rgba(240,205,120,.8);border-bottom:0;position:relative;overflow:hidden}
+.kpad.num{border-radius:0;border-top:1px solid rgba(240,205,120,.35);box-shadow:0 12px 30px rgba(0,0,0,.6)}
+body.kp-num .kpad.num{background:linear-gradient(180deg,rgba(40,29,15,.98),rgba(14,10,6,.99))}
+body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
+.capsbar{column-span:all;display:flex;align-items:center;gap:10px;margin:0 0 8px;padding:6px 10px;border-radius:14px;border:1px solid rgba(214,172,92,.45);background:rgba(255,255,255,.05)}
+.capbox{display:flex;flex-direction:column;align-items:center;min-width:92px;padding:2px 10px;border-radius:10px;background:rgba(0,0,0,.28)}
+.capbox span{font:700 10px system-ui;letter-spacing:.1em;text-transform:uppercase;color:#cdbd98}
+.capbox b{font:800 18px Georgia,serif;color:#f2c75c}
+.capsbar em{margin-left:auto;font:12px system-ui;font-style:normal;color:#cdbd98}
+#infoSheet .howto .qh{margin:6px 0 3px}
+#infoSheet .qrow{margin-bottom:4px}
+#infoSheet .qth{width:34px;height:34px;min-width:34px;font-size:12px}
+#infoSheet .qrow{gap:10px;margin-bottom:2px;font-size:14px;line-height:1.25}
+#infoSheet .hnote{margin:4px 0 0;font-size:12px}
+#infoSheet .capsbar{margin-bottom:4px;padding:4px 10px}
+@media(max-height:380px){#infoSheet .qrow{font-size:12.5px}#infoSheet .qth{width:28px;height:28px;min-width:28px}#infoSheet .capbox b{font-size:15px}}
+#buyModal .sheet{position:relative}
+#buyModal .buyx{position:absolute;top:8px;right:10px;z-index:3;display:grid;place-items:center;width:34px;height:34px;min-width:34px;min-height:34px;padding:0;border-radius:50%;border:1px solid rgba(214,172,92,.7);background:#2c1d0e;color:#f3d58a;font-size:16px;line-height:1}
+
+/* ===== 46. one card face for everybody: small rank in the corner, one suit below it, never touching ===== */
+.tcard:not(.back):after{content:none}
+.tcard:not(.back),.tmini.face{display:block}
+.tcard b,.tmini.face b{position:absolute;left:0;right:0;top:.12em;text-align:center;font-size:.92em;line-height:1}
+.tcard span,.tmini.face span{position:absolute;left:0;right:0;top:auto;bottom:.1em;transform:none;text-align:center;font-size:1.55em;line-height:1}
+.tmini.face{border-radius:calc(var(--u) * 6)}
+/* last five hands: five tiles in a column, the chosen hand opens beside them */
+.hist{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);gap:10px 16px;align-items:start}
+.hist .hlist{display:flex;flex-direction:column;gap:6px}
+.hist .htile{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:0;padding:8px 14px;border-radius:14px;border:1px solid rgba(214,172,92,.5);background:linear-gradient(180deg,rgba(60,44,24,.8),rgba(20,15,10,.85));color:#f6e3b0;text-align:left}
+.hist .htile b{font:800 15px Georgia,serif;color:#f2c75c;white-space:nowrap}
+.hist .htile span{font:13px system-ui;color:#e6d7b3;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hist .htile.on{background:linear-gradient(180deg,#f1dcae,#c4a068);color:#1d1308;border-color:transparent}
+.hist .htile.on b,.hist .htile.on span{color:#1d1308}
+.hist .hdetail{min-width:0}
+.hist .hsum{margin:0 0 6px}
+.hist .hsteps{max-height:calc(var(--vh) - 235px)}
+.hist>.hnote{grid-column:1/-1}
+.tbm .lb{font-size:max(9px,calc(var(--u) * 22))}.tbm{padding:0 calc(var(--u) * 8)}
+
 </style>
 </head>
 <body>
@@ -1888,6 +1931,7 @@ input.kpon{border-color:#f2d27c!important;box-shadow:0 0 0 3px rgba(242,199,92,.
 
 <div class="modal" id="buyModal" hidden role="dialog" aria-modal="true" aria-labelledby="buyHead">
   <div class="sheet">
+    <button type="button" class="buyx" id="buyClose" aria-label="Close">&#10005;</button>
     <div class="eyebrow" id="buyTitle">Table</div>
     <h2 id="buyHead">Take a seat</h2>
     <p class="muted" id="buyHelp" style="font-size:13px"></p>
@@ -3090,7 +3134,7 @@ function tCard(c, faceDown, wild) {
 }
 function tMini(c, i) {
   if (!c) return h('div', { class: 'tmini back', 'data-i': i });
-  return h('div', { class: 'tmini face' + (isRedCard(c) ? ' red' : ''), 'data-i': i, 'aria-label': c }, h('b', { text: c.slice(0, -1) }), h('span', { text: c.slice(-1) }));
+  return h('div', { class: 'tmini face' + (isRedCard(c) ? ' red' : ''), 'data-i': i, 'aria-label': c, 'data-r': c.slice(0, -1) }, h('b', { text: c.slice(0, -1) }), h('span', { text: c.slice(-1) }));
 }
 
 /* One player at a seat: picture on the circle, name and chips on the plate below it, and (for the others) their three cards on the outlines. */
@@ -3218,9 +3262,9 @@ function renderMoves(G, uid, live) {
   const ic = k => h('svg', { class: 'mi', viewBox: '0 0 24 24', 'aria-hidden': 'true', fill: k === 'coin' ? 'currentColor' : 'none', stroke: 'currentColor', 'stroke-width': 2.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, h('path', { d: art[k] }), k === 'eye' ? h('circle', { cx: 12, cy: 12, r: 3, fill: 'currentColor' }) : null);
   const xs = [518, 722, 926, 1130, 1334];
   return h('div', { class: 'tbmoves', id: live ? 'moves' : null },
-    defs.map(([id, type, cls, text, cost, ik, fn, ok], i) => h('button', { id: live ? id : null, class: 'tbm ' + cls + (live ? '' : ' idle') + (S.act && S.act.type === type ? ' busy' : '') + (type === 'see' && live && lm.status === 'seen' ? ' gone' : ''), type: 'button', style: tbAt(xs[i], 810), disabled: !ok || busy || !live, onclick: fn },
+    defs.map(([id, type, cls, text, cost, ik, fn, ok], i) => h('button', { id: live ? id : null, class: 'tbm ' + cls + (live ? '' : ' idle') + (S.act && S.act.type === type ? ' busy' : '') + (type === 'see' && live && lm.status === 'seen' ? ' gone' : ''), type: 'button', style: tbAt(xs[i], 808), disabled: !ok || busy || !live, onclick: fn },
       ic(ik), h('span', { class: 'ml' }, h('span', { class: 'lb', text: text }), cost > 0 ? h('span', { class: 'am', text: rupee(cost) }) : null))),
-    live ? h('p', { id: 'moveNote', class: 'tbnote', style: tbAt(926, 773), text: busy ? 'Sending…' : sideNote(G, uid, lm) }) : null,
+    live ? h('p', { id: 'moveNote', class: 'tbnote', style: tbAt(926, 766), text: busy ? 'Sending…' : sideNote(G, uid, lm) }) : null,
     live && lm.inHand ? autoPill(lm) : null,
     live && lm.inHand ? autoPackPill() : null,
     live && lm.sideAsked ? sideAsk(G, uid) : null);
@@ -3337,7 +3381,7 @@ function renderFelt(R, me, msgs) {
   if (result) { talk.appendChild(h('div', { id: 'resultCard', role: 'status' }, h('b', { class: 'tbwin', id: 'winBanner', text: winners.map(id => G.players[id].name).join(' & ') }), h('span', { class: 'tbwhy', id: 'resultWhy', text: G.result.reason === 'fold' ? 'Everyone else packed' : G.result.rank }))); }
   else if (live && !G.turn) talk.appendChild(h('div', { class: 'tbshowcall', role: 'status', id: 'showCall' }, h('b', { text: 'SHOW!' }), h('span', { text: 'Cards are being opened…' })));
   else if (live) talk.appendChild(h('div', { class: 'tbstake' }, 'Boot ' + rupee(cfg.boot) + ' · Stake ', h('b', { id: 'stakeAmt', text: fmt(G.stake) })));
-  else talk.appendChild(h('p', { id: 'idleNote', class: 'tbidle', text: !online ? 'Connecting to the table…' : 'Boot ' + rupee(cfg.boot) + ' · ' + (readyHumans(R).length === 0 ? 'Sit down and a bot keeps you company.' : 'The next hand is about to be dealt.') }));
+  else talk.appendChild(h('p', { id: 'idleNote', class: 'tbidle', text: !online ? 'Connecting to the table…' : 'Boot ' + rupee(cfg.boot) + (readyHumans(R).length === 0 ? '' : ' · The next hand is about to be dealt.') }));
   stage.appendChild(talk);
 
   /* players, and empty seats: if you are standing, each one is a Sit down button (the game keeps no seat numbers, so any seat is the same seat) */
@@ -3359,7 +3403,7 @@ function renderFelt(R, me, msgs) {
     const hidden = !rv && (mine.status === 'blind' || !hd);
     const canSee = playing && mine.status === 'blind';
     const shown = rv || (hd && !hidden ? hd : null), wm = shown && cfgV.id !== 'classic' ? wildMask(shown, G) : null;
-    stage.appendChild(h('div', { class: 'tbhand' + (canSee ? ' tappable' : ''), id: 'myCards', style: tbAt(926, 706), onclick: canSee ? () => handleGameAction('see') : null }, [0, 1, 2].map(i => tCard(rv ? rv[i] : hd && !hidden ? hd[i] : '', hidden, !!(wm && wm[i])))));
+    stage.appendChild(h('div', { class: 'tbhand' + (canSee ? ' tappable' : ''), id: 'myCards', style: tbAt(926, 700), onclick: canSee ? () => handleGameAction('see') : null }, [0, 1, 2].map(i => tCard(rv ? rv[i] : hd && !hidden ? hd[i] : '', hidden, !!(wm && wm[i])))));
   }
 
   /* the action row, under the cards: only for a seated player */
@@ -3532,6 +3576,7 @@ async function submitAuth() {
   try {
     // "Remember me": stay signed in on this phone, or only until the tab is closed
     try { const P = firebase.auth.Auth.Persistence; if (auth.setPersistence && P) await auth.setPersistence(!reg && $('authRemember') && !$('authRemember').checked ? P.SESSION : P.LOCAL); } catch (e) { /* the default persistence is fine */ }
+    S.freshLogin = !S.keepSeat;                                  // typed credentials: any old seat is let go, not offered as "Return"
     if (reg) await Auth.register(name, email, password);
     else await Auth.signIn(email, password);
   } catch (e) {
@@ -3809,17 +3854,18 @@ const Sweep = {
    (nobody was hosting), they are taken to the table so it can finish; they are packed out and leave the moment the table allows. */
 const StaleSeat = {
   table: '', busy: false,
-  note(cfg, stack) { toast('You were away for over 15 minutes, so you left ' + tableName(cfg) + '. ' + fmt(stack) + ' chips are back in your wallet.'); },
+  note(cfg, stack, fresh) { toast((fresh ? 'You signed in again, so you left ' : 'You were away for over 15 minutes, so you left ') + ''  + tableName(cfg) + '. ' + fmt(stack) + ' chips are back in your wallet.'); },
   async begin(uid, prof) {
     StaleSeat.table = '';
     if (!prof || !prof.tableId || uid === ADMIN_UID) return;
     const t = prof.tableId, cfg = TABLE_BY_ID[t];
     let m = null;
     try { const snap = await Repo.membersCol(t).doc(uid).get(); m = snap.exists ? snap.data() : null; } catch (e) { return; }
-    if (!m || !cfg || Date.now() - Presence.lastSeen(m) <= ABSENT_MS) return;
+    const fresh = !!S.freshLogin; S.freshLogin = false; StaleSeat.fresh = fresh;
+    if (!m || !cfg || (!fresh && Date.now() - Presence.lastSeen(m) <= ABSENT_MS)) return;
     StaleSeat.table = t;
-    try { await Repo.leaveTable(uid, t); StaleSeat.table = ''; S.forceLobby = true; prof.tableId = ''; prof.chips = (prof.chips || 0) + m.stack; StaleSeat.note(cfg, m.stack); }
-    catch (e) { S.forceLobby = false; toast('You were away for over 15 minutes. Settling your old seat…'); }
+    try { await Repo.leaveTable(uid, t); StaleSeat.table = ''; S.forceLobby = true; prof.tableId = ''; prof.chips = (prof.chips || 0) + m.stack; StaleSeat.fresh = fresh; StaleSeat.note(cfg, m.stack, fresh); }
+    catch (e) { S.forceLobby = false; toast('Settling your old seat…'); }
   },
   async tick() {
     const R = S.room, t = StaleSeat.table;
@@ -3828,7 +3874,7 @@ const StaleSeat = {
     if (!me) { StaleSeat.table = ''; return; }
     if (leaveBlockReason(R, me)) return;
     StaleSeat.busy = true;
-    try { await Repo.leaveTable(S.user.uid, t); StaleSeat.table = ''; S.forceLobby = true; StaleSeat.note(TABLE_BY_ID[t], me.stack); }
+    try { await Repo.leaveTable(S.user.uid, t); StaleSeat.table = ''; S.forceLobby = true; StaleSeat.note(TABLE_BY_ID[t], me.stack, StaleSeat.fresh); }
     catch (e) { /* the table was not ready yet: try again on the next tick */ }
     finally { StaleSeat.busy = false; }
   }
@@ -4679,8 +4725,8 @@ const Sheets = {
   el: null,
   DRAWERS: new Set(['logSheet', 'historySheet', 'playersSheet', 'chatSheet', 'ranksSheet', 'infoSheet', 'setSheet', 'classicSheet', 'variantSheet', 'walletSheet']),
   // Table pop-ups that sit at the side so the table stays visible; everything else is a centred glossy tile.
-  DOCKED: new Set(['logSheet', 'historySheet', 'playersSheet', 'chatSheet']),
-  SIZES: { walletSheet: 's', soonSheet: 's', tipSheet: 's', topupSheet: 's', setSheet: 's', privSheet: 's', giftSheet: 'm', profileSheet: 'm', privAdminSheet: 'm', playerSheet: 'm', variantSheet: 'm', myProfileSheet: 'l', clubSheet: 'l', infoSheet: 'l', ranksSheet: 'l', bootSheet: 'l' },
+  DOCKED: new Set(['logSheet', 'playersSheet', 'chatSheet']),
+  SIZES: { walletSheet: 's', soonSheet: 's', tipSheet: 's', topupSheet: 's', setSheet: 's', privSheet: 's', giftSheet: 'm', historySheet: 'l', profileSheet: 'm', privAdminSheet: 'm', playerSheet: 'm', variantSheet: 'm', myProfileSheet: 'l', clubSheet: 'l', infoSheet: 'l', ranksSheet: 'l', bootSheet: 'l' },
   origin: null,
   // Where the pop-up grows from and shrinks back to: the button that was just pressed.
   keyframe(r, o) {
@@ -4743,7 +4789,6 @@ const Sheets = {
     const B = t => h('b', { text: t });
     const cfg0 = S.room && TABLE_BY_ID[S.room.id], cfgCaps = cfg0 && cfg0.boot ? bootInfo(cfg0.boot) : null;
     const how = h('div', { class: 'howto' },
-      h('div', { class: 'qh', text: 'Quick rules' }),
       h('div', { class: 'qh', text: 'Setup' }),
       row('chip', null, B('Pay the boot; '), 'get 3 cards face-down.'),
       row('timer', '30s', B('30s per turn '), '(miss 2 = removed).'),
@@ -4756,13 +4801,13 @@ const Sheets = {
       row('', icon('crown'), B('Last player left '), 'wins instantly if everyone else folds.'),
       row('', icon('users'), B('2 players left: '), 'either can ask for a Show to compare hands.'),
       row('', icon('trophy'), 'After ', B('3 complete rounds '), 'with no blind players, all hands show. Best hand wins.'),
-      cfgCaps ? row('', icon('info'), B('Caps at this table: '), 'a blind move costs at most ' + fmt(cfgCaps.blind) + ', a chaal at most ' + fmt(cfgCaps.chaal) + '. At a pot of ' + fmt(cfgCaps.pot) + ' the hands are shown.') : null,
       h('div', { class: 'qh', text: 'Chips' }),
-      row('', icon('plus'), 'Tap ', B('+'), ' next to your chips between hands to add more.'),
-      h('div', { class: 'qh', text: 'Winning hands, best to lowest' }));
+      row('', icon('plus'), 'Tap ', B('+'), ' next to your chips between hands to add more.'));
+    const capbox = (k, v) => h('div', { class: 'capbox' }, h('span', { text: k }), h('b', { text: fmt(v) }));
+    const caps = cfgCaps ? h('div', { class: 'capsbar', id: 'tableCaps' }, capbox('Max blind', cfgCaps.blind), capbox('Max chaal', cfgCaps.chaal), capbox('Pot limit', cfgCaps.pot), h('em', { text: 'At the pot limit the hands are shown.' })) : null;
     const cfg = S.room && TABLE_BY_ID[S.room.id], v = variantOfGame(cfg, S.room && S.room.game);
     const vbox = v.id === 'classic' ? null : h('div', { class: 'vdetail', id: 'variantRules' }, h('b', { text: v.name + ' table: the hand ranking is different' }), h('p', { text: v.rule }));
-    Sheets.open('infoSheet', 'How to play', h('div', {}, vbox, how, v.id === 'classic' ? table : h('p', { class: 'hnote', text: 'The list below is the ordinary ranking. Use the rules above for this table.' }), v.id === 'classic' ? null : table, h('p', { class: 'hnote', text: 'Same hand in a Show? The pot is split. Play chips only, no real money.' })));
+    Sheets.open('infoSheet', 'How to play', h('div', {}, caps, vbox, how, h('p', { class: 'hnote', text: 'Same hand in a Show? The pot is split. Play chips only.' })));
   },
   // Tip the dealer: chips come out of the wallet and the dealer says thank you.
   tip() {
@@ -4837,8 +4882,8 @@ const Sheets = {
     };
     draw(); Social.onLog = () => { if ($('chatLog')) draw(); };
     Sheets.open('chatSheet', 'Table chat', h('div', { class: 'setlist' }, list,
-      h('div', { class: 'chatq' }, Object.keys(CHAT_PHRASES).map(k => h('button', { type: 'button', class: 'chatbtn', 'data-code': k, text: CHAT_PHRASES[k], onclick: () => Social.send('chat', k, '') }))),
-      h('div', { class: 'stkrow' }, Object.keys(STICKERS).map(k => h('button', { type: 'button', class: 'stkbtn', 'data-code': k, 'aria-label': k, text: STICKERS[k], onclick: () => Social.send('sticker', k, '') })))));
+      h('div', { class: 'chatq' }, Object.keys(CHAT_PHRASES).map(k => h('button', { type: 'button', class: 'chatbtn', 'data-code': k, text: CHAT_PHRASES[k], onclick: () => { Social.send('chat', k, ''); Sheets.close(); } }))),
+      h('div', { class: 'stkrow' }, Object.keys(STICKERS).map(k => h('button', { type: 'button', class: 'stkbtn', 'data-code': k, 'aria-label': k, text: STICKERS[k], onclick: () => { Social.send('sticker', k, ''); Sheets.close(); } })))));
     Social.onLog = () => { if ($('chatLog')) draw(); };
   },
   // Send a gift to someone at the table.
@@ -4868,13 +4913,16 @@ const Sheets = {
     const draw = (replayUpTo) => {
       box.replaceChildren();
       if (!hands.length) { box.appendChild(h('p', { class: 'hnote', style: 'font-size:14px', text: 'No hands yet. They show here as you watch them.' })); return; }
-      box.appendChild(h('div', { class: 'htabs' }, hands.map((hd, i) => h('button', { type: 'button', class: 'htab' + (i === pick ? ' on' : ''), 'data-i': i, text: 'Hand ' + hd.handNo, onclick: () => { clearTimeout(Sheets.replayT); pick = i; draw(); } }))));
+      const tileText = hd => hd.result ? hd.result.winners.join(' & ') + ' won ' + fmt(hd.result.amount) : 'In progress';
+      box.appendChild(h('div', { class: 'hlist' }, hands.map((hd, i) => h('button', { type: 'button', class: 'htile' + (i === pick ? ' on' : ''), 'data-i': i, onclick: () => { clearTimeout(Sheets.replayT); pick = i; draw(); } },
+        h('b', { text: 'Hand ' + hd.handNo }), h('span', { text: tileText(hd) })))));
       const hd = hands[pick];
-      box.appendChild(h('div', { class: 'hsum', text: hd.result ? (hd.result.reason === 'fold' ? hd.result.winners.join(' & ') + ' won ' + fmt(hd.result.amount) + ' (everyone packed)' : hd.result.winners.join(' & ') + ' won ' + fmt(hd.result.amount) + (hd.result.rank ? ' with ' + hd.result.rank : '')) : 'In progress' }));
-      box.appendChild(h('button', { type: 'button', class: 'btn-secondary', id: 'replayBtn', text: '\u25B6 Replay', onclick: () => replay(hd) }));
+      const det = h('div', { class: 'hdetail' });
+      det.appendChild(h('div', { class: 'hsum', text: hd.result ? (hd.result.reason === 'fold' ? hd.result.winners.join(' & ') + ' won ' + fmt(hd.result.amount) + ' (everyone packed)' : hd.result.winners.join(' & ') + ' won ' + fmt(hd.result.amount) + (hd.result.rank ? ' with ' + hd.result.rank : '')) : 'In progress' }));
+      det.appendChild(h('button', { type: 'button', class: 'btn-secondary', id: 'replayBtn', text: '\u25B6 Replay', onclick: () => replay(hd) }));
       const rows = h('div', { class: 'hsteps', id: 'hSteps' }, hd.steps.map((st, i) => stepRow(st, i)));
       if (replayUpTo !== undefined) [...rows.children].forEach((r, i) => { if (i > replayUpTo) r.classList.add('hid'); });
-      box.appendChild(rows);
+      det.appendChild(rows); box.appendChild(det);
     };
     const replay = hd => {
       clearTimeout(Sheets.replayT);
@@ -4889,7 +4937,7 @@ const Sheets = {
       tick();
     };
     draw();
-    Sheets.open('historySheet', 'Hand history', h('div', { class: 'setlist' }, box));
+    Sheets.open('historySheet', 'Last 5 hands', h('div', { class: 'setlist' }, box));
   },
   // Hand ranks, best first.
   ranks() {
@@ -5255,13 +5303,13 @@ const Keypad = {
     Keypad.cur = input;
     document.querySelectorAll('.kpon').forEach(n => n.classList.remove('kpon'));
     input.classList.add('kpon');
-    document.body.classList.add('kp-open');
+    document.body.classList.add('kp-open'); document.body.classList.toggle('kp-num', mode === 'num');
     requestAnimationFrame(() => { if (Keypad.el) document.documentElement.style.setProperty('--kph', Keypad.el.offsetHeight + 'px'); });
   },
   hide() {
     if (Keypad.el) Keypad.el.remove();
     Keypad.el = null; Keypad.cur = null; Keypad.mode = null;
-    document.body.classList.remove('kp-open'); document.documentElement.style.setProperty('--kph', '0px');
+    document.body.classList.remove('kp-open', 'kp-num'); document.documentElement.style.setProperty('--kph', '0px');
     document.querySelectorAll('.kpon').forEach(n => n.classList.remove('kpon'));
   },
   key(k) {
@@ -5744,6 +5792,7 @@ function showFatal(text) {
 function wireStaticControls() {
   $('signOutBtn').addEventListener('click', handleSignOut);
   $('buyCancel').addEventListener('click', closeBuyIn);
+  $('buyClose').addEventListener('click', closeBuyIn);
   $('buySend').addEventListener('click', submitBuyIn);
   $('buyInput').addEventListener('keydown', e => { if (e.key === 'Enter') submitBuyIn(); });
   $('buyModal').addEventListener('click', e => { if (e.target === $('buyModal')) closeBuyIn(); });
