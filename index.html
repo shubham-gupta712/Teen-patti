@@ -1856,6 +1856,24 @@ html[data-ptheme="mahogany"] .vip,html[data-ptheme="mahogany"] .ptab.on,html[dat
 }
 @media(max-height:380px){#myProfileSheet .popt{line-height:1;padding:0 6px}#myProfileSheet .pbody.tab-look .popts{gap:2px}#myProfileSheet .pbody .qh{margin:2px 0}.pbody .crests{margin:2px 0}.pbody .cside .hnote{margin:2px 0 0;font-size:10px}#clubSheet .ptabs{margin-bottom:3px}}
 
+/* ===== 44. our own keypad ===== */
+:root{--kph:0px}
+.kpad{position:fixed;left:50%;bottom:0;transform:translateX(-50%);z-index:300;width:min(100vw,780px);padding:6px 8px calc(6px + env(safe-area-inset-bottom));border:1.5px solid rgba(240,205,120,.8);border-bottom:0;border-radius:18px 18px 0 0;background:linear-gradient(180deg,rgba(52,38,20,.97),rgba(14,10,6,.98));box-shadow:0 -10px 30px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,236,190,.35);display:grid;gap:5px;animation:kpup .22s ease-out;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+@keyframes kpup{from{transform:translate(-50%,100%)}to{transform:translate(-50%,0)}}
+.kprow{display:flex;gap:5px;justify-content:center}
+.kpk{flex:1 1 0;min-width:0;height:32px;min-height:0;padding:0;border-radius:9px;border:1px solid rgba(214,172,92,.55);background:linear-gradient(180deg,#3b2a15,#1c130a);color:#f6e6bc;font:700 16px Georgia,'Times New Roman',serif;box-shadow:0 2px 0 #090603}
+.kpk.wide{flex:1.5 1 0;font:700 13px system-ui}
+.kpk.act{background:linear-gradient(180deg,#f3dba0,#c19a55);color:#241707;border-color:transparent}
+.kpk:active{filter:brightness(1.4);transform:translateY(1px)}
+.kpad.num .kpk{height:40px;font-size:20px}.kpad.num .kprow{width:min(100%,520px);margin:0 auto}
+body.kp-open .sheetback.tile{padding-bottom:calc(var(--kph) + 8px)}
+body.kp-open .sheetback.tile .sheet{max-height:calc(var(--vh) - var(--kph) - 16px)}
+input.kpon{border-color:#f2d27c!important;box-shadow:0 0 0 3px rgba(242,199,92,.3)!important}
+#privSheet .pfrow input,#privAdminSheet #paCode,#privAdminSheet #paPass,#buyInput,#topupInput{font:700 22px Georgia,serif;letter-spacing:.12em;text-align:center}
+#privSheet .pfrow input::placeholder{font-size:14px;letter-spacing:.06em;opacity:.55}
+#privSheet .pfrow input{min-height:46px}
+@media(max-height:380px){.kpk{height:28px}.kpad.num .kpk{height:34px}.kpad{padding-top:4px;gap:4px}}
+
 </style>
 </head>
 <body>
@@ -2582,7 +2600,7 @@ const Repo = {
   // only ever stored in the admin-only secret document, so players cannot read it.
   async privateKey(code, password) {
     if (!(window.crypto && crypto.subtle)) throw new AppError('This browser cannot check the password. Use a recent Chrome over https.');
-    const bytes = new TextEncoder().encode('tp|' + PRIVATE_ID + '|' + cleanCode(code) + '|' + password);
+    const bytes = new TextEncoder().encode('tp|' + PRIVATE_ID + '|' + cleanCode(code) + '|' + String(password).toUpperCase());
     return [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))].map(b => b.toString(16).padStart(2, '0')).join('');
   },
   // A player proves they know the code and password by writing the matching hash.
@@ -3575,9 +3593,10 @@ function openBuyIn(tableId) {
   $('buyErr').hidden = !short;
   $('buySend').disabled = short;
   $('buyModal').hidden = false;
-  $('buyInput').focus();
+  const bi = $('buyInput'); if (!bi.dataset.kp) { bi.type = 'text'; bi.maxLength = 9; Keypad.attach(bi, 'num'); }
+  bi.focus();
 }
-function closeBuyIn() { $('buyModal').hidden = true; S.buy = null; }
+function closeBuyIn() { $('buyModal').hidden = true; S.buy = null; Keypad.hide(); }
 
 async function submitBuyIn() {
   if (!S.buy || S.busy.join) return;
@@ -4677,10 +4696,10 @@ const Sheets = {
     back.animate(opening ? [{ backgroundColor: 'rgba(0,0,0,0)' }, {}] : [{}, { backgroundColor: 'rgba(0,0,0,0)' }], { duration: ms, easing: 'ease', fill: opening ? 'none' : 'forwards' });
     return sh.animate(fr, { duration: ms, easing: ease, fill: opening ? 'none' : 'forwards' });
   },
-  closeNow() { if (Sheets.el) { Sheets.el.remove(); Sheets.el = null; } Social.onLog = null; clearTimeout(Sheets.replayT); },
+  closeNow() { Keypad.hide(); if (Sheets.el) { Sheets.el.remove(); Sheets.el = null; } Social.onLog = null; clearTimeout(Sheets.replayT); },
   close() {
     const el = Sheets.el; if (!el) return;
-    Sheets.el = null; Social.onLog = null; clearTimeout(Sheets.replayT);
+    Sheets.el = null; Social.onLog = null; clearTimeout(Sheets.replayT); Keypad.hide();
     el.style.pointerEvents = 'none'; el.classList.add('sheetout');
     el.removeAttribute('id'); el.querySelectorAll('[id]').forEach(n => n.removeAttribute('id'));
     const a = Sheets.fly(el, false);
@@ -4766,7 +4785,7 @@ const Sheets = {
     if (G && G.phase === 'playing' && G.players && G.players[uid]) { toast('You can add chips when this hand ends.'); return; }
     const room = Math.max(0, cfg.max - me.stack), cap = Math.min(wallet, room);
     const opts = [...new Set([cfg.min, cfg.min * 2, Math.floor(cap / 2 / cfg.boot) * cfg.boot, cap])].filter(v => v > 0 && v <= cap).sort((a, b) => a - b);
-    const input = h('input', { id: 'topupInput', type: 'number', inputmode: 'numeric', min: 1, max: cap, step: 1, value: opts[0] || '' });
+    const input = h('input', { id: 'topupInput', type: 'text', maxlength: 9, value: opts[0] || '' }); Keypad.attach(input, 'num');
     const err = h('div', { id: 'topupErr', class: 'hnote', style: 'color:#a02a40;min-height:16px' });
     const go = h('button', { id: 'topupGo', type: 'button', class: 'btn-primary', text: 'Add chips', disabled: cap < 1 });
     go.onclick = async () => {
@@ -5006,7 +5025,8 @@ const Sheets = {
   // Players: room code and password, then the buy-in. The database checks them; a wrong guess is refused.
   privateEntry() {
     const code = h('input', { id: 'privCode', type: 'text', maxlength: 12, placeholder: 'ROOM CODE', autocapitalize: 'characters', autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Room code' });
-    const pass = h('input', { id: 'privPass', type: 'password', maxlength: 20, placeholder: 'Password', autocomplete: 'off', 'aria-label': 'Password' });
+    const pass = h('input', { id: 'privPass', type: 'text', maxlength: 20, placeholder: 'PASSWORD', autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Password' });
+    Keypad.attach(code, 'alnum'); Keypad.attach(pass, 'alnum');
     const err = h('div', { id: 'privErr', class: 'msg err', role: 'alert', hidden: true });
     const go = h('button', { id: 'privGo', type: 'button', class: 'btn-primary', text: 'Enter table' });
     const run = async () => {
@@ -5034,11 +5054,13 @@ const Sheets = {
     const pd = S.rooms[PRIVATE_ID], sec = S.privSecret;
     const rnd = (n, set) => Array.from({ length: n }, () => set[Math.floor(Math.random() * set.length)]).join('');
     const SAFE = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+    const _kp = i => Keypad.attach(i, 'alnum');
     const name = h('input', { id: 'paName', type: 'text', maxlength: 24, value: pd ? pd.name : 'Private Table', 'aria-label': 'Table name' });
     const stake = h('select', { id: 'paStake', 'aria-label': 'Stake' }, STAKES.map(x => h('option', { value: String(x.boot), text: 'Boot ' + x.boot + '  \u00B7  buy-in ' + fmt(x.min) + ' - ' + fmt(x.max) })));
     stake.value = String(pd ? pd.boot : 10);
     const code = h('input', { id: 'paCode', type: 'text', maxlength: 12, value: sec ? sec.code : rnd(6, SAFE), autocapitalize: 'characters', autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Room code' });
-    const pass = h('input', { id: 'paPass', type: 'text', maxlength: 20, value: sec ? sec.password : rnd(6, SAFE.toLowerCase()), autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Password' });
+    const pass = h('input', { id: 'paPass', type: 'text', maxlength: 20, value: sec ? sec.password : rnd(6, SAFE), autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Password' });
+    _kp(code); _kp(pass);
     const err = h('div', { id: 'paErr', class: 'msg err', role: 'alert', hidden: true });
     const save = h('button', { id: 'paSave', type: 'button', class: 'btn-primary', text: pd && pd.status === 'open' ? 'Save changes' : 'Open the table' });
     save.onclick = async () => {
@@ -5055,7 +5077,7 @@ const Sheets = {
       h('div', { class: 'field' }, h('label', { for: 'paStake', text: 'STAKE' }), stake),
       h('div', { class: 'field' }, h('label', { for: 'paCode', text: 'ROOM CODE (4-12 LETTERS OR NUMBERS)' }), code),
       h('div', { class: 'field' }, h('label', { for: 'paPass', text: 'PASSWORD (4-20 CHARACTERS)' }), pass),
-      h('button', { id: 'paGen', type: 'button', class: 'btn-ghost btn-small', text: 'Generate a new code and password', onclick: () => { code.value = rnd(6, SAFE); pass.value = rnd(6, SAFE.toLowerCase()); } }),
+      h('button', { id: 'paGen', type: 'button', class: 'btn-ghost btn-small', text: 'Generate a new code and password', onclick: () => { code.value = rnd(6, SAFE); pass.value = rnd(6, SAFE); } }),
       err, save));
   }
 };
@@ -5212,6 +5234,57 @@ Object.assign(Sheets, {
       club ? h('p', { class: 'hnote', id: 'iClub', text: 'Club: ' + Clubs.tag(club) }) : null);
   }
 });
+
+/* ==========================================================================
+   SECTION 24c - OUR OWN KEYPAD
+   Capital letters and digits only (room codes, passwords), or digits only (chips), drawn along the bottom of the
+   screen so the phone's big keyboard never covers the pop-up. Inputs opt in with Keypad.attach(input, 'alnum'|'num').
+   ========================================================================== */
+const Keypad = {
+  el: null, cur: null, mode: null,
+  attach(input, mode) {
+    input.setAttribute('inputmode', 'none'); input.setAttribute('autocomplete', 'off'); input.dataset.kp = mode;
+    if (window.matchMedia && matchMedia('(pointer: coarse)').matches) input.readOnly = true;   // a phone: never raise its own keyboard
+    const open = () => Keypad.show(input);
+    input.addEventListener('focus', open); input.addEventListener('pointerdown', open);
+    return input;
+  },
+  show(input) {
+    const mode = input.dataset.kp;
+    if (!Keypad.el || Keypad.mode !== mode) Keypad.build(mode);
+    Keypad.cur = input;
+    document.querySelectorAll('.kpon').forEach(n => n.classList.remove('kpon'));
+    input.classList.add('kpon');
+    document.body.classList.add('kp-open');
+    requestAnimationFrame(() => { if (Keypad.el) document.documentElement.style.setProperty('--kph', Keypad.el.offsetHeight + 'px'); });
+  },
+  hide() {
+    if (Keypad.el) Keypad.el.remove();
+    Keypad.el = null; Keypad.cur = null; Keypad.mode = null;
+    document.body.classList.remove('kp-open'); document.documentElement.style.setProperty('--kph', '0px');
+    document.querySelectorAll('.kpon').forEach(n => n.classList.remove('kpon'));
+  },
+  key(k) {
+    const i = Keypad.cur; if (!i || !i.isConnected) return;
+    if (k === 'bs') i.value = i.value.slice(0, -1);
+    else if (k === 'clr') i.value = '';
+    else { const max = i.maxLength > 0 ? i.maxLength : 20; if (i.value.length < max) i.value += k; }
+    i.dispatchEvent(new Event('input', { bubbles: true }));
+    if (window.Sfx && Sfx.tap) Sfx.tap();
+  },
+  build(mode) {
+    if (Keypad.el) Keypad.el.remove();
+    Keypad.mode = mode;
+    const k = (label, key, cls) => h('button', { type: 'button', class: 'kpk' + (cls ? ' ' + cls : ''), 'data-k': key, 'aria-label': key === 'bs' ? 'Backspace' : key === 'clr' ? 'Clear' : key === 'done' ? 'Done' : label, text: label, onpointerdown: e => e.preventDefault(), onclick: () => key === 'done' ? Keypad.hide() : Keypad.key(key) });
+    const row = (chars, ...extra) => h('div', { class: 'kprow' }, [...chars].map(c => k(c, c)), ...extra);
+    const bs = k('\u232B', 'bs', 'wide'), clr = k('Clear', 'clr', 'wide'), done = k('Done', 'done', 'wide act');
+    const rows = mode === 'num'
+      ? [row('12345', bs), row('67890', done)]
+      : [row('1234567890'), row('QWERTYUIOP'), row('ASDFGHJKL', bs), row('ZXCVBNM', clr, done)];
+    Keypad.el = h('div', { class: 'kpad ' + mode, id: 'kpad', role: 'group', 'aria-label': 'Keypad' }, rows);
+    document.body.appendChild(Keypad.el);
+  }
+};
 
 /* ==========================================================================
    SECTION 24 - GAME ENGINE
