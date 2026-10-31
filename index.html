@@ -1918,6 +1918,32 @@ body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
 .tbm .lb{font-size:max(9px,calc(var(--u) * 22))}.tbm{padding:0 calc(var(--u) * 8)}
 .tmini.face{position:relative;overflow:hidden}
 
+/* ===== 47. rules in three tidy columns; chat as a small tray beside the rail ===== */
+#infoSheet .sbodyx>div{column-count:1}
+.howgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 22px;align-items:start}
+.howgrid .hcol,.howgrid .hsec{min-width:0}
+.howgrid .vdetail{margin:0 0 8px;padding:8px 12px}
+.howgrid .vdetail b{font-size:16px}
+.howgrid .vdetail p{margin:2px 0 0;font-size:13px}
+.sheetback.chatdock{padding-left:9%}
+.sheetback.chatdock .sheet{width:min(38vw,320px);border-radius:16px}
+.chatdock .shead{padding:3px 8px 3px 14px;font-size:14px}
+.chatdock .sclose{width:26px;height:26px;min-width:26px;min-height:26px;max-width:26px;max-height:26px;font-size:12px}
+.chatdock .sbodyx{padding:6px 8px 8px}
+.chatdock .setlist{gap:5px}
+.chatdock .chatlog{max-height:46px;min-height:0;padding:2px 4px;font-size:12px}
+.chatdock .chatq{display:flex;flex-wrap:wrap;gap:4px}
+.chatdock .chatbtn{padding:3px 10px;min-height:0;font-size:12px}
+.chatdock .stkrow{display:grid;grid-template-columns:repeat(8,1fr);gap:3px}
+.chatdock .stkbtn{padding:1px 0;min-height:0;font-size:19px;line-height:1.25;border-radius:9px}
+.howgrid .qh{margin:2px 0 6px;font:700 17px var(--serif);color:#f2c75c}
+.sheetback.chatdock .sheet{width:min(34vw,290px)}
+.chatdock .chatbtn{font-size:11.5px;padding:3px 9px}
+.chatdock .chatlog{padding:0 4px}
+.chatdock .chatlog .hnote{margin:2px 0;font-size:11px}
+#infoSheet .hnote{margin:0;font-size:11px;line-height:1.2}#infoSheet .howgrid .qrow{margin-bottom:0}#infoSheet .capsbar{margin-bottom:2px}
+#infoSheet .qth{width:30px;height:30px;min-width:30px}#infoSheet .howgrid .qh{margin:0 0 3px}
+
 </style>
 </head>
 <body>
@@ -3656,7 +3682,6 @@ async function submitBuyIn() {
   try {
     const result = await Repo.joinTable(S.user.uid, tableId, n);
     closeBuyIn();
-    toast(result === 'resumed' ? 'Welcome back to ' + tableName(cfg) + '.' : 'Seat taken at ' + tableName(cfg) + '. Sit down when you are ready.');
   } catch (e) {
     console.error('[TeenPatti] join failed', e && e.code, e && e.message);
     $('buyErr').textContent = friendlyError(e); $('buyErr').hidden = false;
@@ -3700,7 +3725,6 @@ function handleLeave() {
   const stack = me ? me.stack : 0;
   return withBusy('leave', 'leave table', async () => {
     await Repo.leaveTable(S.user.uid, R.id);
-    toast('Left ' + tableName(cfg) + '. ' + fmt(stack) + ' chips returned to your wallet.');
   });
 }
 
@@ -4480,7 +4504,6 @@ const Fx = {
   // Tipping the dealer: chips go from you to the dealer, who nods and says thanks.
   tip(amt) {
     const dealer = $('dealerFigure'), from = Fx.seat(S.user && S.user.uid) || $('tipBtn');
-    toast('Thank you! The dealer appreciates it.');
     if (!Fx.on || !dealer) return;
     Sfx.chip(); setTimeout(() => Sfx.chip(), 200);
     Fx.fly(from, dealer, Math.min(8, 3 + Math.round(amt / Math.max(1, (S.room && TABLE_BY_ID[S.room.id].boot) || 1) / 4)), 0);
@@ -4789,26 +4812,25 @@ const Sheets = {
     const row = (cls, inner, ...txt) => h('div', { class: 'qrow' }, th(cls, inner), h('div', {}, ...txt));
     const B = t => h('b', { text: t });
     const cfg0 = S.room && TABLE_BY_ID[S.room.id], cfgCaps = cfg0 && cfg0.boot ? bootInfo(cfg0.boot) : null;
+    const sec = (t, ...rows) => h('div', { class: 'hsec' }, h('div', { class: 'qh', text: t }), ...rows);
     const how = h('div', { class: 'howto' },
-      h('div', { class: 'qh', text: 'Setup' }),
-      row('chip', null, B('Pay the boot; '), 'get 3 cards face-down.'),
-      row('timer', '30s', B('30s per turn '), '(miss 2 = removed).'),
-      h('div', { class: 'qh', text: 'Turn actions' }),
-      row('', icon('eyeOff'), B('Blind: '), 'play without looking (pays normal stake). Max 3 blind moves, then cards flip face-up.'),
-      row('', icon('eye'), B('Seen: '), 'look for free, play (pays double stake).'),
-      row('x2', '2x', B('Raise: '), 'double the current stake.'),
-      row('back', null, B('Pack: '), 'fold and lose your chips.'),
-      h('div', { class: 'qh', text: 'Winning / ending' }),
-      row('', icon('crown'), B('Last player left '), 'wins instantly if everyone else folds.'),
-      row('', icon('users'), B('2 players left: '), 'either can ask for a Show to compare hands.'),
-      row('', icon('trophy'), 'After ', B('3 complete rounds '), 'with no blind players, all hands show. Best hand wins.'),
-      h('div', { class: 'qh', text: 'Chips' }),
-      row('', icon('plus'), 'Tap ', B('+'), ' next to your chips between hands to add more.'));
+      sec('Setup',
+        row('chip', null, B('Pay the boot; '), 'get 3 cards face-down.'),
+        row('timer', '30s', B('30s per turn '), '(miss 2 = removed).')),
+      sec('Turn actions',
+        row('', icon('eyeOff'), B('Blind: '), 'play without looking, normal stake. Max 3 blind moves.'),
+        row('', icon('eye'), B('Seen: '), 'look for free, pays double stake.'),
+        row('x2', '2x', B('Raise: '), 'double the current stake.'),
+        row('back', null, B('Pack: '), 'fold and lose your chips.')),
+      sec('Winning / ending',
+        row('', icon('crown'), B('Last player left '), 'wins if everyone else folds.'),
+        row('', icon('users'), B('2 players left: '), 'either can ask for a Show.'),
+        row('', icon('trophy'), 'After ', B('3 rounds '), 'with no blind players, all hands show. Best hand wins.')));
     const capbox = (k, v) => h('div', { class: 'capbox' }, h('span', { text: k }), h('b', { text: fmt(v) }));
     const caps = cfgCaps ? h('div', { class: 'capsbar', id: 'tableCaps' }, capbox('Max blind', cfgCaps.blind), capbox('Max chaal', cfgCaps.chaal), capbox('Pot limit', cfgCaps.pot), h('em', { text: 'At the pot limit the hands are shown.' })) : null;
     const cfg = S.room && TABLE_BY_ID[S.room.id], v = variantOfGame(cfg, S.room && S.room.game);
-    const vbox = v.id === 'classic' ? null : h('div', { class: 'vdetail', id: 'variantRules' }, h('b', { text: v.name + ' table: the hand ranking is different' }), h('p', { text: v.rule }));
-    Sheets.open('infoSheet', 'How to play', h('div', {}, caps, vbox, how, h('p', { class: 'hnote', text: 'Same hand in a Show? The pot is split. Play chips only.' })));
+    const vbox = v.id === 'classic' ? null : h('div', { class: 'vdetail', id: 'variantRules' }, h('b', { text: v.name + ' table' }), h('p', { text: v.tag + '. Hand ranks change, see Hand ranks.' }));
+    Sheets.open('infoSheet', 'How to play', h('div', {}, caps, h('div', { class: 'howgrid' }, ...(secs => [h('div', { class: 'hcol' }, vbox, secs[0]), secs[1], secs[2]])([...how.children])), h('p', { class: 'hnote', text: 'Same hand in a Show? The pot is split.' })));
   },
   // Tip the dealer: chips come out of the wallet and the dealer says thank you.
   tip() {
@@ -4816,8 +4838,9 @@ const Sheets = {
     const opts = [2, 5, 10, 25].map(m => Math.min(1000, Math.max(1, cfg.boot * m)));
     const err = h('div', { id: 'tipErr', class: 'msg err', role: 'alert', hidden: true });
     const give = amt => withBusy('tip', 'tip the dealer', async () => {
-      try { await Repo.tip(S.user.uid, R.id, amt); Sheets.close(); Fx.tip(amt); }
-      catch (e) { err.textContent = friendlyError(e); err.hidden = false; }
+      Sheets.close();                                   // out of the way at once so the dealer's thank-you is in view
+      try { await Repo.tip(S.user.uid, R.id, amt); Fx.tip(amt); }
+      catch (e) { toast(friendlyError(e), 'err'); }
     });
     Sheets.open('tipSheet', 'Tip the dealer', h('div', { class: 'setlist' },
       h('div', { class: 'tipdealer' }, h('div', { class: 'tipav', 'aria-hidden': 'true' }, icon('crown')), h('p', { class: 'hnote', style: 'font-size:14px;text-align:left', text: 'A little something for a good deal. Tips come out of your wallet (' + fmt(p.chips) + ').' })),
@@ -4884,7 +4907,7 @@ const Sheets = {
     draw(); Social.onLog = () => { if ($('chatLog')) draw(); };
     Sheets.open('chatSheet', 'Table chat', h('div', { class: 'setlist' }, list,
       h('div', { class: 'chatq' }, Object.keys(CHAT_PHRASES).map(k => h('button', { type: 'button', class: 'chatbtn', 'data-code': k, text: CHAT_PHRASES[k], onclick: () => { Social.send('chat', k, ''); Sheets.close(); } }))),
-      h('div', { class: 'stkrow' }, Object.keys(STICKERS).map(k => h('button', { type: 'button', class: 'stkbtn', 'data-code': k, 'aria-label': k, text: STICKERS[k], onclick: () => { Social.send('sticker', k, ''); Sheets.close(); } })))));
+      h('div', { class: 'stkrow' }, Object.keys(STICKERS).map(k => h('button', { type: 'button', class: 'stkbtn', 'data-code': k, 'aria-label': k, text: STICKERS[k], onclick: () => { Social.send('sticker', k, ''); Sheets.close(); } })))), 'chatdock');
     Social.onLog = () => { if ($('chatLog')) draw(); };
   },
   // Send a gift to someone at the table.
