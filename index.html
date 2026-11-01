@@ -1960,6 +1960,52 @@ body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
 .rklist.tiles .hcards{margin:0;grid-column:1/-1;display:flex;gap:4px}
 .rklist.tiles.nines .rkrow{grid-template-columns:1fr}
 
+/* 49. Admin control room, messages */
+.atiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.atile{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:16px;text-align:left;border-radius:20px;border:1px solid #d9b866;background:linear-gradient(160deg,#fffaf0,#f3e3b8);color:#3a2808;box-shadow:0 6px 16px rgba(80,55,10,.18);cursor:pointer;min-height:150px}
+.atile:active{transform:scale(.98)}
+.atile .aic{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:linear-gradient(180deg,#e9c46a,#b8862b);color:#2a1d00;font-size:24px;margin-bottom:6px}
+.atile b{font:800 17px/1.2 Georgia,serif}
+.atile .asub{font-size:12px;line-height:1.3;color:#6b5a40}
+.atile .astat{margin-top:auto;font-style:normal;font-size:12px;font-weight:800;color:#8a5f12;letter-spacing:.3px}
+.aback{display:flex;align-items:center;gap:12px;margin:2px 0 12px}
+.aback h2{margin:0;font-size:22px}
+.agrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px}
+.aform{margin-top:10px;padding:12px;border-radius:14px;border:1px dashed #c9a24d;background:rgba(255,248,226,.55)}
+.acount{font-size:12px;color:#6b5a40;margin:6px 0 12px}
+.apick{max-height:200px;overflow:auto;margin-top:8px;border:1px solid var(--line);border-radius:12px;padding:6px 10px;background:rgba(255,255,255,.5)}
+.apickrow{display:flex;gap:8px;align-items:center;padding:6px 0;font-size:13px}
+.apickrow input{width:20px;height:20px;flex:none}
+.achips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.achip{padding:6px 12px;border-radius:20px;border:1px solid #c9a24d;background:transparent;color:#6b5a40;font-weight:700;font-size:12px;cursor:pointer}
+.achip.on{background:#c9a24d;color:#2a1d00}
+.aprow{display:flex;align-items:center;gap:10px;width:100%;padding:0;background:none;border:0;text-align:left;cursor:pointer;color:inherit}
+.apav{flex:none;width:38px;height:38px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#e9d9a8;font-size:20px}
+.apav img{width:100%;height:100%;object-fit:cover}
+.apwho{flex:1;min-width:0;display:flex;flex-direction:column}
+.apwho b{font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.apwho i{font-style:normal;font-size:12px;color:#6b5a40;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.apchips{font-weight:800;font-variant-numeric:tabular-nums;color:#8a5f12}
+.aplayer.banned{opacity:.75;border-color:#d96b7f}
+.adetail{margin-top:10px;padding-top:10px;border-top:1px dashed #c9a24d}
+.akv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.akv div{padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.55);border:1px solid var(--line);min-width:0}
+.akv span{display:block;font-size:10px;letter-spacing:1px;color:#6b5a40;text-transform:uppercase}
+.akv b{display:block;font-size:13px;word-break:break-all}
+.anote{padding:10px 0;border-top:1px solid var(--line)}
+.anote b{display:block}.anote i{font-style:normal;font-size:12px;color:#6b5a40}
+.anote p{margin:4px 0 8px;font-size:13px}
+#pSearch,.aform input,.field select,.field textarea{width:100%;min-height:var(--tap,44px);padding:10px 12px;border-radius:12px;border:1px solid #c9a24d;background:#fffdf6;color:#3a2808;font:inherit}
+.field textarea{resize:vertical}
+.nldot{position:absolute;right:-4px;top:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:#e0344f;color:#fff;font:800 11px/18px system-ui;text-align:center;font-style:normal;pointer-events:none}
+.inote{padding:10px 12px;margin-bottom:8px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}
+.inote.fresh{border-color:#f2c75c;background:rgba(242,199,92,.12)}
+.inote.reward b{color:#f6d77a}
+.inote .inh{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.inote .inh i{font-style:normal;font-size:11px;opacity:.7;white-space:nowrap}
+.inote p{margin:4px 0 0;font-size:13px;opacity:.9}
+.table-grid.one{grid-template-columns:1fr}
+
 </style>
 </head>
 <body>
@@ -2116,8 +2162,16 @@ const TABLE_BY_ID = Object.fromEntries(TABLES.concat(LEGACY_TABLES).map(t => [t.
 const PRIVATE_CFG = TABLE_BY_ID[PRIVATE_ID];
 // Keeps the private table's config in step with its room document (stake, buy-in limits, name).
 function applyPrivateCfg(doc) {
-  if (doc && doc.private === true) Object.assign(PRIVATE_CFG, { boot: doc.boot, min: doc.minBuyIn, max: doc.maxBuyIn, title: doc.name || 'Private Table' });
+  if (doc && doc.private === true) applyRoomCfg(PRIVATE_ID, doc);
 }
+// Every table's live numbers (boot, buy-in range, the three limits) are in its room document; the admin can change them.
+function applyRoomCfg(id, doc) {
+  const t = TABLE_BY_ID[id];
+  if (!t || !doc || !Number.isInteger(doc.boot)) return;
+  Object.assign(t, { boot: doc.boot, min: doc.minBuyIn, max: doc.maxBuyIn, blind: doc.maxBlind || doc.boot * ENGINE_MULT.blind, chaal: doc.maxChaal || doc.boot * ENGINE_MULT.chaal, pot: doc.potLimit || doc.boot * ENGINE_MULT.pot });
+  if (t.private) t.title = doc.name || 'Private Table';
+}
+const ENGINE_MULT = { blind: 16, chaal: 64, pot: 512 };       // what a limit is when the admin has not set one, in boots
 const tableName = t => (t.title || ('Boot ' + t.boot)) + (t.mode ? ' \u00B7 Boot ' + t.boot : '');     // the table's name, e.g. "Mehfil Lounge"
 const tableStake = t => t.boot ? 'Boot ' + t.boot : 'Boot not set';                   // its stake, shown beside the name
 
@@ -2428,7 +2482,7 @@ const Repo = {
     if (snap.exists) return snap.data();
     const name = cleanName(S.pendingName || user.displayName) || nameFromEmail(user.email);
     try {
-      await ref.set({ uid: user.uid, name, avatar: AVATAR_IDS[Math.abs([...user.uid].reduce((a, ch) => a * 31 + ch.charCodeAt(0), 7)) % AVATAR_IDS.length], chips: START_CHIPS, tableId: '', createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
+      await ref.set({ uid: user.uid, name, avatar: AVATAR_IDS[Math.abs([...user.uid].reduce((a, ch) => a * 31 + ch.charCodeAt(0), 7)) % AVATAR_IDS.length], chips: START_CHIPS, tableId: '', ...(user.email ? { email: user.email } : {}), createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
     } catch (e) {
       const again = await ref.get();          // another tab may have created it first
       if (again.exists) return again.data();
@@ -2450,8 +2504,8 @@ const Repo = {
     if (!cfg || cfg.hidden) throw new AppError('Unknown table.');
     const roomSnap = await Repo.roomRef(tableId).get();                       // rule: rooms get
     if (!roomSnap.exists) throw new AppError(cfg.private ? 'The private table is not open right now.' : 'This table is not set up yet. Ask the admin to set up the tables.');
-    if (cfg.private) applyPrivateCfg(roomSnap.data());                         // its stake and limits live in its room document
-    if (roomSnap.data().status !== 'open') throw new AppError(cfg.private ? 'The private table is not open right now.' : 'This table is closed.');
+    applyRoomCfg(tableId, roomSnap.data());                         // its stake and limits live in its room document
+    if (roomSnap.data().status !== 'open') throw new AppError(cfg.private ? 'The private table is not open right now.' : 'This table is under maintenance. Please try again soon.');
     if (!Number.isInteger(buyIn) || buyIn < cfg.min || buyIn > cfg.max)
       throw new AppError('Buy-in must be a whole number from ' + fmt(cfg.min) + ' to ' + fmt(cfg.max) + '.');
     const uref = Repo.userRef(uid), mref = Repo.membersCol(tableId).doc(uid);
@@ -2545,7 +2599,7 @@ const Repo = {
 
   /* ---- listeners (rules: get/list on rooms, members, bots, game, users) ---- */
   watchProfile: (sc, uid, cb) => sc.listen(Repo.userRef(uid), s => cb(s.exists ? s.data() : null)),
-  watchRoom: (sc, t, cb) => sc.listen(Repo.roomRef(t), s => { const d = s.exists ? s.data() : null; if (t === PRIVATE_ID) applyPrivateCfg(d); cb(d); }),
+  watchRoom: (sc, t, cb) => sc.listen(Repo.roomRef(t), s => { const d = s.exists ? s.data() : null; applyRoomCfg(t, d); cb(d); }),
   watchMembers: (sc, t, cb) => sc.listen(Repo.membersCol(t), s => cb(s.docs.map(d => d.data()))),
   watchFeed: (sc, t, cb) => sc.listen(Repo.feedCol(t), s => cb(s.docs.map(d => d.data()))),
   sendFeed: (t, uid, kind, code, to, seq) => Repo.feedCol(t).doc(uid).set({ uid, kind, code, to: to || '', seq, updatedAt: FV.serverTimestamp() }),
@@ -2662,7 +2716,8 @@ const Repo = {
   async ensureRoom(t) {
     const ref = Repo.roomRef(t.id), snap = await ref.get();
     if (snap.exists) return false;
-    await ref.set({ tableId: t.id, name: tableName(t), boot: t.boot, minBuyIn: t.min, maxBuyIn: t.max, permanent: true, adminUid: ADMIN_UID, status: 'open', dealerAt: 0, seated: 0, createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
+    const d0 = bootInfo(Number(t.id.split('_')[1]));
+    await ref.set({ tableId: t.id, name: tableName(t), boot: d0.boot, minBuyIn: d0.min, maxBuyIn: d0.max, permanent: true, adminUid: ADMIN_UID, status: 'open', dealerAt: 0, seated: 0, createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
     return true;
   },
   // Idempotent: fixed IDs, create only what is missing, repair only what differs.
@@ -2670,14 +2725,11 @@ const Repo = {
     const out = { created: 0, repaired: 0, unchanged: 0 };
     for (const t of TABLES.filter(x => !x.private)) {
       const ref = Repo.roomRef(t.id), snap = await ref.get();
-      const want = { tableId: t.id, name: tableName(t), boot: t.boot, minBuyIn: t.min, maxBuyIn: t.max, permanent: true, adminUid: ADMIN_UID };
+      const d0 = bootInfo(Number(t.id.split('_')[1])), want = { tableId: t.id, name: tableName(t), boot: d0.boot, minBuyIn: d0.min, maxBuyIn: d0.max, permanent: true, adminUid: ADMIN_UID };
       if (!snap.exists) {
         await ref.set(Object.assign({ status: 'open', hostUid: '', dealerAt: 0, seated: 0, createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() }, want));
         out.created++;
-      } else if (Object.keys(want).some(k => snap.data()[k] !== want[k])) {
-        await ref.update(Object.assign({ updatedAt: FV.serverTimestamp() }, want));
-        out.repaired++;
-      } else out.unchanged++;
+      } else out.unchanged++;                 // never overwrites: the admin may have customised the table
     }
     return out;
   },
@@ -2702,19 +2754,26 @@ const Repo = {
   },
   // Admin only. Rules: rooms create/update (validRoom, private branch) + secret create/update (validSecret).
   async openPrivate(o) {
-    const st = STAKES.find(x => x.boot === o.boot);
-    if (!st) throw new AppError('Pick a stake.');
+    const preset = STAKES.find(x => x.boot === o.boot), def = bootInfo(o.boot || 1);
+    const st = { boot: o.boot, min: o.min || (preset ? preset.min : def.min), max: o.max || (preset ? preset.max : def.max), blind: o.blind || def.blind, chaal: o.chaal || def.chaal, pot: o.pot || def.pot };
+    const chk = readLimits(st);
+    if (chk.error) throw new AppError(chk.error);
     const code = cleanCode(o.code), password = String(o.password || '');
     if (code.length < 4 || code.length > 12) throw new AppError('The room code needs 4 to 12 letters or numbers.');
     if (password.length < 4 || password.length > 20) throw new AppError('The password needs 4 to 20 characters.');
     const name = String(o.name || '').replace(/\s+/g, ' ').trim().slice(0, 24) || 'Private Table';
     const key = await Repo.privateKey(code, password);
     const ref = Repo.roomRef(PRIVATE_ID), snap = await ref.get();
-    if (snap.exists && snap.data().boot !== st.boot) {
-      const ms = await Repo.membersCol(PRIVATE_ID).get();
-      if (!ms.empty) throw new AppError('Players are still seated at the private table, so its stake cannot change yet. Remove them or wait until they leave.');
+    if (snap.exists) {
+      const o0 = snap.data();
+      const differs = o0.boot !== st.boot || o0.minBuyIn !== st.min || o0.maxBuyIn !== st.max || o0.name !== name || (o0.maxBlind || 0) !== st.blind || (o0.maxChaal || 0) !== st.chaal || (o0.potLimit || 0) !== st.pot;
+      if (differs) {
+        if (o0.status === 'open') throw new AppError('Close the private table first. Its name and numbers can only change while it is closed and empty.');
+        const ms = await Repo.membersCol(PRIVATE_ID).get();
+        if (!ms.empty) throw new AppError('Players are still seated at the private table, so its numbers cannot change yet. Remove them or wait until they leave.');
+      }
     }
-    const base = { tableId: PRIVATE_ID, name, boot: st.boot, minBuyIn: st.min, maxBuyIn: st.max, permanent: true, adminUid: ADMIN_UID, private: true, status: 'open' };
+    const base = { tableId: PRIVATE_ID, name, boot: st.boot, minBuyIn: st.min, maxBuyIn: st.max, maxBlind: st.blind, maxChaal: st.chaal, potLimit: st.pot, permanent: true, adminUid: ADMIN_UID, private: true, status: 'open' };
     const b = db.batch();
     if (!snap.exists) b.set(ref, Object.assign({ hostUid: '', dealerAt: 0, seated: 0, createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() }, base));
     else b.update(ref, Object.assign({ updatedAt: FV.serverTimestamp() }, base));
@@ -2792,12 +2851,14 @@ async function onAuthChange(user) {
   try {
     const prof = await Repo.ensureProfile(user);
     if (seq !== authSeq) return;                 // a newer sign-in replaced this one
-    S.profile = prof;
+    S.profile = await Repo.syncEmail(user, prof);
     await StaleSeat.begin(user.uid, prof);       // a seat left idle for over 15 minutes is given up before anything is drawn
     if (seq !== authSeq) return;
     Stats.load(user.uid);
     scopeProfile = Scopes.open('profile');
     Repo.watchProfile(scopeProfile, user.uid, p => { S.profile = p; setConnection(true); go(); });
+    Notices.first = true; Notices.announced = new Set(); Notices.all = [];
+    Repo.watchNotices(scopeProfile, docs => Notices.set(docs));
     S.authReady = true; go();
   } catch (e) {
     if (seq !== authSeq) return;
@@ -2832,6 +2893,7 @@ function desiredRoute() {
     return { name: 'admin' };
   }
   if (!S.profile) return { name: 'loading' };
+  if (S.profile.banned === true) return { name: 'banned' };
   if (S.profile.tableId && TABLE_BY_ID[S.profile.tableId] && !S.forceLobby) return { name: 'table', tableId: S.profile.tableId };
   return { name: 'lobby' };
 }
@@ -2857,7 +2919,7 @@ function openRoomsScope() {
   scopeRooms = Scopes.open('rooms');
   for (const t of TABLES) {
     Repo.watchRoom(scopeRooms, t.id, d => {
-      S.rooms[t.id] = d; S.roomsLoaded[t.id] = true; setConnection(true); scheduleRender();
+      applyRoomCfg(t.id, d); S.rooms[t.id] = d; S.roomsLoaded[t.id] = true; setConnection(true); scheduleRender();
       if (!d && !t.private && !S.isAdmin && !ensuring[t.id]) { ensuring[t.id] = true; Repo.ensureRoom(t).catch(() => { ensuring[t.id] = false; }); }
     });
   }
@@ -2966,10 +3028,15 @@ function render() {
     case 'auth': node = renderAuth(); break;
     case 'lobby': node = renderLobby(); break;
     case 'table': node = renderTable(); break;
-        case 'admin': node = renderAdmin(); break;
+    case 'admin': node = renderAdmin(); break;
+    case 'banned': node = renderBanned(); break;
     case 'error': node = renderLoadError(); break;
     default: node = renderLoading();
   }
+  /* an admin who is typing keeps their keyboard: a snapshot arriving must not rebuild the form under their fingers */
+  const ae = document.activeElement;
+  if (r.name === 'admin' && !enter && !Admin.force && ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName) && $('screen').contains(ae)) return;
+  Admin.force = false;
   if (enter) node.classList.add('enter');
   /* a snapshot that changes nothing you can see (a heartbeat, say) must not rebuild the screen: that is what made it flicker */
   const html = r.name === 'table' && !enter ? node.outerHTML : null;
@@ -3000,52 +3067,6 @@ function renderLoadError() {
 // A player's picture: a portrait when we have one, otherwise the emoji.
 function avatarNode(id) {
   return IMG['av_' + id] ? h('img', { class: 'avimg', src: IMG['av_' + id], alt: '', draggable: 'false' }) : h('span', { class: 'ava', text: avatarEmoji(id) });
-}
-
-/* ---- admin dashboard (setup and navigation; full dealer tools in Phase 7) ---- */
-function renderAdmin() {
-  const pub = TABLES.filter(t => !t.private);
-  const cards = pub.map(t => {
-    const doc = S.rooms[t.id], loaded = !!S.roomsLoaded[t.id];
-    const on = hostLive(doc);
-    return h('div', { class: 'card tight', 'data-table': t.id },
-      h('div', { class: 'row' }, h('strong', { class: 'gold', text: t.mode ? tableName(t) : tableName(t) + ' \u00B7 ' + tableStake(t) }),
-        h('span', { class: 'badge ' + (!loaded ? '' : !doc ? 'off' : on ? 'on' : ''), text: !loaded ? 'Loading' : !doc ? 'Not set up' : on ? 'Being played' : 'Quiet' })),
-      h('div', { class: 'muted', text: 'Buy-in ' + fmt(t.min) + ' - ' + fmt(t.max) }),
-      h('div', { class: 'astats' },
-        h('div', {}, h('b', { text: doc ? String(on ? (doc.seated || 0) : 0) : '-' }), h('span', { text: 'Seated' })),
-        h('div', {}, h('b', { text: doc ? doc.status : '-' }), h('span', { text: 'Status' }))),
-      h('button', { class: 'btn-secondary btn-small', type: 'button', 'data-enter': t.id, text: 'Enter table', disabled: !doc, style: 'margin-top:10px;width:100%', onclick: () => { location.hash = '#/table/' + t.id; } }));
-  });
-  const missing = pub.filter(t => S.roomsLoaded[t.id] && !S.rooms[t.id]).length;
-
-  /* the private table: the admin opens it with a room code and password, and can close it again */
-  const pd = S.rooms[PRIVATE_ID], pLoaded = !!S.roomsLoaded[PRIVATE_ID], pOpen = !!pd && pd.status === 'open', pOn = hostLive(pd), sec = S.privSecret;
-  const privCard = h('div', { class: 'card tight', id: 'privCard', 'data-table': PRIVATE_ID },
-    h('div', { class: 'row' }, h('strong', { class: 'gold', text: (pd ? pd.name : 'Private table') + (pd ? ' \u00B7 Boot ' + pd.boot : '') }),
-      h('span', { id: 'privBadge', class: 'badge ' + (!pLoaded ? '' : pOpen ? 'on' : 'off'), text: !pLoaded ? 'Loading' : !pd ? 'Not created' : pOpen ? 'Open' : 'Closed' })),
-    pd ? h('div', { class: 'muted', text: 'Buy-in ' + fmt(pd.minBuyIn) + ' - ' + fmt(pd.maxBuyIn) }) : h('div', { class: 'muted', text: 'Only you can open it. Players need its room code and password.' }),
-    pd ? h('div', { class: 'astats' },
-      h('div', {}, h('b', { text: String(pOn ? (pd.seated || 0) : 0) }), h('span', { text: 'Seated' })),
-      h('div', {}, h('b', { text: pd.status }), h('span', { text: 'Status' }))) : null,
-    sec ? h('div', { id: 'privSecret', class: 'secretbox' },
-      h('div', {}, h('span', { text: 'ROOM CODE' }), h('b', { id: 'privCodeShown', text: sec.code })),
-      h('div', {}, h('span', { text: 'PASSWORD' }), h('b', { id: 'privPassShown', text: sec.password }))) : null,
-    h('div', { class: 'controls', style: 'margin-top:10px' },
-      h('button', { id: 'privOpenBtn', class: 'btn-primary btn-small', type: 'button', text: pd ? 'Change code or stake' : 'Open the private table', onclick: () => Sheets.privateAdmin() }),
-      sec && pOpen ? h('button', { id: 'privCopyBtn', class: 'btn-secondary btn-small', type: 'button', text: 'Copy invite', onclick: copyInvite }) : null,
-      pOpen ? h('button', { id: 'privCloseBtn', class: 'btn-ghost btn-small', type: 'button', text: 'Close it', disabled: !!S.busy.closePriv, onclick: handleClosePrivate }) : null,
-      h('button', { class: 'btn-secondary btn-small', type: 'button', 'data-enter': PRIVATE_ID, text: 'Enter table', disabled: !pd, onclick: () => { location.hash = '#/table/' + PRIVATE_ID; } })));
-  return h('div', {},
-    h('div', { class: 'card' },
-      h('div', { class: 'eyebrow', text: 'Administrator' }),
-      h('h2', { text: 'Table dashboard' }),
-      h('p', { class: 'muted', text: 'Signed in as ' + (S.user.email || S.user.uid) + '. Twelve public tables with fixed IDs (six Classic, six Variant), plus one private table you open yourself. Setup is safe to run again.' }),
-      missing ? h('div', { class: 'msg err', role: 'alert', text: missing + ' table(s) are not set up. Press the button below.' }) : null,
-      h('div', { id: 'setupMsg', class: 'msg ok', role: 'status', hidden: !S.setupMsg, text: S.setupMsg || '' }),
-      h('div', { class: 'controls' },
-        h('button', { id: 'setupBtn', class: 'btn-primary' + (S.busy.setup ? ' busy' : ''), type: 'button', text: 'Set up / refresh the public tables', disabled: !!S.busy.setup, onclick: handleSetup }))),
-    h('div', { class: 'table-grid', id: 'adminGrid' }, cards.concat(privCard)));
 }
 
 /* ---- table room ---- */
@@ -3494,7 +3515,7 @@ function tileState(t) {
   const st = { doc, loaded, mine, usable: false, badge: '', badgeCls: '', meta: '', n: 0, cta: 'Unavailable' };
   if (!loaded) { st.badge = 'Loading'; st.meta = t.private ? 'Invite only' : ''; st.cta = '...'; return st; }
   if (!doc) { st.badge = t.private ? 'Not open' : 'Not ready'; st.badgeCls = 'off'; st.meta = t.private ? 'Invite only' : 'Not set up yet'; st.cta = t.private ? 'Not open' : 'Not ready'; return st; }
-  if (doc.status !== 'open' && !mine) { st.badge = t.private ? 'Not open' : 'Closed'; st.badgeCls = 'off'; st.meta = t.private ? 'Invite only' : 'Table closed'; st.cta = t.private ? 'Not open' : 'Closed'; return st; }
+  if (doc.status !== 'open' && !mine) { st.badge = t.private ? 'Not open' : 'Maintenance'; st.badgeCls = 'off'; st.meta = t.private ? 'Invite only' : 'Under maintenance'; st.cta = t.private ? 'Not open' : 'Closed'; return st; }
   st.usable = true;
   st.n = hostLive(doc) ? (doc.seated || 0) : 0;
   st.badge = mine ? 'Your seat' : 'Open'; st.badgeCls = 'on';
@@ -3544,7 +3565,7 @@ function renderLobby() {
   parts.push(h('b', { id: 'walletBal', class: 'nlbal', style: nlBox(1486, 34, 1594, 80) + ';font-size:max(9px,calc(var(--u) * ' + (String(p.chips).length > 6 ? 27 : 34) + '))', text: fmt(p.chips) }));
   parts.push(hit('lbWallet', [1428, 30, 1648, 84], 'Wallet and add chips', () => Sheets.wallet()));
   parts.push(hit('lbGift', [1662, 28, 1718, 84], 'Gifts', () => Sheets.soon('Gifts', 'Daily bonuses and gifts from friends.')));
-  parts.push(hit('lbMail', [1727, 28, 1783, 84], 'Messages', () => Sheets.soon('Messages', 'Messages from the club and your friends.')));
+  { const mail = hit('lbMail', [1727, 28, 1783, 84], 'Messages', () => Sheets.inbox()), un = Notices.unread().length; if (un) mail.appendChild(h('i', { class: 'nldot', text: String(un) })); parts.push(mail); }
   parts.push(hit('lbBell', [1792, 28, 1848, 84], 'Notifications', () => Sheets.soon('Notifications', 'Table invites and updates will show up here.')));
 
   /* the side menu: leather rows with a gold edge, like the badge */
@@ -3814,7 +3835,7 @@ function handleAdminRemove(m) {
 function handleSetup() {
   return withBusy('setup', 'set up tables', async () => {
     const r = await Repo.setupTables();
-    S.setupMsg = 'Tables ready. Created ' + r.created + ', repaired ' + r.repaired + ', already correct ' + r.unchanged + '.';
+    S.setupMsg = 'Tables ready. Created ' + r.created + ', already set up ' + r.unchanged + '.';
   });
 }
 
@@ -4135,7 +4156,7 @@ const Dealer = {
     const humans = readyHumans(R);
     const parts = R.members.filter(m => m.seatState === 'seated').slice(0, MAX_HUMAN_SEATS).map(m => ({ id: m.uid, name: m.name, avatar: m.avatar, chips: m.stack }));
     if (humans.length === 1 && Dealer.botSeated()) TEST_BOTS.forEach(t => { const b = Dealer.botDoc(t.id); parts.push({ id: b.botId, name: b.name, avatar: 'bot', chips: b.stack, bot: true }); });
-    const r = startHand({ tableId: R.id, boot: cfg.boot, variant: cfg.random ? ENGINE.VARIANT_IDS[secureRandInt(ENGINE.VARIANT_IDS.length)] : cfg.variant, participants: parts, prev, now: Date.now(), rnd: secureRandInt });
+    const r = startHand({ tableId: R.id, boot: cfg.boot, blindMax: cfg.blind, chaalMax: cfg.chaal, potMax: cfg.pot, variant: cfg.random ? ENGINE.VARIANT_IDS[secureRandInt(ENGINE.VARIANT_IDS.length)] : cfg.variant, participants: parts, prev, now: Date.now(), rnd: secureRandInt });
     if (r.error) { S.dealerInfo.lastError = r.error; scheduleRender(); return; }
     S.dealerInfo.lastError = '';
     Dealer.commit(r.G, r.hands);
@@ -4831,7 +4852,7 @@ const Sheets = {
     const th = (cls, inner) => h('span', { class: 'qth ' + cls }, inner);
     const row = (cls, inner, ...txt) => h('div', { class: 'qrow' }, th(cls, inner), h('div', {}, ...txt));
     const B = t => h('b', { text: t });
-    const cfg0 = S.room && TABLE_BY_ID[S.room.id], cfgCaps = cfg0 && cfg0.boot ? bootInfo(cfg0.boot) : null;
+    const cfg0 = S.room && TABLE_BY_ID[S.room.id], cfgCaps = cfg0 && cfg0.boot ? { blind: cfg0.blind || bootInfo(cfg0.boot).blind, chaal: cfg0.chaal || bootInfo(cfg0.boot).chaal, pot: cfg0.pot || bootInfo(cfg0.boot).pot } : null;
     const sec = (t, ...rows) => h('div', { class: 'hsec' }, h('div', { class: 'qh', text: t }), ...rows);
     const how = h('div', { class: 'howto' },
       sec('Setup',
@@ -5148,8 +5169,14 @@ const Sheets = {
     const SAFE = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
     const _kp = i => Keypad.attach(i, 'alnum');
     const name = h('input', { id: 'paName', type: 'text', maxlength: 24, value: pd ? pd.name : 'Private Table', 'aria-label': 'Table name' });
-    const stake = h('select', { id: 'paStake', 'aria-label': 'Stake' }, STAKES.map(x => h('option', { value: String(x.boot), text: 'Boot ' + x.boot + '  \u00B7  buy-in ' + fmt(x.min) + ' - ' + fmt(x.max) })));
-    stake.value = String(pd ? pd.boot : 10);
+    const stake = h('select', { id: 'paStake', 'aria-label': 'Stake' }, STAKES.map(x => h('option', { value: String(x.boot), text: 'Boot ' + x.boot + '  \u00B7  buy-in ' + fmt(x.min) + ' - ' + fmt(x.max) })).concat(h('option', { value: 'custom', text: 'Custom numbers' })));
+    const cur = pd ? { boot: pd.boot, min: pd.minBuyIn, max: pd.maxBuyIn, blind: PRIVATE_CFG.blind, chaal: PRIVATE_CFG.chaal, pot: PRIVATE_CFG.pot } : (() => { const x = STAKES.find(s => s.boot === 10), i = bootInfo(10); return { boot: 10, min: x.min, max: x.max, blind: i.blind, chaal: i.chaal, pot: i.pot }; })();
+    const isPreset = STAKES.some(x => x.boot === cur.boot && x.min === cur.min && x.max === cur.max) && cur.blind === cur.boot * 16 && cur.chaal === cur.boot * 64 && cur.pot === cur.boot * 512;
+    stake.value = isPreset ? String(cur.boot) : 'custom';
+    const num = (id, v) => h('input', { id, type: 'number', min: 1, inputmode: 'numeric', value: String(v), oninput: () => { stake.value = 'custom'; } });
+    const nf = { boot: num('paBoot', cur.boot), min: num('paMin', cur.min), max: num('paMax', cur.max), blind: num('paBlind', cur.blind), chaal: num('paChaal', cur.chaal), pot: num('paPot', cur.pot) };
+    const fillFrom = b => { const x = STAKES.find(s => s.boot === b), i = bootInfo(b); nf.boot.value = b; nf.min.value = x ? x.min : i.min; nf.max.value = x ? x.max : i.max; nf.blind.value = i.blind; nf.chaal.value = i.chaal; nf.pot.value = i.pot; };
+    stake.onchange = () => { if (stake.value !== 'custom') fillFrom(Number(stake.value)); };
     const code = h('input', { id: 'paCode', type: 'text', maxlength: 12, value: sec ? sec.code : rnd(6, SAFE), autocapitalize: 'characters', autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Room code' });
     const pass = h('input', { id: 'paPass', type: 'text', maxlength: 20, value: sec ? sec.password : rnd(6, SAFE), autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Password' });
     _kp(code); _kp(pass);
@@ -5158,7 +5185,7 @@ const Sheets = {
     save.onclick = async () => {
       save.disabled = true; err.hidden = true;
       try {
-        const r = await Repo.openPrivate({ name: name.value, boot: Number(stake.value), code: code.value, password: pass.value });
+        const r = await Repo.openPrivate({ name: name.value, boot: Number(nf.boot.value), min: Number(nf.min.value), max: Number(nf.max.value), blind: Number(nf.blind.value), chaal: Number(nf.chaal.value), pot: Number(nf.pot.value), code: code.value, password: pass.value });
         S.privSecret = { code: r.code, password: r.password };
         Sheets.close(); toast('The private table is open.'); scheduleRender();
       } catch (e) { err.textContent = friendlyError(e); err.hidden = false; save.disabled = false; }
@@ -5167,6 +5194,7 @@ const Sheets = {
       h('p', { class: 'hnote', style: 'text-align:left;font-size:13px', text: 'Players type the room code and password to sit here. Changing them locks out anyone who has not been given the new ones (people already seated stay seated).' }),
       h('div', { class: 'field' }, h('label', { for: 'paName', text: 'TABLE NAME' }), name),
       h('div', { class: 'field' }, h('label', { for: 'paStake', text: 'STAKE' }), stake),
+      h('div', { class: 'agrid' }, ...[['paBoot', 'boot', 'BOOT'], ['paMin', 'min', 'LOWEST BUY-IN'], ['paMax', 'max', 'HIGHEST BUY-IN'], ['paBlind', 'blind', 'MAX BLIND'], ['paChaal', 'chaal', 'MAX CHAAL'], ['paPot', 'pot', 'POT LIMIT']].map(([id, k, l]) => h('div', { class: 'field' }, h('label', { for: id, text: l }), nf[k]))),
       h('div', { class: 'field' }, h('label', { for: 'paCode', text: 'ROOM CODE (4-12 LETTERS OR NUMBERS)' }), code),
       h('div', { class: 'field' }, h('label', { for: 'paPass', text: 'PASSWORD (4-20 CHARACTERS)' }), pass),
       h('button', { id: 'paGen', type: 'button', class: 'btn-ghost btn-small', text: 'Generate a new code and password', onclick: () => { code.value = rnd(6, SAFE); pass.value = rnd(6, SAFE); } }),
@@ -5379,6 +5407,443 @@ const Keypad = {
 };
 
 /* ==========================================================================
+   SECTION 30 - ADMIN CONTROL ROOM
+   One page of tiles: Tables, Private table, Players, Notifications, Rewards. Each tile opens its own view.
+   Every power here is enforced by firestore.rules; this screen only asks.
+   ========================================================================== */
+const Admin = {
+  st: { view: 'hub', users: null, stats: {}, loading: false, q: '', filter: 'all', sel: '', edit: '', draft: {}, notices: null, aud: { type: 'all', n: 1000, picked: [] }, nTitle: '', nBody: '', rAmt: '', rNote: 'A gift from the club', chipAmt: '', chipNote: '', msg: '', msgKind: 'ok' },
+  go(view) { Admin.st.aud = { type: 'all', n: 1000, picked: [] }; Admin.st.view = view; Admin.st.msg = ''; Admin.st.sel = ''; Admin.st.edit = ''; if (view === 'players' || view === 'notify' || view === 'rewards') Admin.loadUsers(); if (view === 'notify' || view === 'rewards') Admin.loadNotices(); Admin.paint(); },
+  paint() { Admin.force = true; scheduleRender(); },
+  say(text, kind) { Admin.st.msg = text; Admin.st.msgKind = kind || 'ok'; Admin.paint(); },
+  async loadUsers(force) {
+    const a = Admin.st;
+    if (a.loading || (a.users && !force)) return;
+    a.loading = true; Admin.paint();
+    try {
+      const users = await Repo.listUsers();
+      a.users = users;
+      const stats = await Promise.all(users.map(u => Repo.getStats(u.uid).then(s => [u.uid, s], () => [u.uid, null])));
+      stats.forEach(([id, s]) => { a.stats[id] = s; });
+    } catch (e) { Admin.say(friendlyError(e), 'err'); }
+    a.loading = false; Admin.paint();
+  },
+  async loadNotices() {
+    try { Admin.st.notices = await Repo.listNotices(); Admin.paint(); } catch (e) { Admin.say(friendlyError(e), 'err'); }
+  },
+  /* ---- who a message or reward is for ---- */
+  AUDIENCES: [
+    ['all', 'Every player'], ['playing', 'Playing right now'], ['recent', 'Played in the last 7 days'], ['inactive', 'Not played for 14 days or more'],
+    ['newbies', 'Joined in the last 7 days'], ['low', 'Chips below an amount'], ['high', 'Chips at or above an amount'], ['picked', 'Players I choose']],
+  pick() {
+    const a = Admin.st, au = a.aud, now = Date.now(), day = 864e5, us = (a.users || []).filter(u => u.banned !== true);
+    const ms = v => (v && v.toMillis ? v.toMillis() : 0);
+    switch (au.type) {
+      case 'playing': return us.filter(u => u.tableId);
+      case 'recent': return us.filter(u => now - ms(u.updatedAt) < 7 * day);
+      case 'inactive': return us.filter(u => now - ms(u.updatedAt) >= 14 * day);
+      case 'newbies': return us.filter(u => now - ms(u.createdAt) < 7 * day);
+      case 'low': return us.filter(u => u.chips < au.n);
+      case 'high': return us.filter(u => u.chips >= au.n);
+      case 'picked': return us.filter(u => au.picked.includes(u.uid));
+      default: return us;
+    }
+  },
+  /* the "who is this for" box shared by Notifications and Rewards */
+  audienceBox() {
+    const a = Admin.st, au = a.aud, who = Admin.pick();
+    const sel = h('select', { id: 'audType', 'aria-label': 'Who is it for', onchange: e => { au.type = e.target.value; Admin.paint(); } }, Admin.AUDIENCES.map(([v, t]) => h('option', { value: v, text: t })));
+    sel.value = au.type;
+    const num = (au.type === 'low' || au.type === 'high') ? h('input', { id: 'audN', type: 'number', min: 0, inputmode: 'numeric', value: String(au.n), 'aria-label': 'Amount', oninput: e => { au.n = Math.max(0, Math.floor(Number(e.target.value) || 0)); Admin.refreshCount(); } }) : null;
+    const list = au.type === 'picked' ? h('div', { class: 'apick', id: 'audList' }, (a.users || []).filter(u => u.banned !== true).map(u => h('label', { class: 'apickrow' },
+      h('input', { type: 'checkbox', checked: au.picked.includes(u.uid), 'data-uid': u.uid, onchange: e => { const i = au.picked.indexOf(u.uid); if (e.target.checked && i < 0) au.picked.push(u.uid); if (!e.target.checked && i >= 0) au.picked.splice(i, 1); Admin.refreshCount(); } }),
+      h('span', { text: u.name + (u.email ? '  ·  ' + u.email : '') })))) : null;
+    return h('div', { class: 'field' }, h('label', { for: 'audType', text: 'WHO IS IT FOR' }), sel, num ? h('div', { style: 'margin-top:8px' }, num) : null, list,
+      h('div', { class: 'acount', id: 'audCount', text: a.users ? 'Reaches ' + who.length + (who.length === 1 ? ' player' : ' players') + (who.length ? ': ' + who.slice(0, 4).map(u => u.name).join(', ') + (who.length > 4 ? ' and ' + (who.length - 4) + ' more' : '') : '') + '. Banned players are left out.' : 'Loading players...' }));
+  },
+  refreshCount() { const el = $('audCount'); if (el) { const who = Admin.pick(); el.textContent = 'Reaches ' + who.length + (who.length === 1 ? ' player' : ' players') + (who.length ? ': ' + who.slice(0, 4).map(u => u.name).join(', ') + (who.length > 4 ? ' and ' + (who.length - 4) + ' more' : '') : '') + '. Banned players are left out.'; } },
+  csv() {
+    const a = Admin.st, q = v => '"' + String(v === undefined || v === null ? '' : v).replace(/"/g, '""') + '"';
+    const ms = v => (v && v.toMillis ? new Date(v.toMillis()).toISOString().slice(0, 16).replace('T', ' ') : '');
+    const cols = ['Name', 'Email', 'Player ID', 'Chips', 'Seated at', 'Banned', 'Joined', 'Last active', 'Hands', 'Wins', 'Win %', 'Best streak', 'Biggest pot', 'Peak chips', 'Packs', 'Blind hands'];
+    const rows = (a.users || []).map(u => { const s = a.stats[u.uid] || {}, hd = s.hands || 0;
+      return [u.name, u.email || '', u.uid, u.chips, u.tableId ? tableName(TABLE_BY_ID[u.tableId] || { boot: '?' }) : '', u.banned ? 'Yes' : 'No', ms(u.createdAt), ms(u.updatedAt), hd, s.wins || 0, hd ? Math.round((s.wins || 0) / hd * 100) : 0, s.best || 0, s.bigPot || 0, s.peak || 0, s.packs || 0, s.blindHands || 0]; });
+    const text = '﻿' + [cols].concat(rows).map(r => r.map(q).join(',')).join('\r\n');
+    const url = URL.createObjectURL(new Blob([text], { type: 'text/csv;charset=utf-8' }));
+    const el = h('a', { href: url, download: 'teen-patti-players-' + new Date().toISOString().slice(0, 10) + '.csv' });
+    document.body.appendChild(el); el.click(); el.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000);
+    return text;
+  }
+};
+
+/* ---- repository additions for the admin (rules: users list/update by admin, rooms update, notices create/delete) ---- */
+Object.assign(Repo, {
+  async listUsers() { const s = await db.collection('users').get(); return s.docs.map(d => d.data()).sort((a, b) => String(a.name).localeCompare(String(b.name))); },
+  async listNotices() { const s = await db.collection('notices').get(); return s.docs.map(d => Object.assign({ id: d.id }, d.data())).sort((a, b) => ((b.createdAt && b.createdAt.toMillis ? b.createdAt.toMillis() : 0) - (a.createdAt && a.createdAt.toMillis ? a.createdAt.toMillis() : 0))).slice(0, 30); },
+  async tableIsEmpty(id) { const ms = await Repo.membersCol(id).get(); return ms.empty; },
+  // Opens or closes a table. Closing stops new players joining; people already seated can finish and leave.
+  setTableStatus(id, status) { return Repo.roomRef(id).update({ status, updatedAt: FV.serverTimestamp() }); },
+  // Changes a table's numbers. The table must be closed and empty (the rules check it too). `reopen` publishes it again.
+  async saveTable(id, v, reopen) {
+    if (!(await Repo.tableIsEmpty(id))) throw new AppError('Players are still seated at this table. Wait until they have left, then publish.');
+    const upd = { boot: v.boot, minBuyIn: v.min, maxBuyIn: v.max, maxBlind: v.blind, maxChaal: v.chaal, potLimit: v.pot, updatedAt: FV.serverTimestamp() };
+    if (reopen) upd.status = 'open';
+    await Repo.roomRef(id).update(upd);
+  },
+  setBanned(uid, banned) { return Repo.userRef(uid).update({ banned, updatedAt: FV.serverTimestamp() }); },
+  // Adds (or, with a negative amount, removes) chips in one wallet. The rules check that the note and the change agree.
+  async grantChips(uid, amount, note) {
+    await db.runTransaction(async tx => {
+      const ref = Repo.userRef(uid), s = await tx.get(ref);
+      if (!s.exists) throw new AppError('That player was not found.');
+      const now = s.data().chips, next = now + amount;
+      if (next < 0) throw new AppError('That player only has ' + fmt(now) + ' chips.');
+      tx.update(ref, { chips: next, lastGrant: { amount, note: String(note || '').slice(0, 80), at: FV.serverTimestamp() }, updatedAt: FV.serverTimestamp() });
+    });
+  },
+  sendNotice(o) {
+    return db.collection('notices').add({ title: o.title, body: o.body, kind: o.kind, all: !!o.all, uids: o.uids || [], count: o.count || 0, amount: o.amount || 0, createdAt: FV.serverTimestamp() });
+  },
+  deleteNotice(id) { return db.collection('notices').doc(id).delete(); }
+});
+
+/* Runs an admin action; any error is shown at the top of the page instead of a passing toast. */
+async function adminBusy(key, context, fn) {
+  if (S.busy[key]) return undefined;
+  S.busy[key] = true; Admin.paint();
+  try { return await fn(); }
+  catch (e) { console.error('[TeenPatti] ' + context, e && e.code, e && e.message); Admin.say(friendlyError(e), 'err'); return undefined; }
+  finally { S.busy[key] = false; Admin.paint(); }
+}
+/* ---------------------------------------------------------------- views ---- */
+const ADMIN_TILES = [
+  ['tables', 'tileTables', 'Public tables', 'Set up, customise, close for maintenance'],
+  ['private', 'tilePrivate', 'Private table', 'Create or watch your invite-only table'],
+  ['players', 'tilePlayers', 'Players', 'Profiles, chips, bans and CSV export'],
+  ['notify', 'tileNotify', 'Notifications', 'Message all players or a group'],
+  ['rewards', 'tileRewards', 'Rewards', 'Give chips to all players or a group']];
+const ADMIN_ICON = { tables: '♠', private: '♛', players: '☺', notify: '✉', rewards: '★' };
+
+function renderAdmin() {
+  const a = Admin.st;
+  const back = title => h('div', { class: 'aback' },
+    h('button', { id: 'adminBack', type: 'button', class: 'btn-ghost btn-small', text: '← Control room', onclick: () => Admin.go('hub') }),
+    h('h2', { text: title }));
+  const msg = h('div', { id: 'adminMsg', class: 'msg ' + (a.msgKind === 'err' ? 'err' : 'ok'), role: 'status', hidden: !a.msg, text: a.msg });
+  if (a.view === 'tables') return h('div', {}, back('Public tables'), adminTables(msg));
+  if (a.view === 'private') return h('div', {}, back('Private table'), adminPrivate());
+  if (a.view === 'players') return h('div', {}, back('Players'), msg, adminPlayers());
+  if (a.view === 'notify') return h('div', {}, back('Notifications'), msg, adminNotify());
+  if (a.view === 'rewards') return h('div', {}, back('Rewards'), msg, adminRewards());
+  // the control room: one tile per job
+  const pub = TABLES.filter(t => !t.private), live = pub.filter(t => hostLive(S.rooms[t.id])).length;
+  const pd = S.rooms[PRIVATE_ID];
+  const info = {
+    tables: pub.length + ' tables' + (live ? ' · ' + live + ' live' : ''),
+    private: !pd ? 'Not created yet' : pd.status === 'open' ? 'Open' + (hostLive(pd) ? ' · ' + (pd.seated || 0) + ' seated' : '') : 'Closed',
+    players: a.users ? a.users.length + ' players' : 'View and manage',
+    notify: 'Send a message', rewards: 'Send chips'
+  };
+  return h('div', {},
+    h('div', { class: 'card' },
+      h('div', { class: 'eyebrow', text: 'Administrator' }),
+      h('h2', { text: 'Control room' }),
+      h('p', { class: 'muted', text: 'Signed in as ' + (S.user.email || S.user.uid) + '. Pick a job below.' })),
+    h('div', { class: 'atiles', id: 'adminTiles' }, ADMIN_TILES.map(([v, id, title, sub]) =>
+      h('button', { id, type: 'button', class: 'atile', onclick: () => Admin.go(v) },
+        h('span', { class: 'aic', 'aria-hidden': 'true', text: ADMIN_ICON[v] }),
+        h('b', { text: title }), h('span', { class: 'asub', text: sub }), h('i', { class: 'astat', text: info[v] })))));
+}
+
+/* ---- 1. public tables ---- */
+function adminTables(msg) {
+  const a = Admin.st, pub = TABLES.filter(t => !t.private);
+  const missing = pub.filter(t => S.roomsLoaded[t.id] && !S.rooms[t.id]).length;
+  const head = h('div', { class: 'card' },
+    h('p', { class: 'muted', text: 'Twelve public tables (six Classic, six Variant). To change a table: close it for maintenance, wait until nobody is seated, customise it, then publish. A table that is being played cannot be changed.' }),
+    missing ? h('div', { class: 'msg err', role: 'alert', text: missing + ' table(s) are not set up. Press the button below.' }) : null,
+    h('div', { id: 'setupMsg', class: 'msg ok', role: 'status', hidden: !S.setupMsg, text: S.setupMsg || '' }), msg,
+    h('div', { class: 'controls' },
+      h('button', { id: 'setupBtn', class: 'btn-primary' + (S.busy.setup ? ' busy' : ''), type: 'button', text: 'Set up / refresh the public tables', disabled: !!S.busy.setup, onclick: handleSetup })));
+  const cards = pub.map(t => {
+    const doc = S.rooms[t.id], loaded = !!S.roomsLoaded[t.id];
+    const on = hostLive(doc), closed = !!doc && doc.status !== 'open';
+    const editing = a.edit === t.id;
+    const badge = !loaded ? ['', 'Loading'] : !doc ? ['off', 'Not set up'] : closed ? ['off', 'Maintenance'] : on ? ['on', 'Being played'] : ['', 'Open, quiet'];
+    return h('div', { class: 'card tight', 'data-table': t.id },
+      h('div', { class: 'row' }, h('strong', { class: 'gold', text: tableName(t) }), h('span', { class: 'badge ' + badge[0], text: badge[1] })),
+      h('div', { class: 'muted', text: 'Buy-in ' + fmt(t.min) + ' - ' + fmt(t.max) }),
+      h('div', { class: 'muted', text: 'Max blind ' + fmt(t.blind) + '  ·  Max chaal ' + fmt(t.chaal) + '  ·  Pot limit ' + fmt(t.pot) }),
+      h('div', { class: 'astats' },
+        h('div', {}, h('b', { text: doc ? String(on ? (doc.seated || 0) : 0) : '-' }), h('span', { text: 'Seated' })),
+        h('div', {}, h('b', { text: doc ? (closed ? 'closed' : 'open') : '-' }), h('span', { text: 'Status' }))),
+      editing ? adminTableForm(t, doc, on) : null,
+      h('div', { class: 'controls', style: 'margin-top:10px' },
+        doc && !editing ? h('button', { id: 'edit_' + t.id, class: 'btn-secondary btn-small', type: 'button', text: 'Customise', onclick: () => { a.edit = t.id; a.draft = { boot: t.boot, min: t.min, max: t.max, blind: t.blind, chaal: t.chaal, pot: t.pot }; Admin.paint(); } }) : null,
+        doc && !closed ? h('button', { id: 'close_' + t.id, class: 'btn-ghost btn-small', type: 'button', text: 'Close for maintenance', onclick: () => adminSetStatus(t, 'closed') }) : null,
+        doc && closed && !editing ? h('button', { id: 'open_' + t.id, class: 'btn-primary btn-small', type: 'button', text: 'Reopen table', onclick: () => adminSetStatus(t, 'open') }) : null,
+        h('button', { class: 'btn-secondary btn-small', type: 'button', 'data-enter': t.id, text: 'Watch table', disabled: !doc, onclick: () => { location.hash = '#/table/' + t.id; } })));
+  });
+  return h('div', {}, head, h('div', { class: 'table-grid one', id: 'adminGrid' }, cards));
+}
+const LIMIT_FIELDS = [['boot', 'BOOT (ENTRY STAKE)'], ['min', 'LOWEST BUY-IN'], ['max', 'HIGHEST BUY-IN'], ['blind', 'MAX BLIND (ONE MOVE)'], ['chaal', 'MAX CHAAL (ONE MOVE)'], ['pot', 'POT LIMIT (HANDS ARE SHOWN)']];
+// Reads and checks the numbers in a customise form.
+function readLimits(d) {
+  const v = {}; for (const [k] of LIMIT_FIELDS) v[k] = Number(d[k]);
+  if (!LIMIT_FIELDS.every(([k]) => Number.isInteger(v[k]) && v[k] > 0)) return { error: 'Every number must be a whole number above zero.' };
+  if (v.boot > 100000) return { error: 'The boot can be at most 100,000.' };
+  if (v.min < v.boot) return { error: 'The lowest buy-in cannot be below the boot.' };
+  if (v.max < v.min) return { error: 'The highest buy-in cannot be below the lowest.' };
+  if (v.blind < v.boot) return { error: 'The max blind cannot be below the boot.' };
+  if (v.chaal < v.boot * 2) return { error: 'The max chaal must be at least twice the boot.' };
+  if (v.pot < v.boot * 4) return { error: 'The pot limit must be at least four times the boot.' };
+  if (v.max > 1e9 || v.pot > 1e9 || v.chaal > 1e9) return { error: 'That number is too large.' };
+  return { v };
+}
+function adminTableForm(t, doc, on) {
+  const a = Admin.st, d = a.draft, closed = !!doc && doc.status !== 'open';
+  const inputs = LIMIT_FIELDS.map(([k, label]) => h('div', { class: 'field' }, h('label', { for: 'tf_' + k, text: label }),
+    h('input', { id: 'tf_' + k, type: 'number', min: 1, inputmode: 'numeric', value: String(d[k]), disabled: !closed, oninput: e => { d[k] = e.target.value; } })));
+  const err = h('div', { id: 'tfErr', class: 'msg err', role: 'alert', hidden: true });
+  const act = reopen => async () => {
+    const r = readLimits(d); if (r.error) { err.textContent = r.error; err.hidden = false; return; }
+    err.hidden = true;
+    await adminBusy('save_' + t.id, 'save table', async () => {
+      await Repo.saveTable(t.id, r.v, reopen);
+      a.edit = ''; Admin.say(tableName(t) + (reopen ? ' is published and open again.' : ' is saved. It stays closed until you reopen it.'));
+    });
+  };
+  const std = () => { const b = Number(d.boot); if (!Number.isInteger(b) || b < 1) return; const i = bootInfo(b); Object.assign(d, { min: i.min, max: i.max, blind: i.blind, chaal: i.chaal, pot: i.pot }); Admin.paint(); };
+  return h('div', { class: 'aform', id: 'tableForm' },
+    !closed ? h('div', { class: 'msg', text: 'Close this table for maintenance first. Numbers can only change while it is closed and nobody is seated.' }) : (on ? h('div', { class: 'msg', text: 'Players are still seated. You can publish once they have left.' }) : null),
+    h('div', { class: 'agrid' }, inputs),
+    err,
+    h('div', { class: 'controls' },
+      h('button', { id: 'tfStd', class: 'btn-ghost btn-small', type: 'button', text: 'Fill the standard numbers for this boot', disabled: !closed, onclick: std }),
+      h('button', { id: 'tfSave', class: 'btn-secondary btn-small', type: 'button', text: 'Save, keep closed', disabled: !closed || !!S.busy['save_' + t.id], onclick: act(false) }),
+      h('button', { id: 'tfPublish', class: 'btn-primary btn-small', type: 'button', text: 'Publish and reopen', disabled: !closed || !!S.busy['save_' + t.id], onclick: act(true) }),
+      h('button', { id: 'tfCancel', class: 'btn-ghost btn-small', type: 'button', text: 'Cancel', onclick: () => { a.edit = ''; Admin.paint(); } })));
+}
+function adminSetStatus(t, status) {
+  if (status === 'closed' && !confirm('Put ' + tableName(t) + ' under maintenance? Nobody new can join. Players already seated can finish and leave.')) return;
+  return adminBusy('st_' + t.id, 'change table status', async () => {
+    await Repo.setTableStatus(t.id, status);
+    Admin.say(tableName(t) + (status === 'closed' ? ' is under maintenance.' : ' is open.'));
+  });
+}
+
+/* ---- 2. the private table ---- */
+function adminPrivate() {
+  const pd = S.rooms[PRIVATE_ID], pLoaded = !!S.roomsLoaded[PRIVATE_ID], pOpen = !!pd && pd.status === 'open', pOn = hostLive(pd), sec = S.privSecret;
+  const cfg = PRIVATE_CFG;
+  return h('div', { class: 'card tight', id: 'privCard', 'data-table': PRIVATE_ID },
+    h('div', { class: 'row' }, h('strong', { class: 'gold', text: (pd ? pd.name : 'Private table') + (pd ? ' · Boot ' + pd.boot : '') }),
+      h('span', { id: 'privBadge', class: 'badge ' + (!pLoaded ? '' : pOpen ? 'on' : 'off'), text: !pLoaded ? 'Loading' : !pd ? 'Not created' : pOpen ? 'Open' : 'Closed' })),
+    pd ? h('div', { class: 'muted', text: 'Buy-in ' + fmt(pd.minBuyIn) + ' - ' + fmt(pd.maxBuyIn) }) : h('div', { class: 'muted', text: 'Only you can open it. Players need its room code and password. You can set the boot, buy-in and limits.' }),
+    pd ? h('div', { class: 'muted', text: 'Max blind ' + fmt(cfg.blind) + '  ·  Max chaal ' + fmt(cfg.chaal) + '  ·  Pot limit ' + fmt(cfg.pot) }) : null,
+    pd ? h('div', { class: 'astats' },
+      h('div', {}, h('b', { text: String(pOn ? (pd.seated || 0) : 0) }), h('span', { text: 'Seated' })),
+      h('div', {}, h('b', { text: pd.status }), h('span', { text: 'Status' }))) : null,
+    sec ? h('div', { id: 'privSecret', class: 'secretbox' },
+      h('div', {}, h('span', { text: 'ROOM CODE' }), h('b', { id: 'privCodeShown', text: sec.code })),
+      h('div', {}, h('span', { text: 'PASSWORD' }), h('b', { id: 'privPassShown', text: sec.password }))) : null,
+    h('div', { class: 'controls', style: 'margin-top:10px' },
+      h('button', { id: 'privOpenBtn', class: 'btn-primary btn-small', type: 'button', text: pd ? 'Customise or change code' : 'Create the private table', onclick: () => Sheets.privateAdmin() }),
+      sec && pOpen ? h('button', { id: 'privCopyBtn', class: 'btn-secondary btn-small', type: 'button', text: 'Copy invite', onclick: copyInvite }) : null,
+      pOpen ? h('button', { id: 'privCloseBtn', class: 'btn-ghost btn-small', type: 'button', text: 'Close it', disabled: !!S.busy.closePriv, onclick: handleClosePrivate }) : null,
+      h('button', { class: 'btn-secondary btn-small', type: 'button', 'data-enter': PRIVATE_ID, text: 'Watch table', disabled: !pd, onclick: () => { location.hash = '#/table/' + PRIVATE_ID; } })));
+}
+
+/* ---- 3. players ---- */
+function adminPlayers() {
+  const a = Admin.st, us = a.users;
+  if (!us) return h('div', { class: 'card' }, h('p', { class: 'muted', text: a.loading ? 'Loading players...' : 'No players loaded yet.' }));
+  const now = Date.now(), ms = v => (v && v.toMillis ? v.toMillis() : 0);
+  const FILTERS = [['all', 'All'], ['playing', 'Playing now'], ['banned', 'Banned'], ['low', 'Low chips'], ['new', 'New this week']];
+  const match = u => {
+    const q = a.q.trim().toLowerCase();
+    if (q && !(String(u.name).toLowerCase().includes(q) || String(u.email || '').toLowerCase().includes(q) || u.uid.toLowerCase().includes(q))) return false;
+    return a.filter === 'playing' ? !!u.tableId : a.filter === 'banned' ? u.banned === true : a.filter === 'low' ? u.chips < 1000 : a.filter === 'new' ? now - ms(u.createdAt) < 7 * 864e5 : true;
+  };
+  const shown = us.filter(match);
+  const search = h('input', { id: 'pSearch', type: 'search', placeholder: 'Search name, email or ID', value: a.q, oninput: e => { a.q = e.target.value; Admin.listOnly(); } });
+  const head = h('div', { class: 'card tight' },
+    h('div', { class: 'row' }, h('strong', { class: 'gold', text: us.length + ' players' }),
+      h('button', { id: 'exportCsv', class: 'btn-secondary btn-small', type: 'button', text: 'Export CSV', onclick: () => { Admin.csv(); toast('The player list was saved as a CSV file.'); } })),
+    h('p', { class: 'muted', style: 'font-size:12px;margin:6px 0', text: 'Passwords are never visible to anyone, not even the admin; they are kept scrambled by Firebase. Use "Send password reset" on a player instead. Emails appear once a player has signed in after this update.' }),
+    search,
+    h('div', { class: 'achips', id: 'pFilters' }, FILTERS.map(([v, t]) => h('button', { type: 'button', class: 'achip' + (a.filter === v ? ' on' : ''), 'data-f': v, text: t, onclick: () => { a.filter = v; Admin.paint(); } }))));
+  return h('div', {}, head, h('div', { id: 'pList' }, playerRows(shown)));
+}
+Admin.listOnly = function () { const el = $('pList'); if (!el) return; const us = Admin.st.users || [], a = Admin.st, q = a.q.trim().toLowerCase(); const now = Date.now(), ms = v => (v && v.toMillis ? v.toMillis() : 0); el.replaceChildren(playerRows(us.filter(u => (!q || String(u.name).toLowerCase().includes(q) || String(u.email || '').toLowerCase().includes(q) || u.uid.toLowerCase().includes(q)) && (a.filter === 'playing' ? !!u.tableId : a.filter === 'banned' ? u.banned === true : a.filter === 'low' ? u.chips < 1000 : a.filter === 'new' ? now - ms(u.createdAt) < 7 * 864e5 : true)))); };
+function playerRows(list) {
+  const a = Admin.st;
+  if (!list.length) return h('div', { class: 'card tight' }, h('p', { class: 'muted', text: 'No players match.' }));
+  return h('div', {}, list.map(u => {
+    const open = a.sel === u.uid, s = a.stats[u.uid] || {}, hd = s.hands || 0;
+    return h('div', { class: 'card tight aplayer' + (u.banned ? ' banned' : ''), 'data-uid': u.uid },
+      h('button', { type: 'button', class: 'aprow', 'data-open': u.uid, onclick: () => { a.sel = open ? '' : u.uid; Admin.paint(); } },
+        h('span', { class: 'apav' }, avatarNode(u.avatar)),
+        h('span', { class: 'apwho' }, h('b', { text: u.name }), h('i', { text: u.email || 'email not seen yet' })),
+        h('span', { class: 'apchips', text: fmt(u.chips) }),
+        u.banned ? h('span', { class: 'badge off', text: 'Banned' }) : u.tableId ? h('span', { class: 'badge on', text: 'Playing' }) : null),
+      open ? playerDetail(u, s, hd) : null);
+  }));
+}
+function playerDetail(u, s, hd) {
+  const a = Admin.st, ms = v => (v && v.toMillis ? new Date(v.toMillis()).toLocaleString() : '-');
+  const kv = (k, v) => h('div', {}, h('span', { text: k }), h('b', { text: String(v) }));
+  const amt = h('input', { id: 'chipAmt', type: 'number', min: 1, inputmode: 'numeric', placeholder: 'Chips', value: a.chipAmt, oninput: e => { a.chipAmt = e.target.value; } });
+  const note = h('input', { id: 'chipNote', type: 'text', maxlength: 80, placeholder: 'Reason (the player sees this)', value: a.chipNote, oninput: e => { a.chipNote = e.target.value; } });
+  const move = sign => () => {
+    const n = Number(a.chipAmt);
+    if (!Number.isInteger(n) || n <= 0 || n > 1e9) return Admin.say('Type a whole number of chips above zero.', 'err');
+    const why = a.chipNote.trim() || (sign > 0 ? 'Chips added by the admin' : 'Chips removed by the admin');
+    if (!confirm((sign > 0 ? 'Add ' : 'Remove ') + fmt(n) + ' chips ' + (sign > 0 ? 'to ' : 'from ') + u.name + '?')) return;
+    return adminBusy('chips_' + u.uid, 'change chips', async () => {
+      await Repo.grantChips(u.uid, sign * n, why);
+      u.chips += sign * n; a.chipAmt = ''; a.chipNote = '';
+      await Admin.loadUsers(true);
+      Admin.say((sign > 0 ? 'Added ' : 'Removed ') + fmt(n) + ' chips. ' + u.name + ' now has ' + fmt((a.users.find(x => x.uid === u.uid) || u).chips) + '.');
+    });
+  };
+  return h('div', { class: 'adetail', id: 'playerDetail' },
+    h('div', { class: 'akv' },
+      kv('Name', u.name), kv('Email', u.email || 'not seen yet'), kv('Chips', fmt(u.chips)), kv('Seated at', u.tableId ? tableName(TABLE_BY_ID[u.tableId] || { boot: '?' }) : 'not seated'),
+      kv('Joined', ms(u.createdAt)), kv('Last active', ms(u.updatedAt)), kv('Hands played', hd), kv('Hands won', s.wins || 0),
+      kv('Win rate', hd ? Math.round((s.wins || 0) / hd * 100) + '%' : '-'), kv('Best streak', s.best || 0), kv('Biggest pot', fmt(s.bigPot || 0)), kv('Peak chips', fmt(s.peak || 0)),
+      kv('Packs', s.packs || 0), kv('Blind hands', s.blindHands || 0), kv('Player ID', u.uid), kv('Password', 'hidden by Firebase')),
+    u.lastGrant ? h('div', { class: 'muted', style: 'font-size:12px', text: 'Last admin change: ' + (u.lastGrant.amount > 0 ? '+' : '') + fmt(u.lastGrant.amount) + ' (' + u.lastGrant.note + ')' }) : null,
+    h('div', { class: 'agrid' }, h('div', { class: 'field' }, h('label', { for: 'chipAmt', text: 'CHIPS' }), amt), h('div', { class: 'field' }, h('label', { for: 'chipNote', text: 'NOTE' }), note)),
+    h('div', { class: 'controls' },
+      h('button', { id: 'chipAdd', class: 'btn-primary btn-small', type: 'button', text: 'Add chips', onclick: move(1) }),
+      h('button', { id: 'chipRemove', class: 'btn-secondary btn-small', type: 'button', text: 'Remove chips', onclick: move(-1) })),
+    h('div', { class: 'controls' },
+      h('button', { id: 'banBtn', class: u.banned ? 'btn-primary btn-small' : 'btn-ghost btn-small', type: 'button', text: u.banned ? 'Lift the ban' : 'Ban this player',
+        onclick: () => {
+          if (!u.banned && !confirm('Ban ' + u.name + '? They will be locked out of the game until you lift the ban.')) return;
+          return adminBusy('ban_' + u.uid, 'ban player', async () => { await Repo.setBanned(u.uid, !u.banned); u.banned = !u.banned; Admin.say(u.name + (u.banned ? ' is banned.' : ' can play again.')); });
+        } }),
+      u.email ? h('button', { id: 'resetPw', class: 'btn-secondary btn-small', type: 'button', text: 'Send password reset', onclick: () => adminBusy('pw_' + u.uid, 'send reset', async () => { await Auth.sendReset(u.email); Admin.say('A password reset email was sent to ' + u.email + '.'); }) }) : null));
+}
+
+/* ---- 4. notifications ---- */
+function adminNotify() {
+  const a = Admin.st;
+  const title = h('input', { id: 'nTitle', type: 'text', maxlength: 60, placeholder: 'Title', value: a.nTitle, oninput: e => { a.nTitle = e.target.value; } });
+  const body = h('textarea', { id: 'nBody', maxlength: 500, rows: 4, placeholder: 'Message', oninput: e => { a.nBody = e.target.value; } }); body.value = a.nBody;
+  const send = () => {
+    const who = Admin.pick(), t = a.nTitle.trim();
+    if (!t) return Admin.say('Give the message a title.', 'err');
+    if (!who.length) return Admin.say('Nobody matches that audience.', 'err');
+    if (who.length > 400) return Admin.say('A message can reach 400 players at a time. Narrow the audience.', 'err');
+    if (!confirm('Send "' + t + '" to ' + who.length + ' player' + (who.length === 1 ? '' : 's') + '?')) return;
+    return adminBusy('notify', 'send notification', async () => {
+      await Repo.sendNotice({ title: t, body: a.nBody.trim(), kind: 'info', all: false, uids: who.map(u => u.uid), count: who.length });
+      a.nTitle = ''; a.nBody = ''; await Admin.loadNotices();
+      Admin.say('Sent to ' + who.length + ' player' + (who.length === 1 ? '' : 's') + '. They see it under Messages in the lobby.');
+    });
+  };
+  return h('div', {},
+    h('div', { class: 'card' },
+      h('div', { class: 'field' }, h('label', { for: 'nTitle', text: 'TITLE' }), title),
+      h('div', { class: 'field' }, h('label', { for: 'nBody', text: 'MESSAGE' }), body),
+      Admin.audienceBox(),
+      h('div', { class: 'controls' }, h('button', { id: 'nSend', class: 'btn-primary', type: 'button', text: 'Send notification', disabled: !!S.busy.notify, onclick: send }))),
+    noticeHistory('info'));
+}
+function noticeHistory(kind) {
+  const a = Admin.st, list = (a.notices || []).filter(n => n.kind === kind);
+  const ms = v => (v && v.toMillis ? new Date(v.toMillis()).toLocaleString() : '');
+  return h('div', { class: 'card tight', id: 'noticeHistory' }, h('strong', { class: 'gold', text: kind === 'reward' ? 'Rewards sent' : 'Sent messages' }),
+    list.length ? h('div', {}, list.map(n => h('div', { class: 'anote', 'data-id': n.id },
+      h('div', {}, h('b', { text: n.title }), h('i', { text: ms(n.createdAt) + '  ·  ' + (n.count || (n.uids || []).length) + ' players' + (n.amount ? '  ·  ' + fmt(n.amount) + ' chips each' : '') })),
+      n.body ? h('p', { text: n.body }) : null,
+      h('button', { type: 'button', class: 'btn-ghost btn-small', text: 'Delete', onclick: () => confirm('Delete this ' + (kind === 'reward' ? 'record' : 'message') + '? Players will no longer see it. Chips already given stay.') && adminBusy('dn_' + n.id, 'delete', async () => { await Repo.deleteNotice(n.id); await Admin.loadNotices(); }) })))) : h('p', { class: 'muted', text: a.notices ? 'Nothing sent yet.' : 'Loading...' }));
+}
+
+/* ---- 5. rewards ---- */
+function adminRewards() {
+  const a = Admin.st;
+  const amt = h('input', { id: 'rAmt', type: 'number', min: 1, inputmode: 'numeric', placeholder: 'Chips for each player', value: a.rAmt, oninput: e => { a.rAmt = e.target.value; Admin.refreshTotal(); } });
+  const note = h('input', { id: 'rNote', type: 'text', maxlength: 80, value: a.rNote, oninput: e => { a.rNote = e.target.value; } });
+  const send = () => {
+    const who = Admin.pick(), n = Number(a.rAmt);
+    if (!Number.isInteger(n) || n <= 0 || n > 1e8) return Admin.say('Type a whole number of chips for each player.', 'err');
+    if (!who.length) return Admin.say('Nobody matches that audience.', 'err');
+    if (who.length > 400) return Admin.say('A reward can reach 400 players at a time. Narrow the audience.', 'err');
+    if (!confirm('Give ' + fmt(n) + ' chips to each of ' + who.length + ' player' + (who.length === 1 ? '' : 's') + ' (' + fmt(n * who.length) + ' in all)?')) return;
+    return adminBusy('reward', 'send reward', async () => {
+      const why = a.rNote.trim() || 'A gift from the club', done = [];
+      for (const u of who) { try { await Repo.grantChips(u.uid, n, why); done.push(u.uid); } catch (e) { console.warn('[TeenPatti] reward', u.uid, e && e.code); } }
+      if (done.length) await Repo.sendNotice({ title: 'You received ' + fmt(n) + ' chips', body: why, kind: 'reward', all: false, uids: done, count: done.length, amount: n });
+      a.rAmt = ''; await Admin.loadUsers(true); await Admin.loadNotices();
+      Admin.say(done.length === who.length ? 'Sent ' + fmt(n) + ' chips to ' + done.length + ' player' + (done.length === 1 ? '' : 's') + '.' : 'Sent to ' + done.length + ' of ' + who.length + ' players. The rest could not be paid; try again.', done.length === who.length ? 'ok' : 'err');
+    });
+  };
+  return h('div', {},
+    h('div', { class: 'card' },
+      h('p', { class: 'muted', text: 'Chips go straight into the wallets. Each player sees the gift under Messages in the lobby.' }),
+      Admin.audienceBox(),
+      h('div', { class: 'field' }, h('label', { for: 'rAmt', text: 'CHIPS FOR EACH PLAYER' }), amt),
+      h('div', { class: 'acount', id: 'rTotal' }),
+      h('div', { class: 'field' }, h('label', { for: 'rNote', text: 'MESSAGE TO THE PLAYERS' }), note),
+      h('div', { class: 'controls' }, h('button', { id: 'rSend', class: 'btn-primary', type: 'button', text: 'Send reward', disabled: !!S.busy.reward, onclick: send }))),
+    noticeHistory('reward'));
+}
+Admin.refreshTotal = function () { const el = $('rTotal'); if (el) { const n = Number(Admin.st.rAmt), w = Admin.pick().length; el.textContent = Number.isInteger(n) && n > 0 ? 'Total: ' + fmt(n * w) + ' chips for ' + w + ' player' + (w === 1 ? '' : 's') : ''; } };
+
+/* ==========================================================================
+   SECTION 31 - MESSAGES FROM THE CLUB (player side) AND THE BANNED SCREEN
+   The admin's notices are readable by every signed-in player; each lists who it is for and the app shows a player
+   only theirs. What a player has already read is remembered on this phone.
+   ========================================================================== */
+const Notices = {
+  all: [], announced: new Set(), first: true,
+  key: () => 'tp_seen_' + (S.user ? S.user.uid : ''),
+  seenAt() { try { return Number(localStorage.getItem(Notices.key()) || 0); } catch (e) { return 0; } },
+  ms: n => (n.createdAt && n.createdAt.toMillis ? n.createdAt.toMillis() : Date.now()),
+  mine() { const uid = S.user && S.user.uid; return Notices.all.filter(n => n.all === true || (Array.isArray(n.uids) && n.uids.includes(uid))).sort((a, b) => Notices.ms(b) - Notices.ms(a)); },
+  unread() { const t = Notices.seenAt(); return Notices.mine().filter(n => Notices.ms(n) > t); },
+  markSeen() { try { localStorage.setItem(Notices.key(), String(Date.now())); } catch (e) { /* private mode */ } scheduleRender(); },
+  set(docs) {
+    Notices.all = docs;
+    const fresh = Notices.unread().filter(n => !Notices.announced.has(n.id));
+    fresh.forEach(n => Notices.announced.add(n.id));
+    // something new arrived while the player is in the lobby: open the messages for them
+    if (fresh.length && !Notices.first && S.route && S.route.name === 'lobby' && !Sheets.el) Sheets.inbox();
+    Notices.first = false;
+    scheduleRender();
+  }
+};
+Object.assign(Repo, {
+  watchNotices: (sc, cb) => sc.listen(db.collection('notices'), s => cb(s.docs.map(d => Object.assign({ id: d.id }, d.data())))),
+  async syncEmail(user, prof) {
+    if (!user.email || prof.email === user.email) return prof;
+    try { await Repo.userRef(user.uid).update({ email: user.email, updatedAt: FV.serverTimestamp() }); return Object.assign({}, prof, { email: user.email }); }
+    catch (e) { return prof; }
+  }
+});
+Object.assign(Sheets, {
+  inbox() {
+    const list = Notices.mine(), t = Notices.seenAt();
+    const when = n => new Date(Notices.ms(n)).toLocaleString([], { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' });
+    Sheets.open('inboxSheet', 'Messages', h('div', { class: 'setlist', id: 'inboxList' }, list.length
+      ? list.slice(0, 20).map(n => h('div', { class: 'inote' + (n.kind === 'reward' ? ' reward' : '') + (Notices.ms(n) > t ? ' fresh' : ''), 'data-id': n.id },
+        h('div', { class: 'inh' }, h('b', { text: (n.kind === 'reward' ? '★ ' : '') + n.title }), h('i', { text: when(n) })),
+        n.body ? h('p', { text: n.body }) : null))
+      : h('p', { class: 'hnote', style: 'font-size:14px', text: 'No messages yet. Gifts and news from the club will show up here.' })));
+    Notices.markSeen();
+  }
+});
+function renderBanned() {
+  return h('div', { class: 'card auth', id: 'bannedCard' },
+    h('h2', { text: 'Your account is paused' }),
+    h('p', { class: 'muted', text: 'The club admin has paused this account, so you cannot join tables right now. If you think this is a mistake, please speak to the admin.' }),
+    h('div', { class: 'auth-actions' }, h('button', { id: 'bannedOut', class: 'btn-ghost', type: 'button', text: 'Sign out', onclick: handleSignOut })));
+}
+
+/* ==========================================================================
    SECTION 24 - GAME ENGINE
    Pure functions: no screen, no Firebase, no clock except the `now` passed in.
    The browser dealer and the unit tests call exactly the same code.
@@ -5535,7 +6000,7 @@ function addLog(G, text) {
 }
 
 /* ---- costs (the label and the cost both come from the player's real status) ---- */
-const blindCap = G => G.boot * ENGINE.BLIND_CAP_MULT, chaalCap = G => G.boot * ENGINE.CHAAL_CAP_MULT, potCap = G => G.boot * ENGINE.POT_CAP_MULT;
+const blindCap = G => G.blindMax || G.boot * ENGINE.BLIND_CAP_MULT, chaalCap = G => G.chaalMax || G.boot * ENGINE.CHAAL_CAP_MULT, potCap = G => G.potMax || G.boot * ENGINE.POT_CAP_MULT;
 function chaalCost(G, id) { return G.players[id].status === 'seen' ? 2 * G.stake : Math.min(G.stake, blindCap(G)); }
 function raiseCost(G, id) {
   const ns = G.stake * 2;
@@ -5615,9 +6080,12 @@ function startHand(o) {
   }
   const handNo = (prev.handNo || 0) + 1, variant = o.variant && ENGINE.VARIANT_IDS.includes(o.variant) ? o.variant : 'classic';
   const G = {
-    phase: 'playing', handNo, handId: o.tableId + '-' + handNo, boot, stake: boot, maxStake: boot * ENGINE.CHAAL_CAP_MULT / 2,
+    phase: 'playing', handNo, handId: o.tableId + '-' + handNo, boot, stake: boot, maxStake: (o.chaalMax || boot * ENGINE.CHAAL_CAP_MULT) / 2,
     pot: boot * n, order, turn: order[0], dealerIdx: n - 1, turnEndsAt: now + GAME_CONFIG.turnMs + GAME_CONFIG.dealPadMs, players, result: null, log: [], dealtAt: now
   };
+  if (o.blindMax) G.blindMax = o.blindMax;
+  if (o.chaalMax) G.chaalMax = o.chaalMax;
+  if (o.potMax) G.potMax = o.potMax;
   if (variant !== 'classic') G.variant = variant;
   if (variant === 'joker') G.joker = deck[3 * n].slice(0, -1);        // the next card off the deck names the joker rank; it is not dealt to anyone
   addLog(G, 'Hand ' + handNo + ' dealt. Boot ' + boot + ' each.' + (o.announceVariant && variant !== 'classic' ? ' Variant: ' + variant + '.' : '') + (G.joker ? ' Joker: ' + G.joker + '.' : ''));
