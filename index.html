@@ -2076,13 +2076,18 @@ body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
 .nlstage .nlcoin{box-shadow:0 0 0 calc(var(--u) * 2) #6f1018,0 1px 3px rgba(0,0,0,.55)}
 
 /* 55. the engraved rake note, the locked chat button and the pot-split labels */
-.tbstage .tbrakenote{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.tbstage .tbrakenote span{font:700 max(7px,calc(var(--u) * 17))/1 Georgia,serif;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;color:#e7c56e;opacity:.92;text-shadow:0 -1px 0 rgba(0,0,0,.75),0 1px 0 rgba(255,226,150,.28),0 0 6px rgba(0,0,0,.55)}
 .tbstage .tbri.locked{opacity:.38;filter:grayscale(.6)}
 .fxchip.fxch{background:radial-gradient(circle at 35% 30%,#ffe9a6,#c99a2e);border:2px dashed #5a3d08}
 .fxsplit{position:fixed;z-index:60;padding:3px 12px;border-radius:99px;font:700 13px/1.2 system-ui;white-space:nowrap;pointer-events:none;background:rgba(10,6,4,.8);border:1px solid rgba(214,172,92,.6);box-shadow:0 2px 8px rgba(0,0,0,.5)}
 .fxsplit.win{color:#8ff0b2;border-color:rgba(120,230,160,.6)}
 .fxsplit.rake{color:#ffd36b}
+
+/* 56. Chaal / Double labels under a player, and your own result at this table */
+.tbpst.chaal{background:#10345a;color:#bfe0ff;border-color:rgba(96,170,255,.55)}
+.tbpst.double{background:#4a2a05;color:#ffd990;border-color:rgba(255,176,60,.65)}
+.tbstage .tbsess{position:absolute;z-index:4;display:flex;align-items:center;justify-content:center;gap:calc(var(--u) * 8);border-radius:99px;background:rgba(10,6,4,.7);border:1px solid rgba(214,172,92,.4);font:700 max(8px,calc(var(--u) * 19))/1 system-ui;color:#f6ecd2;white-space:nowrap;pointer-events:none}
+.tbstage .tbsess small{font-weight:600;letter-spacing:.08em;opacity:.8;font-size:.82em}
+.tbstage .tbsess b.up{color:#7be3a0}.tbstage .tbsess b.down{color:#ff8e9d}
 
 </style>
 </head>
@@ -3210,7 +3215,7 @@ function updateTimer() {
 
 /* Who sits where: the players of the live hand, or the seated players between hands. */
 function seatList(R, G, live) {
-  if (live) return G.order.map(id => { const p = G.players[id]; return { id, name: p.name, avatar: p.avatar, chips: p.chips, invested: p.invested || 0, status: p.status, bot: !!p.bot, dealer: G.order[G.dealerIdx] === id }; });
+  if (live) return G.order.map(id => { const p = G.players[id]; return { id, name: p.name, avatar: p.avatar, chips: p.chips, invested: p.invested || 0, status: p.status, last: p.last || '', bot: !!p.bot, dealer: G.order[G.dealerIdx] === id }; });
   const list = R.members.filter(m => m.seatState === 'seated').map(m => ({ id: m.uid, name: m.name, avatar: m.avatar, chips: m.stack, status: '', bot: false, dealer: false }));
   (R.bots || []).filter(b => b.seatState === 'seated').forEach(b => list.push({ id: b.botId, name: b.name, avatar: 'bot', chips: b.stack, status: '', bot: true, dealer: false }));
   return list;
@@ -3268,7 +3273,7 @@ const tbBox = (x0, y0, x1, y1) => 'left:' + (x0 / TB_W * 100).toFixed(3) + '%;to
 // the centre of each seat circle on the picture, and the three card outlines that belong to it (centre + tilt)
 const TB_SEATS = { TL: [513, 278], TR: [1358, 278], ML: [365, 462], MR: [1500, 462], BL: [540, 632], BR: [1318, 632] };
 const TB_CARDS = { TL: [615, 408, -20], TR: [1235, 408, 20], ML: [490, 510, 0], MR: [1375, 510, 0], BL: [650, 578, 24], BR: [1205, 578, -24] };
-const TB_FILL = ['TL', 'TR', 'ML', 'MR', 'BR', 'BL'];      // the order other players take seats in (BL is yours once you sit)
+const TB_CYCLE = ['BL', 'ML', 'TL', 'TR', 'MR', 'BR'];     // the seats in clockwise order, starting at the bottom left (yours once you sit)
 const rupee = n => fmt(n);
 
 /* cards */
@@ -3296,13 +3301,14 @@ function tbSeat(sp, key, c) {
       h('circle', { cx: 38, cy: 38, r: TIMER_R, class: 'tbprog', style: 'stroke:' + col + ';stroke-dasharray:' + TIMER_C + ';stroke-dashoffset:' + (TIMER_C * (1 - f)) }));
   }
   const open = () => Sheets.player(sp, c);
-  const label = away ? 'Away' : out ? 'Packed' : sp.status === 'seen' ? 'Seen' : sp.status === 'blind' ? 'Blind' : '';
+  const label = away ? 'Away' : out ? 'Packed' : sp.last === 'double' ? 'Double' : sp.last === 'chaal' ? 'Chaal' : sp.status === 'seen' ? 'Seen' : sp.status === 'blind' ? 'Blind' : '';
+  const stKind = away || out ? 'out' : sp.last === 'double' || sp.last === 'chaal' ? sp.last : sp.status;
   const kids = [
     h('div', { class: 'tbring', style: tbAt(ax, ay), onclick: open }, avatarNode(sp.avatar), ring, sp.dealer ? h('span', { class: 'tbdealer', title: 'Dealer button', text: 'D' }) : null, h('span', { class: away ? 'tbaway' : 'tbonline', title: away ? 'Away' : 'Online' })),
     h('div', { class: 'tbplate', style: tbAt(ax, ay + 64), onclick: open },
       h('div', { class: 'tbpname', text: isMe ? 'You' : sp.name }),
       h('div', { class: 'tbpchips' }, h('span', { text: rupee(sp.chips) }), isMe && c.me ? h('button', { id: 'addChipsBtn', class: 'tbadd', type: 'button', 'aria-label': 'Add chips', text: '+', onclick: e => { e.stopPropagation(); Sheets.topup(); } }) : null),
-      label ? h('div', { class: 'tbpst ' + (away || out ? 'out' : sp.status), text: label }) : null),
+      label ? h('div', { class: 'tbpst ' + stKind, text: label }) : null),
     Social.prop(sp.id) ? h('div', { class: 'tbprop', style: tbAt(ax + (ax < 935 ? -88 : 88), ay + 4), title: GIFTS[Social.prop(sp.id).code].name, text: GIFTS[Social.prop(sp.id).code].icon }) : null,
     turn ? h('div', { class: 'tbdisc', style: tbAt(ax + 58, ay - 52), text: fmtSecs(G.turnEndsAt - Date.now() - 500) }) : null];
   if (!isMe) {
@@ -3463,7 +3469,11 @@ function renderFelt(R, me, msgs) {
   const meSeat = me && me.seatState === 'seated' ? seats.find(x => x.id === me.uid) || null : null;
   const reveal = (result && G.result.reveal) || {}, winners = result ? G.result.winners : [];
   const ctx = { R, G, me, uid, live, playing, reveal, winners };
-  const others = seats.filter(x => !(me && x.id === me.uid)).slice(0, meSeat ? 5 : 6);
+  // Everyone sees the same ring: the others are laid out clockwise from your seat in the hand's own turn order (you are the bottom-left seat),
+  // so a turn always moves to the next player round the table on every screen. A watcher sees the ring in turn order from the first player.
+  const myIx = meSeat ? seats.findIndex(x => x.id === me.uid) : -1;
+  const ring = myIx >= 0 ? seats.slice(myIx + 1).concat(seats.slice(0, myIx)) : seats.slice();
+  const others = ring.slice(0, meSeat ? 5 : 6);
   const online = hostLive(R.doc), seated = !!me && me.seatState === 'seated';
   const stage = h('div', { class: 'tbstage' + (result && uid && G.result.winners.includes(uid) ? ' iwon' : ''), id: 'tbStage' });
   // LED rim light round the felt: it brightens and turns from green to gold as the pot grows (measured in boots).
@@ -3498,8 +3508,12 @@ function renderFelt(R, me, msgs) {
     rail('playersBtn', 'Players', 'users', () => Sheets.players()),
     rail('infoBtn', 'Hand ranks', 'stats', () => Sheets.ranks())));
 
-  /* the house's cut, engraved in the felt between the dealer's chip tray and the Teen Patti crest */
-  stage.appendChild(h('div', { class: 'tbrakenote', id: 'rakeNote', 'aria-label': 'Rake equals 0.05 times the pot amount', style: tbBox(760, 388, 1092, 416) }, h('span', { text: 'Rake = 0.05 x pot amount' })));
+  /* what you have won or lost at this table so far (yours only; it starts again when you stand up) */
+  if (me && !S.isAdmin) {
+    const ss = Session.get(uid, R.id).net;
+    stage.appendChild(h('div', { class: 'tbsess', id: 'sessPnl', style: tbBox(24, 622, 236, 656), title: 'Your result at this table' },
+      h('small', { text: 'THIS TABLE' }), h('b', { id: 'sessNet', class: ss > 0 ? 'up' : ss < 0 ? 'down' : '', text: (ss > 0 ? '+' : ss < 0 ? '\u2212' : '') + fmt(Math.abs(ss)) })));
+  }
 
   /* the dealer is in the picture; this is where dealt cards start from */
   stage.appendChild(h('div', { class: 'dealerfig', id: 'dealerFigure', style: tbAt(926, 325), 'aria-label': 'Dealer' }, h('div', { class: 'tbdeck', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'))));
@@ -3540,7 +3554,10 @@ function renderFelt(R, me, msgs) {
 
   /* players, and empty seats: if you are standing, each one is a Sit down button (the game keeps no seat numbers, so any seat is the same seat) */
   const els = [];
-  const fill = TB_FILL.filter(k => !(meSeat && k === 'BL'));
+  const cyc = TB_CYCLE.filter(k => !(meSeat && k === 'BL')), nO = others.length;
+  const slot = i => cyc[Math.min(cyc.length - 1, Math.floor((i + (meSeat ? 0.5 : 0)) * cyc.length / Math.max(1, nO)))];   // spread round the ring, keeping the clockwise order
+  const taken = others.map((sp, k) => slot(k));
+  const fill = taken.concat(cyc.filter(k => !taken.includes(k)));
   others.forEach((sp, k) => els.push(tbSeat(sp, fill[k], ctx)));
   const watching = !!me && !seated && !S.isAdmin;
   let sitIdUsed = false;
@@ -3808,6 +3825,7 @@ async function submitBuyIn() {
   S.busy.join = true; setBtnBusy('buySend', true); $('buyErr').hidden = true; S.forceLobby = false;
   try {
     const result = await Repo.joinTable(S.user.uid, tableId, n);
+    Session.reset(S.user.uid, tableId);
     closeBuyIn();
   } catch (e) {
     console.error('[TeenPatti] join failed', e && e.code, e && e.message);
@@ -3842,7 +3860,10 @@ function handleSeatChange(type) {
 function resolvePending() {
   if (!S.pending || !S.room) return;
   const me = myMember(S.room);
-  if (me && ((S.pending.type === 'sit' && me.seatState === 'seated') || (S.pending.type === 'stand' && me.seatState === 'standing'))) S.pending = null;
+  if (me && ((S.pending.type === 'sit' && me.seatState === 'seated') || (S.pending.type === 'stand' && me.seatState === 'standing'))) {
+    const was = S.pending.type, t = S.pending.tableId; S.pending = null;
+    if (was === 'stand' && !S.isAdmin) Session.afterStand(t);        // standing up ends your visit: chips back to the wallet, result cleared, buy in again
+  }
 }
 
 function handleLeave() {
@@ -3852,6 +3873,7 @@ function handleLeave() {
   const stack = me ? me.stack : 0;
   return withBusy('leave', 'leave table', async () => {
     await Repo.leaveTable(S.user.uid, R.id);
+    Session.reset(S.user.uid, R.id);
   });
 }
 
@@ -4849,6 +4871,7 @@ const Stats = {
     if (last === G.handId) return;
     try { localStorage.setItem('tp_stat_hand_' + uid, G.handId); } catch (e) { /* private window */ }
     Repo.bumpStats(uid, Stats.delta(G, uid)).catch(e => console.warn('[TeenPatti] stats', e && e.code));
+    Session.add(G, uid, S.room && S.room.id);
     Vip.accrue(G, uid).catch(e => console.warn('[TeenPatti] vip', e && e.code));
   },
   /* ---- what the numbers mean ---- */
@@ -4887,6 +4910,38 @@ const Stats = {
   // Fetch my own stats (look and numbers) and my club once after sign-in; the theme is applied at once.
   load(uid) { Repo.getStats(uid).then(st => { S.myStats = Stats.full(st); Stats.applyTheme(S.myStats.theme); }).catch(() => {}); Clubs.load(uid); },
   applyTheme(th) { document.documentElement.setAttribute('data-ptheme', th && Stats.THEMES[th] ? th : 'velvet'); }
+};
+
+/* ==========================================================================
+   SESSION RESULT - what you have won or lost at the table you are sitting at (yours only; it is kept on your own phone).
+   Each finished hand adds your share of the pot minus what you put in. It starts again from zero when you stand up
+   (your chips go back to your wallet and you buy in again).
+   ========================================================================== */
+const Session = {
+  key(uid, t) { return 'tp_sess_' + uid + '_' + t; },
+  get(uid, t) { try { const d = JSON.parse(localStorage.getItem(Session.key(uid, t)) || 'null'); return d && typeof d.net === 'number' ? d : { net: 0, hand: '' }; } catch (e) { return { net: 0, hand: '' }; } },
+  put(uid, t, d) { try { localStorage.setItem(Session.key(uid, t), JSON.stringify(d)); } catch (e) { /* private window */ } },
+  reset(uid, t) { try { localStorage.removeItem(Session.key(uid, t)); } catch (e) { /* private window */ } },
+  // Called once for each finished hand.
+  add(G, uid, t) {
+    const p = G && G.players && G.players[uid], rs = G && G.result;
+    if (!p || !rs || !t) return;
+    const d = Session.get(uid, t); if (d.hand === G.handId) return;
+    Session.put(uid, t, { net: d.net + ((rs.shares && rs.shares[uid]) || 0) - (p.invested || 0), hand: G.handId });
+  },
+  // After you stand up: your stack goes back to the wallet, the result is cleared and the buy-in window opens again.
+  async afterStand(t) {
+    const uid = S.user && S.user.uid; if (!uid || !t || Session.busy) return;
+    Session.busy = true;
+    try {
+      Session.reset(uid, t);
+      await Repo.leaveTable(uid, t);
+      S.forceLobby = true;
+      toast('You stood up. Your chips are back in your wallet. Buy in to play again.');
+      setTimeout(() => { try { openBuyIn(t); } catch (e) { /* the lobby still works */ } }, 400);
+    } catch (e) { console.error('[TeenPatti] stand-up cash out failed', e && e.code, e && e.message); }
+    finally { Session.busy = false; }
+  }
 };
 
 /* ==========================================================================
@@ -6583,7 +6638,7 @@ function applyAction(G0, id, type, now, hands) {
   }
   if (type === 'see') {
     if (!lm.see.ok) return bad(lm.see.reason);
-    p.status = 'seen'; addLog(G, p.name + ' looked at their cards.');
+    p.status = 'seen'; p.last = ''; addLog(G, p.name + ' looked at their cards.');
     maybeFinalShow(G, hands);
     return { ok: true, G };
   }
@@ -6597,7 +6652,7 @@ function applyAction(G0, id, type, now, hands) {
     if (!lm.chaal.ok) return bad(lm.chaal.reason);
     const c = lm.chaal.cost, wasBlind = p.status === 'blind'; pay(G, id, c);
     addLog(G, p.name + (wasBlind ? ' plays blind.' : ' plays chaal.'));
-    noteBlind(G, id, wasBlind); delete p.owe;
+    noteBlind(G, id, wasBlind); delete p.owe; p.last = wasBlind ? '' : 'chaal';
     advanceTurn(G, now); maybeFinalShow(G, hands); return { ok: true, G };
   }
   if (type === 'raise') {
@@ -6605,7 +6660,7 @@ function applyAction(G0, id, type, now, hands) {
     const wasBlind = p.status === 'blind';
     G.stake *= 2; const c = raiseCost({ stake: G.stake / 2, boot: G.boot, players: G.players }, id); pay(G, id, c);
     addLog(G, p.name + (wasBlind ? ' doubles the blind.' : ' doubles the chaal.'));
-    noteBlind(G, id, wasBlind); delete p.owe;
+    noteBlind(G, id, wasBlind); delete p.owe; p.last = 'double';
     advanceTurn(G, now); maybeFinalShow(G, hands); return { ok: true, G };
   }
   if (type === 'sideshow') {
