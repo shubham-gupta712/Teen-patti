@@ -2031,6 +2031,25 @@ body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
 .rbtotal span{display:block;font-size:11px;letter-spacing:2px;opacity:.8}
 .rbtotal b{display:block;font:800 36px/1.2 Georgia,serif;color:#f6d77a;font-variant-numeric:tabular-nums}
 
+/* 52. VIP tier card and list (profile and rakeback) */
+.vipcard{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-radius:18px;border:2px solid var(--gold);background:linear-gradient(160deg,rgba(8,34,26,.96),rgba(14,48,37,.96));box-shadow:0 0 0 1px rgba(255,255,255,.06) inset,0 6px 18px rgba(0,0,0,.35)}
+.vipl{flex:1;min-width:0}
+.vname{display:block;font:800 22px/1.2 Georgia,serif;letter-spacing:.5px;text-transform:uppercase;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vtier{margin:6px 0 10px;font-size:11px;letter-spacing:1.6px;font-weight:800;color:var(--gold)}
+.vpct{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.vpct b{font:800 20px/1 system-ui;color:#fff;font-variant-numeric:tabular-nums}
+.vinfo{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#a9c3d8;color:#0b2a22;font:800 12px/1 Georgia,serif;font-style:normal}
+.vbar{height:12px;border-radius:8px;background:rgba(0,0,0,.45);overflow:hidden}
+.vbar i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#fff1c8,#ffb84d)}
+.vnext{margin-top:8px;font-size:13px;color:#a9c3d8}
+.vstar{flex:none;font-size:76px;line-height:1;color:var(--tc,#f2c75c);text-shadow:0 2px 0 rgba(255,255,255,.35),0 4px 10px rgba(0,0,0,.45);filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+.vlist{display:flex;flex-direction:column;gap:6px;margin:12px 0}
+.vrow{display:grid;grid-template-columns:14px 1fr auto;column-gap:10px;align-items:center;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12)}
+.vrow small{grid-column:2;color:#a9c3d8;font-size:11.5px}
+.vrow em{grid-row:1/3;grid-column:3;font:800 17px/1 Georgia,serif;font-style:normal;color:var(--gold)}
+.vrow.on{border-color:var(--gold);background:rgba(242,199,92,.14)}
+.vdot{width:14px;height:14px;border-radius:50%;grid-row:1/3}
+
 </style>
 </head>
 <body>
@@ -4771,7 +4790,7 @@ const Stats = {
     if (last === G.handId) return;
     try { localStorage.setItem('tp_stat_hand_' + uid, G.handId); } catch (e) { /* private window */ }
     Repo.bumpStats(uid, Stats.delta(G, uid)).catch(e => console.warn('[TeenPatti] stats', e && e.code));
-    Rakeback.accrue(G, uid).catch(e => console.warn('[TeenPatti] rakeback', e && e.code));
+    Vip.accrue(G, uid).catch(e => console.warn('[TeenPatti] vip', e && e.code));
   },
   /* ---- what the numbers mean ---- */
   style(st) {
@@ -5227,13 +5246,13 @@ Object.assign(Sheets, {
     const p = S.profile; if (!p) return;
     tab = tab || 'stats';
     const st = Stats.full(S.myStats), mine = S.myClub;
-    const tabs = h('div', { class: 'ptabs', role: 'tablist' }, [['stats', 'Stats'], ['trophies', 'Trophies'], ['look', 'Look']].map(([id, t]) =>
+    const tabs = h('div', { class: 'ptabs', role: 'tablist' }, [['stats', 'Stats'], ['vip', 'VIP'], ['trophies', 'Trophies'], ['look', 'Look']].map(([id, t]) =>
       h('button', { type: 'button', id: 'ptab_' + id, class: 'ptab' + (tab === id ? ' on' : ''), role: 'tab', 'aria-selected': tab === id ? 'true' : 'false', text: t, onclick: () => Sheets.profile(id) })));
     const head = h('div', { class: 'pprofile' },
       h('div', { class: 'pbig2' }, framed(p.avatar, st.frame)),
       h('h3', { text: p.name }),
       st.title && Stats.TITLES[st.title] ? h('p', { class: 'ptitle', id: 'pTitle', text: Stats.TITLES[st.title].name }) : null,
-      h('p', { class: 'hnote' }, h('span', { class: 'vip', text: Stats.tier(st.hands).toUpperCase() }), mine ? h('span', { class: 'pcrest', id: 'pClub', text: ' ' + Clubs.tag(mine.c) }) : null),
+      h('p', { class: 'hnote' }, h('span', { class: 'vip', id: 'pVipTag', text: vipInfo(Vip.doc).tier.name.toUpperCase() }), mine ? h('span', { class: 'pcrest', id: 'pClub', text: ' ' + Clubs.tag(mine.c) }) : null),
       h('button', { type: 'button', class: 'plink', id: 'pEdit', text: 'Change name or picture', onclick: () => Sheets.profileEdit() }));
     const box = (k, v, id) => h('div', { class: 'pstat2' }, h('b', { id, text: String(v) }), h('span', { text: k }));
     const sec = (t, ...kids) => h('div', { class: 'psec' }, h('div', { class: 'qh', text: t }), ...kids);
@@ -5244,8 +5263,14 @@ Object.assign(Sheets, {
         sec('Play style', h('p', { class: 'pstyle', id: 'sStyle', text: Stats.style(st) }), h('p', { class: 'hnote', text: st.hands < 10 ? 'Play 10 hands to reveal your style.' : 'Worked out from how often you pack, play blind and win without a showdown.' })),
         sec('Best hands won', h('div', { class: 'pgrid' }, box('Trail', st.trail, 'sTrail'), box('Pure seq.', st.pseq, 'sPseq'), box('Sequence', st.seq, 'sSeq'), box('Color', st.color, 'sColor'), box('Pair', st.pair, 'sPair')),
           st.aces ? h('p', { class: 'hnote', id: 'sAces', text: 'Trail of Aces: ' + st.aces + (st.aces === 1 ? ' time' : ' times') }) : null),
-        sec('Economy', h('div', { class: 'pgrid' }, box('Peak chips', fmt(st.peak), 'sPeak'), box('Biggest pot', fmt(st.bigPot), 'sPot')), h('p', { class: 'hnote', text: 'Rakeback: coming soon (there is no rake at the tables yet).' })),
+        sec('Economy', h('div', { class: 'pgrid' }, box('Peak chips', fmt(st.peak), 'sPeak'), box('Biggest pot', fmt(st.bigPot), 'sPot')), h('p', { class: 'hnote', text: 'Rakeback and VIP tier: see the VIP tab.' })),
         sec('Streaks', h('div', { class: 'pgrid' }, box('Current', st.streak, 'sStreak'), box('Longest', st.best, 'sBest'), box('Comebacks', st.comeback, 'sComeback'))));
+    } else if (tab === 'vip') {
+      const slot = h('div', { id: 'vipSlot' }, vipCard(p.name, Vip.doc), h('p', { class: 'hnote', text: 'Loading...' }));
+      body = h('div', { class: 'pbody tab-vip' }, slot);
+      const fill = d => slot.replaceChildren(vipCard(p.name, d), vipTierList(d),
+        h('p', { class: 'hnote', id: 'vipNote', text: 'Your tier comes from the rake you have contributed over your whole life and is never lost. Each Friday the club pays you your week\'s rake times your tier percentage (' + vipInfo(d).tier.pct + '% now). This week: ' + fmt(Math.floor(vipInfo(d).weekly)) + ' chips of rake so far.' }));
+      Vip.load().then(fill, () => fill(null));
     } else if (tab === 'trophies') {
       const tr = Stats.TROPHIES.map(t => h('div', { class: 'ptrophy' + (t.ok(st) ? ' got' : ''), 'data-trophy': t.id },
         h('span', { class: 'tico', text: t.ok(st) ? '🏆' : '🔒' }), h('div', {}, h('b', { text: t.name }), h('small', { text: t.how })), h('em', { text: t.ok(st) ? 'Won' : String(t.n(st)) })));
@@ -5265,6 +5290,7 @@ Object.assign(Sheets, {
         sec('Coming soon', h('p', { class: 'hnote', text: 'Table felts, card backs and celebration animations.' })));
     }
     Sheets.open('myProfileSheet', 'Your profile', h('div', {}, head, tabs, body));
+    if (!Vip.doc) Vip.load().then(d => { const el = $('pVipTag'); if (el && d) el.textContent = vipInfo(d).tier.name.toUpperCase(); }, () => {});
   },
   async setLook(kind, val) {
     const uid = S.user && S.user.uid; if (!uid) return;
@@ -5405,8 +5431,8 @@ const ADMIN_ONLINE_MS = 60000;               // a seat stamped within this long 
    Every power here is enforced by firestore.rules; this screen only asks.
    ========================================================================== */
 const Admin = {
-  st: { view: 'hub', users: null, stats: {}, loading: false, q: '', filter: 'all', sel: '', edit: '', tab: '', pf: null, rake: null, draft: {}, notices: null, aud: { type: 'all', n: 1000, picked: [] }, nTitle: '', nBody: '', rAmt: '', rNote: 'A gift from the club', chipAmt: '', chipNote: '', msg: '', msgKind: 'ok' },
-  go(view) { Admin.st.aud = { type: 'all', n: 1000, picked: [] }; Admin.st.view = view; Admin.st.msg = ''; Admin.st.sel = ''; Admin.st.edit = ''; Admin.st.tab = ''; Admin.st.pf = null; if (view === 'rake') Admin.watchRake(); else Admin.unwatchRake(); if (view === 'players' || view === 'notify' || view === 'rewards') Admin.loadUsers(); if (view === 'notify' || view === 'rewards') Admin.loadNotices(); Admin.paint(); },
+  st: { view: 'hub', users: null, stats: {}, loading: false, q: '', filter: 'all', sel: '', edit: '', tab: '', pf: null, rake: null, vip: null, batches: null, draft: {}, notices: null, aud: { type: 'all', n: 1000, picked: [] }, nTitle: '', nBody: '', rAmt: '', rNote: 'A gift from the club', chipAmt: '', chipNote: '', msg: '', msgKind: 'ok' },
+  go(view) { Admin.st.aud = { type: 'all', n: 1000, picked: [] }; Admin.st.view = view; Admin.st.msg = ''; Admin.st.sel = ''; Admin.st.edit = ''; Admin.st.tab = ''; Admin.st.pf = null; if (view === 'vip') Admin.loadVip(); if (view === 'rake') Admin.watchRake(); else Admin.unwatchRake(); if (view === 'players' || view === 'notify' || view === 'rewards') Admin.loadUsers(); if (view === 'notify' || view === 'rewards') Admin.loadNotices(); Admin.paint(); },
   paint() { Admin.force = true; scheduleRender(); },
   say(text, kind) { Admin.st.msg = text; Admin.st.msgKind = kind || 'ok'; Admin.paint(); },
   async loadUsers(force) {
@@ -5440,6 +5466,45 @@ const Admin = {
     Admin.rakeUnsub = db.collection('rake').onSnapshot(snap => { const o = {}; snap.docs.forEach(d => { o[d.id] = d.data(); }); Admin.st.rake = o; if (Admin.st.view === 'rake') Admin.paint(); }, e => { Admin.st.rake = {}; Admin.say(friendlyError(e), 'err'); });
   },
   unwatchRake() { if (Admin.rakeUnsub) { Admin.rakeUnsub(); Admin.rakeUnsub = null; } },
+  /* ---- weekly rakeback: review, then approve ---- */
+  async loadVip() {
+    try {
+      await Admin.loadUsers();
+      const s = await db.collection('vip').get(); const o = {}; s.docs.forEach(d => { o[d.id] = d.data(); });
+      const b = await db.collection('vipBatches').get();
+      Admin.st.vip = o; Admin.st.batches = b.docs.map(d => Object.assign({ id: d.id }, d.data())).sort((x, y) => (y.createdAt && y.createdAt.toMillis ? y.createdAt.toMillis() : 0) - (x.createdAt && x.createdAt.toMillis ? x.createdAt.toMillis() : 0)).slice(0, 5);
+      Admin.paint();
+    } catch (e) { Admin.st.vip = Admin.st.vip || {}; Admin.say(friendlyError(e), 'err'); }
+  },
+  // Each player's line for this week: their rake, tier, percentage and the payout it would give (rounded down; below one chip it carries over).
+  vipRows() {
+    const a = Admin.st, names = {}; (a.users || []).forEach(u => { names[u.uid] = u; });
+    return Object.keys(a.vip || {}).map(id => {
+      const d = a.vip[id], v = vipInfo(d), weekly = Math.round((d.weekly || 0) * 100) / 100;
+      return { uid: id, name: names[id] ? names[id].name : id.slice(0, 6), banned: !!(names[id] && names[id].banned), weekly, tier: v.tier, lifetime: d.lifetime || 0, payout: Math.floor(weekly * v.tier.pct / 100) };
+    }).filter(r => r.weekly > 0).sort((x, y) => y.payout - x.payout || y.weekly - x.weekly);
+  },
+  // The Friday payout, exactly as reviewed: each player's reviewed weekly rake is paid at their tier % and taken off their week.
+  async payoutWeek(rows) {
+    const batch = 'wk' + new Date().toISOString().slice(0, 16).replace(/[-:T]/g, ''), paid = [];
+    for (const r of rows) {
+      try {
+        await db.runTransaction(async tx => {
+          const ref = db.collection('vip').doc(r.uid), s = await tx.get(ref);
+          if (!s.exists) return;
+          const d = s.data(), pct = VIP_TIERS[vipTierIdx(d.lifetime)].pct, W = r.weekly;
+          if (d.weekly + 0.01 < W) return;
+          const payout = Math.floor(W * pct / 100); if (payout < 1) return;
+          tx.update(ref, { uid: r.uid, lifetime: d.lifetime, weekly: Math.round((d.weekly - W) * 100) / 100, claimable: d.claimable + payout, claimed: d.claimed, lastPayout: { batch, weekly: W, pct, payout, at: FV.serverTimestamp() }, updatedAt: FV.serverTimestamp() });
+          tx.set(db.collection('vipLedger').doc(), { batch, uid: r.uid, name: r.name, weekly: W, pct, tier: VIP_TIERS[vipTierIdx(d.lifetime)].id, payout, createdAt: FV.serverTimestamp() });
+          paid.push(payout);
+        });
+      } catch (e) { console.error('[TeenPatti] payout', r.uid, e && e.code); }
+    }
+    const total = paid.reduce((x, y) => x + y, 0);
+    if (paid.length) await db.collection('vipBatches').doc(batch).set({ players: paid.length, weekly: Math.round(rows.reduce((x, r) => x + r.weekly, 0) * 100) / 100, total, createdAt: FV.serverTimestamp() });
+    return { players: paid.length, total, skipped: rows.length - paid.length };
+  },
   async loadNotices() {
     try { Admin.st.notices = await Repo.listNotices(); Admin.paint(); } catch (e) { Admin.say(friendlyError(e), 'err'); }
   },
@@ -5534,8 +5599,9 @@ const ADMIN_TILES = [
   ['players', 'tilePlayers', 'Players', 'Profiles, chips, bans and CSV export'],
   ['notify', 'tileNotify', 'Notifications', 'Message all players or a group'],
   ['rewards', 'tileRewards', 'Rewards', 'Give chips to all players or a group'],
-  ['rake', 'tileRake', 'Rake', 'What each table has earned, live']];
-const ADMIN_ICON = { tables: '♠', private: '♛', players: '☺', notify: '✉', rewards: '★', rake: '◈' };
+  ['rake', 'tileRake', 'Rake', 'What each table has earned, live'],
+  ['vip', 'tileVip', 'Rakeback', 'Review and approve the Friday payout']];
+const ADMIN_ICON = { tables: '♠', private: '♛', players: '☺', notify: '✉', rewards: '★', rake: '◈', vip: '♦' };
 
 function renderAdmin() {
   const a = Admin.st;
@@ -5548,6 +5614,7 @@ function renderAdmin() {
   if (a.view === 'players') return h('div', {}, back('Players'), msg, adminPlayers());
   if (a.view === 'notify') return h('div', {}, back('Notifications'), msg, adminNotify());
   if (a.view === 'rewards') return h('div', {}, back('Rewards'), msg, adminRewards());
+  if (a.view === 'vip') return h('div', {}, back('Weekly rakeback'), msg, adminVip());
   if (a.view === 'rake') return h('div', {}, back('Rake'), msg, adminRake());
   // the control room: one tile per job
   Admin.watchRake();
@@ -5557,7 +5624,7 @@ function renderAdmin() {
     tables: pub.length + ' tables' + (live ? ' · ' + live + ' live' : ''),
     private: !pd ? 'Not created yet' : pd.status === 'open' ? 'Open' + (hostLive(pd) ? ' · ' + (pd.seated || 0) + ' seated' : '') : 'Closed',
     players: a.users ? a.users.length + ' players' : 'View and manage',
-    notify: 'Send a message', rewards: 'Send chips', rake: a.rake ? fmt(Object.values(a.rake).reduce((x, d) => x + (d.total || 0), 0)) + ' collected' : 'Per-table totals'
+    notify: 'Send a message', rewards: 'Send chips', vip: 'Approve the weekly payout', rake: a.rake ? fmt(Object.values(a.rake).reduce((x, d) => x + (d.total || 0), 0)) + ' collected' : 'Per-table totals'
   };
   return h('div', {},
     h('div', { class: 'card' },
@@ -5892,6 +5959,36 @@ function adminRewards() {
 }
 Admin.refreshTotal = function () { const el = $('rTotal'); if (el) { const n = Number(Admin.st.rAmt), w = Admin.pick().length; el.textContent = Number.isInteger(n) && n > 0 ? 'Total: ' + fmt(n * w) + ' chips for ' + w + ' player' + (w === 1 ? '' : 's') : ''; } };
 
+
+/* ---- 7. weekly rakeback: nothing is paid until the admin approves it here ---- */
+function adminVip() {
+  const a = Admin.st;
+  if (!a.vip) return h('div', { class: 'card' }, h('p', { class: 'muted', text: 'Loading the week...' }));
+  const rows = Admin.vipRows(), pay = rows.filter(r => r.payout > 0 && !r.banned);
+  const totalW = rows.reduce((x, r) => x + r.weekly, 0), totalP = pay.reduce((x, r) => x + r.payout, 0);
+  // the next Friday 7:00 PM IST = 13:30 UTC
+  const due = new Date(); due.setUTCHours(13, 30, 0, 0); while (due.getUTCDay() !== 5 || due.getTime() < Date.now() - 6 * 3600e3) due.setUTCDate(due.getUTCDate() + 1);
+  const dueText = due.toLocaleString('en-IN', { weekday: 'long', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Kolkata' }) + ' IST';
+  const go = h('button', { id: 'vipPay', class: 'btn-primary', type: 'button', text: pay.length ? 'Approve and pay ' + pay.length + (pay.length === 1 ? ' player' : ' players') + ' · ' + fmt(totalP) + ' chips' : 'Nothing to pay yet', disabled: !pay.length || !!S.busy.vipPay,
+    onclick: () => {
+      if (!confirm('Pay ' + fmt(totalP) + ' chips of rakeback to ' + pay.length + ' players? Their weekly rake is reduced by the amount paid.')) return;
+      return adminBusy('vipPay', 'pay rakeback', async () => { const r = await Admin.payoutWeek(pay); await Admin.loadVip(); Admin.say('Paid ' + fmt(r.total) + ' chips to ' + r.players + (r.players === 1 ? ' player' : ' players') + (r.skipped ? ' (' + r.skipped + ' skipped: nothing new to pay).' : '.')); });
+    } });
+  return h('div', {},
+    h('div', { class: 'card tight' },
+      h('p', { class: 'muted', style: 'margin:0 0 8px', text: 'Rakeback is never paid on its own. Check the amounts below, then approve. Next payout day: ' + dueText + '.' }),
+      h('div', { class: 'astats' },
+        h('div', {}, h('b', { id: 'vipWeekRake', text: fmt(Math.round(totalW)) }), h('span', { text: 'Rake this week' })),
+        h('div', {}, h('b', { id: 'vipWeekPay', text: fmt(totalP) }), h('span', { text: 'To pay out' }))),
+      h('p', { class: 'muted', style: 'font-size:12px;margin:8px 0', text: 'Payout = a player\'s weekly rake x their tier % (Bronze and Silver 5%, Gold 10%, Platinum 15%), rounded down. Amounts under one chip carry over to the next week. Banned players are not paid.' }),
+      go),
+    h('div', { class: 'tstrips', id: 'vipRows' }, rows.length ? rows.map(r => h('div', { class: 'tstrip static', 'data-vip': r.uid },
+      h('span', { class: 'tsname' }, h('b', { text: r.name }), h('i', { text: r.tier.name + ' ' + r.tier.pct + '% · rake ' + r.weekly.toFixed(2) + (r.banned ? ' · banned' : '') })),
+      h('span', { class: 'tsrake', text: r.banned ? '—' : fmt(r.payout) }))) : [h('div', { class: 'card tight' }, h('p', { class: 'muted', text: 'No rake has been contributed this week yet.' }))]),
+    a.batches && a.batches.length ? h('div', { class: 'card tight', id: 'vipBatches' }, h('strong', { class: 'gold', text: 'Past payouts' }),
+      a.batches.map(b => h('div', { class: 'anote' }, h('b', { text: fmt(b.total) + ' chips to ' + b.players + ' players' }), h('i', { text: (b.createdAt && b.createdAt.toMillis ? new Date(b.createdAt.toMillis()).toLocaleString() : '') + ' · week rake ' + fmt(Math.round(b.weekly)) })))) : null);
+}
+
 /* ==========================================================================
    SECTION 31 - MESSAGES FROM THE CLUB (player side) AND THE BANNED SCREEN
    The admin's notices are readable by every signed-in player; each lists who it is for and the app shows a player
@@ -5948,42 +6045,78 @@ function renderBanned() {
 
 /* ==========================================================================
    SECTION 32 - REWARDS (player side)
-   Three tabs: Rewards (chips from the admin), Gifts (sent to you by other players at a table) and Rakeback.
-   Rakeback: every hour played on a table is worth one boot of that table. It is counted hand by hand (a hand counts
-   whether you won, lost or packed) and paid into your wallet when you press Redeem.
+   Three tabs: Rewards (chips from the admin), Gifts (sent to you by other players at a table) and Rakeback (paid weekly
+   once the admin approves it, redeemed into your wallet here). VIP tiers are in the profile.
    ========================================================================== */
-const RAKEBACK_HAND_CAP_MS = 10 * 60 * 1000;   // one hand never counts for more than ten minutes
-const Rakeback = {
+/* VIP tiers. They come from the rake a player has contributed over their whole life (it never resets, so a tier is never lost).
+   Each finished hand adds the player's share of that hand's rake: the rake times their part of the pot. The same amount also
+   goes into this week's counter; on Fridays the admin reviews the week and pays weekly rake x tier % into "claimable". */
+const VIP_TIERS = [
+  { id: 'BRONZE', name: 'Bronze', pct: 5, from: 0, next: 10001, col: '#c98a4b' },
+  { id: 'SILVER', name: 'Silver', pct: 5, from: 10001, next: 50001, col: '#cfd6e2' },
+  { id: 'GOLD', name: 'Gold', pct: 10, from: 50001, next: 200001, col: '#f2c75c' },
+  { id: 'PLATINUM', name: 'Platinum', pct: 15, from: 200001, next: 0, col: '#8fe3ff' }];
+const vipTierIdx = l => (l > 200000 ? 3 : l > 50000 ? 2 : l > 10000 ? 1 : 0);
+// Pure: what the profile card shows for a VIP document (or for none yet).
+const vipInfo = d => {
+  const l = d && d.lifetime ? d.lifetime : 0, i = vipTierIdx(l), t = VIP_TIERS[i], nx = VIP_TIERS[i + 1] || null;
+  return { tier: t, next: nx, lifetime: l, weekly: d && d.weekly ? d.weekly : 0, claimable: d && d.claimable ? d.claimable : 0,
+    progress: nx ? Math.min(100, Math.round(l / t.next * 10000) / 100) : 100, payoutNow: Math.floor((d && d.weekly ? d.weekly : 0) * t.pct / 100) };
+};
+const Vip = {
   doc: null,
-  ref: uid => db.collection('rakeback').doc(uid),
-  // chips ready to redeem: whole chips only
-  available: d => d ? Math.max(0, Math.floor((d.earned || 0) + 1e-9) - (d.redeemed || 0)) : 0,
-  credit(G) { const dur = Math.max(0, Math.min(RAKEBACK_HAND_CAP_MS, Date.now() - (G.dealtAt || Date.now()))); return Math.round(G.boot * dur / 3600000 * 10000) / 10000; },
+  ref: uid => db.collection('vip').doc(uid),
   async load() {
     const uid = S.user && S.user.uid; if (!uid) return null;
-    const s = await Rakeback.ref(uid).get(); Rakeback.doc = s.exists ? s.data() : null; return Rakeback.doc;
+    const s = await Vip.ref(uid).get(); Vip.doc = s.exists ? s.data() : null; return Vip.doc;
+  },
+  // This player's share of a finished hand's rake (their part of the pot), to two decimals.
+  share(G, uid) {
+    const R = G.result, me = G.players[uid];
+    if (!R || !me || !(R.rake > 0) || !(R.amount > 0)) return 0;
+    return Math.round(R.rake * me.invested / R.amount * 100) / 100;
   },
   // Called once per finished hand (see Stats.record).
   async accrue(G, uid) {
-    const add = Rakeback.credit(G); if (!(add > 0)) return;
+    const add = Vip.share(G, uid); if (!(add > 0)) return;
     await db.runTransaction(async tx => {
-      const ref = Rakeback.ref(uid), s = await tx.get(ref);
-      if (!s.exists) tx.set(ref, { uid, earned: add, redeemed: 0, updatedAt: FV.serverTimestamp() });
-      else { const d = s.data(); tx.update(ref, { uid, earned: Math.round((d.earned + add) * 10000) / 10000, redeemed: d.redeemed, updatedAt: FV.serverTimestamp() }); }
+      const ref = Vip.ref(uid), s = await tx.get(ref), r2 = v => Math.round(v * 100) / 100;
+      if (!s.exists) tx.set(ref, { uid, lifetime: add, weekly: add, claimable: 0, claimed: 0, updatedAt: FV.serverTimestamp() });
+      else { const d = s.data(); const o = { uid, lifetime: r2(d.lifetime + add), weekly: r2(d.weekly + add), claimable: d.claimable, claimed: d.claimed, updatedAt: FV.serverTimestamp() }; if (d.lastPayout) o.lastPayout = d.lastPayout; tx.update(ref, o); }
     });
   },
-  // Moves the whole chips earned into the wallet (rule: rakeback update + users update validRedeem, one batch).
+  // Moves everything claimable into the wallet (rules: vip update + users update validRedeem, one batch).
   async redeem() {
     const uid = S.user.uid;
     return db.runTransaction(async tx => {
-      const rr = Rakeback.ref(uid), ur = Repo.userRef(uid), rs = await tx.get(rr), us = await tx.get(ur);
-      const d = rs.exists ? rs.data() : null, n = Rakeback.available(d);
-      if (!n) throw new AppError('Nothing to redeem yet. Keep playing and it will add up.');
-      tx.update(rr, { uid, earned: d.earned, redeemed: d.redeemed + n, updatedAt: FV.serverTimestamp() });
+      const vr = Vip.ref(uid), ur = Repo.userRef(uid), vs = await tx.get(vr), us = await tx.get(ur);
+      const d = vs.exists ? vs.data() : null, n = d ? d.claimable : 0;
+      if (!n) throw new AppError('Nothing to redeem yet. Your rakeback is paid on Fridays.');
+      const o = { uid, lifetime: d.lifetime, weekly: d.weekly, claimable: 0, claimed: d.claimed + n, updatedAt: FV.serverTimestamp() }; if (d.lastPayout) o.lastPayout = d.lastPayout;
+      tx.update(vr, o);
       tx.update(ur, { chips: us.data().chips + n, updatedAt: FV.serverTimestamp() });
       return n;
     });
   }
+};
+/* The tier card: name, progress to the next tier, and a star in the tier's colour. Used in the profile and under Rakeback. */
+function vipCard(name, d) {
+  const v = vipInfo(d), star = h('span', { class: 'vstar', 'aria-hidden': 'true', style: '--tc:' + v.tier.col, text: '★' });
+  return h('div', { class: 'vipcard', id: 'vipCard', 'data-tier': v.tier.id },
+    h('div', { class: 'vipl' },
+      h('b', { class: 'vname', text: name }),
+      h('div', { class: 'vtier', id: 'vipTier', text: v.tier.name.toUpperCase() + ' · ' + v.tier.pct + '% RAKEBACK' }),
+      h('div', { class: 'vpct' }, h('b', { id: 'vipPct', text: v.progress.toFixed(2) + '%' }), h('i', { class: 'vinfo', title: 'Progress to the next tier, from the rake you have contributed over your lifetime', text: 'i' })),
+      h('div', { class: 'vbar' }, h('i', { id: 'vipBar', style: 'width:' + v.progress + '%' })),
+      h('div', { class: 'vnext', id: 'vipNext', text: v.next ? 'Next level: ' + v.next.name + ' at ' + fmt(v.tier.next) + ' lifetime rake' : 'Top level reached' })),
+    star);
+}
+const vipTierList = d => {
+  const cur = vipTierIdx(d && d.lifetime ? d.lifetime : 0);
+  return h('div', { class: 'vlist', id: 'vipTiers' }, VIP_TIERS.map((t, i) => h('div', { class: 'vrow' + (i === cur ? ' on' : '') + (i < cur ? ' done' : ''), 'data-tier': t.id },
+    h('span', { class: 'vdot', style: 'background:' + t.col }), h('b', { text: t.name }),
+    h('small', { text: i === 3 ? fmt(t.from) + '+ lifetime rake' : (i === 0 ? 'Up to ' + fmt(VIP_TIERS[1].from - 1) : fmt(t.from) + ' - ' + fmt(VIP_TIERS[i + 1].from - 1)) + ' lifetime rake' }),
+    h('em', { text: t.pct + '%' }))));
 };
 /* Gifts other players sent you at a table, remembered on this phone (the table feed itself is short-lived). */
 const GiftBox = {
@@ -6013,17 +6146,17 @@ Object.assign(Sheets, {
       const box = h('div', { class: 'rbox', id: 'rakebackBox' }, h('p', { class: 'hnote', text: 'Loading...' }));
       body.append(box);
       const paint = d => {
-        const n = Rakeback.available(d);
+        const v = vipInfo(d), n = v.claimable;
         const redeem = h('button', { id: 'rbRedeem', type: 'button', class: 'btn-primary', text: n ? 'Redeem ' + fmt(n) + ' chips' : 'Nothing to redeem yet', disabled: !n });
         redeem.onclick = async () => {
           redeem.disabled = true;
-          try { const got = await Rakeback.redeem(); toast(fmt(got) + ' chips added to your balance.'); await Rakeback.load(); paint(Rakeback.doc); scheduleRender(); }
+          try { const got = await Vip.redeem(); toast(fmt(got) + ' chips added to your balance.'); await Vip.load(); paint(Vip.doc); scheduleRender(); }
           catch (e) { toast(friendlyError(e), 'err'); redeem.disabled = false; }
         };
-        box.replaceChildren(h('div', { class: 'rbtotal' }, h('span', { text: 'RAKEBACK EARNED' }), h('b', { id: 'rbTotal', text: fmt(n) })), redeem,
-          h('p', { class: 'hnote', text: 'Every hour you play at a table earns one boot of that table back. Redeem it any time to add it to your balance.' }));
+        box.replaceChildren(h('div', { class: 'rbtotal' }, h('span', { text: 'RAKEBACK READY TO REDEEM' }), h('b', { id: 'rbTotal', text: fmt(n) })), redeem,
+          h('p', { class: 'hnote', text: 'Rakeback is paid every Friday evening, after the club has checked and approved it. It is never paid automatically. Redeem it any time to add it to your balance.' }));
       };
-      Rakeback.load().then(paint, e => box.replaceChildren(h('p', { class: 'hnote', text: friendlyError(e) })));
+      Vip.load().then(paint, e => box.replaceChildren(h('p', { class: 'hnote', text: friendlyError(e) })));
     }
     Sheets.open('rewardsSheet', 'Rewards', h('div', {}, bar, body));
   }
