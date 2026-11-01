@@ -1089,7 +1089,7 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .tbpnum{font:700 max(11px,calc(var(--u) * 30))/1.05 system-ui;color:#f6d77a;font-variant-numeric:tabular-nums}
 .tbpnum small{font-size:.8em;margin-right:.1em}
 .tbpot.idle .tbpnum{color:#e4cf99}
-.tbtalk{position:absolute;left:calc(1152 / 1870 * 100%);top:calc(642 / 841 * 100%);transform:translate(-50%,-50%);z-index:3;display:flex;justify-content:center;pointer-events:none;max-width:calc(var(--u) * 330)}
+.tbtalk{position:absolute;left:calc(926 / 1870 * 100%);top:calc(402 / 841 * 100%);transform:translate(-50%,-50%);z-index:3;display:flex;justify-content:center;pointer-events:none;max-width:calc(var(--u) * 330)}
 .tbtalk>*{margin:0;padding:calc(var(--u) * 5) calc(var(--u) * 20);border-radius:99px;background:rgba(10,6,4,.66);border:1px solid rgba(214,172,92,.35);font:600 max(8px,calc(var(--u) * 20))/1.25 system-ui;color:#f6ecd2;white-space:nowrap;text-align:center}
 .tbtalk b{color:#f6d77a}
 .tbshowcall b{margin-right:.5em;color:#f6d77a;letter-spacing:.1em}
@@ -2650,7 +2650,7 @@ const Repo = {
   tip(uid, tableId, amount) {
     if (!TABLE_BY_ID[tableId]) throw new AppError('Unknown table.');
     if (!Number.isInteger(amount) || amount < 1 || amount > 1000) throw new AppError('A tip is 1 to 1,000 chips.');
-    const uref = Repo.userRef(uid), tref = Repo.roomRef(tableId).collection('tips').doc(uid);
+    const uref = Repo.userRef(uid), tref = Repo.roomRef(tableId).collection('tips').doc(uid), jref = db.collection('tipjar').doc(tableId);
     return db.runTransaction(async tx => {
       const us = await tx.get(uref);
       if (!us.exists || us.data().tableId !== tableId) throw new AppError('You do not have a seat at this table.');
@@ -2658,6 +2658,7 @@ const Repo = {
       if (u.chips < amount) throw new AppError('You only have ' + fmt(u.chips) + ' chips in your wallet.');
       tx.update(uref, { chips: u.chips - amount, updatedAt: FV.serverTimestamp() });
       tx.set(tref, { uid, amount, updatedAt: FV.serverTimestamp() });
+      tx.set(jref, { tableId, total: FV.increment(amount), count: FV.increment(1), updatedAt: FV.serverTimestamp() }, { merge: true });   // the dealer tips of this table, for the admin
     });
   },
 
@@ -3064,11 +3065,11 @@ const readyBots = R => (R.bots || []).filter(b => b.seatState === 'seated' && b.
 const seatedHumans = R => R.members.filter(m => m.seatState === 'seated').length;
 
 /* Why Sit Down is unavailable, as a sentence. Empty string means allowed. */
-function sitBlockReason(R, me) {
+function sitBlockReason(R, me, afterTopUp) {
   const cfg = TABLE_BY_ID[R.id];
   if (!me) return 'You do not have a seat record at this table.';
   if (me.seatState === 'seated') return 'You are already seated.';
-  if (me.stack < cfg.boot) return 'Out of chips — watching table.';
+  if (me.stack < cfg.boot && !afterTopUp && !(S.profile && S.profile.chips >= cfg.boot)) return 'Out of chips — watching table.';
   if (!hostLive(R.doc)) return 'Connecting to the table… try again in a moment.';
   if (seatedHumans(R) >= MAX_HUMAN_SEATS) return 'All ' + MAX_HUMAN_SEATS + ' player seats are taken.';
   return '';
@@ -3830,7 +3831,7 @@ async function submitBuyIn() {
     $('buyErr').textContent = 'Buy-in must be a whole number from ' + fmt(cfg.min) + ' to ' + fmt(cfg.max) + '.';
     $('buyErr').hidden = false; return;
   }
-  S.busy.join = true; setBtnBusy('buySend', true); $('buyErr').hidden = true; S.forceLobby = false;
+  S.busy.join = true; setBtnBusy('buySend', true); $('buyErr').hidden = true; S.forceLobby = false; S.stoodAt = '';
   try {
     const result = await Repo.joinTable(S.user.uid, tableId, n);
     Session.reset(S.user.uid, tableId);
@@ -3844,10 +3845,11 @@ async function submitBuyIn() {
 }
 
 /* ---- sitting, standing, leaving ---- */
-function handleSeatChange(type) {
+function handleSeatChange(type, confirmed) {
   const R = S.room, me = myMember(R);
-  const why = type === 'sit' ? sitBlockReason(R, me) : standBlockReason(R, me);
+  const why = type === 'sit' ? sitBlockReason(R, me, confirmed) : standBlockReason(R, me);
   if (why) return toast(why, 'err');
+  if (type === 'sit' && !confirmed && me && me.seatState !== 'seated' && !S.isAdmin && (S.stoodAt === R.id || me.stack < TABLE_BY_ID[R.id].min)) return Sheets.sitDown();
   const sc = scopeRoom;
   return withBusy('seat', 'request ' + type, async () => {
     const hn = Dealer.G ? Dealer.G.handNo : (R.game ? R.game.handNo : 0);
@@ -3869,19 +3871,46 @@ function resolvePending() {
   if (!S.pending || !S.room) return;
   const me = myMember(S.room);
   if (me && ((S.pending.type === 'sit' && me.seatState === 'seated') || (S.pending.type === 'stand' && me.seatState === 'standing'))) {
-    const was = S.pending.type, t = S.pending.tableId; S.pending = null;
-    if (was === 'stand' && !S.isAdmin) Session.afterStand(t);        // standing up ends your visit: chips back to the wallet, result cleared, buy in again
+    if (S.pending.type === 'stand') S.stoodAt = S.pending.tableId;
+    if (S.pending.type === 'sit') S.stoodAt = '';
+    S.pending = null;        // standing up keeps you at the table as a watcher; your session result stays until you leave and join again
   }
 }
 
 function handleLeave() {
-  const R = S.room, me = myMember(R), cfg = TABLE_BY_ID[R.id];
+  const R = S.room, me = myMember(R);
   const why = leaveBlockReason(R, me);
+  if (why && /Pack first/.test(why)) return confirmLeaveLive();
   if (why) return toast(why, 'err');
-  const stack = me ? me.stack : 0;
   return withBusy('leave', 'leave table', async () => {
     await Repo.leaveTable(S.user.uid, R.id);
     Session.reset(S.user.uid, R.id);
+  });
+}
+// Leaving in the middle of a hand: ask first. Yes packs your cards, then takes you to the lobby.
+function confirmLeaveLive() {
+  const yes = h('button', { id: 'leaveYes', type: 'button', class: 'btn-primary', text: 'Yes, leave', onclick: () => { Sheets.close(); leaveLiveHand(); } });
+  const no = h('button', { id: 'leaveNo', type: 'button', class: 'btn-secondary', text: 'No, stay', onclick: () => Sheets.close() });
+  Sheets.open('leaveSheet', 'Leave the table?', h('div', { class: 'setlist' },
+    h('p', { class: 'hnote', style: 'text-align:left;font-size:14px', text: 'A hand is still being played. If you leave now your cards are packed and what you put in the pot is lost.' }),
+    h('div', { class: 'row' }, no, yes)));
+}
+function leaveLiveHand() {
+  const R = S.room, me = myMember(R), t = R.id, uid = S.user.uid;
+  if (!me || S.busy.leave) return;
+  return withBusy('leave', 'leave table', async () => {
+    const hn = Dealer.G ? Dealer.G.handNo : (R.game ? R.game.handNo : 0);
+    toast('Packing your cards...');
+    if (Dealer.active) Dealer.submit('stand', hn); else await Repo.sendAction(uid, t, 'stand', hn);   // the dealer packs you and stands you up
+    const end = Date.now() + 12000;
+    while (Date.now() < end) {
+      await new Promise(r => setTimeout(r, 400));
+      if (!S.room || S.room.id !== t) return;                       // already taken to the lobby
+      const R2 = S.room, m2 = myMember(R2);
+      if (!m2) return;
+      if (!leaveBlockReason(R2, m2)) { await Repo.leaveTable(uid, t); Session.reset(uid, t); return; }
+    }
+    toast('The table did not answer. Try again.', 'err');
   });
 }
 
@@ -3903,7 +3932,7 @@ function handleGameAction(type) {
 /* ---- Auto Blind / Auto Chaal: plays the plain chaal for you on each of your turns, until the hand ends ---- */
 const Auto = {
   key: '', timer: 0,
-  reset() { Auto.key = ''; clearTimeout(Auto.timer); Auto.timer = 0; },
+  reset() { Auto.key = ''; clearTimeout(Auto.timer); Auto.timer = 0; S.autoRef = null; },
   stop(msg) { if (!S.auto && !S.autoPack) return; S.auto = false; S.autoPack = false; Auto.reset(); if (msg) toast(msg, 'err'); scheduleRender(); },
   // Auto Pack: on your next turn the cards are packed for you. It switches itself off once you are out of the hand.
   checkPack() {
@@ -3926,6 +3955,9 @@ const Auto = {
     if (!G || G.phase === 'idle' || !G.players || !G.players[uid]) return Auto.stop();
     if (G.phase !== 'playing' || G.players[uid].status === 'packed') return Auto.stop();
     const lm = legalMoves(G, uid);
+    // The tick is a promise to pay the amount shown when it was ticked. If anyone raises (or the hand changes) it switches itself off.
+    if (!S.autoRef) S.autoRef = { hand: G.handId, cost: lm.chaal.cost, stake: G.stake };
+    else if (S.autoRef.hand !== G.handId || S.autoRef.cost !== lm.chaal.cost || S.autoRef.stake !== G.stake) { S.auto = false; Auto.reset(); toast('Auto ' + (lm.chaal.label || 'Chaal') + ' is off: the amount changed.'); scheduleRender(); return; }
     if (!lm.myTurn || sidePending(G)) return;
     if (!lm.chaal.ok) return Auto.stop('Auto play stopped: ' + lm.chaal.reason);
     const key = G.handId + '|' + G.turnEndsAt + '|' + (G.log || []).length;
@@ -4926,8 +4958,8 @@ const Stats = {
 
 /* ==========================================================================
    SESSION RESULT - what you have won or lost at the table you are sitting at (yours only; it is kept on your own phone).
-   Each finished hand adds your share of the pot minus what you put in. It starts again from zero when you stand up
-   (your chips go back to your wallet and you buy in again).
+   Each finished hand adds your share of the pot minus what you put in. It starts again from zero only when you leave the table and join again from the lobby.
+   Standing up keeps it (you stay and watch).
    ========================================================================== */
 const Session = {
   key(uid, t) { return 'tp_sess_' + uid + '_' + t; },
@@ -4940,19 +4972,6 @@ const Session = {
     if (!p || !rs || !t) return;
     const d = Session.get(uid, t); if (d.hand === G.handId) return;
     Session.put(uid, t, { net: d.net + ((rs.shares && rs.shares[uid]) || 0) - (p.invested || 0), hand: G.handId });
-  },
-  // After you stand up: your stack goes back to the wallet, the result is cleared and the buy-in window opens again.
-  async afterStand(t) {
-    const uid = S.user && S.user.uid; if (!uid || !t || Session.busy) return;
-    Session.busy = true;
-    try {
-      Session.reset(uid, t);
-      await Repo.leaveTable(uid, t);
-      S.forceLobby = true;
-      toast('You stood up. Your chips are back in your wallet. Buy in to play again.');
-      setTimeout(() => { try { openBuyIn(t); } catch (e) { /* the lobby still works */ } }, 400);
-    } catch (e) { console.error('[TeenPatti] stand-up cash out failed', e && e.code, e && e.message); }
-    finally { Session.busy = false; }
   }
 };
 
@@ -5085,6 +5104,29 @@ const Sheets = {
       cap < 1 ? h('p', { class: 'hnote', text: wallet < 1 ? 'Your wallet has no chips left.' : 'Your stack is already at the table limit.' }) : null,
       h('div', { class: 'quickrow' }, opts.map(v => h('button', { type: 'button', class: 'btn-secondary', text: '+' + fmt(v), onclick: () => { input.value = v; } }))),
       h('div', { class: 'field' }, h('label', { for: 'topupInput', text: 'CHIPS TO ADD' }), input),
+      err, go));
+  },
+  // Sit down: ask for the buy-in. You may add chips from your wallet to what you already hold at this table.
+  sitDown() {
+    const R = S.room, me = myMember(R), cfg = R && TABLE_BY_ID[R.id], wallet = S.profile ? S.profile.chips : 0;
+    if (!R || !me || !cfg) return;
+    const room = Math.max(0, cfg.max - me.stack), cap = Math.min(wallet, room), need = Math.max(0, cfg.min - me.stack);
+    const opts = [...new Set([need, cfg.min, Math.floor(cap / 2 / cfg.boot) * cfg.boot, cap])].filter(v => v >= 0 && v <= cap).sort((a, b) => a - b);
+    const input = h('input', { id: 'sitAddInput', type: 'text', maxlength: 9, value: String(need) }); Keypad.attach(input, 'num');
+    const err = h('div', { id: 'sitErr', class: 'hnote', style: 'color:#a02a40;min-height:16px' });
+    const go = h('button', { id: 'sitGo', type: 'button', class: 'btn-primary', text: 'Sit down' });
+    go.onclick = async () => {
+      const n = Number(input.value || 0);
+      if (!Number.isInteger(n) || n < 0 || n > cap) { err.textContent = 'Enter a whole number from 0 to ' + fmt(cap) + '.'; return; }
+      if (me.stack + n < cfg.min) { err.textContent = 'You need at least ' + fmt(cfg.min) + ' chips at this table. Add ' + fmt(need) + ' or more.'; return; }
+      go.disabled = true; err.textContent = '';
+      try { if (n > 0) await Repo.topUp(S.user.uid, R.id, n); Sheets.close(); handleSeatChange('sit', true); }
+      catch (e) { err.textContent = friendlyError(e); go.disabled = false; }
+    };
+    Sheets.open('sitSheet', 'Sit down', h('div', { class: 'setlist' },
+      h('p', { class: 'hnote', style: 'text-align:left;font-size:13px', text: 'Buy-in ' + fmt(cfg.min) + ' to ' + fmt(cfg.max) + '  \u00B7  At this table ' + fmt(me.stack) + '  \u00B7  Wallet ' + fmt(wallet) }),
+      h('div', { class: 'quickrow' }, opts.map(v => h('button', { type: 'button', class: 'btn-secondary', text: v === 0 ? 'Keep ' + fmt(me.stack) : '+' + fmt(v), onclick: () => { input.value = v; } }))),
+      h('div', { class: 'field' }, h('label', { for: 'sitAddInput', text: 'CHIPS TO ADD' }), input),
       err, go));
   },
   player(sp) {
@@ -5592,9 +5634,10 @@ const Admin = {
   /* the house's take, live from the rake ledger */
   watchRake() {
     if (Admin.rakeUnsub) return;
+    Admin.tipUnsub = db.collection('tipjar').onSnapshot(snap => { const o = {}; snap.docs.forEach(d => { o[d.id] = d.data(); }); Admin.st.tips = o; if (Admin.st.view === 'rake') Admin.paint(); }, () => { Admin.st.tips = {}; });
     Admin.rakeUnsub = db.collection('rake').onSnapshot(snap => { const o = {}; snap.docs.forEach(d => { o[d.id] = d.data(); }); Admin.st.rake = o; if (Admin.st.view === 'rake') Admin.paint(); }, e => { Admin.st.rake = {}; Admin.say(friendlyError(e), 'err'); });
   },
-  unwatchRake() { if (Admin.rakeUnsub) { Admin.rakeUnsub(); Admin.rakeUnsub = null; } },
+  unwatchRake() { if (Admin.rakeUnsub) { Admin.rakeUnsub(); Admin.rakeUnsub = null; } if (Admin.tipUnsub) { Admin.tipUnsub(); Admin.tipUnsub = null; } },
   /* ---- weekly rakeback: review, then approve ---- */
   async loadVip() {
     try {
@@ -5952,6 +5995,30 @@ function adminRake() {
         d.total || d.hands ? h('button', { type: 'button', class: 'btn-secondary btn-small tsreset', 'data-reset': id, text: 'Reset', onclick: () => {
           if (!confirm('Reset the rake of ' + names(id) + ' to zero? This cannot be undone.')) return;
           return adminBusy('rr_' + id, 'reset rake', async () => { await db.collection('rake').doc(id).delete(); Admin.say('Rake of ' + names(id) + ' reset.'); });
+        } }) : null);
+    })),
+    adminTips(rows.filter((id, i, ar) => ar.indexOf(id) === i), names, ms));
+}
+
+/* Tips players gave the dealer, kept apart from the rake. */
+function adminTips(ids, names, ms) {
+  const T = Admin.st.tips || {}, all = ids.concat(Object.keys(T).filter(k => !ids.includes(k)));
+  const total = Object.values(T).reduce((x, d) => x + (d.total || 0), 0), count = Object.values(T).reduce((x, d) => x + (d.count || 0), 0);
+  return h('div', { id: 'tipsPanel' },
+    h('div', { class: 'card tight' },
+      h('strong', { class: 'gold', text: 'Dealer tips' }),
+      h('div', { class: 'astats' },
+        h('div', {}, h('b', { id: 'tipTotal', text: fmt(total) }), h('span', { text: 'Total tips, all tables' })),
+        h('div', {}, h('b', { id: 'tipCount', text: String(count) }), h('span', { text: 'Tips given' }))),
+      h('p', { class: 'muted', style: 'font-size:12.5px;margin:8px 0 0', text: 'Tips are separate from the rake. Reset sets one table back to zero.' })),
+    h('div', { class: 'tstrips', id: 'tipList' }, all.map(id => {
+      const d = T[id] || {};
+      return h('div', { class: 'tstrip static', 'data-tip': id },
+        h('span', { class: 'tsname' }, h('b', { text: names(id) }), h('i', { text: d.count ? d.count + ' tips · last ' + ms(d.updatedAt) : 'no tips yet' })),
+        h('span', { class: 'tsrake', text: fmt(d.total || 0) }),
+        d.total ? h('button', { type: 'button', class: 'btn-secondary btn-small tsreset', 'data-tipreset': id, text: 'Reset', onclick: () => {
+          if (!confirm('Reset the tips of ' + names(id) + ' to zero? This cannot be undone.')) return;
+          return adminBusy('tr_' + id, 'reset tips', async () => { await db.collection('tipjar').doc(id).delete(); Admin.say('Tips of ' + names(id) + ' reset.'); });
         } }) : null);
     })));
 }
@@ -6504,7 +6571,7 @@ function legalMoves(G, id) {
   if (sideWhy && out.see.ok) out.see = { ok: false, reason: sideWhy };
   out.sideAsked = !!(G.side && G.side.state === 'ask' && G.side.to === id);
   out.finalRound = false; out.round = 0;
-  out.blindsLeft = p.status === 'blind' ? Math.max(0, ENGINE.BLIND_LIMIT - (p.blinds || 0)) : 0;
+  out.blindsLeft = p.status === 'blind' ? 99 : 0;
   return out;
 }
 
@@ -6618,7 +6685,7 @@ function forcePack(G0, id, now, hands) {
 function noteBlind(G, id, wasBlind) {
   if (!wasBlind) return;
   const p = G.players[id]; p.blinds = (p.blinds || 0) + 1;
-  if (p.blinds >= ENGINE.BLIND_LIMIT) { p.status = 'seen'; addLog(G, p.name + ' must look at their cards.'); }
+  // a player stays blind until they choose to look at their cards (the blind cap still limits the stake)
 }
 
 // The single entry point for a move. Returns { ok, G } or { ok:false, error }.
