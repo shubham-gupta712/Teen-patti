@@ -2084,10 +2084,18 @@ body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
 
 /* 56. Chaal / Double labels under a player, and your own result at this table */
 .tbpst.chaal{background:#10345a;color:#bfe0ff;border-color:rgba(96,170,255,.55)}
+.tbpst.inactive{background:#3b1a1a;color:#ffb0a8;border-color:rgba(255,110,90,.7);animation:tbInact 1s ease-in-out infinite alternate}
+@keyframes tbInact{from{opacity:1}to{opacity:.55}}
 .tbpst.double{background:#4a2a05;color:#ffd990;border-color:rgba(255,176,60,.65)}
 .tbstage .tbsess{position:absolute;z-index:4;display:flex;align-items:center;justify-content:center;gap:calc(var(--u) * 8);border-radius:99px;background:rgba(10,6,4,.7);border:1px solid rgba(214,172,92,.4);font:700 max(8px,calc(var(--u) * 19))/1 system-ui;color:#f6ecd2;white-space:nowrap;pointer-events:none}
 .tbstage .tbsess small{font-weight:600;letter-spacing:.08em;opacity:.8;font-size:.82em}
 .tbstage .tbsess b.up{color:#7be3a0}.tbstage .tbsess b.down{color:#ff8e9d}
+
+/* 57. the sideshow button shows its price in the same way as the other moves */
+.tbm.b-side .am{color:#f3e3ff;opacity:1}
+.tbm.tbautob .am{margin-left:calc(var(--u) * 8);color:#ffe9a6}
+
+.tstrip .tsreset{flex:none;margin-left:8px;padding:6px 10px;min-height:0;font-size:12px}
 
 </style>
 </head>
@@ -2830,11 +2838,11 @@ const Repo = {
   },
   // A player proves they know the code and password by writing the matching hash.
   // Rule: unlocked create/update (validUnlock). A wrong guess is refused with permission-denied.
-  async unlockPrivate(uid, code, password) {
-    const key = await Repo.privateKey(code, password);
+  async unlockPrivate(uid, code) {
+    const key = await Repo.privateKey(code, cleanCode(code));
     try { await Repo.unlockRef(uid).set({ uid, key, createdAt: FV.serverTimestamp() }); }
     catch (e) {
-      if (e && e.code === 'permission-denied') throw new AppError('That room code or password is not right, or the private table is not open.');
+      if (e && e.code === 'permission-denied') throw new AppError('That room code is not right, or the private table is not open.');
       throw e;
     }
   },
@@ -2844,9 +2852,8 @@ const Repo = {
     const st = { boot: o.boot, min: o.min || (preset ? preset.min : def.min), max: o.max || (preset ? preset.max : def.max), blind: o.blind || def.blind, chaal: o.chaal || def.chaal, pot: o.pot || def.pot };
     const chk = readLimits(st);
     if (chk.error) throw new AppError(chk.error);
-    const code = cleanCode(o.code), password = String(o.password || '');
+    const code = cleanCode(o.code), password = code;      // the room code is the only secret: it is also stored as the password the rules still expect
     if (code.length < 4 || code.length > 12) throw new AppError('The room code needs 4 to 12 letters or numbers.');
-    if (password.length < 4 || password.length > 20) throw new AppError('The password needs 4 to 20 characters.');
     const name = String(o.name || '').replace(/\s+/g, ' ').trim().slice(0, 24) || 'Private Table';
     const key = await Repo.privateKey(code, password);
     const ref = Repo.roomRef(PRIVATE_ID), snap = await ref.get();
@@ -3042,6 +3049,7 @@ function openRoomScope(tableId) {
   if (S.isAdmin) sc.every(Sweep.tick, 5000);
   else { Presence.beat(); sc.every(Presence.beat, PRESENCE_MS); }
   sc.every(Hosting.check, 2000);
+  sc.every(Inactive.tick, 1500);
   sc.every(StaleSeat.tick, 2000);                         // countdown text only; never re-draws the screen
 }
 
@@ -3215,7 +3223,7 @@ function updateTimer() {
 
 /* Who sits where: the players of the live hand, or the seated players between hands. */
 function seatList(R, G, live) {
-  if (live) return G.order.map(id => { const p = G.players[id]; return { id, name: p.name, avatar: p.avatar, chips: p.chips, invested: p.invested || 0, status: p.status, last: p.last || '', bot: !!p.bot, dealer: G.order[G.dealerIdx] === id }; });
+  if (live) return G.order.map(id => { const p = G.players[id]; return { id, name: p.name, avatar: p.avatar, chips: p.chips, invested: p.invested || 0, status: p.status, last: p.last || '', inactive: !!p.inactive, bot: !!p.bot, dealer: G.order[G.dealerIdx] === id }; });
   const list = R.members.filter(m => m.seatState === 'seated').map(m => ({ id: m.uid, name: m.name, avatar: m.avatar, chips: m.stack, status: '', bot: false, dealer: false }));
   (R.bots || []).filter(b => b.seatState === 'seated').forEach(b => list.push({ id: b.botId, name: b.name, avatar: 'bot', chips: b.stack, status: '', bot: true, dealer: false }));
   return list;
@@ -3301,8 +3309,8 @@ function tbSeat(sp, key, c) {
       h('circle', { cx: 38, cy: 38, r: TIMER_R, class: 'tbprog', style: 'stroke:' + col + ';stroke-dasharray:' + TIMER_C + ';stroke-dashoffset:' + (TIMER_C * (1 - f)) }));
   }
   const open = () => Sheets.player(sp, c);
-  const label = away ? 'Away' : out ? 'Packed' : sp.last === 'double' ? 'Double' : sp.last === 'chaal' ? 'Chaal' : sp.status === 'seen' ? 'Seen' : sp.status === 'blind' ? 'Blind' : '';
-  const stKind = away || out ? 'out' : sp.last === 'double' || sp.last === 'chaal' ? sp.last : sp.status;
+  const label = sp.inactive ? 'Inactive' : away ? 'Away' : out ? 'Packed' : sp.last === 'doubleblind' ? 'Double Blind' : sp.last === 'doublechaal' ? 'Double Chaal' : sp.last === 'chaal' ? 'Chaal' : sp.status === 'seen' ? 'Seen' : sp.status === 'blind' ? 'Blind' : '';
+  const stKind = sp.inactive ? 'inactive' : away || out ? 'out' : /^double/.test(sp.last) ? 'double' : sp.last === 'chaal' ? 'chaal' : sp.status;
   const kids = [
     h('div', { class: 'tbring', style: tbAt(ax, ay), onclick: open }, avatarNode(sp.avatar), ring, sp.dealer ? h('span', { class: 'tbdealer', title: 'Dealer button', text: 'D' }) : null, h('span', { class: away ? 'tbaway' : 'tbonline', title: away ? 'Away' : 'Online' })),
     h('div', { class: 'tbplate', style: tbAt(ax, ay + 64), onclick: open },
@@ -3440,7 +3448,7 @@ function autoPill(lm, x) {
   const word = lm.status === 'seen' ? 'Auto Chaal' : 'Auto Blind';
   return h('label', { class: 'tbm tbautob b-chaal' + (S.auto ? ' on' : ''), style: tbAt(x, 808) },
     h('input', { type: 'checkbox', id: 'autoChk', checked: !!S.auto, onchange: e => { S.auto = e.target.checked; if (S.auto) S.autoPack = false; Auto.reset(); scheduleRender(); if (S.auto) Auto.check(); } }),
-    h('span', { class: 'bx', 'aria-hidden': 'true' }, icon('check')), h('span', { class: 'ml' }, h('span', { class: 'lb', id: 'autoLbl', text: word })));
+    h('span', { class: 'bx', 'aria-hidden': 'true' }, icon('check')), h('span', { class: 'ml' }, h('span', { class: 'lb', id: 'autoLbl', text: word }), lm.chaal.cost > 0 ? h('span', { class: 'am', id: 'autoAmt', text: rupee(lm.chaal.cost) }) : null));
 }
 /* Auto Pack, on the left of your cards: packs on your next turn. It and Auto Chaal cannot both be on. */
 function autoPackPill(x) {
@@ -3540,7 +3548,7 @@ function renderFelt(R, me, msgs) {
   }
 
   /* the pot, and a line of table talk under it */
-  const potv = live ? (result ? G.result.amount : G.pot) : 0;
+  const potv = live ? (result ? G.result.amount - (G.result.rake || 0) : G.pot) : 0;   // after the hand: what the winners take, the rake already out
   stage.appendChild(h('div', { class: 'tbpot' + (live ? '' : ' idle'), style: tbBox(808, 590, 1042, 656) },
     h('div', { class: 'tbplabel', text: result ? 'WON' : 'POT' }), h('div', { class: 'tbpnum' }, h('span', { id: 'potAmt', text: fmt(potv) }))));
   const pileN = live && !result ? pileCount(Fx.shown, cfg.boot) : 0;
@@ -3925,7 +3933,7 @@ const Auto = {
     Auto.key = key;
     Auto.timer = setTimeout(() => {
       const G2 = S.room && S.room.game;
-      if (S.auto && !S.act && G2 && G2.handId === G.handId && G2.turn === uid && !sidePending(G2)) handleGameAction('chaal');
+      if (S.auto && !S.act && G2 && G2.handId === G.handId && G2.turn === uid && !sidePending(G2)) { S.auto = false; Auto.reset(); handleGameAction('chaal'); }   // one turn only: tick it again for the next one
     }, 700);
   }
 };
@@ -3961,10 +3969,10 @@ function handleClosePrivate() {
 function copyInvite() {
   const sec = S.privSecret, pd = S.rooms[PRIVATE_ID];
   if (!sec) return;
-  const text = 'Teen Patti Club - private table' + (pd ? ' (' + pd.name + ')' : '') + '\nRoom code: ' + sec.code + '\nPassword: ' + sec.password + '\nOpen the lobby and tap the Private Table tile.';
+  const text = 'Teen Patti Club - private table' + (pd ? ' (' + pd.name + ')' : '') + '\nRoom code: ' + sec.code + '\nOpen the lobby and tap the Private Table tile.';
   const done = () => toast('Invite copied. Paste it into your chat.');
-  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, () => toast('Could not copy. Select the code and password and share them by hand.', 'err'));
-  else toast('Could not copy. Select the code and password and share them by hand.', 'err');
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, () => toast('Could not copy. Select the room code and share it by hand.', 'err'));
+  else toast('Could not copy. Select the room code and share it by hand.', 'err');
 }
 
 /* ==========================================================================
@@ -4051,6 +4059,29 @@ const StaleSeat = {
     try { await Repo.leaveTable(S.user.uid, t); StaleSeat.table = ''; S.forceLobby = true; StaleSeat.note(TABLE_BY_ID[t], me.stack, StaleSeat.fresh); }
     catch (e) { /* the table was not ready yet: try again on the next tick */ }
     finally { StaleSeat.busy = false; }
+  }
+};
+
+/* A player who missed two turns in a row is marked Inactive for everyone at the table. A few seconds later their own phone takes them off the table
+   (stack back to the wallet). A phone that is switched off or closed is removed by the table once it has been silent long enough (Sweep). */
+const Inactive = {
+  t: '', since: 0, busy: false,
+  async tick() {
+    const R = S.room, uid = S.user && S.user.uid; if (!R || !uid || S.isAdmin || Inactive.busy) return;
+    const G = R.game, mine = G && G.players && G.players[uid];
+    if (mine && mine.inactive && !Inactive.t) { Inactive.t = R.id; Inactive.since = Date.now(); }
+    if (!Inactive.t) return;
+    if (Inactive.t !== R.id) { Inactive.t = ''; return; }
+    const me = myMember(R);
+    if (!me) { Inactive.t = ''; return; }
+    if (Date.now() - Inactive.since < 4500 || leaveBlockReason(R, me)) return;
+    Inactive.busy = true;
+    try {
+      Session.reset(uid, R.id);
+      await Repo.leaveTable(uid, R.id); Inactive.t = ''; S.forceLobby = true;
+      toast('You missed two turns in a row, so you were stood up and removed from the table. Your chips are back in your wallet.');
+    } catch (e) { /* the table was not ready yet: try again on the next tick */ }
+    finally { Inactive.busy = false; }
   }
 };
 
@@ -4297,8 +4328,8 @@ const Dealer = {
         if (G.players[who] && !G.players[who].bot) {
           Dealer.missed[who] = (Dealer.missed[who] || 0) + 1;
           if (Dealer.missed[who] >= GAME_CONFIG.maxMissed && N.players[who]) {
-            N.players[who].standAfter = true; Dealer.missed[who] = 0;
-            N.log = N.log.concat(nm + ' missed two turns and was stood up.').slice(-ENGINE.LOG_MAX);
+            N.players[who].standAfter = true; N.players[who].inactive = true; Dealer.missed[who] = 0;
+            N.log = N.log.concat(nm + ' missed two turns, is inactive and is removed from the table.').slice(-ENGINE.LOG_MAX);
           }
         }
         Dealer.commit(N);
@@ -4333,7 +4364,7 @@ const Dealer = {
     for (const id of g.order) if (g.players[id] && g.players[id].status !== 'packed' && hs[id] && hs[id].handId === g.handId) hands[id] = hs[id].cards;
     const complete = g.order.every(id => g.players[id].status === 'packed' || hands[id]);
     if (complete) {
-      Dealer.hands = hands; Dealer.G = Object.assign({}, g, { turnEndsAt: now + GAME_CONFIG.turnMs });
+      Dealer.hands = hands; Dealer.G = Object.assign({}, g, { turnEndsAt: g.turnEndsAt > now ? g.turnEndsAt : now });   // a turn that ran out while nobody was hosting counts as missed: the next tick packs that player
       await Repo.writeGame(t, Dealer.G);
       S.dealerInfo.lastError = ''; S.dealerInfo.note = 'Resumed hand ' + g.handNo + ' after a reload.';
     } else {
@@ -4501,7 +4532,7 @@ const Fx = {
     if (isNew) {
       Fx.hand = G.handId; Fx.wonHand = '';
       Fx.dealStart = Fx.on && fresh && G.phase === 'playing' ? now : 0;
-      Fx.shown = Fx.dealStart ? 0 : (result ? G.result.amount : G.pot);
+      Fx.shown = Fx.dealStart ? 0 : (result ? G.result.amount - (G.result.rake || 0) : G.pot);
       Fx.status = mine ? mine.status : '';
       Fx.pl = {}; Fx.stake = G.stake;
       if (G.phase === 'playing') History.start(G);
@@ -4531,7 +4562,7 @@ const Fx = {
     if (G.turn !== uid) Fx.turnKey = G.phase === 'playing' ? Fx.turnKey : '';
 
     // pot count-up (the number shown survives a re-render)
-    const prevT = Fx.target; Fx.target = result ? G.result.amount : G.pot;
+    const prevT = Fx.target; Fx.target = result ? G.result.amount - (G.result.rake || 0) : G.pot;
     if (Fx.on && !isNew && Fx.target > prevT && $('potAmt')) $('potAmt').animate([{ transform: 'scale(1)' }, { transform: 'scale(1.3)' }, { transform: 'scale(1)' }], { duration: 320, easing: 'ease-out' });
     if (!Fx.on) Fx.shown = Fx.target;
     Fx.paint();
@@ -4722,29 +4753,10 @@ const Fx = {
   },
 
   // Once per hand: the chips slide from the pot to the winner's picture. No pop-up.
-  // Two labels rise out of the pot: the winnings go towards the winner(s), the rake towards the dealer.
-  splitLabels(G, net, rk) {
-    const L = $('fxLayer'), pot = potEl(); if (!Fx.on || !L || !pot) return;
-    const a = Fx.centre(pot), win = G.result.winners[0] && Fx.seat(G.result.winners[0]), dl = $('dealerFigure');
-    const mk = (txt, cls, to, delay) => {
-      const b = to ? Fx.centre(to) : { x: a.x, y: a.y - 60 }, el = h('div', { class: 'fxsplit ' + cls, text: txt });
-      el.style.left = a.x + 'px'; el.style.top = a.y + 'px'; L.appendChild(el);
-      const dx = b.x - a.x, dy = b.y - a.y;
-      const an = el.animate([{ transform: 'translate(-50%,-50%) scale(.6)', opacity: 0 }, { transform: 'translate(-50%,-50%) scale(1.1)', opacity: 1, offset: .18 },
-        { transform: 'translate(calc(-50% + ' + dx * .15 + 'px),calc(-50% + ' + (dy * .15 - 14) + 'px)) scale(1)', opacity: 1, offset: .55 },
-        { transform: 'translate(calc(-50% + ' + dx * .5 + 'px),calc(-50% + ' + (dy * .5 - 10) + 'px)) scale(.9)', opacity: 0 }], { duration: 1900, delay, easing: 'ease-out', fill: 'both' });
-      an.onfinish = () => el.remove();
-    };
-    mk('Winners ' + fmt(net), 'win', win, 0);
-    if (rk > 0) mk('Rake ' + fmt(rk), 'rake', dl, 120);
-  },
   celebrate(G) {
     const pot = $('potAmt'), win = G.result.winners;
-    // the pot is split in front of everyone: the winnings fly to the winners, the rake flies to the dealer
-    const rk = G.result.rake || 0, net = G.result.amount - rk, dealer = $('dealerFigure');
-    Fx.splitLabels(G, net, rk);
-    win.forEach((id, k) => Fx.fly(potEl(), Fx.seat(id), 12, 900 + k * 120));
-    if (rk > 0 && dealer) { Fx.fly(potEl(), dealer, Math.min(8, 3 + Math.floor(rk / Math.max(1, G.result.amount / 20))), 700, false, true); Sfx.chip(); }
+    // the pot, less the house's rake, goes to the winner(s)
+    win.forEach((id, k) => Fx.fly(potEl(), Fx.seat(id), 12, 250 + k * 120));
     if (pot && Fx.on) pot.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.08)' }, { transform: 'scale(1)' }], { duration: 500 });
     if (win.includes(S.user && S.user.uid)) { Sfx.win(); Sfx.buzz([40, 50, 40, 50, 80]); }
   }
@@ -5298,30 +5310,29 @@ const Sheets = {
   },
 
   /* ---- the private table ---- */
-  // Players: room code and password, then the buy-in. The database checks them; a wrong guess is refused.
+  // Players: room code, then the buy-in. The database checks them; a wrong guess is refused.
   privateEntry() {
     const code = h('input', { id: 'privCode', type: 'text', maxlength: 12, placeholder: 'ROOM CODE', autocapitalize: 'characters', autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Room code' });
-    const pass = h('input', { id: 'privPass', type: 'text', maxlength: 20, placeholder: 'PASSWORD', autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Password' });
-    Keypad.attach(code, 'alnum'); Keypad.attach(pass, 'alnum');
+    Keypad.attach(code, 'alnum');
     const err = h('div', { id: 'privErr', class: 'msg err', role: 'alert', hidden: true });
     const go = h('button', { id: 'privGo', type: 'button', class: 'btn-primary', text: 'Enter table' });
     const run = async () => {
       if (go.disabled) return;
-      if (cleanCode(code.value).length < 4 || !pass.value) { err.textContent = 'Enter the room code and the password you were given.'; err.hidden = false; return; }
+      if (cleanCode(code.value).length < 4) { err.textContent = 'Enter the room code you were given.'; err.hidden = false; return; }
       go.disabled = true; err.hidden = true;
       try {
-        await Repo.unlockPrivate(S.user.uid, code.value, pass.value);
+        await Repo.unlockPrivate(S.user.uid, code.value);
         Sheets.close();
         openBuyIn(PRIVATE_ID);
       } catch (e) { err.textContent = friendlyError(e); err.hidden = false; go.disabled = false; }
     };
     go.onclick = run;
-    [code, pass].forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') run(); }));
+    [code].forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') run(); }));
     Sheets.open('privSheet', 'Private table', h('div', { class: 'setlist' },
-      h('p', { class: 'hnote', style: 'text-align:left', text: 'By invitation only. Enter the room code and password you were given.' }),
+      h('p', { class: 'hnote', style: 'text-align:left', text: 'By invitation only. Enter the room code you were given.' }),
       h('div', { class: 'pfrow' },
         h('div', { class: 'field' }, h('label', { for: 'privCode', text: 'ROOM CODE' }), code),
-        h('div', { class: 'field' }, h('label', { for: 'privPass', text: 'PASSWORD' }), pass), go),
+        go),
       err), 'compact');
     code.focus();
   }
@@ -5571,6 +5582,11 @@ const Admin = {
       try { const m = await Repo.membersCol(u.tableId).doc(u.uid).get(); const d = m.exists ? m.data() : null; const ts = d && (d.seenAt || d.updatedAt || d.joinedAt); u._seen = ts && ts.toMillis ? ts.toMillis() : 0; u._held = !m.exists; } catch (e) { u._seen = 0; }
     }));
     Admin.st.presenceAt = now;
+    // A seat nobody has stamped for a long time belongs to a player who is gone: clear it (the chips go back to their wallet). One at a time, and only when the table allows it.
+    for (const u of (Admin.st.users || [])) {
+      if (!u.tableId || u._held || !u._seen || now - u._seen < KICK_MS * 2) continue;
+      try { await Repo.adminRemoveMember(u.uid, u.tableId); u.chips = (u.chips || 0) + (u._stack || 0); u.tableId = ''; u._seen = 0; } catch (e) { /* a hand is in progress, or the seat is already gone: leave it */ }
+    }
   },
   stateOf(u) { return !u.tableId ? 'off' : (u._seen && Date.now() - u._seen < ADMIN_ONLINE_MS) ? 'playing' : 'held'; },
   /* the house's take, live from the rake ledger */
@@ -5598,6 +5614,14 @@ const Admin = {
     }).filter(r => r.weekly > 0).sort((x, y) => y.payout - x.payout || y.weekly - x.weekly);
   },
   // The Friday payout, exactly as reviewed: each player's reviewed weekly rake is paid at their tier % and taken off their week.
+  async resetWeekly(uid) {
+    await db.runTransaction(async tx => {
+      const ref = db.collection('vip').doc(uid), s = await tx.get(ref); if (!s.exists) return;
+      const d = s.data(), o = { uid, lifetime: d.lifetime, weekly: 0, claimable: d.claimable, claimed: d.claimed, updatedAt: FV.serverTimestamp() };
+      if (d.lastPayout !== undefined) o.lastPayout = d.lastPayout;
+      tx.set(ref, o);
+    });
+  },
   async payoutWeek(rows) {
     const batch = 'wk' + new Date().toISOString().slice(0, 16).replace(/[-:T]/g, ''), paid = [];
     for (const r of rows) {
@@ -5849,14 +5873,13 @@ function adminPrivate() {
   return h('div', { class: 'card tight', id: 'privCard', 'data-table': PRIVATE_ID },
     h('div', { class: 'row' }, h('strong', { class: 'gold', text: (pd ? pd.name : 'Private table') + (pd ? ' · Boot ' + pd.boot : '') }),
       h('span', { id: 'privBadge', class: 'badge ' + (!pLoaded ? '' : pOpen ? 'on' : 'off'), text: !pLoaded ? 'Loading' : !pd ? 'Not created' : pOpen ? 'Open' : 'Closed' })),
-    pd ? h('div', { class: 'muted', text: 'Buy-in ' + fmt(pd.minBuyIn) + ' - ' + fmt(pd.maxBuyIn) }) : h('div', { class: 'muted', text: 'Only you can open it. Players need its room code and password. You can set the boot, buy-in and limits.' }),
+    pd ? h('div', { class: 'muted', text: 'Buy-in ' + fmt(pd.minBuyIn) + ' - ' + fmt(pd.maxBuyIn) }) : h('div', { class: 'muted', text: 'Only you can open it. Players need its room code. You can set the boot, buy-in and limits.' }),
     pd ? h('div', { class: 'muted', text: 'Max blind ' + fmt(cfg.blind) + '  ·  Max chaal ' + fmt(cfg.chaal) + '  ·  Pot limit ' + fmt(cfg.pot) }) : null,
     pd ? h('div', { class: 'astats' },
       h('div', {}, h('b', { text: String(pOn ? (pd.seated || 0) : 0) }), h('span', { text: 'Seated' })),
       h('div', {}, h('b', { text: pd.status }), h('span', { text: 'Status' }))) : null,
     sec ? h('div', { id: 'privSecret', class: 'secretbox' },
-      h('div', {}, h('span', { text: 'ROOM CODE' }), h('b', { id: 'privCodeShown', text: sec.code })),
-      h('div', {}, h('span', { text: 'PASSWORD' }), h('b', { id: 'privPassShown', text: sec.password }))) : null,
+      h('div', {}, h('span', { text: 'ROOM CODE' }), h('b', { id: 'privCodeShown', text: sec.code }))) : null,
     h('div', { class: 'controls', style: 'margin-top:10px' },
       h('button', { id: 'privOpenBtn', class: 'btn-primary btn-small', type: 'button', text: pd ? 'Customise or change code' : 'Create the private table', onclick: () => Sheets.privateAdmin() }),
       sec && pOpen ? h('button', { id: 'privCopyBtn', class: 'btn-secondary btn-small', type: 'button', text: 'Copy invite', onclick: copyInvite }) : null,
@@ -5885,24 +5908,23 @@ function adminPrivForm() {
   stake.value = f.stake;
   const num = (id, k) => h('input', { id, type: 'number', min: 1, inputmode: 'numeric', value: String(f[k]), oninput: e => { f[k] = e.target.value; f.stake = 'custom'; stake.value = 'custom'; } });
   const code = h('input', { id: 'paCode', type: 'text', maxlength: 12, value: f.code, autocapitalize: 'characters', autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Room code', oninput: e => { f.code = e.target.value; } });
-  const pass = h('input', { id: 'paPass', type: 'text', maxlength: 20, value: f.password, autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Password', oninput: e => { f.password = e.target.value; } });
-  Keypad.attach(code, 'alnum'); Keypad.attach(pass, 'alnum');
+  Keypad.attach(code, 'alnum');
   const err = h('div', { id: 'paErr', class: 'msg err', role: 'alert', hidden: !f.err, text: f.err });
   const save = h('button', { id: 'paSave', type: 'button', class: 'btn-primary btn-small', text: pd && pd.status === 'open' ? 'Save changes' : 'Open the table', disabled: !!S.busy.privSave });
   save.onclick = () => {
     S.busy.privSave = true; f.err = ''; Admin.paint();
-    Repo.openPrivate({ name: f.name, boot: Number(f.boot), min: Number(f.min), max: Number(f.max), blind: Number(f.blind), chaal: Number(f.chaal), pot: Number(f.pot), code: f.code, password: f.password })
-      .then(r => { S.privSecret = { code: r.code, password: r.password }; Admin.st.pf = null; toast('The private table is open.'); }, e => { f.err = friendlyError(e); })
+    Repo.openPrivate({ name: f.name, boot: Number(f.boot), min: Number(f.min), max: Number(f.max), blind: Number(f.blind), chaal: Number(f.chaal), pot: Number(f.pot), code: f.code })
+      .then(r => { S.privSecret = { code: r.code }; Admin.st.pf = null; toast('The private table is open.'); }, e => { f.err = friendlyError(e); })
       .finally(() => { S.busy.privSave = false; Admin.paint(); });
   };
   return h('div', { class: 'card tight', id: 'privAdminSheet' },
     h('div', { class: 'row' }, h('strong', { class: 'gold', text: pd ? 'Customise the private table' : 'Create the private table' })),
-    h('p', { class: 'muted', style: 'font-size:12.5px;margin:6px 0 10px', text: 'Players type the room code and password to sit here. Changing them locks out anyone who has not been given the new ones (people already seated stay seated).' }),
+    h('p', { class: 'muted', style: 'font-size:12.5px;margin:6px 0 10px', text: 'Players type the room code to sit here. Changing it locks out anyone who has not been given the new one (people already seated stay seated).' }),
     h('div', { class: 'aform' },
       field('paName', 'TABLE NAME', name), field('paStake', 'STAKE', stake),
       h('div', { class: 'agrid' }, [['paBoot', 'boot', 'BOOT'], ['paMin', 'min', 'LOWEST BUY-IN'], ['paMax', 'max', 'HIGHEST BUY-IN'], ['paBlind', 'blind', 'MAX BLIND'], ['paChaal', 'chaal', 'MAX CHAAL'], ['paPot', 'pot', 'POT LIMIT']].map(([id, k, l]) => field(id, l, num(id, k)))),
-      field('paCode', 'ROOM CODE (4-12 LETTERS OR NUMBERS)', code), field('paPass', 'PASSWORD (4-20 CHARACTERS)', pass),
-      h('button', { id: 'paGen', type: 'button', class: 'btn-ghost btn-small', text: 'Generate a new code and password', onclick: () => { f.code = privRnd(6); f.password = privRnd(6); Admin.paint(); } }),
+      field('paCode', 'ROOM CODE (4-12 LETTERS OR NUMBERS)', code),
+      h('button', { id: 'paGen', type: 'button', class: 'btn-ghost btn-small', text: 'Generate a new room code', onclick: () => { f.code = privRnd(6); Admin.paint(); } }),
       err,
       h('div', { class: 'controls' }, save,
         h('button', { id: 'paCancel', type: 'button', class: 'btn-ghost btn-small', text: 'Cancel', onclick: () => { a.pf = null; Admin.paint(); } }))));
@@ -5921,12 +5943,16 @@ function adminRake() {
       h('div', { class: 'astats' },
         h('div', {}, h('b', { id: 'rakeTotal', text: fmt(total) }), h('span', { text: 'Total rake, all tables' })),
         h('div', {}, h('b', { id: 'rakeHands', text: String(hands) }), h('span', { text: 'Hands with rake' }))),
-      h('p', { class: 'muted', style: 'font-size:12.5px;margin:8px 0 0', text: 'Each time a pot passes a whole multiple of 10 boots, one boot is set aside. It updates here the moment a hand ends. Players never see it.' })),
+      h('p', { class: 'muted', style: 'font-size:12.5px;margin:8px 0 0', text: '5% of every pot is set aside as rake (rounded down). It updates here the moment a hand ends. Players never see it. Reset sets one table back to zero.' })),
     h('div', { class: 'tstrips', id: 'rakeList' }, rows.filter((id, i, ar) => ar.indexOf(id) === i).map(id => {
       const d = R[id] || {};
       return h('div', { class: 'tstrip static', 'data-rake': id },
         h('span', { class: 'tsname' }, h('b', { text: names(id) }), h('i', { text: d.hands ? d.hands + ' hands · last ' + ms(d.updatedAt) : 'no rake yet' })),
-        h('span', { class: 'tsrake', text: fmt(d.total || 0) }));
+        h('span', { class: 'tsrake', text: fmt(d.total || 0) }),
+        d.total || d.hands ? h('button', { type: 'button', class: 'btn-secondary btn-small tsreset', 'data-reset': id, text: 'Reset', onclick: () => {
+          if (!confirm('Reset the rake of ' + names(id) + ' to zero? This cannot be undone.')) return;
+          return adminBusy('rr_' + id, 'reset rake', async () => { await db.collection('rake').doc(id).delete(); Admin.say('Rake of ' + names(id) + ' reset.'); });
+        } }) : null);
     })));
 }
 
@@ -5963,7 +5989,7 @@ function playerRows(list) {
         h('span', { class: 'apav' }, avatarNode(u.avatar)),
         h('span', { class: 'apwho' }, h('b', { text: u.name }), h('i', { text: u.email || 'email not seen yet' })),
         h('span', { class: 'apchips', text: fmt(u.chips) }),
-        u.banned ? h('span', { class: 'badge off', text: 'Banned' }) : Admin.stateOf(u) === 'playing' ? h('span', { class: 'badge on', text: 'Playing' }) : Admin.stateOf(u) === 'held' ? h('span', { class: 'badge', text: 'Seat held' }) : null),
+        u.banned ? h('span', { class: 'badge off', text: 'Banned' }) : Admin.stateOf(u) === 'playing' ? h('span', { class: 'badge on', text: 'Playing' }) : null),
       open ? playerDetail(u, s, hd) : null);
   }));
 }
@@ -6097,7 +6123,11 @@ function adminVip() {
       go),
     h('div', { class: 'tstrips', id: 'vipRows' }, rows.length ? rows.map(r => h('div', { class: 'tstrip static', 'data-vip': r.uid },
       h('span', { class: 'tsname' }, h('b', { text: r.name }), h('i', { text: r.tier.name + ' ' + r.tier.pct + '% · rake ' + r.weekly.toFixed(2) + (r.banned ? ' · banned' : '') })),
-      h('span', { class: 'tsrake', text: r.banned ? '—' : fmt(r.payout) }))) : [h('div', { class: 'card tight' }, h('p', { class: 'muted', text: 'No rake has been contributed this week yet.' }))]),
+      h('span', { class: 'tsrake', text: r.banned ? '—' : fmt(r.payout) }),
+      h('button', { type: 'button', class: 'btn-secondary btn-small tsreset', 'data-reset': r.uid, text: 'Reset', onclick: () => {
+        if (!confirm('Reset the weekly rake of ' + r.name + ' to zero? Their tier and lifetime total stay.')) return;
+        return adminBusy('vr_' + r.uid, 'reset weekly rake', async () => { await Admin.resetWeekly(r.uid); await Admin.loadVip(); Admin.say('Weekly rake of ' + r.name + ' reset.'); });
+      } }))) : [h('div', { class: 'card tight' }, h('p', { class: 'muted', text: 'No rake has been contributed this week yet.' }))]),
     a.batches && a.batches.length ? h('div', { class: 'card tight', id: 'vipBatches' }, h('strong', { class: 'gold', text: 'Past payouts' }),
       a.batches.map(b => h('div', { class: 'anote' }, h('b', { text: fmt(b.total) + ' chips to ' + b.players + ' players' }), h('i', { text: (b.createdAt && b.createdAt.toMillis ? new Date(b.createdAt.toMillis()).toLocaleString() : '') + ' · week rake ' + fmt(Math.round(b.weekly)) })))) : null);
 }
@@ -6473,9 +6503,7 @@ function legalMoves(G, id) {
   if (sideWhy) for (const k of ['chaal', 'raise', 'show', 'pack']) { out[k] = Object.assign({}, out[k], { ok: false, reason: sideWhy }); }
   if (sideWhy && out.see.ok) out.see = { ok: false, reason: sideWhy };
   out.sideAsked = !!(G.side && G.side.state === 'ask' && G.side.to === id);
-  const rd = roundsOf(G);
-  out.finalRound = rd !== undefined && rd >= ENGINE.ROUNDS_AFTER_BLINDS - 1;
-  out.round = rd === undefined ? 0 : rd + 1;
+  out.finalRound = false; out.round = 0;
   out.blindsLeft = p.status === 'blind' ? Math.max(0, ENGINE.BLIND_LIMIT - (p.blinds || 0)) : 0;
   return out;
 }
@@ -6556,30 +6584,15 @@ function showdown(G, hands) {
 // The round counter lives on the first player's entry (rnd) so the table state needs no extra field.
 function roundsOf(G) { const p = G.players && G.order && G.players[G.order[0]]; return p ? p.rnd : undefined; }
 function setRounds(G, n) { const p = G.players[G.order[0]]; if (p) p.rnd = n; }
-// Once nobody is blind any more, betting runs in rounds: every player still in must move once per round.
-// After the third completed round the table shows the hands. Returns true when the hand was finished.
+// Forced show: only when the pot limit is reached. Returns true when the hand was finished.
 function maybeFinalShow(G, hands) {
   if (G.phase !== 'playing') return false;
   const act = activeIds(G);
+  // The table shows the hands by itself only when the pot reaches its limit. Otherwise the hand goes on until players pack or ask for a show.
   if (act.length >= 2 && G.boot && G.pot >= potCap(G) && hands && act.every(k => hands[k] && hands[k].length === 3)) {
     addLog(G, 'Pot limit ' + potCap(G) + ' reached. The table shows the hands.');
     showdown(G, hands); return true;
   }
-  if (act.length < 2 || act.some(id => G.players[id].status === 'blind')) return false;
-  if (roundsOf(G) === undefined) {
-    setRounds(G, 0); act.forEach(k => { G.players[k].owe = true; });
-    addLog(G, 'Blinds are over. ' + ENGINE.ROUNDS_AFTER_BLINDS + ' betting rounds, then a show.');
-    return false;
-  }
-  if (act.some(id => G.players[id].owe)) return false;
-  if (roundsOf(G) + 1 >= ENGINE.ROUNDS_AFTER_BLINDS) {
-    if (!hands || !act.every(k => hands[k] && hands[k].length === 3)) return false;
-    setRounds(G, roundsOf(G) + 1);
-    addLog(G, 'Round ' + roundsOf(G) + ' complete. The table shows the hands.');
-    showdown(G, hands); return true;
-  }
-  setRounds(G, roundsOf(G) + 1); act.forEach(k => { G.players[k].owe = true; });
-  addLog(G, 'Round ' + roundsOf(G) + ' complete.');
   return false;
 }
 
@@ -6660,7 +6673,7 @@ function applyAction(G0, id, type, now, hands) {
     const wasBlind = p.status === 'blind';
     G.stake *= 2; const c = raiseCost({ stake: G.stake / 2, boot: G.boot, players: G.players }, id); pay(G, id, c);
     addLog(G, p.name + (wasBlind ? ' doubles the blind.' : ' doubles the chaal.'));
-    noteBlind(G, id, wasBlind); delete p.owe; p.last = 'double';
+    noteBlind(G, id, wasBlind); delete p.owe; p.last = wasBlind ? 'doubleblind' : 'doublechaal';
     advanceTurn(G, now); maybeFinalShow(G, hands); return { ok: true, G };
   }
   if (type === 'sideshow') {
