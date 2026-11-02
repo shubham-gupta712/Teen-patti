@@ -2770,7 +2770,15 @@ const Repo = {
   },
   // One batch: the finished state and every player's new stack/seat state.
   // Rule: members update (seatState, stack, updatedAt only) + game update
-  settle(t, G, plan) {
+  async settle(t, G, plan) {
+    try { return await Repo._settle(t, G, plan, true); }
+    catch (e) {
+      // If only the rake ledger is refused, still finish the hand so the table never freezes.
+      if (e && e.code === 'permission-denied' && G.result && G.result.rake > 0) { console.warn('[TeenPatti] rake ledger refused, settling without it'); return Repo._settle(t, G, plan, false); }
+      throw e;
+    }
+  },
+  _settle(t, G, plan, withRake) {
     const b = db.batch();
     for (const id of Object.keys(plan)) {
       if (G.players[id] && G.players[id].bot) b.set(Repo.botsCol(t).doc(id), { botId: id, name: G.players[id].name, seatState: plan[id].seatState, stack: plan[id].stack, updatedAt: FV.serverTimestamp() });   // Rule: bots create/update (validBot)
@@ -2778,7 +2786,7 @@ const Repo = {
     }
     b.set(Repo.gameRef(t), Repo._game(G));
     // The house's take for this hand goes in the table's rake ledger in the same write (rules: rake create/update).
-    if (G.phase === 'result' && G.result && G.result.rake > 0) b.set(Repo.rakeRef(t), { tableId: t, total: FV.increment(G.result.rake), hands: FV.increment(1), lastHandId: G.handId, updatedAt: FV.serverTimestamp() }, { merge: true });
+    if (withRake && G.phase === 'result' && G.result && G.result.rake > 0) b.set(Repo.rakeRef(t), { tableId: t, total: FV.increment(G.result.rake), hands: FV.increment(1), lastHandId: G.handId, updatedAt: FV.serverTimestamp() }, { merge: true });
     return b.commit();
   },
   // Rule: bots create/update (admin, fixed IDs bot_dealer / bot_lucky)
@@ -4272,11 +4280,11 @@ const Dealer = {
   // claim is gone, and whoever hosts next resumes from what the table saved.
   write(fn) {
     const sc = Dealer.sc;
-    Dealer.wchain = Dealer.wchain.then(() => (Dealer.sc === sc ? fn() : null)).catch(e => {
+    Dealer.wchain = Dealer.wchain.then(() => (Dealer.sc === sc ? Promise.resolve(fn()).then(r => { Dealer.denied = 0; return r; }) : null)).catch(e => {
       console.error('[TeenPatti] table write failed', e && e.code, e && e.message);
       if (Dealer.sc === sc && sc) {
         S.dealerInfo.lastError = 'A table write failed: ' + friendlyError(e);
-        if (e && e.code === 'permission-denied') Dealer.stop(false);
+        if (e && e.code === 'permission-denied' && (Dealer.denied = (Dealer.denied || 0) + 1) > 3) Dealer.stop(false);
         else Dealer.booted = false;                       // any other refusal: re-read what the table really saved and carry on from there
       }
     });
@@ -6488,7 +6496,7 @@ function legalMoves(G, id) {
   if (sideWhy && out.see.ok) out.see = { ok: false, reason: sideWhy };
   out.sideAsked = !!(G.side && G.side.state === 'ask' && G.side.to === id);
   out.finalRound = false; out.round = 0;
-  out.blindsLeft = p.status === 'blind' ? 99 : 0;
+  out.blindsLeft = p.status === 'blind' ? Math.max(0, ENGINE.BLIND_LIMIT - (p.blinds || 0)) : 0;
   return out;
 }
 
@@ -6602,7 +6610,7 @@ function forcePack(G0, id, now, hands) {
 function noteBlind(G, id, wasBlind) {
   if (!wasBlind) return;
   const p = G.players[id]; p.blinds = (p.blinds || 0) + 1;
-  // a player stays blind until they choose to look at their cards (the blind cap still limits the stake)
+  if (p.blinds >= ENGINE.BLIND_LIMIT && p.status === 'blind') { p.status = 'seen'; p.last = ''; addLog(G, p.name + ' must look at their cards (three blind moves).'); }
 }
 
 // The single entry point for a move. Returns { ok, G } or { ok:false, error }.
