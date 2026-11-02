@@ -2097,6 +2097,21 @@ body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
 
 .tstrip .tsreset{flex:none;margin-left:8px;padding:6px 10px;min-height:0;font-size:12px}
 
+/* 58. the "Leave the table?" sheet: centred text and two equal buttons */
+#leaveSheet .leavemsg{text-align:center;font-size:15px;line-height:1.45;margin:2px 0 14px}
+#leaveSheet .leaverow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#leaveSheet .leaverow button{width:100%;min-height:46px;margin:0;white-space:nowrap;display:flex;align-items:center;justify-content:center}
+
+/* 59. rake and tips side by side on each table's line */
+.tstrip.tscard{flex-direction:column;align-items:stretch;gap:8px;padding:10px 12px}
+.tstrip.tscard .tsname b{display:block}
+.tsparts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tspart{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.55);border:1px solid rgba(217,184,102,.7)}
+.tspart i{font:700 11px/1 system-ui;letter-spacing:.12em;color:#8a5f12;font-style:normal}
+.tspart b{font:800 20px/1.1 Georgia,serif;color:#5a3d08;font-variant-numeric:tabular-nums}
+.tspart small{font-size:11px;color:#6b5a3a;min-height:14px}
+.tspart .tsreset{margin:4px 0 0;align-self:flex-start}
+
 </style>
 </head>
 <body>
@@ -2229,9 +2244,6 @@ const variantOfTable = t => VARIANT_BY_ID[(t && t.variant) || 'classic'];
 // The variant being played: a Variant Table picks a new one every hand, so its game state says which.
 const variantOfGame = (t, G) => (t && t.random) ? VARIANT_BY_ID[(G && G.variant) || 'classic'] : variantOfTable(t);
 /* The six boot amounts every public table comes in, and what each one means (all caps are multiples of the boot). */
-const CLUB_MAX = 50;                                              // members in one club (rules: clubMax)
-const CREST = ['\uD83E\uDD81', '\uD83D\uDC2F', '\uD83E\uDD85', '\uD83D\uDC09', '\uD83D\uDC3A', '\uD83E\uDD82', '\uD83D\uDC51', '\u2660\uFE0F', '\u2665\uFE0F', '\u2666\uFE0F', '\u2663\uFE0F', '\uD83D\uDD25'];
-const crestOf = id => CREST[Math.max(0, parseInt(String(id || 'c0').slice(1), 10) || 0)] || CREST[0];
 const BOOTS = [1, 2, 5, 10, 20, 50];
 const bootInfo = b => ({ boot: b, min: b * 100, max: b * 500, blind: b * 16, chaal: b * 64, pot: b * 512 });
 const TABLES = [
@@ -2714,33 +2726,6 @@ const Repo = {
       tx.set(ref, Object.assign({}, o, look, { uid, updatedAt: FV.serverTimestamp() }));
     });
   },
-  /* ---- clubs (rules: clubs, clubMembers; create / join / leave are batches so memberCount always matches) ---- */
-  getMembership: uid => db.collection('clubMembers').doc(uid).get().then(d => d.exists ? d.data() : null),
-  getClub: id => db.collection('clubs').doc(id).get().then(d => d.exists ? Object.assign({ id: d.id }, d.data()) : null),
-  listClubs: () => db.collection('clubs').get().then(s => s.docs.map(d => Object.assign({ id: d.id }, d.data())).sort((a, b) => b.memberCount - a.memberCount || String(a.name).localeCompare(b.name))),
-  clubRoster: id => db.collection('clubMembers').where('clubId', '==', id).get().then(s => s.docs.map(d => d.data()).sort((a, b) => (a.kind === 'owner' ? -1 : 0) - (b.kind === 'owner' ? -1 : 0) || String(a.name).localeCompare(b.name))),
-  createClub: (uid, name, crest, ownerName) => {
-    const b = db.batch(), now = FV.serverTimestamp();
-    b.set(db.collection('clubs').doc(uid), { name, crest, ownerUid: uid, ownerName, memberCount: 1, createdAt: now, updatedAt: now });
-    b.set(db.collection('clubMembers').doc(uid), { uid, clubId: uid, name: ownerName, kind: 'owner', joinedAt: now });
-    return b.commit();
-  },
-  joinClub: async (uid, name, clubId) => {
-    const c = await Repo.getClub(clubId);
-    if (!c) throw new Error('That club no longer exists.');
-    if (c.memberCount >= CLUB_MAX) throw new Error('That club is full (' + CLUB_MAX + ' members).');
-    const b = db.batch(), now = FV.serverTimestamp();
-    b.set(db.collection('clubMembers').doc(uid), { uid, clubId, name, kind: 'member', joinedAt: now });
-    b.update(db.collection('clubs').doc(clubId), { memberCount: c.memberCount + 1, updatedAt: now });
-    return b.commit();
-  },
-  leaveClub: async (uid, m) => {
-    const c = await Repo.getClub(m.clubId), b = db.batch(), now = FV.serverTimestamp();
-    b.delete(db.collection('clubMembers').doc(uid));
-    if (m.kind === 'owner') b.delete(db.collection('clubs').doc(uid));                       // the founder closes an empty club
-    else if (c) b.update(db.collection('clubs').doc(m.clubId), { memberCount: Math.max(1, c.memberCount - 1), updatedAt: now });
-    return b.commit();
-  },
   watchBots: (sc, t, cb) => sc.listen(Repo.botsCol(t), s => cb(s.docs.map(d => d.data()))),
   // Rule: hands get (only the document whose ID is my UID)
   watchHand: (sc, t, uid, cb) => sc.listen(Repo.handsCol(t).doc(uid), s => cb(s.exists ? s.data() : null)),
@@ -2937,7 +2922,7 @@ async function onAuthChange(user) {
   closeAllScopes();
   S.user = user; S.profile = null; S.isAdmin = false; S.loadError = '';
   S.room = null; S.rooms = {}; S.roomsLoaded = {}; S.route = { name: 'loading' };
-  if (!user) { try { sessionStorage.removeItem('tp_uid'); } catch (e) { /* private mode */ } S.forceLobby = false; S.authReady = true; S.myStats = null; S.myClub = null; Stats.applyTheme('velvet'); go(); return; }
+  if (!user) { try { sessionStorage.removeItem('tp_uid'); } catch (e) { /* private mode */ } S.forceLobby = false; S.authReady = true; S.myStats = null; Stats.applyTheme('velvet'); go(); return; }
   { let seen = ''; try { seen = sessionStorage.getItem('tp_uid') || ''; sessionStorage.setItem('tp_uid', user.uid); } catch (e) { /* private mode */ } S.forceLobby = seen !== user.uid; }   // a fresh sign-in starts in the lobby; a reload in the same tab goes back to your table
   S.isAdmin = user.uid === ADMIN_UID;
   if (S.isAdmin) { S.authReady = true; go(); return; }
@@ -3685,9 +3670,8 @@ function renderLobby() {
   const row = (id, y, label, ic, fn, cls) => h('button', { id, class: 'nlrow' + (cls ? ' ' + cls : ''), type: 'button', 'aria-label': label, style: nlBox(40, y, 308, y + 68), onclick: fn },
     iconF(ic), h('span', { text: label }), h('i', { class: 'nlchev' }, icon('chevron')));
   parts.push(row('lbPrivate', 262, 'Private Table', 'people', privateTap));
-  parts.push(row('lbClub', 350, 'Club', 'shield', () => Sheets.club()));
-  parts.push(row('lbBoard', 438, 'LeaderBoard', 'trophy', () => Sheets.soon('Leaderboard', 'Who has won the most chips. This arrives once lifetime stats are tracked.')));
-  parts.push(row('lbGear', 526, 'Settings', 'gear', () => Sheets.settings()));
+  parts.push(row('lbBoard', 350, 'LeaderBoard', 'trophy', () => Sheets.soon('Leaderboard', 'Who has won the most chips. This arrives once lifetime stats are tracked.')));
+  parts.push(row('lbGear', 438, 'Settings', 'gear', () => Sheets.settings()));
 
   /* the three cards */
   const seatedAt = ids => ids.reduce((n, id) => { const st = tileState(TABLE_BY_ID[id]); return n + (st.usable ? st.n : 0); }, 0);
@@ -3892,8 +3876,8 @@ function confirmLeaveLive() {
   const yes = h('button', { id: 'leaveYes', type: 'button', class: 'btn-primary', text: 'Yes, leave', onclick: () => { Sheets.close(); leaveLiveHand(); } });
   const no = h('button', { id: 'leaveNo', type: 'button', class: 'btn-secondary', text: 'No, stay', onclick: () => Sheets.close() });
   Sheets.open('leaveSheet', 'Leave the table?', h('div', { class: 'setlist' },
-    h('p', { class: 'hnote', style: 'text-align:left;font-size:14px', text: 'A hand is still being played. If you leave now your cards are packed and what you put in the pot is lost.' }),
-    h('div', { class: 'row' }, no, yes)));
+    h('p', { class: 'hnote leavemsg', text: 'A hand is still being played. If you leave now your cards are packed and what you put in the pot is lost.' }),
+    h('div', { class: 'leaverow' }, no, yes)));
 }
 function leaveLiveHand() {
   const R = S.room, me = myMember(R), t = R.id, uid = S.user.uid;
@@ -4952,7 +4936,7 @@ const Stats = {
   // The stats document with every counter present (old documents lack the new ones).
   full(st) { return Object.assign({ hands: 0, wins: 0, streak: 0, best: 0, showWins: 0, foldWins: 0, packs: 0, blindHands: 0, trail: 0, pseq: 0, seq: 0, color: 0, pair: 0, aces: 0, night: 0, comeback: 0, houdini: 0, bigPot: 0, peak: 0, frame: 'none', theme: 'velvet', title: '' }, st || {}); },
   // Fetch my own stats (look and numbers) and my club once after sign-in; the theme is applied at once.
-  load(uid) { Repo.getStats(uid).then(st => { S.myStats = Stats.full(st); Stats.applyTheme(S.myStats.theme); }).catch(() => {}); Clubs.load(uid); },
+  load(uid) { Repo.getStats(uid).then(st => { S.myStats = Stats.full(st); Stats.applyTheme(S.myStats.theme); }).catch(() => {}); Notices.loadSeen(uid); },
   applyTheme(th) { document.documentElement.setAttribute('data-ptheme', th && Stats.THEMES[th] ? th : 'velvet'); }
 };
 
@@ -5150,8 +5134,7 @@ const Sheets = {
       const f = Stats.full(st), big = document.querySelector('#playerSheet .pbig'), box = $('pcInspect');
       if (big && f.frame !== 'none') big.replaceChildren(framed(sp.avatar, f.frame));
       if (box) {
-        box.replaceChildren(f.title && Stats.TITLES[f.title] ? h('p', { class: 'ptitle', id: 'iTitle', text: Stats.TITLES[f.title].name }) : null, Sheets.inspect(sp, st, null));
-        Repo.getMembership(sp.id).then(m => m && Repo.getClub(m.clubId)).then(c => { const b2 = $('pcInspect'); if (b2 && c) b2.appendChild(h('p', { class: 'hnote', id: 'iClub', text: 'Club: ' + Clubs.tag(c) })); }).catch(() => {});
+        box.replaceChildren(f.title && Stats.TITLES[f.title] ? h('p', { class: 'ptitle', id: 'iTitle', text: Stats.TITLES[f.title].name }) : null, Sheets.inspect(sp, st));
       }
     }).catch(() => { ['pcHands', 'pcRate', 'pcStreak'].forEach(id => { const e = $(id); if (e) e.textContent = '\u2014'; }); });
   },
@@ -5392,14 +5375,6 @@ document.addEventListener('pointerdown', e => {
    Your own profile sheet (stats, trophies, titles / frames / themes), the Club sheet, and the card you get when
    you tap another player. All numbers come from the one small stats document each player keeps (see Stats).
    ========================================================================== */
-const Clubs = {
-  // my membership and club, loaded once after sign-in and refreshed after any change
-  load(uid) {
-    return Repo.getMembership(uid).then(m => m ? Repo.getClub(m.clubId).then(c => { S.myClub = c ? { m, c } : null; }) : (S.myClub = null)).catch(() => {});
-  },
-  tag: club => club ? crestOf(club.crest) + ' ' + club.name : ''
-};
-
 // The avatar with the frame this player has earned.
 const framed = (avatarId, frame) => {
   const f = Stats.FRAMES[frame] || Stats.FRAMES.none;
@@ -5412,14 +5387,14 @@ Object.assign(Sheets, {
   profile(tab) {
     const p = S.profile; if (!p) return;
     tab = tab || 'stats';
-    const st = Stats.full(S.myStats), mine = S.myClub;
+    const st = Stats.full(S.myStats);
     const tabs = h('div', { class: 'ptabs', role: 'tablist' }, [['stats', 'Stats'], ['vip', 'VIP'], ['trophies', 'Trophies'], ['look', 'Look']].map(([id, t]) =>
       h('button', { type: 'button', id: 'ptab_' + id, class: 'ptab' + (tab === id ? ' on' : ''), role: 'tab', 'aria-selected': tab === id ? 'true' : 'false', text: t, onclick: () => Sheets.profile(id) })));
     const head = h('div', { class: 'pprofile' },
       h('div', { class: 'pbig2' }, framed(p.avatar, st.frame)),
       h('h3', { text: p.name }),
       st.title && Stats.TITLES[st.title] ? h('p', { class: 'ptitle', id: 'pTitle', text: Stats.TITLES[st.title].name }) : null,
-      h('p', { class: 'hnote' }, h('span', { class: 'vip', id: 'pVipTag', text: vipInfo(Vip.doc).tier.name.toUpperCase() }), mine ? h('span', { class: 'pcrest', id: 'pClub', text: ' ' + Clubs.tag(mine.c) }) : null),
+      h('p', { class: 'hnote' }, h('span', { class: 'vip', id: 'pVipTag', text: vipInfo(Vip.doc).tier.name.toUpperCase() })),
       h('button', { type: 'button', class: 'plink', id: 'pEdit', text: 'Change name or picture', onclick: () => Sheets.profileEdit() }));
     const box = (k, v, id) => h('div', { class: 'pstat2' }, h('b', { id, text: String(v) }), h('span', { text: k }));
     const sec = (t, ...kids) => h('div', { class: 'psec' }, h('div', { class: 'qh', text: t }), ...kids);
@@ -5469,73 +5444,14 @@ Object.assign(Sheets, {
     } catch (e) { toast(friendlyError(e), 'err'); }
   },
 
-  /* ---- clubs: Join / Create and My Club ---- */
-  club(tab) {
-    const p = S.profile; if (!p) return;
-    const mine = S.myClub;
-    tab = tab || (mine ? 'mine' : 'join');
-    const tabs = h('div', { class: 'ptabs', role: 'tablist' }, [['join', 'Join / Create'], ['mine', 'My Club']].map(([id, t]) =>
-      h('button', { type: 'button', id: 'ctab_' + id, class: 'ptab' + (tab === id ? ' on' : ''), role: 'tab', 'aria-selected': tab === id ? 'true' : 'false', text: t, onclick: () => Sheets.club(id) })));
-    const body = h('div', { class: 'pbody', id: 'clubBody' }, h('p', { class: 'hnote', text: 'Loading...' }));
-    Sheets.open('clubSheet', 'Clubs', h('div', {}, tabs, body));
-    const fail = e => { body.replaceChildren(h('p', { class: 'msg err', text: friendlyError(e) })); };
-    const refresh = async () => { await Clubs.load(S.user.uid); Sheets.club(S.myClub ? 'mine' : 'join'); };
-    if (tab === 'mine') {
-      if (!mine) { body.replaceChildren(h('p', { class: 'hnote', text: 'You are not in a club yet. Join one, or create your own, on the other tab.' })); return; }
-      const c = mine.c;
-      Repo.clubRoster(c.id).then(list => {
-        const leave = h('button', { type: 'button', class: 'btn-primary', id: 'clubLeave', text: mine.m.kind === 'owner' ? 'Close club' : 'Leave club', disabled: mine.m.kind === 'owner' && c.memberCount > 1 });
-        leave.onclick = async () => { leave.disabled = true; try { await Repo.leaveClub(S.user.uid, mine.m); toast(mine.m.kind === 'owner' ? 'Club closed.' : 'You left the club.'); await refresh(); } catch (e) { toast(friendlyError(e), 'err'); leave.disabled = false; } };
-        body.classList.add('cols');
-        body.replaceChildren(h('div', { class: 'cside' },
-          h('div', { class: 'cbadge' }, h('span', { class: 'ccrest', text: crestOf(c.crest) }), h('div', {}, h('b', { id: 'myClubName', text: c.name }), h('small', { id: 'myClubCount', text: c.memberCount + ' / ' + CLUB_MAX + ' members' }))),
-          h('p', { class: 'hnote', text: mine.m.kind === 'owner' && c.memberCount > 1 ? 'The founder can close the club once everyone else has left.' : 'Club tournaments: coming soon.' }),
-          leave),
-          h('div', { class: 'cside' }, h('div', { class: 'qh', text: 'Members' }),
-          h('div', { class: 'croster', id: 'clubRoster' }, list.map(m => h('div', { class: 'crow' }, h('span', { text: m.name }), m.kind === 'owner' ? h('em', { text: 'Founder' }) : null)))));
-      }).catch(fail);
-      return;
-    }
-    if (mine) { body.replaceChildren(h('p', { class: 'hnote', text: 'You are in ' + Clubs.tag(mine.c) + '. Leave it from the My Club tab to join or create another.' })); return; }
-    // create
-    let crest = 'c0';
-    const name = h('input', { id: 'clubName', type: 'text', maxlength: 24, placeholder: 'Club name (3-24 letters)', autocomplete: 'off', 'aria-label': 'Club name' });
-    const crests = h('div', { class: 'crests', id: 'clubCrests' });
-    const drawCrests = () => crests.replaceChildren(...CREST.map((e, i) => h('button', { type: 'button', class: 'crestopt' + (crest === 'c' + i ? ' on' : ''), 'data-crest': 'c' + i, text: e, onclick: () => { crest = 'c' + i; drawCrests(); } })));
-    drawCrests();
-    const err = h('div', { id: 'clubErr', class: 'msg err', hidden: true });
-    const mk = h('button', { type: 'button', class: 'btn-primary', id: 'clubCreate', text: 'Create club' });
-    mk.onclick = async () => {
-      const nm = name.value.replace(/\s+/g, ' ').trim();
-      if (nm.length < 3 || nm.length > 24) { err.textContent = 'Give the club a name of 3 to 24 characters.'; err.hidden = false; return; }
-      mk.disabled = true; err.hidden = true;
-      try { await Repo.createClub(S.user.uid, nm, crest, p.name); toast('Club created.'); await refresh(); }
-      catch (e) { err.textContent = friendlyError(e); err.hidden = false; mk.disabled = false; }
-    };
-    const list = h('div', { class: 'clist', id: 'clubList' }, h('p', { class: 'hnote', text: 'Loading clubs...' }));
-    Repo.listClubs().then(cs => {
-      list.replaceChildren(...(cs.length ? cs.map(c => {
-        const full = c.memberCount >= CLUB_MAX;
-        const j = h('button', { type: 'button', class: 'cjoin', 'data-club': c.id, text: full ? 'Full' : 'Join', disabled: full });
-        j.onclick = async () => { j.disabled = true; try { await Repo.joinClub(S.user.uid, p.name, c.id); toast('Welcome to ' + c.name + '.'); await refresh(); } catch (e) { toast(friendlyError(e), 'err'); j.disabled = full; } };
-        return h('div', { class: 'crow2' }, h('span', { class: 'ccrest', text: crestOf(c.crest) }), h('div', {}, h('b', { text: c.name }), h('small', { text: c.memberCount + ' / ' + CLUB_MAX + ' · founder ' + c.ownerName })), j);
-      }) : [h('p', { class: 'hnote', text: 'No clubs yet. Be the first to create one.' })]));
-    }).catch(fail);
-    body.classList.add('cols');
-    body.replaceChildren(h('div', { class: 'cside' }, h('div', { class: 'qh', text: 'Join a club' }), list),
-      h('div', { class: 'cside' }, h('div', { class: 'qh', text: 'Create your own' }), name, crests, err, mk,
-        h('p', { class: 'hnote', text: 'A club holds up to ' + CLUB_MAX + ' players. Tournaments between clubs are coming soon.' })));
-  },
-
   // Tap another player at the table: a short summary of how they play (the Inspect card).
-  inspect(sp, st, club) {
+  inspect(sp, st) {
     const f = Stats.full(st), has = f.hands > 0;
     const fav = [['trail', 'Trail'], ['pseq', 'Pure sequence'], ['seq', 'Sequence'], ['color', 'Color'], ['pair', 'Pair']].sort((a, b) => f[b[0]] - f[a[0]])[0];
     return h('div', { class: 'pinspect', id: 'pInspect' },
       h('p', { class: 'pstyle', id: 'iStyle', text: has ? Stats.style(f) : 'No games recorded yet' }),
       has && f[fav[0]] ? h('p', { class: 'hnote', id: 'iFav', text: 'Favourite win: ' + fav[1] + ' (' + f[fav[0]] + ')' }) : null,
-      has ? h('p', { class: 'hnote', text: 'Longest streak ' + f.best + ' · Biggest pot ' + fmt(f.bigPot) }) : null,
-      club ? h('p', { class: 'hnote', id: 'iClub', text: 'Club: ' + Clubs.tag(club) }) : null);
+      has ? h('p', { class: 'hnote', text: 'Longest streak ' + f.best + ' · Biggest pot ' + fmt(f.bigPot) }) : null);
   }
 });
 
@@ -5975,51 +5891,36 @@ function adminPrivForm() {
 
 /* ---- 6. rake: what the house has taken from each table, live ---- */
 function adminRake() {
-  const a = Admin.st, R = a.rake, pub = TABLES.filter(t => !t.private).concat(TABLES.filter(t => t.private));
+  const a = Admin.st, R = a.rake, T = a.tips || {}, pub = TABLES.filter(t => !t.private).concat(TABLES.filter(t => t.private));
   if (!R) return h('div', { class: 'card' }, h('p', { class: 'muted', text: 'Loading the rake ledger...' }));
-  const total = Object.values(R).reduce((x, d) => x + (d.total || 0), 0), hands = Object.values(R).reduce((x, d) => x + (d.hands || 0), 0);
+  const sum = (o, k) => Object.values(o).reduce((x, d) => x + (d[k] || 0), 0);
   const ms = v => (v && v.toMillis ? new Date(v.toMillis()).toLocaleString() : '-');
   const names = t => (TABLE_BY_ID[t] ? tableName(TABLE_BY_ID[t]) : t);
-  const rows = Object.keys(R).sort((x, y) => (R[y].total || 0) - (R[x].total || 0)).concat(pub.map(t => t.id).filter(id => !(id in R)));
+  const ids = Object.keys(R).concat(Object.keys(T)).concat(pub.map(t => t.id)).filter((id, i, ar) => ar.indexOf(id) === i)
+    .sort((x, y) => ((R[y] || {}).total || 0) + ((T[y] || {}).total || 0) - ((R[x] || {}).total || 0) - ((T[x] || {}).total || 0));
+  // one half of a table's line: what it holds, and its own Reset
+  const part = (label, d, note, attrs, resetAttr, ask, run) => h('div', Object.assign({ class: 'tspart' }, attrs),
+    h('i', { text: label }), h('b', { text: fmt(d.total || 0) }), h('small', { text: note }),
+    (d.total || d.hands || d.count) ? h('button', Object.assign({ type: 'button', class: 'btn-secondary btn-small tsreset' }, resetAttr, { text: 'Reset', onclick: () => { if (confirm(ask)) return run(); } })) : null);
   return h('div', {},
     h('div', { class: 'card tight' },
       h('div', { class: 'astats' },
-        h('div', {}, h('b', { id: 'rakeTotal', text: fmt(total) }), h('span', { text: 'Total rake, all tables' })),
-        h('div', {}, h('b', { id: 'rakeHands', text: String(hands) }), h('span', { text: 'Hands with rake' }))),
-      h('p', { class: 'muted', style: 'font-size:12.5px;margin:8px 0 0', text: '5% of every pot is set aside as rake (rounded down). It updates here the moment a hand ends. Players never see it. Reset sets one table back to zero.' })),
-    h('div', { class: 'tstrips', id: 'rakeList' }, rows.filter((id, i, ar) => ar.indexOf(id) === i).map(id => {
-      const d = R[id] || {};
-      return h('div', { class: 'tstrip static', 'data-rake': id },
-        h('span', { class: 'tsname' }, h('b', { text: names(id) }), h('i', { text: d.hands ? d.hands + ' hands · last ' + ms(d.updatedAt) : 'no rake yet' })),
-        h('span', { class: 'tsrake', text: fmt(d.total || 0) }),
-        d.total || d.hands ? h('button', { type: 'button', class: 'btn-secondary btn-small tsreset', 'data-reset': id, text: 'Reset', onclick: () => {
-          if (!confirm('Reset the rake of ' + names(id) + ' to zero? This cannot be undone.')) return;
-          return adminBusy('rr_' + id, 'reset rake', async () => { await db.collection('rake').doc(id).delete(); Admin.say('Rake of ' + names(id) + ' reset.'); });
-        } }) : null);
-    })),
-    adminTips(rows.filter((id, i, ar) => ar.indexOf(id) === i), names, ms));
-}
-
-/* Tips players gave the dealer, kept apart from the rake. */
-function adminTips(ids, names, ms) {
-  const T = Admin.st.tips || {}, all = ids.concat(Object.keys(T).filter(k => !ids.includes(k)));
-  const total = Object.values(T).reduce((x, d) => x + (d.total || 0), 0), count = Object.values(T).reduce((x, d) => x + (d.count || 0), 0);
-  return h('div', { id: 'tipsPanel' },
-    h('div', { class: 'card tight' },
-      h('strong', { class: 'gold', text: 'Dealer tips' }),
-      h('div', { class: 'astats' },
-        h('div', {}, h('b', { id: 'tipTotal', text: fmt(total) }), h('span', { text: 'Total tips, all tables' })),
-        h('div', {}, h('b', { id: 'tipCount', text: String(count) }), h('span', { text: 'Tips given' }))),
-      h('p', { class: 'muted', style: 'font-size:12.5px;margin:8px 0 0', text: 'Tips are separate from the rake. Reset sets one table back to zero.' })),
-    h('div', { class: 'tstrips', id: 'tipList' }, all.map(id => {
-      const d = T[id] || {};
-      return h('div', { class: 'tstrip static', 'data-tip': id },
-        h('span', { class: 'tsname' }, h('b', { text: names(id) }), h('i', { text: d.count ? d.count + ' tips · last ' + ms(d.updatedAt) : 'no tips yet' })),
-        h('span', { class: 'tsrake', text: fmt(d.total || 0) }),
-        d.total ? h('button', { type: 'button', class: 'btn-secondary btn-small tsreset', 'data-tipreset': id, text: 'Reset', onclick: () => {
-          if (!confirm('Reset the tips of ' + names(id) + ' to zero? This cannot be undone.')) return;
-          return adminBusy('tr_' + id, 'reset tips', async () => { await db.collection('tipjar').doc(id).delete(); Admin.say('Tips of ' + names(id) + ' reset.'); });
-        } }) : null);
+        h('div', {}, h('b', { id: 'rakeTotal', text: fmt(sum(R, 'total')) }), h('span', { text: 'Total rake' })),
+        h('div', {}, h('b', { id: 'rakeHands', text: String(sum(R, 'hands')) }), h('span', { text: 'Hands with rake' })),
+        h('div', {}, h('b', { id: 'tipTotal', text: fmt(sum(T, 'total')) }), h('span', { text: 'Total dealer tips' })),
+        h('div', {}, h('b', { id: 'tipCount', text: String(sum(T, 'count')) }), h('span', { text: 'Tips given' }))),
+      h('p', { class: 'muted', style: 'font-size:12.5px;margin:8px 0 0', text: '5% of every pot is set aside as rake (rounded down). Tips are what players give the dealer. Both update as hands and tips happen. Each table has its own Reset for rake and for tips. Players never see these.' })),
+    h('div', { class: 'tstrips', id: 'rakeList' }, ids.map(id => {
+      const d = R[id] || {}, t = T[id] || {};
+      return h('div', { class: 'tstrip static tscard', 'data-rake': id },
+        h('span', { class: 'tsname' }, h('b', { text: names(id) })),
+        h('div', { class: 'tsparts' },
+          part('RAKE', d, d.hands ? d.hands + ' hands · last ' + ms(d.updatedAt) : 'no rake yet', {}, { 'data-reset': id },
+            'Reset the rake of ' + names(id) + ' to zero? This cannot be undone.',
+            () => adminBusy('rr_' + id, 'reset rake', async () => { await db.collection('rake').doc(id).delete(); Admin.say('Rake of ' + names(id) + ' reset.'); })),
+          part('TIPS', t, t.count ? t.count + ' tips · last ' + ms(t.updatedAt) : 'no tips yet', { 'data-tip': id }, { 'data-tipreset': id },
+            'Reset the tips of ' + names(id) + ' to zero? This cannot be undone.',
+            () => adminBusy('tr_' + id, 'reset tips', async () => { await db.collection('tipjar').doc(id).delete(); Admin.say('Tips of ' + names(id) + ' reset.'); }))));
     })));
 }
 
@@ -6208,11 +6109,20 @@ const Notices = {
   all: [], announced: new Set(), first: true,
   // Two panels: 'info' notices are Notifications, 'reward' notices are Rewards. Each remembers what was read on this phone.
   key: kind => 'tp_seen_' + (kind || 'info') + '_' + (S.user ? S.user.uid : ''),
-  seenAt(kind) { try { const v = localStorage.getItem(Notices.key(kind)); return Number(v === null ? (localStorage.getItem('tp_seen_' + (S.user ? S.user.uid : '')) || 0) : v); } catch (e) { return 0; } },
+  remote: { info: 0, reward: 0 },          // what this player has read, kept in the database so it follows them to any phone or browser
+  seenAt(kind) { let l = 0; try { const v = localStorage.getItem(Notices.key(kind)); l = Number(v === null ? (localStorage.getItem('tp_seen_' + (S.user ? S.user.uid : '')) || 0) : v); } catch (e) { /* private mode */ } return Math.max(l, Notices.remote[kind || 'info'] || 0); },
+  loadSeen(uid) { Repo.getSeen(uid).then(d => { if (d) { Notices.remote = { info: Number(d.info) || 0, reward: Number(d.reward) || 0 }; scheduleRender(); } }).catch(() => {}); },
   ms: n => (n.createdAt && n.createdAt.toMillis ? n.createdAt.toMillis() : Date.now()),
   mine(kind) { const uid = S.user && S.user.uid; return Notices.all.filter(n => (n.all === true || (Array.isArray(n.uids) && n.uids.includes(uid))) && (!kind || (n.kind === 'reward' ? 'reward' : 'info') === kind)).sort((a, b) => Notices.ms(b) - Notices.ms(a)); },
   unread(kind) { const t = Notices.seenAt(kind); return Notices.mine(kind).filter(n => Notices.ms(n) > t); },
-  markSeen(kind) { try { localStorage.setItem(Notices.key(kind), String(Math.max(Date.now(), ...Notices.mine(kind).map(Notices.ms)))); } catch (e) { /* private mode */ } scheduleRender(); },
+  markSeen(kind) {
+    kind = kind || 'info';
+    const v = Math.max(Date.now(), ...Notices.mine(kind).map(Notices.ms));
+    try { localStorage.setItem(Notices.key(kind), String(v)); } catch (e) { /* private mode */ }
+    Notices.remote[kind] = v;
+    if (S.user && !S.isAdmin) Repo.putSeen(S.user.uid, kind, v).catch(() => {});
+    scheduleRender();
+  },
   set(docs) {
     Notices.all = docs;
     const fresh = Notices.unread().filter(n => !Notices.announced.has(n.id));
@@ -6224,6 +6134,8 @@ const Notices = {
   }
 };
 Object.assign(Repo, {
+  getSeen: uid => db.collection('seen').doc(uid).get().then(d => d.exists ? d.data() : null),
+  putSeen: (uid, kind, v) => db.collection('seen').doc(uid).set({ [kind]: v, updatedAt: FV.serverTimestamp() }, { merge: true }),
   watchNotices: (sc, cb) => sc.listen(db.collection('notices'), s => cb(s.docs.map(d => Object.assign({ id: d.id }, d.data())))),
   async syncEmail(user, prof) {
     if (!user.email || prof.email === user.email) return prof;
@@ -6334,6 +6246,7 @@ const rewardsUnread = () => Notices.unread('reward').length + GiftBox.unread();
 Object.assign(Sheets, {
   rewards(tab) {
     tab = tab || 'rewards';
+    GiftBox.markSeen();                      // opening Rewards counts as looking at everything in it: the badge goes away
     const body = h('div', { class: 'setlist', id: 'rewardsBody' });
     const tabs = [['rewards', 'Rewards'], ['gifts', 'Gifts'], ['rakeback', 'Rakeback']];
     const bar = h('div', { class: 'rtabs', id: 'rewardsTabs', role: 'tablist' }, tabs.map(([v, t]) => h('button', { type: 'button', role: 'tab', class: 'rtab' + (v === tab ? ' on' : ''), id: 'rtab_' + v, 'aria-selected': v === tab ? 'true' : 'false', text: t, onclick: () => Sheets.rewards(v) })));
