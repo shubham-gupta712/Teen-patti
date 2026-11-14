@@ -2157,6 +2157,82 @@ body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
 .tspart small{font-size:11px;color:#6b5a3a;min-height:14px}
 .tspart .tsreset{margin:4px 0 0;align-self:flex-start}
 
+
+/* ===== 60. Admin console: a dashboard look. One dark header with the numbers, colour-coded jobs, compact player cards ===== */
+.ahero{margin-bottom:14px;padding:16px 16px 14px;border-radius:22px;background:radial-gradient(120% 140% at 0% 0%,#14503a 0%,#0a2c20 55%,#071d15 100%);border:1px solid #c9a24d;box-shadow:0 10px 24px rgba(20,40,20,.28);color:#fdf3d2}
+.aherotop{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.ahero .eyebrow{color:#e9c46a}
+.ahero h2{margin:2px 0 0;font-size:24px;color:#fff6da}
+.aherowho{min-width:0;max-width:55%;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.08);border:1px solid rgba(233,196,106,.35);font-size:11px;color:#d9cfae;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.akpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:14px}
+.akpi{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:0;padding:9px 10px;border-radius:14px;border:1px solid rgba(233,196,106,.3);background:rgba(255,255,255,.07);color:inherit;text-align:left;cursor:pointer}
+.akpi:active{transform:scale(.97)}
+.akpi b{font:800 19px/1.1 Georgia,serif;color:#ffe9a6;font-variant-numeric:tabular-nums;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.akpi span{font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:#b9c9b6;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.atile{--ac:#b8862b;--ac2:#e9c46a;flex-direction:row;align-items:center;flex-wrap:wrap;gap:6px 10px;min-height:0;padding:12px;border-radius:18px;border-color:#e2cb8f;background:#fffdf6;box-shadow:0 4px 12px rgba(80,55,10,.1);position:relative;overflow:hidden}
+.atile:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,var(--ac2),var(--ac))}
+.atile .aic,.aback .aic{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:12px;margin:0;background:linear-gradient(160deg,var(--ac2),var(--ac));color:#fff;font-size:20px;box-shadow:inset 0 -2px 0 rgba(0,0,0,.15)}
+.atile .atxt{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.atile b{font:800 15px/1.2 Georgia,serif}
+.atile .asub{font-size:11px;line-height:1.25}
+.atile .astat{margin:2px 0 0;width:100%;padding:5px 9px;border-radius:9px;background:#f6ecd0;color:#6b4a0e;font-size:11.5px;letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.atile .astat.hot{background:#dff3e5;color:#17623a}
+.atile .astat.hot:before{content:"";display:inline-block;width:7px;height:7px;margin-right:6px;border-radius:50%;background:#22a35a;box-shadow:0 0 0 3px rgba(34,163,90,.2)}
+.aback{gap:10px;margin:0 0 12px;padding:8px 10px;border-radius:16px;background:#fffdf6;border:1px solid #e2cb8f;box-shadow:0 3px 10px rgba(80,55,10,.08)}
+.aback h2{font-size:19px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.aback .aic{width:34px;height:34px;font-size:18px}
+.aback{--ac:#b8862b;--ac2:#e9c46a}
+.t-tables{--ac:#0f6b46;--ac2:#35b27c}.t-private{--ac:#5b2a86;--ac2:#a06bd6}.t-players{--ac:#1d4f9c;--ac2:#5a93e6}.t-notify{--ac:#b0561a;--ac2:#f0a04b}
+.t-rewards{--ac:#a8791a;--ac2:#f0c75a}.t-rake{--ac:#0d6f7a;--ac2:#3cc0c9}.t-vip{--ac:#a3274b;--ac2:#e86a8d}
+.abackbtn{flex:none;display:grid;place-items:center;width:38px;height:38px;min-height:0;padding:0;border-radius:12px;border:1px solid #d9b866;background:#f6ecd0;color:#3a2808;font-size:20px;cursor:pointer}
+.achip{display:inline-flex;align-items:center;gap:6px;min-height:0}
+.achip i{font-style:normal;font-size:10.5px;padding:1px 6px;border-radius:99px;background:rgba(138,95,18,.14);color:#6b4a0e}
+.achip.on i{background:rgba(42,29,0,.18);color:#2a1d00}
+/* players: slim rows; the open one shows a compact profile */
+.aplist{display:flex;flex-direction:column;gap:8px}
+.aplayer{border:1px solid #e2cb8f;border-radius:16px;background:#fffdf6;box-shadow:0 2px 8px rgba(80,55,10,.07);overflow:hidden}
+.aplayer.open{border-color:#c9a24d;box-shadow:0 6px 18px rgba(80,55,10,.16)}
+.aplayer.banned{opacity:1;border-color:#e0a3ae;background:#fff8f8}
+.aprow{padding:9px 12px;min-height:0}
+.apav{position:relative;overflow:visible;width:36px;height:36px}
+.apav img{border-radius:50%}
+.apav.live:after{content:"";position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border-radius:50%;background:#22a35a;border:2px solid #fffdf6}
+.apwho b{font-size:14.5px}.apwho i{font-size:11.5px}
+.aptag{flex:none;padding:2px 8px;border-radius:99px;font:800 9.5px/1.5 system-ui;letter-spacing:.6px;text-transform:uppercase;background:#f1e7c9;color:#6b4a0e}
+.aptag.ok{background:#dff3e5;color:#17623a}.aptag.bad{background:#fbe0e4;color:#a3273f}
+.apchips{flex:none;display:flex;flex-direction:column;align-items:flex-end;line-height:1.1}
+.apchips b{font:800 15px Georgia,serif;color:#7a4f06}
+.apchips i{font-style:normal;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:#9a8558}
+.apcar{flex:none;font-size:11px;color:#9a8558}
+.adetail{margin:0;padding:10px 12px 12px;border-top:1px solid #eedfb4;background:linear-gradient(180deg,#fbf4de,#fffdf6 60px)}
+.apstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.apstats div{padding:6px 4px;border-radius:10px;background:#fff;border:1px solid #eedfb4;text-align:center;min-width:0}
+.apstats b{display:block;font:800 14px/1.2 system-ui;color:#3a2808;font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.apstats span{display:block;font-size:8.5px;letter-spacing:.5px;text-transform:uppercase;color:#8a7648;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.apbar{height:5px;margin-top:6px;border-radius:99px;background:#efe3bd;overflow:hidden}
+.apbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#35b27c,#0f6b46)}
+.aplines{margin-top:8px;border-radius:12px;border:1px solid #eedfb4;background:#fff;overflow:hidden}
+.apline{display:flex;align-items:center;gap:8px;padding:6px 10px;border-top:1px solid #f3e8c6;font-size:12.5px}
+.apline:first-child{border-top:0}
+.apline span{flex:none;width:84px;font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:#8a7648}
+.apline b{flex:1;min-width:0;font-weight:600;color:#3a2808;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.apcopy{flex:none;min-height:0;padding:3px 10px;border-radius:99px;border:1px solid #c9a24d;background:#f6ecd0;color:#6b4a0e;font:700 11px system-ui;cursor:pointer}
+.apwallet{margin-top:8px;padding:10px;border-radius:14px;border:1px solid #d9b866;background:linear-gradient(160deg,#fff8e1,#f6e7b9)}
+.apwhead{display:flex;align-items:baseline;justify-content:space-between}
+.apwhead span{font:800 10px system-ui;letter-spacing:1.4px;color:#8a5f12}
+.apwhead b{font:800 20px Georgia,serif;color:#5a3d08;font-variant-numeric:tabular-nums}
+.apquick{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:2px}
+.apquick .achip{flex:none;background:#fffdf6}
+.apquick .achip.on{background:#c9a24d}
+.apfields{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr);gap:6px;margin-top:8px}
+.apfields input{min-height:40px;padding:8px 10px;font-size:14px;border-radius:10px;border:1px solid #d9b866;background:#fffdf6}
+.aphead{align-items:center;gap:8px}.aphead strong{flex:1}.aphead button{margin:0}
+.apacts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.btn-danger{border-radius:14px;border:1px solid #c44a5f;background:linear-gradient(180deg,#fff1f2,#fbd5da);color:#8f1d33;font-weight:800;cursor:pointer;box-shadow:0 3px 0 #d98a97}
+.btn-danger:disabled{opacity:.45;box-shadow:none;cursor:default}
+.apmore{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.aplink{min-height:0;padding:6px 12px;border-radius:99px;border:1px solid #d9c690;background:#fffdf6;color:#5a4420;font:700 12px system-ui;cursor:pointer}
+.aplink.bad{border-color:#e0a3ae;color:#a3273f}.aplink.good{border-color:#9fd6ad;color:#17623a;background:#eef9f1}
 </style>
 </head>
 <body>
@@ -5797,6 +5873,18 @@ Object.assign(Repo, {
       tx.update(ref, { chips: next, lastGrant: { amount, note: String(note || '').slice(0, 80), at: FV.serverTimestamp() }, updatedAt: FV.serverTimestamp() });
     });
   },
+  // Sets one wallet to zero (chips at a table are not touched). Same rule as grantChips: the note records what was taken.
+  async wipeChips(uid, note) {
+    let took = 0;
+    await db.runTransaction(async tx => {
+      const ref = Repo.userRef(uid), s = await tx.get(ref);
+      if (!s.exists) throw new AppError('That player was not found.');
+      took = s.data().chips || 0;
+      if (took <= 0) throw new AppError('That wallet is already empty.');
+      tx.update(ref, { chips: 0, lastGrant: { amount: -took, note: String(note || '').slice(0, 80), at: FV.serverTimestamp() }, updatedAt: FV.serverTimestamp() });
+    });
+    return took;
+  },
   sendNotice(o) {
     return db.collection('notices').add({ title: o.title, body: o.body, kind: o.kind, all: !!o.all, uids: o.uids || [], count: o.count || 0, amount: o.amount || 0, createdAt: FV.serverTimestamp() });
   },
@@ -5824,8 +5912,9 @@ const ADMIN_ICON = { tables: '♠', private: '♛', players: '☺', notify: '✉
 
 function renderAdmin() {
   const a = Admin.st;
-  const back = title => h('div', { class: 'aback' },
-    h('button', { id: 'adminBack', type: 'button', class: 'btn-ghost btn-small', text: '← Control room', onclick: () => Admin.go('hub') }),
+  const back = title => h('div', { class: 'aback t-' + a.view },
+    h('button', { id: 'adminBack', type: 'button', class: 'abackbtn', 'aria-label': 'Back to the control room', onclick: () => Admin.go('hub') }, h('span', { 'aria-hidden': 'true', text: '←' })),
+    h('span', { class: 'aic', 'aria-hidden': 'true', text: ADMIN_ICON[a.view] || '' }),
     h('h2', { text: title }));
   const msg = h('div', { id: 'adminMsg', class: 'msg ' + (a.msgKind === 'err' ? 'err' : 'ok'), role: 'status', hidden: !a.msg, text: a.msg });
   if (a.view === 'tables') return h('div', {}, back('Public tables'), adminTables(msg));
@@ -5835,25 +5924,32 @@ function renderAdmin() {
   if (a.view === 'rewards') return h('div', {}, back('Rewards'), msg, adminRewards());
   if (a.view === 'vip') return h('div', {}, back('Weekly rakeback'), msg, adminVip());
   if (a.view === 'rake') return h('div', {}, back('Rake'), msg, adminRake());
-  // the control room: one tile per job
+  // the control room: the club at a glance, then one tile per job
   Admin.watchRake();
+  if (!a.users && !a.loading && !a.hubTried) { a.hubTried = true; Admin.loadUsers(); }
   const pub = TABLES.filter(t => !t.private), live = pub.filter(t => hostLive(S.rooms[t.id])).length;
-  const pd = S.rooms[PRIVATE_ID];
+  const pd = S.rooms[PRIVATE_ID], us = a.users, playing = us ? us.filter(u => Admin.stateOf(u) === 'playing').length : 0;
+  const rakeAll = a.rake ? Object.values(a.rake).reduce((x, d) => x + (d.total || 0), 0) : null;
   const info = {
     tables: pub.length + ' tables' + (live ? ' · ' + live + ' live' : ''),
     private: !pd ? 'Not created yet' : pd.status === 'open' ? 'Open' + (hostLive(pd) ? ' · ' + (pd.seated || 0) + ' seated' : '') : 'Closed',
-    players: a.users ? a.users.length + ' players' : 'View and manage',
-    notify: 'Send a message', rewards: 'Send chips', vip: 'Approve the weekly payout', rake: a.rake ? fmt(Object.values(a.rake).reduce((x, d) => x + (d.total || 0), 0)) + ' collected' : 'Per-table totals'
+    players: us ? us.length + ' players' : 'View and manage',
+    notify: 'Send a message', rewards: 'Send chips', vip: 'Friday payout', rake: rakeAll !== null ? fmt(rakeAll) + ' collected' : 'Per-table totals'
   };
-  return h('div', {},
-    h('div', { class: 'card' },
-      h('div', { class: 'eyebrow', text: 'Administrator' }),
-      h('h2', { text: 'Control room' }),
-      h('p', { class: 'muted', text: 'Signed in as ' + (S.user.email || S.user.uid) + '. Pick a job below.' })),
+  const hot = { tables: live > 0, private: !!pd && pd.status === 'open', players: playing > 0 };
+  const kpi = (id, v, l, view) => h('button', { type: 'button', class: 'akpi', id, onclick: () => Admin.go(view) }, h('b', { text: v }), h('span', { text: l }));
+  return h('div', { class: 'ahub' },
+    h('div', { class: 'ahero' },
+      h('div', { class: 'aherotop' }, h('div', {}, h('div', { class: 'eyebrow', text: 'Administrator' }), h('h2', { text: 'Control room' })),
+        h('span', { class: 'aherowho', text: S.user.email || S.user.uid })),
+      h('div', { class: 'akpis', id: 'adminKpis' },
+        kpi('kpiPlayers', us ? fmt(us.length) : '…', 'Players', 'players'), kpi('kpiPlaying', us ? String(playing) : '…', 'Playing', 'players'),
+        kpi('kpiLive', String(live), 'Tables live', 'tables'), kpi('kpiRake', rakeAll !== null ? fmt(rakeAll) : '…', 'Rake', 'rake'))),
     h('div', { class: 'atiles', id: 'adminTiles' }, ADMIN_TILES.map(([v, id, title, sub]) =>
-      h('button', { id, type: 'button', class: 'atile', onclick: () => Admin.go(v) },
+      h('button', { id, type: 'button', class: 'atile t-' + v, onclick: () => Admin.go(v) },
         h('span', { class: 'aic', 'aria-hidden': 'true', text: ADMIN_ICON[v] }),
-        h('b', { text: title }), h('span', { class: 'asub', text: sub }), h('i', { class: 'astat', text: info[v] })))));
+        h('span', { class: 'atxt' }, h('b', { text: title }), h('span', { class: 'asub', text: sub })),
+        h('i', { class: 'astat' + (hot[v] ? ' hot' : ''), text: info[v] })))));
 }
 
 /* ---- 1. public tables ---- */
@@ -6108,66 +6204,86 @@ function adminPlayers() {
   const shown = us.filter(match);
   const search = h('input', { id: 'pSearch', type: 'search', placeholder: 'Search name, email or ID', value: a.q, oninput: e => { a.q = e.target.value; Admin.listOnly(); } });
   const head = h('div', { class: 'card tight' },
-    h('div', { class: 'row' }, h('strong', { class: 'gold', text: us.length + ' players' }),
+    h('div', { class: 'row aphead' }, h('strong', { class: 'gold', text: (shown.length === us.length ? us.length : shown.length + ' of ' + us.length) + ' players' }),
       h('button', { id: 'refreshPlayers', class: 'btn-ghost btn-small', type: 'button', text: 'Refresh', onclick: () => Admin.loadUsers(true) }),
       h('button', { id: 'exportCsv', class: 'btn-secondary btn-small', type: 'button', text: 'Export CSV', onclick: () => { Admin.csv(); toast('The player list was saved as a CSV file.'); } })),
-    h('p', { class: 'muted', style: 'font-size:12px;margin:6px 0', text: 'Passwords are never visible to anyone, not even the admin; they are kept scrambled by Firebase. Use "Send password reset" on a player instead. Emails appear once a player has signed in after this update.' }),
     search,
-    h('div', { class: 'achips', id: 'pFilters' }, FILTERS.map(([v, t]) => h('button', { type: 'button', class: 'achip' + (a.filter === v ? ' on' : ''), 'data-f': v, text: t, onclick: () => { a.filter = v; Admin.paint(); } }))));
+    h('div', { class: 'achips', id: 'pFilters' }, FILTERS.map(([v, t]) => { const n = us.filter(u => v === 'playing' ? Admin.stateOf(u) === 'playing' : v === 'banned' ? u.banned === true : v === 'low' ? u.chips < 1000 : v === 'new' ? now - ms(u.createdAt) < 7 * 864e5 : true).length;
+      return h('button', { type: 'button', class: 'achip' + (a.filter === v ? ' on' : ''), 'data-f': v, onclick: () => { a.filter = v; Admin.paint(); } }, h('span', { text: t }), h('i', { text: String(n) })); })));
   return h('div', {}, head, h('div', { id: 'pList' }, playerRows(shown)));
 }
 Admin.listOnly = function () { const el = $('pList'); if (!el) return; const us = Admin.st.users || [], a = Admin.st, q = a.q.trim().toLowerCase(); const now = Date.now(), ms = v => (v && v.toMillis ? v.toMillis() : 0); el.replaceChildren(playerRows(us.filter(u => (!q || String(u.name).toLowerCase().includes(q) || String(u.email || '').toLowerCase().includes(q) || u.uid.toLowerCase().includes(q)) && (a.filter === 'playing' ? Admin.stateOf(u) === 'playing' : a.filter === 'banned' ? u.banned === true : a.filter === 'low' ? u.chips < 1000 : a.filter === 'new' ? now - ms(u.createdAt) < 7 * 864e5 : true)))); };
 function playerRows(list) {
   const a = Admin.st;
   if (!list.length) return h('div', { class: 'card tight' }, h('p', { class: 'muted', text: 'No players match.' }));
-  return h('div', {}, list.map(u => {
-    const open = a.sel === u.uid, s = a.stats[u.uid] || {}, hd = s.hands || 0;
-    return h('div', { class: 'card tight aplayer' + (u.banned ? ' banned' : ''), 'data-uid': u.uid },
-      h('button', { type: 'button', class: 'aprow', 'data-open': u.uid, onclick: () => { a.sel = open ? '' : u.uid; Admin.paint(); } },
-        h('span', { class: 'apav' }, avatarNode(u.avatar)),
+  return h('div', { class: 'aplist' }, list.map(u => {
+    const open = a.sel === u.uid, s = a.stats[u.uid] || {}, hd = s.hands || 0, st = Admin.stateOf(u);
+    return h('div', { class: 'aplayer' + (u.banned ? ' banned' : '') + (open ? ' open' : ''), 'data-uid': u.uid },
+      h('button', { type: 'button', class: 'aprow', 'data-open': u.uid, 'aria-expanded': open ? 'true' : 'false', onclick: () => { a.sel = open ? '' : u.uid; a.chipAmt = ''; a.chipNote = ''; Admin.paint(); } },
+        h('span', { class: 'apav' + (st === 'playing' ? ' live' : '') }, avatarNode(u.avatar)),
         h('span', { class: 'apwho' }, h('b', { text: u.name }), h('i', { text: u.email || 'email not seen yet' })),
-        h('span', { class: 'apchips', text: fmt(u.chips) }),
-        u.banned ? h('span', { class: 'badge off', text: 'Banned' }) : Admin.stateOf(u) === 'playing' ? h('span', { class: 'badge on', text: 'Playing' }) : null),
+        u.banned ? h('span', { class: 'aptag bad', text: 'Banned' }) : st === 'playing' ? h('span', { class: 'aptag ok', text: 'Playing' }) : st === 'held' ? h('span', { class: 'aptag', text: 'Seat held' }) : null,
+        h('span', { class: 'apchips' }, h('b', { text: fmt(u.chips) }), h('i', { text: 'chips' })),
+        h('span', { class: 'apcar', 'aria-hidden': 'true', text: open ? '▴' : '▾' })),
       open ? playerDetail(u, s, hd) : null);
   }));
 }
 function playerDetail(u, s, hd) {
-  const a = Admin.st, ms = v => (v && v.toMillis ? new Date(v.toMillis()).toLocaleString() : '-');
-  const kv = (k, v) => h('div', {}, h('span', { text: k }), h('b', { text: String(v) }));
-  const amt = h('input', { id: 'chipAmt', type: 'number', min: 1, inputmode: 'numeric', placeholder: 'Chips', value: a.chipAmt, oninput: e => { a.chipAmt = e.target.value; } });
-  const note = h('input', { id: 'chipNote', type: 'text', maxlength: 80, placeholder: 'Reason (the player sees this)', value: a.chipNote, oninput: e => { a.chipNote = e.target.value; } });
-  const move = sign => () => {
+  const a = Admin.st, st = Admin.stateOf(u), wins = s.wins || 0, rate = hd ? Math.round(wins / hd * 100) : 0;
+  const when = v => (v && v.toMillis ? new Date(v.toMillis()).toLocaleString(undefined, { day: 'numeric', month: 'short', year: '2-digit', hour: 'numeric', minute: '2-digit' }) : '-');
+  const stat = (k, v) => h('div', {}, h('b', { text: String(v) }), h('span', { text: k }));
+  const line = (k, v, extra) => h('div', { class: 'apline' }, h('span', { text: k }), h('b', { text: String(v) }), extra || null);
+  const amt = h('input', { id: 'chipAmt', type: 'number', min: 1, inputmode: 'numeric', placeholder: 'Amount', value: a.chipAmt, 'aria-label': 'Chips to add', oninput: e => { a.chipAmt = e.target.value; } });
+  const note = h('input', { id: 'chipNote', type: 'text', maxlength: 80, placeholder: 'Reason (the player sees this) - optional', value: a.chipNote, 'aria-label': 'Reason', oninput: e => { a.chipNote = e.target.value; } });
+  const add = () => {
     const n = Number(a.chipAmt);
-    if (!Number.isInteger(n) || n <= 0 || n > 1e9) return Admin.say('Type a whole number of chips above zero.', 'err');
-    const why = a.chipNote.trim() || (sign > 0 ? 'Chips added by the admin' : 'Chips removed by the admin');
-    if (!confirm((sign > 0 ? 'Add ' : 'Remove ') + fmt(n) + ' chips ' + (sign > 0 ? 'to ' : 'from ') + u.name + '?')) return;
-    return adminBusy('chips_' + u.uid, 'change chips', async () => {
-      await Repo.grantChips(u.uid, sign * n, why);
-      u.chips += sign * n; a.chipAmt = ''; a.chipNote = '';
+    if (!Number.isInteger(n) || n <= 0 || n > 1e9) return Admin.say('Type a whole number of chips above zero, or tap one of the quick amounts.', 'err');
+    const why = a.chipNote.trim() || 'Chips added by the admin';
+    if (!confirm('Add ' + fmt(n) + ' chips to ' + u.name + '?')) return;
+    return adminBusy('chips_' + u.uid, 'add chips', async () => {
+      await Repo.grantChips(u.uid, n, why);
+      u.chips += n; a.chipAmt = ''; a.chipNote = '';
       await Admin.loadUsers(true);
-      Admin.say((sign > 0 ? 'Added ' : 'Removed ') + fmt(n) + ' chips. ' + u.name + ' now has ' + fmt((a.users.find(x => x.uid === u.uid) || u).chips) + '.');
+      Admin.say('Added ' + fmt(n) + ' chips. ' + u.name + ' now has ' + fmt((a.users.find(x => x.uid === u.uid) || u).chips) + '.');
     });
   };
+  const wipe = () => {
+    if (!(u.chips > 0)) return Admin.say(u.name + ' has no chips in the wallet to wipe.', 'err');
+    if (!confirm('Wipe all ' + fmt(u.chips) + ' chips from the wallet of ' + u.name + '? The wallet goes to zero. This cannot be undone.' + (u.tableId ? ' Chips they hold at a table are not touched.' : ''))) return;
+    return adminBusy('chips_' + u.uid, 'wipe chips', async () => {
+      const took = await Repo.wipeChips(u.uid, a.chipNote.trim() || 'Chips wiped by the admin');
+      u.chips = 0; a.chipAmt = ''; a.chipNote = '';
+      await Admin.loadUsers(true);
+      Admin.say('Wiped ' + fmt(took) + ' chips. ' + u.name + ' now has 0.');
+    });
+  };
+  const copyId = () => { const ok = () => toast('Player ID copied.'), no = () => toast('Could not copy the ID.', 'err'); if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u.uid).then(ok, no); else no(); };
+  const busy = !!S.busy['chips_' + u.uid];
   return h('div', { class: 'adetail', id: 'playerDetail' },
-    h('div', { class: 'akv' },
-      kv('Name', u.name), kv('Email', u.email || 'not seen yet'), kv('Chips', fmt(u.chips)), kv('Seated at', u.tableId ? tableName(TABLE_BY_ID[u.tableId] || { boot: '?' }) + (Admin.stateOf(u) === 'playing' ? ' (playing now)' : ' (away, seat held)') : 'not seated'),
-      kv('Joined', ms(u.createdAt)), kv('Last active', ms(u.updatedAt)), kv('Hands played', hd), kv('Hands won', s.wins || 0),
-      kv('Win rate', hd ? Math.round((s.wins || 0) / hd * 100) + '%' : '-'), kv('Best streak', s.best || 0), kv('Biggest pot', fmt(s.bigPot || 0)), kv('Peak chips', fmt(s.peak || 0)),
-      kv('Packs', s.packs || 0), kv('Blind hands', s.blindHands || 0), kv('Player ID', u.uid), kv('Password', 'hidden by Firebase')),
-    u.lastGrant ? h('div', { class: 'muted', style: 'font-size:12px', text: 'Last admin change: ' + (u.lastGrant.amount > 0 ? '+' : '') + fmt(u.lastGrant.amount) + ' (' + u.lastGrant.note + ')' }) : null,
-    h('div', { class: 'agrid' }, h('div', { class: 'field' }, h('label', { for: 'chipAmt', text: 'CHIPS' }), amt), h('div', { class: 'field' }, h('label', { for: 'chipNote', text: 'NOTE' }), note)),
-    h('div', { class: 'controls' },
-      h('button', { id: 'chipAdd', class: 'btn-primary btn-small', type: 'button', text: 'Add chips', onclick: move(1) }),
-      h('button', { id: 'chipRemove', class: 'btn-secondary btn-small', type: 'button', text: 'Remove chips', onclick: move(-1) })),
-    Admin.stateOf(u) === 'held' ? h('div', { class: 'controls' },
-      h('button', { id: 'releaseSeat', class: 'btn-secondary btn-small', type: 'button', text: 'Release the held seat (chips go back to the wallet)', onclick: () => adminBusy('rel_' + u.uid, 'release seat', async () => { await Repo.adminRemoveMember(u.uid, u.tableId); await Admin.loadUsers(true); Admin.say('The seat was released.'); }) })) : null,
-    h('div', { class: 'controls' },
-      h('button', { id: 'banBtn', class: u.banned ? 'btn-primary btn-small' : 'btn-ghost btn-small', type: 'button', text: u.banned ? 'Lift the ban' : 'Ban this player',
+    h('div', { class: 'apstats', id: 'apStats' },
+      stat('Hands', hd), stat('Won', wins), stat('Win rate', hd ? rate + '%' : '-'), stat('Best streak', s.best || 0),
+      stat('Biggest pot', fmt(s.bigPot || 0)), stat('Peak chips', fmt(s.peak || 0)), stat('Packs', s.packs || 0), stat('Blind hands', s.blindHands || 0)),
+    hd ? h('div', { class: 'apbar', title: 'Win rate', 'aria-hidden': 'true' }, h('i', { style: 'width:' + Math.max(2, rate) + '%' })) : null,
+    h('div', { class: 'aplines' },
+      line('Seated at', u.tableId ? tableName(TABLE_BY_ID[u.tableId] || { boot: '?' }) + (st === 'playing' ? ' (playing now)' : ' (away, seat held)') : 'Not seated'),
+      line('Joined', when(u.createdAt)), line('Last active', when(u.updatedAt)),
+      u.lastGrant ? line('Last change', (u.lastGrant.amount > 0 ? '+' : '') + fmt(u.lastGrant.amount) + '  ·  ' + u.lastGrant.note) : null,
+      line('Player ID', u.uid, h('button', { type: 'button', class: 'apcopy', id: 'copyId', text: 'Copy', onclick: copyId }))),
+    h('div', { class: 'apwallet' },
+      h('div', { class: 'apwhead' }, h('span', { text: 'WALLET' }), h('b', { id: 'apWallet', text: fmt(u.chips) })),
+      h('div', { class: 'apquick', id: 'chipQuick' }, [100, 500, 1000, 5000, 10000].map(n => h('button', { type: 'button', class: 'achip' + (Number(a.chipAmt) === n ? ' on' : ''), 'data-amt': n, text: '+' + fmt(n), onclick: () => { a.chipAmt = String(n); Admin.paint(); } }))),
+      h('div', { class: 'apfields' }, amt, note),
+      h('div', { class: 'apacts' },
+        h('button', { id: 'chipAdd', class: 'btn-primary btn-small', type: 'button', text: 'Add chips', disabled: busy, onclick: add }),
+        h('button', { id: 'chipWipe', class: 'btn-danger btn-small', type: 'button', text: 'Wipe chips', disabled: busy || !(u.chips > 0), onclick: wipe }))),
+    h('div', { class: 'apmore' },
+      st === 'held' ? h('button', { id: 'releaseSeat', class: 'aplink', type: 'button', text: 'Release held seat', title: 'The chips at the table go back to the wallet', onclick: () => adminBusy('rel_' + u.uid, 'release seat', async () => { await Repo.adminRemoveMember(u.uid, u.tableId); await Admin.loadUsers(true); Admin.say('The seat was released.'); }) }) : null,
+      u.email ? h('button', { id: 'resetPw', class: 'aplink', type: 'button', text: 'Send password reset', onclick: () => adminBusy('pw_' + u.uid, 'send reset', async () => { await Auth.sendReset(u.email); Admin.say('A password reset email was sent to ' + u.email + '.'); }) }) : null,
+      h('button', { id: 'banBtn', class: 'aplink ' + (u.banned ? 'good' : 'bad'), type: 'button', text: u.banned ? 'Lift the ban' : 'Ban player',
         onclick: () => {
           if (!u.banned && !confirm('Ban ' + u.name + '? They will be locked out of the game until you lift the ban.')) return;
           return adminBusy('ban_' + u.uid, 'ban player', async () => { await Repo.setBanned(u.uid, !u.banned); u.banned = !u.banned; Admin.say(u.name + (u.banned ? ' is banned.' : ' can play again.')); });
-        } }),
-      u.email ? h('button', { id: 'resetPw', class: 'btn-secondary btn-small', type: 'button', text: 'Send password reset', onclick: () => adminBusy('pw_' + u.uid, 'send reset', async () => { await Auth.sendReset(u.email); Admin.say('A password reset email was sent to ' + u.email + '.'); }) }) : null));
+        } })));
 }
 
 /* ---- 4. notifications ---- */
