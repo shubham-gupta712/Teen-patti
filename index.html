@@ -2285,6 +2285,63 @@ body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
 .rxquiet i{font-style:normal;font-weight:800;color:#8a5f12}
 .rxzero{display:flex;flex-wrap:wrap;gap:6px}
 .rxzero span{padding:4px 10px;border-radius:99px;background:#f6ecd0;color:#6b5a40;font-size:11.5px}
+
+/* ===== 62. Admin: public tables as tiles, compose cards for messages and rewards, rakeback as a ranked list ===== */
+.herobtn{width:100%;min-height:0;margin-top:12px;padding:10px 12px;border-radius:12px;border:1px solid rgba(233,196,106,.45);background:rgba(255,255,255,.08);color:#ffe9a6;font:800 13px system-ui;cursor:pointer}
+.herobtn.gold{background:linear-gradient(180deg,#f6d77a,#c9972e);border-color:#f6d77a;color:#2a1d00;font-size:14.5px;padding:12px;box-shadow:0 3px 0 #7a5a12}
+.herobtn:disabled{opacity:.5;box-shadow:none;cursor:default}
+.ahero .akpis:first-child{margin-top:0}
+.cmlabel{font:800 10px system-ui;letter-spacing:1.4px;color:#8a5f12;margin:0 0 6px}
+.ptsec{margin-top:14px}
+.ptgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.pttile{--ac:#b8862b;position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:0;min-height:0;padding:10px 10px 9px;border-radius:16px;border:1px solid #e2cb8f;background:#fffdf6;color:#3a2808;text-align:left;cursor:pointer;box-shadow:0 2px 8px rgba(80,55,10,.08);overflow:hidden}
+.pttile:before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--ac)}
+.pttile:active{transform:scale(.97)}
+.pttile i{font:800 8.5px system-ui;font-style:normal;letter-spacing:1.2px;color:#9a8558;margin-top:2px}
+.pttile b{font:800 24px/1.05 Georgia,serif;font-variant-numeric:tabular-nums}
+.pttile small{font-size:10px;color:#7a6331;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.pttile em{margin-top:6px;padding:2px 7px;border-radius:99px;font:800 9.5px/1.5 system-ui;font-style:normal;background:#f1e7c9;color:#6b4a0e;white-space:nowrap}
+.ptdot{position:absolute;right:9px;top:12px;width:9px;height:9px;border-radius:50%;background:#d6c79a}
+.pttile.s-on{--ac:#22a35a;border-color:#9fd6ad}.pttile.s-on .ptdot{background:#22a35a;box-shadow:0 0 0 3px rgba(34,163,90,.22)}.pttile.s-on em{background:#dff3e5;color:#17623a}
+.pttile.s-off{--ac:#c44a5f;background:#fff8f8}.pttile.s-off .ptdot{background:#c44a5f}.pttile.s-off em{background:#fbe0e4;color:#a3273f}
+.ptkey{display:flex;gap:14px;justify-content:center;margin:14px 0 4px;font-size:11px;color:#7a6331}
+.ptkey span:before{content:"";display:inline-block;width:8px;height:8px;margin-right:5px;border-radius:50%;background:#d6c79a}
+.ptkey .s-on:before{background:#22a35a}.ptkey .s-off:before{background:#c44a5f}
+#tableDetail .aform{margin-top:12px}
+.cmcard{--ac:#b8862b;--ac2:#e9c46a;position:relative;margin-bottom:14px;padding:16px 14px 14px;border-radius:20px;border:1px solid #d9c690;background:#fffdf6;box-shadow:0 6px 16px rgba(80,55,10,.12);overflow:hidden}
+.cmcard:before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,var(--ac2),var(--ac))}
+.cmcard.t-notify{--ac:#b0561a;--ac2:#f0a04b}.cmcard.t-rewards{--ac:#a8791a;--ac2:#f0c75a}
+.cmsec{margin-bottom:14px}
+.cmsec input,.cmsec textarea{width:100%;min-height:42px;padding:9px 12px;font-size:14.5px;border-radius:12px;border:1px solid #d9b866;background:#fff}
+.cmsec textarea{margin-top:6px;resize:vertical;font-family:inherit}
+#vipBatches{margin-top:14px}
+.cmsec .apfields{margin-top:8px}
+.cmaud{display:flex;flex-wrap:wrap;gap:6px}
+.cmaud .achip{background:#fffdf6}.cmaud .achip.on{background:#c9a24d}
+.cmreach{display:flex;align-items:center;gap:8px;margin-top:10px;padding:7px 10px;border-radius:12px;background:#f6ecd0}
+.cmreach b{flex:none;min-width:26px;padding:2px 7px;border-radius:99px;background:#3a2808;color:#ffe9a6;font:800 13px/1.5 system-ui;text-align:center}
+.cmreach span{min-width:0;font-size:12px;color:#5a4420;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cmtotal{display:none;align-items:baseline;justify-content:space-between;margin-bottom:10px;padding:9px 12px;border-radius:12px;background:linear-gradient(160deg,#14503a,#0a2c20);color:#d9cfae}
+.cmtotal.on{display:flex}
+.cmtotal span{font-size:12.5px}.cmtotal b{font:800 19px Georgia,serif;color:#ffe9a6}
+.cmsend{width:100%}
+.cmhist{margin-bottom:14px;padding:14px;border-radius:18px;border:1px solid #e2cb8f;background:#fffdf6}
+.cmitem{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-top:1px solid #f1e5c0}
+.cmitem:first-of-type{border-top:0;padding-top:2px}
+.cmbadge{flex:none;min-width:40px;padding:5px 7px;border-radius:10px;background:#f6ecd0;color:#6b4a0e;font:800 12px/1.3 system-ui;text-align:center}
+.cmtxt{flex:1;min-width:0}
+.cmtxt b{display:block;font-size:13.5px;color:#3a2808;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cmtxt p{margin:1px 0 0;font-size:12.5px;color:#5a4420;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cmtxt i{display:block;font-style:normal;font-size:11px;color:#9a8558;margin-top:1px}
+.cmdel{flex:none;width:30px;height:30px;min-height:0;padding:0;border-radius:50%;border:1px solid #e6d6a8;background:transparent;color:#a3273f;font-size:13px;cursor:pointer}
+.vqtier{flex:none;padding:2px 8px;border-radius:99px;font:800 10px/1.5 system-ui;background:#f0dcc4;color:#7a4a1c}
+.vqtier.v-silver{background:#e8eaee;color:#4a5361}.vqtier.v-gold{background:#f8e7a8;color:#6b4a0e}.vqtier.v-platinum{background:#dfe9f6;color:#274a7a}
+.rxrow.t-vip{--ac:#a3274b;--ac2:#e86a8d}
+.rxrow.dim{opacity:.6}
+.rxrow.t-vip .rxamt{color:#17623a}
+.vqhelp{margin-top:8px;padding:10px 12px;border-radius:14px;background:#fffdf6;border:1px solid #e2cb8f}
+.vqtiers{display:flex;flex-wrap:wrap;gap:6px}
+.vqhelp p{margin:8px 0 0;font-size:12px;color:#5a4420}
 </style>
 </head>
 <body>
@@ -5874,18 +5931,20 @@ const Admin = {
     }
   },
   /* the "who is this for" box shared by Notifications and Rewards */
+  reachText(who) { return who.length ? who.slice(0, 3).map(u => u.name).join(', ') + (who.length > 3 ? ' +' + (who.length - 3) : '') : 'Nobody matches'; },
   audienceBox() {
     const a = Admin.st, au = a.aud, who = Admin.pick();
-    const sel = h('select', { id: 'audType', 'aria-label': 'Who is it for', onchange: e => { au.type = e.target.value; Admin.paint(); } }, Admin.AUDIENCES.map(([v, t]) => h('option', { value: v, text: t })));
-    sel.value = au.type;
-    const num = (au.type === 'low' || au.type === 'high') ? h('input', { id: 'audN', type: 'number', min: 0, inputmode: 'numeric', value: String(au.n), 'aria-label': 'Amount', oninput: e => { au.n = Math.max(0, Math.floor(Number(e.target.value) || 0)); Admin.refreshCount(); } }) : null;
+    const SHORT = { all: 'Everyone', playing: 'Playing now', recent: 'Active 7 days', inactive: 'Away 14+ days', newbies: 'New this week', low: 'Chips below', high: 'Chips above', picked: 'I choose' };
+    const chips = h('div', { class: 'cmaud', id: 'audType', role: 'group', 'aria-label': 'Who is it for' }, Admin.AUDIENCES.map(([v, t]) =>
+      h('button', { type: 'button', class: 'achip' + (au.type === v ? ' on' : ''), 'data-aud': v, title: t, text: SHORT[v] || t, onclick: () => { au.type = v; Admin.paint(); } })));
+    const num = (au.type === 'low' || au.type === 'high') ? h('input', { id: 'audN', type: 'number', min: 0, inputmode: 'numeric', value: String(au.n), placeholder: 'Chips', 'aria-label': 'Amount', oninput: e => { au.n = Math.max(0, Math.floor(Number(e.target.value) || 0)); Admin.refreshCount(); } }) : null;
     const list = au.type === 'picked' ? h('div', { class: 'apick', id: 'audList' }, (a.users || []).filter(u => u.banned !== true).map(u => h('label', { class: 'apickrow' },
       h('input', { type: 'checkbox', checked: au.picked.includes(u.uid), 'data-uid': u.uid, onchange: e => { const i = au.picked.indexOf(u.uid); if (e.target.checked && i < 0) au.picked.push(u.uid); if (!e.target.checked && i >= 0) au.picked.splice(i, 1); Admin.refreshCount(); } }),
       h('span', { text: u.name + (u.email ? '  ·  ' + u.email : '') })))) : null;
-    return h('div', { class: 'field' }, h('label', { for: 'audType', text: 'WHO IS IT FOR' }), sel, num ? h('div', { style: 'margin-top:8px' }, num) : null, list,
-      h('div', { class: 'acount', id: 'audCount', text: a.users ? 'Reaches ' + who.length + (who.length === 1 ? ' player' : ' players') + (who.length ? ': ' + who.slice(0, 4).map(u => u.name).join(', ') + (who.length > 4 ? ' and ' + (who.length - 4) + ' more' : '') : '') + '. Banned players are left out.' : 'Loading players...' }));
+    return h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'SEND TO' }), chips, num ? h('div', { style: 'margin-top:8px' }, num) : null, list,
+      h('div', { class: 'cmreach', id: 'audCount' }, h('b', { id: 'audNum', text: a.users ? String(who.length) : '…' }), h('span', { id: 'audNames', text: a.users ? (who.length === 1 ? 'player  ·  ' : 'players  ·  ') + Admin.reachText(who) : 'Loading players...' })));
   },
-  refreshCount() { const el = $('audCount'); if (el) { const who = Admin.pick(); el.textContent = 'Reaches ' + who.length + (who.length === 1 ? ' player' : ' players') + (who.length ? ': ' + who.slice(0, 4).map(u => u.name).join(', ') + (who.length > 4 ? ' and ' + (who.length - 4) + ' more' : '') : '') + '. Banned players are left out.'; } },
+  refreshCount() { const n = $('audNum'), t = $('audNames'); if (n && t) { const who = Admin.pick(); n.textContent = String(who.length); t.textContent = (who.length === 1 ? 'player  ·  ' : 'players  ·  ') + Admin.reachText(who); } Admin.refreshTotal(); },
   csv() {
     const a = Admin.st, q = v => '"' + String(v === undefined || v === null ? '' : v).replace(/"/g, '""') + '"';
     const ms = v => (v && v.toMillis ? new Date(v.toMillis()).toISOString().slice(0, 16).replace('T', ' ') : '');
@@ -6013,41 +6072,44 @@ function adminTables(msg) {
   const a = Admin.st, pub = TABLES.filter(t => !t.private);
   if (a.tab && TABLE_BY_ID[a.tab]) return adminTableDetail(TABLE_BY_ID[a.tab], msg);
   const missing = pub.filter(t => S.roomsLoaded[t.id] && !S.rooms[t.id]).length;
-  const head = h('div', { class: 'card' },
-    h('p', { class: 'muted', text: 'Twelve public tables. Tap a table to see it, customise it, or close it for maintenance. A table that is being played cannot be changed.' }),
-    missing ? h('div', { class: 'msg err', role: 'alert', text: missing + ' table(s) are not set up. Press the button below.' }) : null,
-    h('div', { id: 'setupMsg', class: 'msg ok', role: 'status', hidden: !S.setupMsg, text: S.setupMsg || '' }), msg,
-    h('div', { class: 'controls' },
-      h('button', { id: 'setupBtn', class: 'btn-primary btn-small' + (S.busy.setup ? ' busy' : ''), type: 'button', text: 'Set up / refresh the public tables', disabled: !!S.busy.setup, onclick: handleSetup })));
-  const strip = t => {
-    const doc = S.rooms[t.id], b = tableBadge(t), on = hostLive(doc);
-    return h('button', { type: 'button', class: 'tstrip', id: 'strip_' + t.id, 'data-table': t.id, onclick: () => { a.tab = t.id; a.edit = ''; a.msg = ''; Admin.paint(); } },
-      h('span', { class: 'tsname' }, h('b', { text: tableName(t) }), h('i', { text: fmt(t.min) + ' - ' + fmt(t.max) + ' buy-in' })),
-      h('span', { class: 'tsseat', text: doc ? (on ? (doc.seated || 0) : 0) + ' seated' : '-' }),
-      h('span', { class: 'badge ' + b[0], text: b[1] }),
-      h('span', { class: 'tschev', 'aria-hidden': 'true', text: '›' }));
+  const live = pub.filter(t => hostLive(S.rooms[t.id])), seated = live.reduce((x, t) => x + (S.rooms[t.id].seated || 0), 0);
+  const shut = pub.filter(t => S.rooms[t.id] && S.rooms[t.id].status !== 'open').length;
+  const kpi = (v, l) => h('div', { class: 'akpi flat' }, h('b', { text: String(v) }), h('span', { text: l }));
+  const head = h('div', { class: 'ahero' },
+    h('div', { class: 'akpis' }, kpi(pub.length, 'Tables'), kpi(live.length, 'Live'), kpi(seated, 'Seated'), kpi(shut, 'Closed')),
+    h('button', { id: 'setupBtn', class: 'herobtn' + (S.busy.setup ? ' busy' : ''), type: 'button', text: missing ? 'Set up ' + missing + ' missing table' + (missing === 1 ? '' : 's') : '↻  Refresh tables', disabled: !!S.busy.setup, onclick: handleSetup }));
+  const tile = t => {
+    const doc = S.rooms[t.id], b = tableBadge(t), on = hostLive(doc), n = doc && on ? (doc.seated || 0) : 0;
+    return h('button', { type: 'button', class: 'pttile s-' + (b[0] || 'idle') + (!doc ? ' none' : ''), id: 'strip_' + t.id, 'data-table': t.id, 'aria-label': tableName(t) + ', ' + b[1], onclick: () => { a.tab = t.id; a.edit = ''; a.msg = ''; Admin.paint(); } },
+      h('span', { class: 'ptdot', 'aria-hidden': 'true' }),
+      h('i', { text: 'BOOT' }), h('b', { text: fmt(t.boot) }),
+      h('small', { text: fmt(t.min) + ' - ' + fmt(t.max) }),
+      h('em', { text: !S.roomsLoaded[t.id] ? '…' : !doc ? 'Not set up' : doc.status !== 'open' ? 'Closed' : on ? n + ' seated' : 'Open' }));
   };
-  return h('div', {}, head, h('div', { class: 'tstrips', id: 'adminGrid' }, pub.map(strip)));
+  const sec = (title, list, cls) => list.length ? h('div', { class: 'ptsec ' + cls }, h('div', { class: 'cmlabel', text: title }), h('div', { class: 'ptgrid' }, list.map(tile))) : null;
+  return h('div', {}, head,
+    h('div', { id: 'setupMsg', class: 'msg ok', role: 'status', hidden: !S.setupMsg, text: S.setupMsg || '' }), msg,
+    h('div', { id: 'adminGrid' }, sec('CLASSIC TABLES', pub.filter(t => !t.random && !t.variant), 't-tables'), sec('VARIANT TABLES', pub.filter(t => t.random || t.variant), 't-private')),
+    h('div', { class: 'ptkey' }, h('span', { class: 's-on', text: 'Being played' }), h('span', { class: 's-idle', text: 'Open' }), h('span', { class: 's-off', text: 'Closed' })));
 }
 // One table: its numbers, its status, and the customise form.
 function adminTableDetail(t, msg) {
   const a = Admin.st, doc = S.rooms[t.id], on = hostLive(doc), closed = !!doc && doc.status !== 'open', editing = a.edit === t.id, b = tableBadge(t);
+  const fact = (v, l) => h('div', {}, h('b', { text: v }), h('span', { text: l }));
   return h('div', {},
-    h('div', { class: 'aback' }, h('button', { id: 'tableBack', type: 'button', class: 'btn-ghost btn-small', text: '← All tables', onclick: () => { a.tab = ''; a.edit = ''; a.msg = ''; Admin.paint(); } })),
+    h('button', { id: 'tableBack', type: 'button', class: 'aplink', style: 'margin-bottom:10px', text: '←  All tables', onclick: () => { a.tab = ''; a.edit = ''; a.msg = ''; Admin.paint(); } }),
     msg,
-    h('div', { class: 'card tight', 'data-table': t.id, id: 'tableDetail' },
-      h('div', { class: 'row' }, h('strong', { class: 'gold', text: tableName(t) }), h('span', { class: 'badge ' + b[0], text: b[1] })),
-      h('div', { class: 'muted', text: 'Buy-in ' + fmt(t.min) + ' - ' + fmt(t.max) }),
-      h('div', { class: 'muted', text: 'Max blind ' + fmt(t.blind) + '  ·  Max chaal ' + fmt(t.chaal) + '  ·  Pot limit ' + fmt(t.pot) }),
-      h('div', { class: 'astats' },
-        h('div', {}, h('b', { text: doc ? String(on ? (doc.seated || 0) : 0) : '-' }), h('span', { text: 'Seated' })),
-        h('div', {}, h('b', { text: doc ? (closed ? 'closed' : 'open') : '-' }), h('span', { text: 'Status' }))),
+    h('div', { class: 'pvcard' + (doc && !closed ? ' open' : ''), 'data-table': t.id, id: 'tableDetail' },
+      h('div', { class: 'pvtop' },
+        h('div', { class: 'pvname' }, h('b', { text: tableName(t) }), h('span', { text: doc ? (on ? (doc.seated || 0) : 0) + ' seated' : 'Not set up yet' })),
+        h('span', { class: 'pvpill ' + (b[0] === 'on' ? 'on' : closed || !doc ? 'off' : ''), text: b[1] })),
+      h('div', { class: 'pvfacts' }, fact(fmt(t.min) + ' - ' + fmt(t.max), 'Buy-in'), fact(fmt(t.blind), 'Max blind'), fact(fmt(t.chaal), 'Max chaal'), fact(fmt(t.pot), 'Pot limit')),
       editing ? adminTableForm(t, doc, on) : null,
-      h('div', { class: 'controls', style: 'margin-top:10px' },
+      h('div', { class: 'pvrow three' },
         doc && !editing ? h('button', { id: 'edit_' + t.id, class: 'btn-secondary btn-small', type: 'button', text: 'Customise', onclick: () => { a.edit = t.id; a.draft = { boot: t.boot, min: t.min, max: t.max, blind: t.blind, chaal: t.chaal, pot: t.pot }; Admin.paint(); } }) : null,
-        doc && !closed ? h('button', { id: 'close_' + t.id, class: 'btn-ghost btn-small', type: 'button', text: 'Close for maintenance', onclick: () => adminSetStatus(t, 'closed') }) : null,
-        doc && closed && !editing ? h('button', { id: 'open_' + t.id, class: 'btn-primary btn-small', type: 'button', text: 'Reopen table', onclick: () => adminSetStatus(t, 'open') }) : null,
-        h('button', { class: 'btn-secondary btn-small', type: 'button', 'data-enter': t.id, text: 'Watch table', disabled: !doc, onclick: () => { location.hash = '#/table/' + t.id; } }))));
+        h('button', { class: 'btn-secondary btn-small', type: 'button', 'data-enter': t.id, text: 'Watch', disabled: !doc, onclick: () => { location.hash = '#/table/' + t.id; } }),
+        doc && !closed ? h('button', { id: 'close_' + t.id, class: 'btn-danger btn-small', type: 'button', text: 'Close', title: 'Close for maintenance', onclick: () => adminSetStatus(t, 'closed') }) : null,
+        doc && closed && !editing ? h('button', { id: 'open_' + t.id, class: 'btn-primary btn-small', type: 'button', text: 'Reopen', onclick: () => adminSetStatus(t, 'open') }) : null)));
 }
 const LIMIT_FIELDS = [['boot', 'BOOT (ENTRY STAKE)'], ['min', 'LOWEST BUY-IN'], ['max', 'HIGHEST BUY-IN'], ['blind', 'MAX BLIND (ONE MOVE)'], ['chaal', 'MAX CHAAL (ONE MOVE)'], ['pot', 'POT LIMIT (HANDS ARE SHOWN)']];
 // Reads and checks the numbers in a customise form.
@@ -6349,8 +6411,8 @@ function playerDetail(u, s, hd) {
 /* ---- 4. notifications ---- */
 function adminNotify() {
   const a = Admin.st;
-  const title = h('input', { id: 'nTitle', type: 'text', maxlength: 60, placeholder: 'Title', value: a.nTitle, oninput: e => { a.nTitle = e.target.value; } });
-  const body = h('textarea', { id: 'nBody', maxlength: 500, rows: 4, placeholder: 'Message', oninput: e => { a.nBody = e.target.value; } }); body.value = a.nBody;
+  const title = h('input', { id: 'nTitle', type: 'text', maxlength: 60, placeholder: 'Title', 'aria-label': 'Title', value: a.nTitle, oninput: e => { a.nTitle = e.target.value; } });
+  const body = h('textarea', { id: 'nBody', maxlength: 500, rows: 3, placeholder: 'Message (optional)', 'aria-label': 'Message', oninput: e => { a.nBody = e.target.value; } }); body.value = a.nBody;
   const send = () => {
     const who = Admin.pick(), t = a.nTitle.trim();
     if (!t) return Admin.say('Give the message a title.', 'err');
@@ -6364,31 +6426,34 @@ function adminNotify() {
     });
   };
   return h('div', {},
-    h('div', { class: 'card' },
-      h('div', { class: 'field' }, h('label', { for: 'nTitle', text: 'TITLE' }), title),
-      h('div', { class: 'field' }, h('label', { for: 'nBody', text: 'MESSAGE' }), body),
+    h('div', { class: 'cmcard t-notify' },
+      h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'MESSAGE' }), title, body),
       Admin.audienceBox(),
-      h('div', { class: 'controls' }, h('button', { id: 'nSend', class: 'btn-primary', type: 'button', text: 'Send notification', disabled: !!S.busy.notify, onclick: send }))),
+      h('button', { id: 'nSend', class: 'btn-primary cmsend', type: 'button', text: 'Send notification', disabled: !!S.busy.notify, onclick: send })),
     noticeHistory('info'));
 }
 function noticeHistory(kind) {
   const a = Admin.st, list = (a.notices || []).filter(n => n.kind === kind);
-  const ms = v => (v && v.toMillis ? new Date(v.toMillis()).toLocaleString() : '');
-  return h('div', { class: 'card tight', id: 'noticeHistory' }, h('strong', { class: 'gold', text: kind === 'reward' ? 'Rewards sent' : 'Sent messages' }),
-    list.length ? h('div', {}, list.map(n => h('div', { class: 'anote', 'data-id': n.id },
-      h('div', {}, h('b', { text: n.title }), h('i', { text: ms(n.createdAt) + '  ·  ' + (n.count || (n.uids || []).length) + ' players' + (n.amount ? '  ·  ' + fmt(n.amount) + ' chips each' : '') })),
-      n.body ? h('p', { text: n.body }) : null,
-      h('button', { type: 'button', class: 'btn-ghost btn-small', text: 'Delete', onclick: () => confirm('Delete this ' + (kind === 'reward' ? 'record' : 'message') + '? Players will no longer see it. Chips already given stay.') && adminBusy('dn_' + n.id, 'delete', async () => { await Repo.deleteNotice(n.id); await Admin.loadNotices(); }) })))) : h('p', { class: 'muted', text: a.notices ? 'Nothing sent yet.' : 'Loading...' }));
+  const ms = v => (v && v.toMillis ? new Date(v.toMillis()).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : '');
+  return h('div', { class: 'cmhist', id: 'noticeHistory' },
+    h('div', { class: 'cmlabel', text: (kind === 'reward' ? 'REWARDS SENT' : 'SENT MESSAGES') + (list.length ? '  ·  ' + list.length : '') }),
+    list.length ? list.map(n => { const cnt = n.count || (n.uids || []).length;
+      return h('div', { class: 'cmitem', 'data-id': n.id },
+        h('span', { class: 'cmbadge', 'aria-hidden': 'true', text: n.amount ? '+' + fmt(n.amount) : '✉' }),
+        h('div', { class: 'cmtxt' }, h('b', { text: n.amount ? (n.body || n.title) : n.title }), !n.amount && n.body ? h('p', { text: n.body }) : null,
+          h('i', { text: ms(n.createdAt) + '  ·  ' + cnt + (cnt === 1 ? ' player' : ' players') + (n.amount ? '  ·  ' + fmt(n.amount * cnt) + ' in all' : '') })),
+        h('button', { type: 'button', class: 'cmdel', 'aria-label': 'Delete', title: 'Delete', text: '✕', onclick: () => confirm('Delete this ' + (kind === 'reward' ? 'record' : 'message') + '? Players will no longer see it. Chips already given stay.') && adminBusy('dn_' + n.id, 'delete', async () => { await Repo.deleteNotice(n.id); await Admin.loadNotices(); }) }));
+    }) : h('p', { class: 'muted', style: 'font-size:13px;margin:6px 0 0', text: a.notices ? 'Nothing sent yet.' : 'Loading...' }));
 }
 
 /* ---- 5. rewards ---- */
 function adminRewards() {
   const a = Admin.st;
-  const amt = h('input', { id: 'rAmt', type: 'number', min: 1, inputmode: 'numeric', placeholder: 'Chips for each player', value: a.rAmt, oninput: e => { a.rAmt = e.target.value; Admin.refreshTotal(); } });
-  const note = h('input', { id: 'rNote', type: 'text', maxlength: 80, value: a.rNote, oninput: e => { a.rNote = e.target.value; } });
+  const amt = h('input', { id: 'rAmt', type: 'number', min: 1, inputmode: 'numeric', placeholder: 'Chips each', 'aria-label': 'Chips for each player', value: a.rAmt, oninput: e => { a.rAmt = e.target.value; Admin.refreshTotal(); } });
+  const note = h('input', { id: 'rNote', type: 'text', maxlength: 80, placeholder: 'Message to the players', 'aria-label': 'Message to the players', value: a.rNote, oninput: e => { a.rNote = e.target.value; } });
   const send = () => {
     const who = Admin.pick(), n = Number(a.rAmt);
-    if (!Number.isInteger(n) || n <= 0 || n > 1e8) return Admin.say('Type a whole number of chips for each player.', 'err');
+    if (!Number.isInteger(n) || n <= 0 || n > 1e8) return Admin.say('Type a whole number of chips for each player, or tap a quick amount.', 'err');
     if (!who.length) return Admin.say('Nobody matches that audience.', 'err');
     if (who.length > 400) return Admin.say('A reward can reach 400 players at a time. Narrow the audience.', 'err');
     if (!confirm('Give ' + fmt(n) + ' chips to each of ' + who.length + ' player' + (who.length === 1 ? '' : 's') + ' (' + fmt(n * who.length) + ' in all)?')) return;
@@ -6400,17 +6465,19 @@ function adminRewards() {
       Admin.say(done.length === who.length ? 'Sent ' + fmt(n) + ' chips to ' + done.length + ' player' + (done.length === 1 ? '' : 's') + '.' : 'Sent to ' + done.length + ' of ' + who.length + ' players. The rest could not be paid; try again.', done.length === who.length ? 'ok' : 'err');
     });
   };
-  return h('div', {},
-    h('div', { class: 'card' },
-      h('p', { class: 'muted', text: 'Chips go straight into the wallets. Each player sees the gift under Messages in the lobby.' }),
-      Admin.audienceBox(),
-      h('div', { class: 'field' }, h('label', { for: 'rAmt', text: 'CHIPS FOR EACH PLAYER' }), amt),
-      h('div', { class: 'acount', id: 'rTotal' }),
-      h('div', { class: 'field' }, h('label', { for: 'rNote', text: 'MESSAGE TO THE PLAYERS' }), note),
-      h('div', { class: 'controls' }, h('button', { id: 'rSend', class: 'btn-primary', type: 'button', text: 'Send reward', disabled: !!S.busy.reward, onclick: send }))),
-    noticeHistory('reward'));
+  const card = h('div', { class: 'cmcard t-rewards' },
+    h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'CHIPS FOR EACH PLAYER' }),
+      h('div', { class: 'apquick', id: 'rQuick' }, [50, 100, 500, 1000, 5000].map(n => h('button', { type: 'button', class: 'achip' + (Number(a.rAmt) === n ? ' on' : ''), 'data-amt': n, text: fmt(n), onclick: () => { a.rAmt = String(n); Admin.paint(); } }))),
+      h('div', { class: 'apfields' }, amt, note)),
+    Admin.audienceBox(),
+    h('div', { class: 'cmtotal', id: 'rTotal' }),
+    h('button', { id: 'rSend', class: 'btn-primary cmsend', type: 'button', text: 'Send reward', disabled: !!S.busy.reward, onclick: send }));
+  setTimeout(Admin.refreshTotal, 0);
+  return h('div', {}, card, noticeHistory('reward'));
 }
-Admin.refreshTotal = function () { const el = $('rTotal'); if (el) { const n = Number(Admin.st.rAmt), w = Admin.pick().length; el.textContent = Number.isInteger(n) && n > 0 ? 'Total: ' + fmt(n * w) + ' chips for ' + w + ' player' + (w === 1 ? '' : 's') : ''; } };
+Admin.refreshTotal = function () { const el = $('rTotal'); if (!el) return; const n = Number(Admin.st.rAmt), w = Admin.pick().length, ok = Number.isInteger(n) && n > 0 && w > 0;
+  el.replaceChildren(); el.classList.toggle('on', ok);
+  if (ok) { el.appendChild(h('span', { text: fmt(n) + ' × ' + w + (w === 1 ? ' player' : ' players') })); el.appendChild(h('b', { text: fmt(n * w) + ' chips' })); } };
 
 
 /* ---- 7. weekly rakeback: nothing is paid until the admin approves it here ---- */
@@ -6418,32 +6485,45 @@ function adminVip() {
   const a = Admin.st;
   if (!a.vip) return h('div', { class: 'card' }, h('p', { class: 'muted', text: 'Loading the week...' }));
   const rows = Admin.vipRows(), pay = rows.filter(r => r.payout > 0 && !r.banned);
-  const totalW = rows.reduce((x, r) => x + r.weekly, 0), totalP = pay.reduce((x, r) => x + r.payout, 0);
+  const totalW = rows.reduce((x, r) => x + r.weekly, 0), totalP = pay.reduce((x, r) => x + r.payout, 0), top = Math.max(1, ...rows.map(r => r.weekly));
   // the next Friday 7:00 PM IST = 13:30 UTC
   const due = new Date(); due.setUTCHours(13, 30, 0, 0); while (due.getUTCDay() !== 5 || due.getTime() < Date.now() - 6 * 3600e3) due.setUTCDate(due.getUTCDate() + 1);
-  const dueText = due.toLocaleString('en-IN', { weekday: 'long', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Kolkata' }) + ' IST';
-  const go = h('button', { id: 'vipPay', class: 'btn-primary', type: 'button', text: pay.length ? 'Approve and pay ' + pay.length + (pay.length === 1 ? ' player' : ' players') + ' · ' + fmt(totalP) + ' chips' : 'Nothing to pay yet', disabled: !pay.length || !!S.busy.vipPay,
+  const dueText = due.toLocaleString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Kolkata' }) + ' IST';
+  const go = h('button', { id: 'vipPay', class: 'herobtn gold', type: 'button', text: pay.length ? 'Approve and pay ' + pay.length + (pay.length === 1 ? ' player' : ' players') : 'Nothing to pay yet', disabled: !pay.length || !!S.busy.vipPay,
     onclick: () => {
       if (!confirm('Pay ' + fmt(totalP) + ' chips of rakeback to ' + pay.length + ' players? Their weekly rake is reduced by the amount paid.')) return;
       return adminBusy('vipPay', 'pay rakeback', async () => { const r = await Admin.payoutWeek(pay); await Admin.loadVip(); Admin.say('Paid ' + fmt(r.total) + ' chips to ' + r.players + (r.players === 1 ? ' player' : ' players') + (r.skipped ? ' (' + r.skipped + ' skipped: nothing new to pay).' : '.')); });
     } });
+  const row = r => { const open = a.vipOpen === r.uid;
+    return h('div', { class: 'rxrow t-vip' + (open ? ' open' : '') + (r.banned ? ' dim' : ''), 'data-vip': r.uid },
+      h('button', { type: 'button', class: 'rxhead', 'aria-expanded': open ? 'true' : 'false', onclick: () => { a.vipOpen = open ? '' : r.uid; Admin.paint(); } },
+        h('span', { class: 'rxname' }, h('b', { text: r.name }), h('i', { text: 'rake ' + fmt(Math.round(r.weekly)) + (r.banned ? '  ·  banned, not paid' : '') })),
+        h('span', { class: 'vqtier v-' + String(r.tier.name).toLowerCase(), text: r.tier.name + ' ' + r.tier.pct + '%' }),
+        h('span', { class: 'rxamt', text: r.banned ? '—' : '+' + fmt(r.payout) }),
+        h('span', { class: 'rxbar', 'aria-hidden': 'true' }, h('i', { style: 'width:' + Math.max(3, Math.round(r.weekly / top * 100)) + '%' }))),
+      open ? h('div', { class: 'rxmore' },
+        h('span', { class: 'rxwhen', text: 'Exact weekly rake ' + r.weekly.toFixed(2) + '  ·  lifetime ' + fmt(Math.round(r.lifetime)) }),
+        h('div', { class: 'apmore' }, h('button', { type: 'button', class: 'aplink bad', 'data-reset': r.uid, text: 'Reset this week', disabled: !!S.busy['vr_' + r.uid], onclick: () => {
+          if (!confirm('Reset the weekly rake of ' + r.name + ' to zero? Their tier and lifetime total stay.')) return;
+          return adminBusy('vr_' + r.uid, 'reset weekly rake', async () => { await Admin.resetWeekly(r.uid); await Admin.loadVip(); Admin.say('Weekly rake of ' + r.name + ' reset.'); });
+        } }))) : null);
+  };
   return h('div', {},
-    h('div', { class: 'card tight' },
-      h('p', { class: 'muted', style: 'margin:0 0 8px', text: 'Rakeback is never paid on its own. Check the amounts below, then approve. Next payout day: ' + dueText + '.' }),
-      h('div', { class: 'astats' },
-        h('div', {}, h('b', { id: 'vipWeekRake', text: fmt(Math.round(totalW)) }), h('span', { text: 'Rake this week' })),
-        h('div', {}, h('b', { id: 'vipWeekPay', text: fmt(totalP) }), h('span', { text: 'To pay out' }))),
-      h('p', { class: 'muted', style: 'font-size:12px;margin:8px 0', text: 'Payout = a player\'s weekly rake x their tier % (Bronze and Silver 5%, Gold 10%, Platinum 15%), rounded down. Amounts under one chip carry over to the next week. Banned players are not paid.' }),
+    h('div', { class: 'ahero rxhero' },
+      h('div', { class: 'rxbig' }, h('span', { text: 'TO PAY OUT' }), h('b', { id: 'vipWeekPay', text: fmt(totalP) }), h('i', { text: 'Next payout  ·  ' + dueText })),
+      h('div', { class: 'akpis three' },
+        h('div', { class: 'akpi flat' }, h('b', { id: 'vipWeekRake', text: fmt(Math.round(totalW)) }), h('span', { text: 'Rake this week' })),
+        h('div', { class: 'akpi flat' }, h('b', { text: String(pay.length) }), h('span', { text: 'Players paid' })),
+        h('div', { class: 'akpi flat' }, h('b', { text: totalW ? (totalP / totalW * 100).toFixed(1) + '%' : '-' }), h('span', { text: 'Given back' }))),
       go),
-    h('div', { class: 'tstrips', id: 'vipRows' }, rows.length ? rows.map(r => h('div', { class: 'tstrip static', 'data-vip': r.uid },
-      h('span', { class: 'tsname' }, h('b', { text: r.name }), h('i', { text: r.tier.name + ' ' + r.tier.pct + '% · rake ' + r.weekly.toFixed(2) + (r.banned ? ' · banned' : '') })),
-      h('span', { class: 'tsrake', text: r.banned ? '—' : fmt(r.payout) }),
-      h('button', { type: 'button', class: 'btn-secondary btn-small tsreset', 'data-reset': r.uid, text: 'Reset', onclick: () => {
-        if (!confirm('Reset the weekly rake of ' + r.name + ' to zero? Their tier and lifetime total stay.')) return;
-        return adminBusy('vr_' + r.uid, 'reset weekly rake', async () => { await Admin.resetWeekly(r.uid); await Admin.loadVip(); Admin.say('Weekly rake of ' + r.name + ' reset.'); });
-      } }))) : [h('div', { class: 'card tight' }, h('p', { class: 'muted', text: 'No rake has been contributed this week yet.' }))]),
-    a.batches && a.batches.length ? h('div', { class: 'card tight', id: 'vipBatches' }, h('strong', { class: 'gold', text: 'Past payouts' }),
-      a.batches.map(b => h('div', { class: 'anote' }, h('b', { text: fmt(b.total) + ' chips to ' + b.players + ' players' }), h('i', { text: (b.createdAt && b.createdAt.toMillis ? new Date(b.createdAt.toMillis()).toLocaleString() : '') + ' · week rake ' + fmt(Math.round(b.weekly)) })))) : null);
+    h('button', { type: 'button', class: 'rxquiet', id: 'vipHelpBtn', onclick: () => { a.vipHelp = !a.vipHelp; Admin.paint(); } }, h('span', { text: 'How the payout is worked out' }), h('i', { text: a.vipHelp ? 'Hide ▴' : 'Show ▾' })),
+    a.vipHelp ? h('div', { class: 'vqhelp', id: 'vipHelp' },
+      h('div', { class: 'vqtiers' }, [['Bronze', 5], ['Silver', 5], ['Gold', 10], ['Platinum', 15]].map(([n, pc]) => h('span', { class: 'vqtier v-' + n.toLowerCase(), text: n + ' ' + pc + '%' }))),
+      h('p', { text: 'Payout = weekly rake × tier %, rounded down. Under one chip carries over. Nothing is paid until you approve. Banned players are not paid.' })) : null,
+    h('div', { class: 'rxlist', id: 'vipRows', style: 'margin-top:8px' }, rows.length ? rows.map(row) : h('p', { class: 'muted', style: 'text-align:center;margin:14px 0', text: 'No rake this week yet.' })),
+    a.batches && a.batches.length ? h('div', { class: 'cmhist', id: 'vipBatches' }, h('div', { class: 'cmlabel', text: 'PAST PAYOUTS' }),
+      a.batches.map(b => h('div', { class: 'cmitem' }, h('span', { class: 'cmbadge', text: '+' + fmt(b.total) }),
+        h('div', { class: 'cmtxt' }, h('b', { text: b.players + (b.players === 1 ? ' player paid' : ' players paid') }), h('i', { text: (b.createdAt && b.createdAt.toMillis ? new Date(b.createdAt.toMillis()).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : '') + '  ·  week rake ' + fmt(Math.round(b.weekly)) }))))) : null);
 }
 
 /* ==========================================================================
