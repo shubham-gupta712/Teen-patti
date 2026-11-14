@@ -1915,6 +1915,28 @@ body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
 .hist .hsum{margin:0 0 6px}
 .hist .hsteps{max-height:calc(var(--vh) - 235px)}
 .hist>.hnote{grid-column:1/-1}
+/* last five hands: which game the hand played (variant tables), and the cards turned over at the show */
+.hist .hno{display:flex;align-items:center;gap:8px;min-width:0;flex:none}
+.hvar{flex:none;padding:2px 8px;border-radius:99px;border:1px solid rgba(242,199,92,.6);background:rgba(20,15,10,.6);color:#f2c75c;font:800 10px/1.4 system-ui;font-style:normal;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap}
+.hvar.big{font-size:11px;padding:4px 10px}
+.hist .htile.on .hvar{border-color:rgba(29,19,8,.55);background:rgba(29,19,8,.12);color:#1d1308}
+.hist .hbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 6px}.hist .hbar .hsum{margin:0;min-width:0;display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px}
+.hist .hbar .btn-small{flex:none;margin-left:auto;padding:5px 12px;min-height:0}
+.hist .hhands{display:flex;align-items:center;gap:8px;overflow-x:auto;padding:3px 2px 5px}
+.hist .hhands.rp .hhand,.hist .hhands.rp .hnoshow{display:none}
+.hist .hhand{flex:none;display:flex;align-items:center;gap:8px;padding:5px 10px 5px 7px;border-radius:12px;border:1px solid rgba(214,172,92,.25);background:rgba(20,15,10,.65)}
+.hist .hhand.win{border-color:#f2c75c;background:linear-gradient(180deg,rgba(90,66,24,.75),rgba(30,22,10,.85))}
+.hist .hcards{display:flex;gap:3px}
+.hist .hcards .tcard{width:26px;height:36px;margin:0;border-radius:4px;font-size:12px;background:#fbf7ee;color:#1b1b1b;box-shadow:0 1px 3px rgba(0,0,0,.6);animation:none}
+.hist .hcards .tcard.red{color:#b3261e}
+.hist .hcards .tcard.wild{box-shadow:0 0 0 2px #f2c75c,0 0 6px rgba(242,199,92,.8)}
+.hist .hcards .tcard .wtag{font-size:7px;width:10px;top:1px;right:1px}
+.hist .hwho{display:flex;flex-direction:column;min-width:0}
+.hist .hwho b{font:700 12.5px system-ui;color:#f6e3b0;white-space:nowrap}
+.hist .hwho span{font:11px system-ui;color:#cdb98f;white-space:nowrap}
+.hist .hhand.win .hwho span{color:#f2c75c;font-weight:700}
+.hist .hnoshow{margin:0;font:12px system-ui;color:#9d8e6c}
+.hist .hsteps{max-height:calc(var(--vh) - 232px);min-height:74px}
 .tbm .lb{font-size:max(9px,calc(var(--u) * 22))}.tbm{padding:0 calc(var(--u) * 8)}
 .tmini.face{position:relative;overflow:hidden}
 
@@ -2018,6 +2040,29 @@ body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
 .tschev{flex:none;font-size:22px;color:#8a5f12;line-height:1}
 .tsrake{flex:none;font:800 17px/1 Georgia,serif;color:#8a5f12;font-variant-numeric:tabular-nums}
 #privAdminSheet .aform{margin-top:0}
+/* the private tables' summaries */
+#sessCard{margin-top:12px}
+.sesslist{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.sessitem{border:1px solid #d9b866;border-radius:16px;background:linear-gradient(160deg,#fffaf0,#f3e3b8);overflow:hidden}
+.sessitem.on{box-shadow:0 3px 10px rgba(80,55,10,.18)}
+.sesshead{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:54px;padding:8px 12px;border:0;background:none;color:#3a2808;text-align:left;cursor:pointer}
+.sesshead span{display:flex;flex-direction:column;min-width:0}
+.sesshead b{font:700 14.5px/1.25 system-ui}
+.sesshead i{font:12px/1.3 system-ui;font-style:normal;color:#7a6331}
+.sesshead em{flex:none;font-style:normal}
+.sessbody{padding:2px 12px 12px;border-top:1px solid rgba(217,184,102,.6)}
+.sessmeta{font-size:12.5px;margin-top:6px}
+.astats.sessgrid{margin-top:8px}
+.astats.sessgrid b{font-size:18px}
+.sesstable{margin-top:10px;border:1px solid rgba(217,184,102,.7);border-radius:12px;overflow:hidden;background:#fffdf6}
+.sessrow{display:grid;grid-template-columns:minmax(0,1.7fr) repeat(3,minmax(0,1fr));gap:6px;align-items:center;padding:7px 10px;border-top:1px solid rgba(217,184,102,.45);font:13px system-ui;color:#3a2808;font-variant-numeric:tabular-nums}
+.sessrow:first-child{border-top:0}
+.sessrow.hd{font:800 10px system-ui;letter-spacing:.8px;text-transform:uppercase;color:#7a6331;background:#f6ecd0}
+.sessrow>span{min-width:0;text-align:right}
+.sessrow>span:first-child{text-align:left;display:flex;flex-direction:column}
+.sessrow b{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sessrow i{font:11px/1.3 system-ui;font-style:normal;color:#7a6331}
+.sessrow .up{color:#1c7a3e;font-weight:800}.sessrow .down{color:#b3261e;font-weight:800}
 #privAdminSheet .agrid{grid-template-columns:repeat(2,minmax(0,1fr))}
 #privAdminSheet .field select{width:100%}
 
@@ -2754,6 +2799,28 @@ const Repo = {
     return b.commit();
   },
   rakeRef: t => db.collection('rake').doc(t),
+  sessionRef: id => db.collection('sessions').doc(id),
+  // The private table keeps a summary of itself (rules: sessions). This works out what one finished hand adds to it:
+  // games played, rake, highest and lowest pot, time played and each player's line. Returns null when there is nothing to add.
+  async _sessionPatch(t, G) {
+    const room = S.rooms[t], sid = room && room.sessionId, cfg = TABLE_BY_ID[t];
+    if (!sid || !cfg || !cfg.private || G.phase !== 'result' || !G.result) return null;
+    const snap = await Repo.sessionRef(sid).get();                                  // rule: sessions get (host)
+    if (!snap.exists) return null;
+    const s = snap.data(), rs = G.result, now = Date.now(), n = s.hands || 0;
+    if (s.lastHandId === G.handId) return null;                                     // this hand is already counted
+    const took = Math.round(Math.min(1800000, Math.max(0, now - (G.dealtAt || now))));
+    const patch = { hands: n + 1, rake: (s.rake || 0) + (rs.rake || 0), potMax: Math.max(s.potMax || 0, rs.amount), potMin: n === 0 ? rs.amount : Math.min(s.potMin || 0, rs.amount),
+      playMs: (s.playMs || 0) + took, lastHandId: G.handId, lastHandAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() };
+    if (n === 0) patch.firstHandAt = FV.serverTimestamp();
+    for (const id of G.order) {
+      const pl = G.players[id]; if (!pl) continue;
+      const net = ((rs.shares && rs.shares[id]) || 0) - (pl.invested || 0), was = (s.players || {})[id];
+      // start: the chips the player sat down with (before their first hand here). stack: what they hold after this hand.
+      patch['players.' + id] = { name: pl.name, bot: !!pl.bot, start: was ? was.start : pl.chips - net, stack: pl.chips, net: (was ? was.net : 0) + net, hands: (was ? was.hands : 0) + 1, firstAt: was ? was.firstAt : now, lastAt: now };
+    }
+    return { ref: Repo.sessionRef(sid), patch };
+  },
   // One batch: every private hand and the public state appear together.
   // Rule: hands create (validHand) + game update
   dealHand(t, G, hands) {
@@ -2771,6 +2838,13 @@ const Repo = {
   // One batch: the finished state and every player's new stack/seat state.
   // Rule: members update (seatState, stack, updatedAt only) + game update
   async settle(t, G, plan) {
+    // The private table's summary rides in the same write. If it cannot be read or is refused, the hand still settles without it.
+    let sess = null;
+    try { sess = await Repo._sessionPatch(t, G); } catch (e) { console.warn('[TeenPatti] table summary not read', e && e.code); }
+    if (sess) {
+      try { return await Repo._settle(t, G, plan, true, sess); }
+      catch (e) { if (!(e && (e.code === 'permission-denied' || e.code === 'not-found'))) throw e; console.warn('[TeenPatti] table summary refused, settling without it'); }
+    }
     try { return await Repo._settle(t, G, plan, true); }
     catch (e) {
       // If only the rake ledger is refused, still finish the hand so the table never freezes.
@@ -2778,7 +2852,7 @@ const Repo = {
       throw e;
     }
   },
-  _settle(t, G, plan, withRake) {
+  _settle(t, G, plan, withRake, sess) {
     const b = db.batch();
     for (const id of Object.keys(plan)) {
       if (G.players[id] && G.players[id].bot) b.set(Repo.botsCol(t).doc(id), { botId: id, name: G.players[id].name, seatState: plan[id].seatState, stack: plan[id].stack, updatedAt: FV.serverTimestamp() });   // Rule: bots create/update (validBot)
@@ -2787,6 +2861,7 @@ const Repo = {
     b.set(Repo.gameRef(t), Repo._game(G));
     // The house's take for this hand goes in the table's rake ledger in the same write (rules: rake create/update).
     if (withRake && G.phase === 'result' && G.result && G.result.rake > 0) b.set(Repo.rakeRef(t), { tableId: t, total: FV.increment(G.result.rake), hands: FV.increment(1), lastHandId: G.handId, updatedAt: FV.serverTimestamp() }, { merge: true });
+    if (sess) b.update(sess.ref, sess.patch);                                       // rule: sessions update (validSessionHand)
     return b.commit();
   },
   // Rule: bots create/update (admin, fixed IDs bot_dealer / bot_lucky)
@@ -2855,28 +2930,44 @@ const Repo = {
     const name = String(o.name || '').replace(/\s+/g, ' ').trim().slice(0, 24) || 'Private Table';
     const key = await Repo.privateKey(code, password);
     const ref = Repo.roomRef(PRIVATE_ID), snap = await ref.get();
+    let changed = false;
     if (snap.exists) {
       const o0 = snap.data();
-      const differs = o0.boot !== st.boot || o0.minBuyIn !== st.min || o0.maxBuyIn !== st.max || o0.name !== name || (o0.maxBlind || 0) !== st.blind || (o0.maxChaal || 0) !== st.chaal || (o0.potLimit || 0) !== st.pot;
+      const differs = changed = o0.boot !== st.boot || o0.minBuyIn !== st.min || o0.maxBuyIn !== st.max || o0.name !== name || (o0.maxBlind || 0) !== st.blind || (o0.maxChaal || 0) !== st.chaal || (o0.potLimit || 0) !== st.pot;
       if (differs) {
         if (o0.status === 'open') throw new AppError('Close the private table first. Its name and numbers can only change while it is closed and empty.');
         const ms = await Repo.membersCol(PRIVATE_ID).get();
         if (!ms.empty) throw new AppError('Players are still seated at the private table, so its numbers cannot change yet. Remove them or wait until they leave.');
       }
     }
-    const base = { tableId: PRIVATE_ID, name, boot: st.boot, minBuyIn: st.min, maxBuyIn: st.max, maxBlind: st.blind, maxChaal: st.chaal, potLimit: st.pot, permanent: true, adminUid: ADMIN_UID, private: true, status: 'open' };
+    // The table's summary: a new table (or one whose name or numbers changed) starts a new one; reopening the same table carries on with its own.
+    const oldSid = snap.exists ? (snap.data().sessionId || '') : '';
+    const oldSess = oldSid ? await Repo.sessionRef(oldSid).get() : null;            // rule: sessions get (admin)
+    const startNew = !!o.fresh || changed || !oldSess || !oldSess.exists;
+    const sid = startNew ? 's' + Date.now().toString(36) + privRnd(4).toLowerCase() : oldSid;
+    const base = { tableId: PRIVATE_ID, name, boot: st.boot, minBuyIn: st.min, maxBuyIn: st.max, maxBlind: st.blind, maxChaal: st.chaal, potLimit: st.pot, permanent: true, adminUid: ADMIN_UID, private: true, status: 'open', sessionId: sid };
     const b = db.batch();
+    if (startNew) {
+      b.set(Repo.sessionRef(sid), { sessionId: sid, tableId: PRIVATE_ID, name, boot: st.boot, minBuyIn: st.min, maxBuyIn: st.max, code, status: 'open', openedAt: FV.serverTimestamp(),
+        hands: 0, rake: 0, potMax: 0, potMin: 0, playMs: 0, players: {}, updatedAt: FV.serverTimestamp() });                                  // rule: sessions create (validNewSession)
+      if (oldSess && oldSess.exists && oldSess.data().status !== 'closed') b.update(Repo.sessionRef(oldSid), { status: 'closed', closedAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
+    } else if (oldSess.data().status !== 'open') b.update(Repo.sessionRef(sid), { status: 'open', updatedAt: FV.serverTimestamp() });       // rule: sessions update (validSessionStatus)
     if (!snap.exists) b.set(ref, Object.assign({ hostUid: '', dealerAt: 0, seated: 0, createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() }, base));
     else b.update(ref, Object.assign({ updatedAt: FV.serverTimestamp() }, base));
     b.set(Repo.secretRef(), { key, code, password, updatedAt: FV.serverTimestamp() });
-    await b.commit();
+    try { await b.commit(); }
+    catch (e) { if (e && e.code === 'permission-denied') throw new AppError('The database refused this. Publish the latest Firestore rules first (they add the table summaries), then try again.'); throw e; }
     return { code, password };
   },
   // Admin only. Stops new players joining; people already seated can finish and leave. Rule: rooms update (validRoom).
   async closePrivate() {
     const ref = Repo.roomRef(PRIVATE_ID), snap = await ref.get();
     if (!snap.exists) return;
-    await ref.update({ status: 'closed', updatedAt: FV.serverTimestamp() });
+    const sid = snap.data().sessionId || '', sess = sid ? await Repo.sessionRef(sid).get().catch(() => null) : null;
+    const b = db.batch();
+    b.update(ref, { status: 'closed', updatedAt: FV.serverTimestamp() });
+    if (sess && sess.exists) b.update(Repo.sessionRef(sid), { status: 'closed', closedAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });   // rule: sessions update (validSessionStatus)
+    await b.commit();
   },
   // Admin only. Rule: secret get
   async getPrivateSecret() {
@@ -4860,7 +4951,9 @@ const History = {
   hands: [], cur: null,
   reset() { History.hands = []; History.cur = null; },
   start(G) {
-    History.cur = { handNo: G.handNo, handId: G.handId, boot: G.boot, steps: [], pot: G.pot, result: null, names: {} };
+    History.cur = { handNo: G.handNo, handId: G.handId, boot: G.boot, steps: [], pot: G.pot, result: null, names: {}, variant: null };
+    const cfg = S.room && TABLE_BY_ID[S.room.id];                     // a variant table: note which game this hand played
+    if (cfg && (cfg.random || (cfg.variant && cfg.variant !== 'classic'))) { const v = variantOfGame(cfg, G); History.cur.variant = { id: v.id, name: v.name, joker: G.joker || '' }; }
     G.order.forEach(id => { History.cur.names[id] = G.players[id].name; });
     History.cur.steps.push({ kind: 'boot', text: 'Boot ' + fmt(G.boot) + ' from each of ' + G.order.length + ' players', paid: G.pot, pot: G.pot });
     History.hands.push(History.cur); History.hands = History.hands.slice(-5);
@@ -4873,7 +4966,10 @@ const History = {
   finish(G) {
     const c = History.cur; if (!c || c.handId !== G.handId || c.result) return;
     const rs = G.result;
-    c.result = { winners: rs.winners.map(id => c.names[id] || 'Player'), amount: rs.amount - (rs.rake || 0), rank: rs.rank || '', reason: rs.reason };
+    const win = new Set(rs.winners), V = { variant: G.variant, joker: G.joker };
+    const shows = G.order.filter(id => rs.reveal && rs.reveal[id]).map(id => ({ name: c.names[id] || 'Player', cards: rs.reveal[id].slice(), hand: handName(rs.reveal[id], V), wild: wildMask(rs.reveal[id], V), win: win.has(id) }))
+      .sort((a, b) => (b.win ? 1 : 0) - (a.win ? 1 : 0));
+    c.result = { winners: rs.winners.map(id => c.names[id] || 'Player'), amount: rs.amount - (rs.rake || 0), rank: rs.rank || '', reason: rs.reason, shows };
   }
 };
 
@@ -5192,11 +5288,18 @@ const Sheets = {
       if (!hands.length) { box.appendChild(h('p', { class: 'hnote', style: 'font-size:14px', text: 'No hands yet. They show here as you watch them.' })); return; }
       const tileText = hd => hd.result ? hd.result.winners.join(' & ') + ' won ' + fmt(hd.result.amount) : 'In progress';
       box.appendChild(h('div', { class: 'hlist' }, hands.map((hd, i) => h('button', { type: 'button', class: 'htile' + (i === pick ? ' on' : ''), 'data-i': i, onclick: () => { clearTimeout(Sheets.replayT); pick = i; draw(); } },
-        h('b', { text: 'Hand ' + hd.handNo }), h('span', { text: tileText(hd) })))));
+        h('div', { class: 'hno' }, h('b', { text: 'Hand ' + hd.handNo }), hd.variant ? h('i', { class: 'hvar', text: hd.variant.name }) : null), h('span', { text: tileText(hd) })))));
       const hd = hands[pick];
       const det = h('div', { class: 'hdetail' });
-      det.appendChild(h('div', { class: 'hsum', text: hd.result ? (hd.result.reason === 'fold' ? hd.result.winners.join(' & ') + ' won ' + fmt(hd.result.amount) + ' (everyone packed)' : hd.result.winners.join(' & ') + ' won ' + fmt(hd.result.amount) + (hd.result.rank ? ' with ' + hd.result.rank : '')) : 'In progress' }));
-      det.appendChild(h('button', { type: 'button', class: 'btn-secondary', id: 'replayBtn', text: '\u25B6 Replay', onclick: () => replay(hd) }));
+      det.appendChild(h('div', { class: 'hbar' }, h('div', { class: 'hsum' }, h('span', { text: hd.result ? (hd.result.reason === 'fold' ? hd.result.winners.join(' & ') + ' won ' + fmt(hd.result.amount) + ' (everyone packed)' : hd.result.winners.join(' & ') + ' won ' + fmt(hd.result.amount) + (hd.result.rank ? ' with ' + hd.result.rank : '')) : 'In progress' }),
+          hd.variant ? h('span', { class: 'hvar big', id: 'hVariant', text: 'Game: ' + hd.variant.name + (hd.variant.joker ? ' \u2022 Joker ' + hd.variant.joker : '') }) : null),
+        h('button', { type: 'button', class: 'btn-secondary btn-small', id: 'replayBtn', text: '\u25B6 Replay', onclick: () => replay(hd) })));
+      const shows = hd.result && hd.result.shows || [];
+      if (hd.result) det.appendChild(h('div', { class: 'hhands', id: 'hHands' },
+        shows.map(sh => h('div', { class: 'hhand' + (sh.win ? ' win' : '') },
+          h('div', { class: 'hcards' }, sh.cards.map((cd, k) => tCard(cd, false, !!(sh.wild && sh.wild[k])))),
+          h('div', { class: 'hwho' }, h('b', { text: sh.name }), h('span', { text: sh.hand + (sh.win ? ' \u2022 Winner' : '') })))),
+        hd.result && !shows.length ? h('p', { class: 'hnoshow', text: 'No show in this hand, so the cards stayed hidden.' }) : null));
       const rows = h('div', { class: 'hsteps', id: 'hSteps' }, hd.steps.map((st, i) => stepRow(st, i)));
       if (replayUpTo !== undefined) [...rows.children].forEach((r, i) => { if (i > replayUpTo) r.classList.add('hid'); });
       det.appendChild(rows); box.appendChild(det);
@@ -5209,6 +5312,7 @@ const Sheets = {
         i++;
         [...$('hSteps').children].forEach((r, k) => { r.classList.toggle('hid', k > i); r.classList.toggle('cur', k === i); });
         const cur = $('hSteps').children[i]; if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: 'nearest' });
+        if ($('hHands')) $('hHands').classList.toggle('rp', i < hd.steps.length);        // the cards turn over when the replay reaches the end
         if (i < hd.steps.length) Sheets.replayT = setTimeout(tick, 750);
       };
       tick();
@@ -5526,7 +5630,7 @@ const ADMIN_ONLINE_MS = 60000;               // a seat stamped within this long 
    ========================================================================== */
 const Admin = {
   st: { view: 'hub', users: null, stats: {}, loading: false, q: '', filter: 'all', sel: '', edit: '', tab: '', pf: null, rake: null, vip: null, batches: null, draft: {}, notices: null, aud: { type: 'all', n: 1000, picked: [] }, nTitle: '', nBody: '', rAmt: '', rNote: 'A gift from the club', chipAmt: '', chipNote: '', msg: '', msgKind: 'ok' },
-  go(view) { Admin.st.aud = { type: 'all', n: 1000, picked: [] }; Admin.st.view = view; Admin.st.msg = ''; Admin.st.sel = ''; Admin.st.edit = ''; Admin.st.tab = ''; Admin.st.pf = null; if (view === 'vip') Admin.loadVip(); if (view === 'rake') Admin.watchRake(); else Admin.unwatchRake(); if (view === 'players' || view === 'notify' || view === 'rewards') Admin.loadUsers(); if (view === 'notify' || view === 'rewards') Admin.loadNotices(); Admin.paint(); },
+  go(view) { Admin.st.aud = { type: 'all', n: 1000, picked: [] }; Admin.st.view = view; Admin.st.msg = ''; Admin.st.sel = ''; Admin.st.edit = ''; Admin.st.tab = ''; Admin.st.pf = null; if (view === 'vip') Admin.loadVip(); if (view === 'rake') Admin.watchRake(); else Admin.unwatchRake(); if (view === 'private') Admin.watchSessions(); else Admin.unwatchSessions(); if (view === 'players' || view === 'notify' || view === 'rewards') Admin.loadUsers(); if (view === 'notify' || view === 'rewards') Admin.loadNotices(); Admin.paint(); },
   paint() { Admin.force = true; scheduleRender(); },
   say(text, kind) { Admin.st.msg = text; Admin.st.msgKind = kind || 'ok'; Admin.paint(); },
   async loadUsers(force) {
@@ -5565,6 +5669,13 @@ const Admin = {
     Admin.tipUnsub = db.collection('tipjar').onSnapshot(snap => { const o = {}; snap.docs.forEach(d => { o[d.id] = d.data(); }); Admin.st.tips = o; if (Admin.st.view === 'rake') Admin.paint(); }, () => { Admin.st.tips = {}; });
     Admin.rakeUnsub = db.collection('rake').onSnapshot(snap => { const o = {}; snap.docs.forEach(d => { o[d.id] = d.data(); }); Admin.st.rake = o; if (Admin.st.view === 'rake') Admin.paint(); }, e => { Admin.st.rake = {}; Admin.say(friendlyError(e), 'err'); });
   },
+  /* the private tables' summaries, newest first (rules: sessions list, admin) */
+  watchSessions() {
+    if (Admin.sessUnsub) return;
+    Admin.sessUnsub = db.collection('sessions').orderBy('openedAt', 'desc').limit(30).onSnapshot(snap => { Admin.st.sessions = snap.docs.map(d => Object.assign({ id: d.id }, d.data())); if (Admin.st.view === 'private') Admin.paint(); },
+      e => { Admin.st.sessions = []; Admin.st.sessErr = friendlyError(e); if (Admin.st.view === 'private') Admin.paint(); });
+  },
+  unwatchSessions() { if (Admin.sessUnsub) { Admin.sessUnsub(); Admin.sessUnsub = null; } Admin.st.sessions = null; Admin.st.sessErr = ''; },
   unwatchRake() { if (Admin.rakeUnsub) { Admin.rakeUnsub(); Admin.rakeUnsub = null; } if (Admin.tipUnsub) { Admin.tipUnsub(); Admin.tipUnsub = null; } },
   /* ---- weekly rakeback: review, then approve ---- */
   async loadVip() {
@@ -5718,7 +5829,7 @@ function renderAdmin() {
     h('h2', { text: title }));
   const msg = h('div', { id: 'adminMsg', class: 'msg ' + (a.msgKind === 'err' ? 'err' : 'ok'), role: 'status', hidden: !a.msg, text: a.msg });
   if (a.view === 'tables') return h('div', {}, back('Public tables'), adminTables(msg));
-  if (a.view === 'private') return h('div', {}, back('Private table'), msg, adminPrivate());
+  if (a.view === 'private') return h('div', {}, back('Private table'), msg, adminPrivate(), a.pf ? null : adminSessions());
   if (a.view === 'players') return h('div', {}, back('Players'), msg, adminPlayers());
   if (a.view === 'notify') return h('div', {}, back('Notifications'), msg, adminNotify());
   if (a.view === 'rewards') return h('div', {}, back('Rewards'), msg, adminRewards());
@@ -5850,21 +5961,68 @@ function adminPrivate() {
       h('div', {}, h('b', { text: String(pOn ? (pd.seated || 0) : 0) }), h('span', { text: 'Seated' })),
       h('div', {}, h('b', { text: pd.status }), h('span', { text: 'Status' }))) : null,
     sec ? h('div', { id: 'privSecret', class: 'secretbox' },
-      h('div', {}, h('span', { text: 'ROOM CODE' }), h('b', { id: 'privCodeShown', text: sec.code }))) : null,
+      h('div', {}, h('span', { text: pd && !pOpen ? 'LAST ROOM CODE (CLOSED)' : 'ROOM CODE' }), h('b', { id: 'privCodeShown', text: sec.code }))) : null,
+    pd && pLoaded && !pOpen ? h('p', { class: 'muted', id: 'privClosedNote', style: 'font-size:12.5px;margin:8px 0 0', text: 'This table is closed. Create a new table to play again: it gets a fresh room code, and you can pick its name, boot and limits.' }) : null,
     h('div', { class: 'controls', style: 'margin-top:10px' },
-      h('button', { id: 'privOpenBtn', class: 'btn-primary btn-small', type: 'button', text: pd ? 'Customise or change code' : 'Create the private table', onclick: () => Sheets.privateAdmin() }),
+      h('button', { id: 'privOpenBtn', class: 'btn-primary btn-small', type: 'button', text: !pd ? 'Create the private table' : pOpen ? 'Customise or change code' : 'Create a new table', onclick: () => Sheets.privateAdmin(!!pd && !pOpen) }),
+      pd && pLoaded && !pOpen ? h('button', { id: 'privReopenBtn', class: 'btn-secondary btn-small', type: 'button', text: 'Reopen with the same code', onclick: () => Sheets.privateAdmin() }) : null,
       sec && pOpen ? h('button', { id: 'privCopyBtn', class: 'btn-secondary btn-small', type: 'button', text: 'Copy invite', onclick: copyInvite }) : null,
       pOpen ? h('button', { id: 'privCloseBtn', class: 'btn-ghost btn-small', type: 'button', text: 'Close it', disabled: !!S.busy.closePriv, onclick: handleClosePrivate }) : null,
       h('button', { class: 'btn-secondary btn-small', type: 'button', 'data-enter': PRIVATE_ID, text: 'Watch table', disabled: !pd, onclick: () => { location.hash = '#/table/' + PRIVATE_ID; } })));
 }
+/* The summary of every private table: who played, what they sat down with and left with, rake, pots and time. */
+function sessWhen(ts) { const ms = ts && ts.toMillis ? ts.toMillis() : 0; return ms ? new Date(ms).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : ''; }
+function sessDur(ms) { const m = Math.floor(Math.max(0, ms || 0) / 60000), sec = Math.floor(Math.max(0, ms || 0) / 1000) % 60; return m >= 60 ? Math.floor(m / 60) + 'h ' + (m % 60) + 'm' : m ? m + 'm ' + sec + 's' : sec + 's'; }
+function adminSessions() {
+  const a = Admin.st, L = a.sessions, pd = S.rooms[PRIVATE_ID], curId = (pd && pd.sessionId) || '';
+  Admin.watchSessions();
+  const head = h('div', { class: 'row' }, h('strong', { class: 'gold', text: 'Table summaries' }), L && L.length ? h('span', { class: 'muted', style: 'font-size:12px', text: L.length + (L.length === 1 ? ' table' : ' tables') }) : null);
+  if (!L) return h('div', { class: 'card tight', id: 'sessCard' }, head, h('p', { class: 'muted', text: 'Loading the summaries...' }));
+  if (a.sessErr) return h('div', { class: 'card tight', id: 'sessCard' }, head, h('p', { class: 'muted', id: 'sessErr', text: a.sessErr }));
+  if (!L.length) return h('div', { class: 'card tight', id: 'sessCard' }, head, h('p', { class: 'muted', id: 'sessEmpty', style: 'font-size:13px', text: 'No summaries yet. Every table you create from now on keeps one here: players, rake, pots, games and time. Tables closed before this update were not recorded.' }));
+  const pick = L.some(x => x.id === a.sess) ? a.sess : '';
+  const signed = n => (n > 0 ? '+' : n < 0 ? '−' : '') + fmt(Math.abs(n));
+  const detail = d => {
+    const open = d.status === 'open', t0 = d.openedAt && d.openedAt.toMillis ? d.openedAt.toMillis() : 0, t1 = !open && d.closedAt && d.closedAt.toMillis ? d.closedAt.toMillis() : Date.now();
+    const ps = Object.keys(d.players || {}).map(id => Object.assign({ id }, d.players[id])).sort((x, y) => (x.bot ? 1 : 0) - (y.bot ? 1 : 0) || (x.firstAt || 0) - (y.firstAt || 0));
+    const tile = (id, v, l) => h('div', {}, h('b', { id, text: v }), h('span', { text: l }));
+    return h('div', { class: 'sessbody', 'data-sess': d.id },
+      h('div', { class: 'muted sessmeta', text: 'Room code ' + (d.code || '-') + '  ·  Buy-in ' + fmt(d.minBuyIn) + ' - ' + fmt(d.maxBuyIn) }),
+      h('div', { class: 'muted sessmeta', text: 'Created ' + sessWhen(d.openedAt) + (open ? '  ·  still open' : d.closedAt ? '  ·  closed ' + sessWhen(d.closedAt) : '') }),
+      h('div', { class: 'astats sessgrid' },
+        tile('ssHands', String(d.hands || 0), 'Games played'), tile('ssRake', fmt(d.rake || 0), 'Rake collected'),
+        tile('ssMax', d.hands ? fmt(d.potMax) : '-', 'Highest pot'), tile('ssMin', d.hands ? fmt(d.potMin) : '-', 'Lowest pot'),
+        tile('ssPlay', sessDur(d.playMs), 'Time played'), tile('ssOpen', t0 ? sessDur(t1 - t0) : '-', open ? 'Open for' : 'Table was open')),
+      ps.length ? h('div', { class: 'sesstable', id: 'ssPlayers' },
+        h('div', { class: 'sessrow hd' }, h('span', { text: 'Player' }), h('span', { text: 'Entry' }), h('span', { text: 'Final' }), h('span', { text: 'Result' })),
+        ps.map(q => {
+          const added = (q.stack || 0) - (q.net || 0) - (q.start || 0);       // chips added from the wallet after sitting down
+          return h('div', { class: 'sessrow', 'data-p': q.id },
+            h('span', {}, h('b', { text: q.name }), h('i', { text: (q.bot ? 'Bot  \u00B7  ' : '') + (q.hands || 0) + (q.hands === 1 ? ' game' : ' games') + (q.firstAt ? '  ·  in ' + new Date(q.firstAt).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }) : '') + (added > 0 ? '  ·  added ' + fmt(added) : '') })),
+            h('span', { text: fmt(q.start || 0) }), h('span', { text: fmt(q.stack || 0) }),
+            h('span', { class: (q.net || 0) > 0 ? 'up' : (q.net || 0) < 0 ? 'down' : '', text: signed(q.net || 0) }));
+        })) : h('p', { class: 'muted', style: 'font-size:13px;margin:8px 0 0', text: 'No game has been played at this table yet.' }),
+      ps.length ? h('p', { class: 'muted', style: 'font-size:11.5px;margin:8px 0 0', text: 'Entry is what a player sat down with for their first game. Final is their balance after their last game. Result is what they won or lost in play (rake already taken out).' }) : null,
+      d.id !== curId ? h('div', { class: 'controls', style: 'margin-top:8px' }, h('button', { type: 'button', class: 'btn-ghost btn-small', 'data-del': d.id, text: 'Delete this summary', disabled: !!S.busy['sd_' + d.id], onclick: () => {
+        if (!confirm('Delete the summary of ' + (d.name || 'this table') + ' (' + sessWhen(d.openedAt) + ')? This cannot be undone.')) return;
+        return adminBusy('sd_' + d.id, 'delete summary', async () => { await Repo.sessionRef(d.id).delete(); Admin.say('Summary deleted.'); });
+      } })) : null);
+  };
+  return h('div', { class: 'card tight', id: 'sessCard' }, head,
+    h('div', { class: 'sesslist' }, L.map(d => h('div', { class: 'sessitem' + (d.id === pick ? ' on' : '') },
+      h('button', { type: 'button', class: 'sesshead', 'data-open': d.id, 'aria-expanded': d.id === pick ? 'true' : 'false', onclick: () => { a.sess = d.id === pick ? '' : d.id; Admin.paint(); } },
+        h('span', {}, h('b', { text: (d.name || 'Private Table') + ' · Boot ' + d.boot }), h('i', { text: sessWhen(d.openedAt) + '  ·  ' + (d.hands || 0) + (d.hands === 1 ? ' game' : ' games') + '  ·  rake ' + fmt(d.rake || 0) })),
+        h('em', { class: 'badge ' + (d.status === 'open' ? 'on' : 'off'), text: d.id === curId && d.status === 'open' ? 'Live' : d.status === 'open' ? 'Open' : 'Closed' })),
+      d.id === pick ? detail(d) : null))));
+}
 // The create / customise form for the private table, drawn inside the page in the same style as the other admin forms.
 const PRIV_SAFE = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 const privRnd = n => Array.from({ length: n }, () => PRIV_SAFE[Math.floor(Math.random() * PRIV_SAFE.length)]).join('');
-Sheets.privateAdmin = function () {
+Sheets.privateAdmin = function (fresh) {      // fresh: a new table after the last one was closed (new room code)
   const pd = S.rooms[PRIVATE_ID], sec = S.privSecret;
   const cur = pd ? { boot: pd.boot, min: pd.minBuyIn, max: pd.maxBuyIn, blind: PRIVATE_CFG.blind, chaal: PRIVATE_CFG.chaal, pot: PRIVATE_CFG.pot } : (() => { const x = STAKES.find(q => q.boot === 10), i = bootInfo(10); return { boot: 10, min: x.min, max: x.max, blind: i.blind, chaal: i.chaal, pot: i.pot }; })();
   const preset = STAKES.some(x => x.boot === cur.boot && x.min === cur.min && x.max === cur.max) && cur.blind === cur.boot * 16 && cur.chaal === cur.boot * 64 && cur.pot === cur.boot * 512;
-  Admin.st.pf = Object.assign({ name: pd ? pd.name : 'Private Table', stake: preset ? String(cur.boot) : 'custom', code: sec ? sec.code : privRnd(6), password: sec ? sec.password : privRnd(6), err: '' }, cur);
+  Admin.st.pf = Object.assign({ name: pd ? pd.name : 'Private Table', stake: preset ? String(cur.boot) : 'custom', code: sec && !fresh ? sec.code : privRnd(6), password: sec && !fresh ? sec.password : privRnd(6), err: '', fresh: !!fresh }, cur);
   Admin.st.view = 'private'; Admin.paint();
 };
 function adminPrivForm() {
@@ -5884,12 +6042,12 @@ function adminPrivForm() {
   const save = h('button', { id: 'paSave', type: 'button', class: 'btn-primary btn-small', text: pd && pd.status === 'open' ? 'Save changes' : 'Open the table', disabled: !!S.busy.privSave });
   save.onclick = () => {
     S.busy.privSave = true; f.err = ''; Admin.paint();
-    Repo.openPrivate({ name: f.name, boot: Number(f.boot), min: Number(f.min), max: Number(f.max), blind: Number(f.blind), chaal: Number(f.chaal), pot: Number(f.pot), code: f.code })
+    Repo.openPrivate({ name: f.name, boot: Number(f.boot), min: Number(f.min), max: Number(f.max), blind: Number(f.blind), chaal: Number(f.chaal), pot: Number(f.pot), code: f.code, fresh: !!f.fresh })
       .then(r => { S.privSecret = { code: r.code }; Admin.st.pf = null; toast('The private table is open.'); }, e => { f.err = friendlyError(e); })
       .finally(() => { S.busy.privSave = false; Admin.paint(); });
   };
   return h('div', { class: 'card tight', id: 'privAdminSheet' },
-    h('div', { class: 'row' }, h('strong', { class: 'gold', text: pd ? 'Customise the private table' : 'Create the private table' })),
+    h('div', { class: 'row' }, h('strong', { class: 'gold', text: f.fresh ? 'Create a new private table' : pd ? 'Customise the private table' : 'Create the private table' })),
     h('p', { class: 'muted', style: 'font-size:12.5px;margin:6px 0 10px', text: 'Players type the room code to sit here. Changing it locks out anyone who has not been given the new one (people already seated stay seated).' }),
     h('div', { class: 'aform' },
       field('paName', 'TABLE NAME', name), field('paStake', 'STAKE', stake),
