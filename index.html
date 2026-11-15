@@ -2435,7 +2435,8 @@ body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
 .nlstage #mode_tournament .tzpatch.sub{left:9%;width:82%;top:42.5%;height:12.5%;border-radius:6px;background:#16212f;font:500 max(7px,calc(var(--u) * 15.5))/1 system-ui;color:#dfe8f6}
 .nlstage #mode_tournament .tzpatch.btn{left:10%;width:80%;top:67%;height:20%;border-radius:99px;background:linear-gradient(180deg,#2c3c52,#253348);border:1px solid rgba(160,190,230,.45);font:700 max(7.5px,calc(var(--u) * 16))/1 system-ui;letter-spacing:.16em;color:#fff}
 .nlstage #mode_tournament.tzlive .tzpatch.top{color:#7dffc0}
-.nlstage #mode_tournament.tzlive .tzpatch.btn{background:linear-gradient(180deg,#1f7a4f,#15573a);border-color:#7dffc0;animation:tzglow 1.6s ease-in-out infinite alternate}
+.nlstage #mode_tournament .tzpatch.btn{background:linear-gradient(180deg,#1f7a4f,#15573a);border-color:#7dffc0;color:#eafff4}
+.nlstage #mode_tournament.tzlive .tzpatch.btn{animation:tzglow 1.6s ease-in-out infinite alternate}
 @keyframes tzglow{to{box-shadow:0 0 12px rgba(125,255,192,.6)}}
 
 /* ===== 64. Tournaments: the boot sets the numbers; the admin's live board ===== */
@@ -2468,6 +2469,76 @@ body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
 .tztesttxt span{font-size:11.5px;color:#4a4f8a;line-height:1.35}
 .tztest .btn-small{flex:none;margin:0}
 .tztestnote{margin:0 0 12px;padding:8px 10px;border-radius:10px;background:#e7e8fb;color:#2e3190;font:800 11px/1.4 system-ui;letter-spacing:.3px}
+
+/* ===== 65. Tournaments for players: the list, the entry pop-up, the call to the table ===== */
+.tzlisthead{display:flex;justify-content:flex-end;align-items:baseline;gap:6px;margin:-2px 0 10px;font-size:12px;color:#cdb98f}
+.tzlisthead b{font:800 15px Georgia,serif;color:#f2c75c}
+.tzlist{display:flex;flex-direction:column;gap:10px}
+.tzitem{position:relative;padding:12px 12px 10px;border-radius:16px;border:1px solid rgba(214,172,92,.45);background:linear-gradient(160deg,rgba(48,34,16,.92),rgba(20,14,8,.95));color:#f6e3b0;overflow:hidden}
+.tzitem:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#c9972e}
+.tzitem.s-live:before{background:#3ccf7f}.tzitem.s-soon:before{background:#7dffc0}.tzitem.s-done:before,.tzitem.s-off:before{background:#8a7d66}
+.tzitem.mine{border-color:#f2c75c;box-shadow:0 0 0 1px rgba(242,199,92,.35) inset}
+.tzitemtop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.tzitemname{min-width:0;display:flex;flex-direction:column;gap:2px}
+.tzitemname b{font:800 16.5px/1.2 Georgia,serif;color:#fff3d6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tzitemname span{font-size:11px;color:#cdb98f}
+.tzstat{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right}
+.tzstat i{font:800 8.5px system-ui;font-style:normal;letter-spacing:1px;padding:2px 7px;border-radius:99px;background:rgba(242,199,92,.16);color:#f2c75c;white-space:nowrap}
+.tzstat b{font:800 16px/1.1 ui-monospace,Menlo,Consolas,monospace;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tzstat.live i{background:rgba(60,207,127,.18);color:#7dffc0}.tzstat.soon i{background:rgba(125,255,192,.14);color:#7dffc0}
+.tzstat.done i,.tzstat.off i{background:rgba(127,127,127,.2);color:#d8ccb4}
+.tzfacts.tzmini{margin-top:10px;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.tzfacts.tzmini div{padding:5px 2px}
+.tzfacts.tzmini b{font-size:12.5px}.tzfacts.tzmini span{font-size:8px}
+.tzitembot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}
+.tzitemgames{min-width:0;font-size:11px;color:#cdb98f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tzitembtns{flex:none;display:flex;align-items:center;gap:8px}
+.tzitembtns .btn-small{margin:0;min-width:0;padding-left:14px;padding-right:14px}
+.tzlink{min-height:0;padding:6px 4px;border:0;background:none;color:#f2c75c;font:700 12px system-ui;text-decoration:underline;cursor:pointer}
+.tzglowbtn{animation:tzglow 1.4s ease-in-out infinite alternate}
+.tzempty{display:flex;flex-direction:column;align-items:center;gap:6px;padding:28px 12px;text-align:center;border-radius:16px;border:1px dashed rgba(214,172,92,.45)}
+.tzempty b{font:800 16px Georgia,serif;color:#fff3d6}.tzempty span{font-size:12px;color:#cdb98f;max-width:300px}
+@media (max-width:420px){.tzfacts.tzmini{grid-template-columns:repeat(3,minmax(0,1fr))}.tzfacts.tzmini div:nth-child(n+4){display:none}}
+.tzpay{color:#f6e3b0}
+.tzpayname{display:flex;flex-direction:column;gap:2px;margin-bottom:10px}
+.tzpayname b{font:800 18px Georgia,serif;color:#fff3d6}.tzpayname span{font-size:11.5px;color:#cdb98f}
+.tzpayrow{display:flex;justify-content:space-between;align-items:baseline;padding:8px 2px;border-top:1px solid rgba(214,172,92,.22);font-size:13px}
+.tzpayrow b{font:800 16px ui-monospace,Menlo,Consolas,monospace;color:#fff3d6;font-variant-numeric:tabular-nums}
+.tzpayrow.total b{color:#f2c75c;font-size:18px}
+/* the call to the table: a small card at the bottom, never the whole screen */
+.tzpop{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:99980;width:min(380px,calc(100vw - 24px));padding:12px 14px;border-radius:18px;border:1px solid #f2c75c;background:linear-gradient(160deg,rgba(44,30,12,.97),rgba(14,10,6,.97));color:#f6e3b0;box-shadow:0 12px 34px rgba(0,0,0,.6);font-family:system-ui,sans-serif;animation:tzpop .35s ease-out both}
+.tzpop.live{border-color:#7dffc0}
+@keyframes tzpop{from{opacity:0;transform:translate(-50%,24px)}to{opacity:1;transform:translate(-50%,0)}}
+.tzpoptop{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tzpoptop i{font:800 9.5px system-ui;font-style:normal;letter-spacing:1.3px;color:#f2c75c}
+.tzpop.live .tzpoptop i{color:#7dffc0}
+.tzpoptop b{font:800 22px/1 ui-monospace,Menlo,Consolas,monospace;color:#fff;font-variant-numeric:tabular-nums}
+.tzpopname{display:block;margin-top:4px;font:800 16px/1.2 Georgia,serif;color:#fff3d6}
+.tzpopsub{display:block;margin-top:2px;font-size:11.5px;color:#cdb98f}
+.tzpopwarn{display:block;margin-top:6px;font-size:11.5px;color:#ffb3c1}
+.tzpopbtns{display:flex;gap:8px;margin-top:10px}
+.tzpopbtns .btn-small{flex:1;margin:0}
+/* sitting down at the tournament table */
+.tzbriefbtns{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.tzcard .tzbriefbtns .btn-small{margin:0;min-width:140px}
+.tzseated{font:800 12.5px system-ui;color:#7dffc0}
+.tzsit{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:3px;min-height:0;padding:12px 26px;border-radius:20px;border:1px solid #f6d77a;background:rgba(16,10,6,.9);color:#fff3d6;box-shadow:0 10px 28px rgba(0,0,0,.6);cursor:pointer}
+.tzsit i{font:800 9.5px system-ui;font-style:normal;letter-spacing:1.6px;color:#f2c75c}
+.tzsit>b:not(:last-child){font:800 22px/1 ui-monospace,Menlo,Consolas,monospace;color:#fff;font-variant-numeric:tabular-nums}
+.tzsit>b:last-child{margin-top:4px;padding:7px 18px;border-radius:99px;background:linear-gradient(180deg,#f6d77a,#c9972e);color:#2a1d00;font:800 13px system-ui}
+.setlist>.tzsheet,.tzsheet,.tzlist,.tzitem{min-width:0}
+.sheetback .setlist .tzitembtns .btn-primary,.sheetback .setlist .tzitembtns .btn-secondary{width:auto;margin:0}
+.tzpay .leaverow{display:grid;grid-template-columns:1fr 1.7fr;gap:10px}
+.sheetback .setlist.tzpay .leaverow button{width:100%;margin:0;min-height:46px}
+/* the admin's list of open tournaments */
+.tzaitem{display:flex;align-items:center;gap:10px;width:100%;min-height:0;margin:0 0 6px;padding:10px 12px;border-radius:14px;border:1px solid #eedfb4;background:#fff;color:#3a2808;text-align:left;cursor:pointer}
+.tzaitem.s-live{border-color:#3ccf7f;box-shadow:0 0 0 1px rgba(60,207,127,.25) inset}
+.tzaname{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.tzaname b{font:800 14.5px system-ui;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tzaname i{font:11px system-ui;font-style:normal;color:#8a7648;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tzaitem .tzstat b{color:#3a2808;font-size:14px}
+.tzaitem .tzstat i{background:#f1e7c9;color:#7a5a12}
+.tzaitem .tzstat.live i{background:#d8f5e4;color:#1c7a3e}
 </style>
 </head>
 <body>
@@ -2618,8 +2689,14 @@ const LEGACY_TABLES = [
 ];
 const tablesOf = mode => TABLES.filter(t => t.mode === mode);
 // Tournament tables: not in the lobby lists. Their numbers come from the tournament the admin publishes; each hand plays one of its games.
-const TOUR_IDS = Array.from({ length: 50 }, (_, i) => 't_' + (i + 1));     // a table opens for every six players who register
-const TOUR_TABLES = TOUR_IDS.map((id, i) => ({ id, boot: 0, min: 0, max: 0, blind: 0, chaal: 0, pot: 0, title: 'Tournament Table ' + (i + 1), tier: 'Tournament', tour: true, random: true, room: 'TP800' + (i + 1) }));
+// Tournament tables: not in the lobby lists. Five tournament slots (a ... e) can run at once; slot a uses t_1 ... t_50,
+// slot b tb_1 ... tb_50 and so on. Their numbers come from the tournament the admin publishes; each hand plays one of its games.
+const TOUR_SLOTS = ['a', 'b', 'c', 'd', 'e'], TOUR_PER = 50;
+const tourIds = s => Array.from({ length: TOUR_PER }, (_, i) => (s === 'a' ? 't' : 't' + s) + '_' + (i + 1));
+const tourSlotOf = id => { const m = /^t([b-e])?_(\d+)$/.exec(id || ''); return m ? (m[1] || 'a') : ''; };
+const tableNoOf = id => { const m = /_(\d+)$/.exec(id || ''); return m ? Number(m[1]) : 0; };
+const TOUR_IDS = [].concat(...TOUR_SLOTS.map(tourIds));
+const TOUR_TABLES = TOUR_IDS.map(id => ({ id, boot: 0, min: 0, max: 0, blind: 0, chaal: 0, pot: 0, title: 'Tournament Table ' + tableNoOf(id), tier: 'Tournament', tour: true, random: true, room: 'TP8' + TOUR_SLOTS.indexOf(tourSlotOf(id)) + String(tableNoOf(id)).padStart(2, '0') }));
 const TOUR_LOBBY_MS = 5 * 60000;           // players are taken to their table this long before the start, and shown the rules
 const TABLE_BY_ID = Object.fromEntries(TABLES.concat(LEGACY_TABLES, TOUR_TABLES).map(t => [t.id, t]));
 const seatCap = id => (TABLE_BY_ID[id] && TABLE_BY_ID[id].tour) ? MAX_SEATS : MAX_HUMAN_SEATS;     // a tournament table has no bots, so all six seats are for players
@@ -4118,7 +4195,7 @@ function renderLobby() {
       h('span', { class: 'tzpatch top', id: 'tourKick', 'aria-hidden': 'true', text: tk.kick }),
       h('span', { class: 'tzpatch sub', 'aria-hidden': 'true', text: tk.sub }),
       h('span', { class: 'tzpatch btn', 'aria-hidden': 'true', text: tk.word }),
-      h('button', { type: 'button', class: 'mbtn nlhit', id: 'modeBtn_tournament', 'aria-label': 'Tournament. ' + tk.sr, style: 'left:0;top:0;width:100%;height:100%', onclick: () => Sheets.tournament() }))); }
+      h('button', { type: 'button', class: 'mbtn nlhit', id: 'modeBtn_tournament', 'aria-label': 'Tournament. ' + tk.sr, style: 'left:0;top:0;width:100%;height:100%', onclick: () => Sheets.tournaments() }))); }
 
   return h('div', { class: 'lobwrap nlwrap' }, h('div', { class: 'lobstage nlstage', id: 'lobStage' }, parts));
 }
@@ -4659,7 +4736,7 @@ const Dealer = {
   canDeal() {
     if (!Dealer.booted || !Dealer.G || Dealer.G.phase !== 'idle') return false;
     const humans = readyHumans(S.room).length;
-    if (TABLE_BY_ID[S.room.id].tour) return humans >= 2 && Tour.dealOk();          // a tournament deals only while a round is running, and never with bots
+    if (TABLE_BY_ID[S.room.id].tour) return humans >= 2 && Tour.dealOk(tourSlotOf(S.room.id));          // a tournament deals only while a round is running, and never with bots
     return humans >= 2 || (humans === 1 && Dealer.botSeated());
   },
   // Between hands: exactly one human waiting -> both bots sit; two or more -> they leave.
@@ -4739,7 +4816,7 @@ const Dealer = {
     const humans = readyHumans(R);
     const parts = R.members.filter(m => m.seatState === 'seated').slice(0, seatCap(R.id)).map(m => ({ id: m.uid, name: m.name, avatar: m.avatar, chips: m.stack }));
     if (humans.length === 1 && Dealer.botSeated()) TEST_BOTS.forEach(t => { const b = Dealer.botDoc(t.id); parts.push({ id: b.botId, name: b.name, avatar: 'bot', chips: b.stack, bot: true }); });
-    const r = startHand({ tableId: R.id, boot: cfg.boot, blindMax: cfg.blind, chaalMax: cfg.chaal, potMax: cfg.pot, variant: cfg.tour ? Tour.pickVariant() : cfg.random ? ENGINE.VARIANT_IDS[secureRandInt(ENGINE.VARIANT_IDS.length)] : cfg.variant, participants: parts, prev, now: Date.now(), rnd: secureRandInt });
+    const r = startHand({ tableId: R.id, boot: cfg.boot, blindMax: cfg.blind, chaalMax: cfg.chaal, potMax: cfg.pot, variant: cfg.tour ? Tour.pickVariant(tourSlotOf(R.id)) : cfg.random ? ENGINE.VARIANT_IDS[secureRandInt(ENGINE.VARIANT_IDS.length)] : cfg.variant, participants: parts, prev, now: Date.now(), rnd: secureRandInt });
     if (r.error) { S.dealerInfo.lastError = r.error; scheduleRender(); return; }
     S.dealerInfo.lastError = '';
     Dealer.commit(r.G, r.hands);
@@ -5402,7 +5479,7 @@ const Sheets = {
   DRAWERS: new Set(['logSheet', 'historySheet', 'playersSheet', 'chatSheet', 'ranksSheet', 'infoSheet', 'setSheet', 'classicSheet', 'variantSheet', 'walletSheet']),
   // Table pop-ups that sit at the side so the table stays visible; everything else is a centred glossy tile.
   DOCKED: new Set(['logSheet', 'playersSheet', 'chatSheet']),
-  SIZES: { walletSheet: 's', soonSheet: 's', tipSheet: 's', topupSheet: 's', setSheet: 's', privSheet: 's', giftSheet: 'm', tourSheet: 'l', historySheet: 'l', profileSheet: 'm', privAdminSheet: 'm', playerSheet: 'm', variantSheet: 'm', myProfileSheet: 'l', clubSheet: 'l', infoSheet: 'l', ranksSheet: 'l', bootSheet: 'l' },
+  SIZES: { walletSheet: 's', soonSheet: 's', tipSheet: 's', topupSheet: 's', setSheet: 's', privSheet: 's', giftSheet: 'm', tourSheet: 'l', tourPaySheet: 's', historySheet: 'l', profileSheet: 'm', privAdminSheet: 'm', playerSheet: 'm', variantSheet: 'm', myProfileSheet: 'l', clubSheet: 'l', infoSheet: 'l', ranksSheet: 'l', bootSheet: 'l' },
   origin: null,
   // Where the pop-up grows from and shrinks back to: the button that was just pressed.
   keyframe(r, o) {
@@ -6188,10 +6265,10 @@ function renderAdmin() {
     tables: pub.length + ' tables' + (live ? ' · ' + live + ' live' : ''),
     private: !pd ? 'Not created yet' : pd.status === 'open' ? 'Open' + (hostLive(pd) ? ' · ' + (pd.seated || 0) + ' seated' : '') : 'Closed',
     players: us ? us.length + ' players' : 'View and manage',
-    tour: (() => { const T = Tour.doc, ph = Tour.phase(T); return ph.name === 'upcoming' ? tzWhen(T.startAt) + ' · ' + (T.count || 0) + ' in' : Tour.running(ph) ? 'Live now' : ph.name === 'ended' ? 'Finished · see standings' : 'Nothing scheduled'; })(),
+    tour: (() => { const L = TOUR_SLOTS.map(Tour.T).filter(T => T && (Tour.phase(T).name === 'upcoming' || Tour.running(Tour.phase(T)))); const live = L.filter(T => Tour.running(Tour.phase(T))).length; return !L.length ? 'Nothing scheduled' : live ? live + ' live now' + (L.length > live ? ' · ' + (L.length - live) + ' upcoming' : '') : L.length + ' upcoming · ' + L.reduce((x, T) => x + (T.count || 0), 0) + ' in'; })(),
     notify: 'Send a message', rewards: 'Send chips', vip: 'Friday payout', rake: rakeAll !== null ? fmt(rakeAll) + ' collected' : 'Per-table totals'
   };
-  const hot = { tables: live > 0, private: !!pd && pd.status === 'open', players: playing > 0, tour: Tour.running(Tour.phase(Tour.doc)) };
+  const hot = { tables: live > 0, private: !!pd && pd.status === 'open', players: playing > 0, tour: TOUR_SLOTS.some(x => Tour.running(Tour.phase(Tour.T(x)))) };
   const kpi = (id, v, l, view) => h('button', { type: 'button', class: 'akpi', id, onclick: () => Admin.go(view) }, h('b', { text: v }), h('span', { text: l }));
   return h('div', { class: 'ahub' },
     h('div', { class: 'ahero' },
@@ -6673,87 +6750,162 @@ function adminVip() {
 
 /* ==========================================================================
    SECTION 32 - TOURNAMENTS
-   The admin publishes one tournament at a time (tournaments/current): when it starts, how long it runs, its breaks, boot, entry
-   chips, limits, games and whether a player may re-enter. Players register beforehand (tournaments/current/players/{uid}).
-   Five minutes before the start every registered player whose app is open is taken to a tournament table (t_1 ... t_4, six seats,
-   no bots) and shown the rules. The table's host deals only while a round is running: not before the start, not in a break and not
-   after the end. Entry chips come out of the wallet as the buy-in and whatever a player holds goes back to the wallet when they
-   leave, exactly like any other table. Each player keeps their own line (balance, chips brought in) for the standings.
+   Up to five tournaments can be open at once, one per slot (tournaments/a ... tournaments/e). Each has its own tables
+   (ta_1 ... ta_50 for slot a, and so on), its own registrations (tournaments/{slot}/players/{uid}) and its own rules.
+   A player registers from the lobby's Tournaments list and pays the entry chips from the wallet there and then; they are
+   held for them. Five minutes before the start a small pop-up offers to take them to their table, where they sit down
+   and see the rules and a live countdown. Joining moves the held chips onto the table. A player who cancels more than
+   five minutes before the start, or whose tournament is cancelled or ends before they join, gets the held chips back.
+   The table's host deals only while a round is running: not before the start, not in a break and not after the end.
    ========================================================================== */
 Object.assign(Repo, {
-  tourRef: () => db.collection('tournaments').doc('current'),
-  tourPlayers: () => db.collection('tournaments').doc('current').collection('players'),
-  // Rules: players create (validTourEntry) + tournaments update (validTourCount), one transaction.
-  tourRegister(uid) {
+  tourRef: s => db.collection('tournaments').doc(s),
+  tourPlayers: s => db.collection('tournaments').doc(s).collection('players'),
+  // Pay the entry and register, in one transaction. Rules: players create (validTourEntry) + tournaments update (validTourCount)
+  // + users update (validWalletTourPay).
+  tourRegister(s, uid) {
     return db.runTransaction(async tx => {
-      const ts = await tx.get(Repo.tourRef()), us = await tx.get(Repo.userRef(uid)), ps = await tx.get(Repo.tourPlayers().doc(uid));
-      if (!ts.exists || ts.data().status !== 'published') throw new AppError('There is no tournament to register for right now.');
+      const tref = Repo.tourRef(s), pref = Repo.tourPlayers(s).doc(uid), uref = Repo.userRef(uid);
+      const ts = await tx.get(tref), ps = await tx.get(pref), us = await tx.get(uref);
+      if (!ts.exists || ts.data().status !== 'published') throw new AppError('This tournament is not open for registration.');
       const T = ts.data(), u = us.data();
       if (ps.exists) return;
-      if (Date.now() >= T.startAt - TOUR_LOBBY_MS) throw new AppError('Registration has closed.');
-      tx.set(Repo.tourPlayers().doc(uid), { uid, name: u.name, avatar: u.avatar || DEFAULT_AVATAR, seatNo: (T.seq || 0) + 1, regAt: FV.serverTimestamp() });
-      tx.update(Repo.tourRef(), { count: (T.count || 0) + 1, seq: (T.seq || 0) + 1 });
+      if (Date.now() >= T.startAt + T.durationMin * 60000) throw new AppError('This tournament has finished.');
+      if (u.banned === true) throw new AppError('Your account cannot register.');
+      if ((u.chips || 0) < T.entry) throw new AppError('The entry is ' + fmt(T.entry) + ' chips and your wallet has ' + fmt(u.chips || 0) + '.');
+      tx.set(pref, { uid, name: u.name, avatar: u.avatar || DEFAULT_AVATAR, seatNo: (T.seq || 0) + 1, regAt: FV.serverTimestamp(), held: T.entry, brought: T.entry });
+      tx.update(tref, { count: (T.count || 0) + 1, seq: (T.seq || 0) + 1 });
+      tx.update(uref, { chips: u.chips - T.entry, tourSlot: s, updatedAt: FV.serverTimestamp() });
     });
   },
-  tourUnregister(uid) {
+  // Cancel a place (more than five minutes before the start): the held entry goes back to the wallet.
+  tourUnregister(s, uid) {
     return db.runTransaction(async tx => {
-      const ts = await tx.get(Repo.tourRef()), ps = await tx.get(Repo.tourPlayers().doc(uid));
+      const tref = Repo.tourRef(s), pref = Repo.tourPlayers(s).doc(uid), uref = Repo.userRef(uid);
+      const ts = await tx.get(tref), ps = await tx.get(pref), us = await tx.get(uref);
       if (!ps.exists || !ts.exists) return;
-      if (Date.now() >= ts.data().startAt - TOUR_LOBBY_MS) throw new AppError('Registration has closed, so your place is kept.');
-      tx.delete(Repo.tourPlayers().doc(uid));
-      tx.update(Repo.tourRef(), { count: Math.max(0, (ts.data().count || 0) - 1) });
+      if (Date.now() >= ts.data().startAt - TOUR_LOBBY_MS) throw new AppError('Places can only be cancelled until 5 minutes before the start.');
+      const held = ps.data().held || 0;
+      tx.delete(pref);
+      tx.update(tref, { count: Math.max(0, (ts.data().count || 0) - 1) });
+      if (held > 0) tx.update(uref, { chips: us.data().chips + held, tourSlot: s, updatedAt: FV.serverTimestamp() });
+    });
+  },
+  // The tournament was cancelled or ended before this player joined: the held entry goes back to the wallet.
+  tourRefund(s, uid) {
+    return db.runTransaction(async tx => {
+      const pref = Repo.tourPlayers(s).doc(uid), uref = Repo.userRef(uid);
+      const ps = await tx.get(pref), us = await tx.get(uref);
+      const held = ps.exists ? (ps.data().held || 0) : 0;
+      if (held <= 0) return 0;
+      tx.update(pref, { held: 0, updatedAt: FV.serverTimestamp() });
+      tx.update(uref, { chips: us.data().chips + held, tourSlot: s, updatedAt: FV.serverTimestamp() });
+      return held;
+    });
+  },
+  // Take a seat record at a tournament table. The held entry becomes the stack; a player who already used it (they left and
+  // came back) pays the entry again from the wallet. Rules: members create (validJoinMember, tournament branch) +
+  // users update (validWalletTourJoin or validWalletJoin) + players update (validTourLine).
+  tourJoin(s, uid, table) {
+    return db.runTransaction(async tx => {
+      const pref = Repo.tourPlayers(s).doc(uid), uref = Repo.userRef(uid), mref = Repo.membersCol(table).doc(uid), tref = Repo.tourRef(s);
+      const ps = await tx.get(pref), us = await tx.get(uref), ms = await tx.get(mref), ts = await tx.get(tref);
+      if (!ps.exists) throw new AppError('You are not registered for this tournament.');
+      const u = us.data(), p = ps.data(), T = ts.data();
+      if (ms.exists && u.tableId === table) return 'resumed';
+      if (u.tableId) throw new AppError('You already have a seat at ' + tableName(TABLE_BY_ID[u.tableId] || { boot: '?' }) + '. Leave that table first.');
+      const held = p.held || 0, stack = held > 0 ? held : T.entry;
+      if (held <= 0 && (u.chips || 0) < T.entry) throw new AppError('Coming back costs the ' + fmt(T.entry) + ' entry chips and your wallet has ' + fmt(u.chips || 0) + '.');
+      tx.set(mref, { uid, name: u.name, avatar: u.avatar || DEFAULT_AVATAR, seatState: 'standing', buyIn: stack, stack, joinedAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp(), seenAt: FV.serverTimestamp() });
+      if (held > 0) {
+        tx.update(uref, { tableId: table, updatedAt: FV.serverTimestamp() });
+        tx.update(pref, { held: 0, table, updatedAt: FV.serverTimestamp() });
+      } else {
+        tx.update(uref, { chips: u.chips - stack, tableId: table, updatedAt: FV.serverTimestamp() });
+        tx.update(pref, { table, final: 0, brought: (p.brought || 0) + stack, updatedAt: FV.serverTimestamp() });
+      }
+      return 'joined';
     });
   },
   // A player's own line in the standings. Rule: players update (the balance must equal the chips they hold at the table).
-  tourReport: (uid, line) => Repo.tourPlayers().doc(uid).update(Object.assign({ updatedAt: FV.serverTimestamp() }, line)),
-
-  /* ---- admin ---- */
+  tourReport: (s, uid, line) => Repo.tourPlayers(s).doc(uid).update(Object.assign({ updatedAt: FV.serverTimestamp() }, line)),
   // The first registered player to reach a table creates its room. Rule: rooms create (tournament table, registered player).
-  async tourEnsureRoom(id) {
+  async tourEnsureRoom(s, id) {
     const ref = Repo.roomRef(id), snap = await ref.get(); if (snap.exists) return;
-    const T = Tour.doc;
+    const T = Tour.T(s);
     await ref.set({ tableId: id, name: TABLE_BY_ID[id].title, boot: T.boot, minBuyIn: T.entry, maxBuyIn: Math.max(T.entry, tourRe(T)), maxBlind: T.maxBlind, maxChaal: T.maxChaal, potLimit: T.potLimit,
       permanent: true, adminUid: ADMIN_UID, status: 'open', dealerAt: 0, seated: 0, createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() }).catch(e => { if (!e || e.code !== 'permission-denied') throw e; });
   },
-  // Keeps the finished tournament's standings in the history and clears the registrations.
-  async tourArchive() {
-    const ts = await Repo.tourRef().get(); if (!ts.exists) return;
-    const T = ts.data(), ps = await Repo.tourPlayers().get(), list = ps.docs.map(d => d.data());
-    if (T.status === 'published' && list.some(x => (x.brought || 0) > 0)) {
+
+  /* ---- admin ---- */
+  // Gives a held entry back (the player never joined). The held entry and the wallet change together, so it is never paid twice.
+  tourAdminRefund(s, uid, note) {
+    return db.runTransaction(async tx => {
+      const pref = Repo.tourPlayers(s).doc(uid), uref = Repo.userRef(uid), ps = await tx.get(pref), us = await tx.get(uref);
+      const held = ps.exists ? (ps.data().held || 0) : 0; if (held <= 0 || !us.exists) return;
+      tx.update(pref, { held: 0, updatedAt: FV.serverTimestamp() });
+      tx.update(uref, { chips: us.data().chips + held, lastGrant: { amount: held, note, at: FV.serverTimestamp() }, updatedAt: FV.serverTimestamp() });
+    });
+  },
+  // Frees a slot: refunds anyone still holding an entry, keeps the standings in the history, clears the registrations.
+  async tourArchive(s) {
+    const ts = await Repo.tourRef(s).get(); if (!ts.exists) return;
+    const T = ts.data(), ps = await Repo.tourPlayers(s).get(), list = ps.docs.map(d => d.data());
+    for (const x of list) if ((x.held || 0) > 0) { try { await Repo.tourAdminRefund(s, x.uid, ('Tournament refund: ' + T.name).slice(0, 80)); } catch (e) { console.warn('[TeenPatti] tournament refund', x.uid, e && e.code); } }
+    const played = list.filter(x => !(x.held > 0) && (x.brought || 0) > 0);
+    if (T.status === 'published' && played.length) {
       await db.collection('tournaments').add({ name: T.name, startAt: T.startAt, durationMin: T.durationMin, boot: T.boot, entry: T.entry, status: 'finished', count: list.length,
-        results: list.map(x => Object.assign({ uid: x.uid, name: x.name, final: x.final || 0, out: x.out || 0, brought: x.brought || 0, reentries: x.reentries || 0 }, Object.fromEntries(TOUR_STATS.map(k => [k, x[k] || 0])))), endedAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
+        results: played.map(x => Object.assign({ uid: x.uid, name: x.name, final: x.final || 0, out: x.out || 0, brought: x.brought || 0, reentries: x.reentries || 0 }, Object.fromEntries(TOUR_STATS.map(k => [k, x[k] || 0])))), endedAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
     }
     for (let i = 0; i < ps.docs.length; i += 400) { const b = db.batch(); ps.docs.slice(i, i + 400).forEach(d => b.delete(d.ref)); await b.commit(); }
-    await Repo.tourRef().delete();
+    await Repo.tourRef(s).delete();
   },
-  async tourPublish(o, edit) {
-    const ts = await Repo.tourRef().get(), old = ts.exists ? ts.data() : null;
-    if (old && old.status === 'published' && !edit && Date.now() < old.startAt + old.durationMin * 60000) throw new AppError('A tournament is already scheduled. Cancel it first, or wait until it has finished.');
-    if (edit && (!old || old.status !== 'published' || Date.now() >= old.startAt - TOUR_LOBBY_MS)) throw new AppError('This tournament can no longer be changed.');
-    // the tables of the last event: nobody may still be sitting there, and a hand it left unfinished is cleared
-    for (const id of TOUR_IDS) {
+  // Publishes into a free slot, or saves changes to the tournament in slot editSlot.
+  async tourPublish(o, editSlot) {
+    let s = editSlot;
+    if (s) {
+      const old = (await Repo.tourRef(s).get()).data();
+      if (!old || old.status !== 'published' || Date.now() >= old.startAt - TOUR_LOBBY_MS) throw new AppError('This tournament can no longer be changed.');
+      if ((old.count || 0) > 0 && o.entry !== old.entry) throw new AppError(old.count + (old.count === 1 ? ' player has' : ' players have') + ' already paid ' + fmt(old.entry) + ' to enter, so the entry chips cannot change.');
+    } else {
+      const docs = {}; for (const x of TOUR_SLOTS) { const d = await Repo.tourRef(x).get(); docs[x] = d.exists ? d.data() : null; }
+      const done = d => !d || d.status !== 'published' || Date.now() >= d.startAt + d.durationMin * 60000;
+      s = TOUR_SLOTS.find(x => !docs[x]) || TOUR_SLOTS.find(x => done(docs[x]));
+      if (!s) throw new AppError('Five tournaments are already open. Wait until one finishes, or cancel one.');
+      if (docs[s]) await Repo.tourArchive(s);
+    }
+    // the tables this slot used last time: nobody may still be sitting there, and a hand left unfinished is cleared
+    for (const id of tourIds(s)) {
       const r = await Repo.roomRef(id).get(); if (!r.exists) break;
-      const ms = await Repo.membersCol(id).get(); if (!ms.empty) throw new AppError('Players are still sitting at ' + TABLE_BY_ID[id].title + '. Wait until they leave, then publish.');
+      const ms = await Repo.membersCol(id).get(); if (!ms.empty) throw new AppError('Players are still sitting at a table from an earlier tournament. Try again in a few minutes.');
       const gs = await Repo.gameRef(id).get(); if (gs.exists && gs.data().phase !== 'idle') await Repo.gameRef(id).set({ phase: 'idle', handNo: gs.data().handNo || 0, updatedAt: FV.serverTimestamp() });
     }
-    if (!edit && old) await Repo.tourArchive();
     const doc = { name: o.name, startAt: o.startAt, durationMin: o.durationMin, breaks: o.breaks, breakMin: o.breakMin, boot: o.boot, entry: o.entry, maxBlind: o.blind, maxChaal: o.chaal, potLimit: o.pot,
-      variants: o.variants, reentry: !!o.reentry, reentryChips: o.rechips, tables: TOUR_IDS.length, maxPlayers: TOUR_IDS.length * MAX_SEATS, status: 'published', updatedAt: FV.serverTimestamp() };
-    if (edit) await Repo.tourRef().update(doc);
-    else await Repo.tourRef().set(Object.assign({ count: 0, seq: 0, createdAt: FV.serverTimestamp() }, doc));
+      variants: o.variants, reentry: !!o.reentry, reentryChips: o.rechips, tables: TOUR_PER, maxPlayers: TOUR_PER * MAX_SEATS, status: 'published', updatedAt: FV.serverTimestamp() };
+    if (editSlot) await Repo.tourRef(s).update(doc);
+    else await Repo.tourRef(s).set(Object.assign({ count: 0, seq: 0, createdAt: FV.serverTimestamp() }, doc));
+    return s;
   },
-  tourCancel() { return Repo.tourRef().update({ status: 'cancelled', updatedAt: FV.serverTimestamp() }); },
-  async tourHistory() { const sn = await db.collection('tournaments').get(); return sn.docs.filter(d => d.id !== 'current').map(d => Object.assign({ id: d.id }, d.data())).sort((a, b) => (b.startAt || 0) - (a.startAt || 0)); }
+  tourCancel(s) { return Repo.tourRef(s).update({ status: 'cancelled', updatedAt: FV.serverTimestamp() }); },
+  async tourHistory() {
+    const sn = await db.collection('tournaments').get();
+    // the single tournament of the earlier version (tournaments/current) is removed: no chips were ever taken for it
+    const old = sn.docs.find(d => d.id === 'current');
+    if (old) { try { const ps = await old.ref.collection('players').get(); const b = db.batch(); ps.docs.slice(0, 450).forEach(d => b.delete(d.ref)); b.delete(old.ref); await b.commit(); } catch (e) { console.warn('[TeenPatti] old tournament cleanup', e && e.code); } }
+    return sn.docs.filter(d => d.id !== 'current' && !TOUR_SLOTS.includes(d.id)).map(d => Object.assign({ id: d.id }, d.data())).sort((a, b) => (b.startAt || 0) - (a.startAt || 0));
+  }
 });
 
 // What each player's own phone records about their hands (kept in their line, read live by the admin).
 const TOUR_STATS = ['hands', 'wins', 'best', 'worst', 'winRun', 'lossRun', 'bestStreak', 'worstStreak', 'bigPot', 'smallPot', 'rake'];
-const tzClock = ms => { const x = Math.max(0, Math.ceil(ms / 1000)), hh = Math.floor(x / 3600), mm = Math.floor(x % 3600 / 60), ss = x % 60; return (hh ? hh + ':' + String(mm).padStart(2, '0') : String(mm)) + ':' + String(ss).padStart(2, '0'); };
+const TOUR_SHOW_DONE_MS = 6 * 3600e3;      // a finished tournament stays in the players' list this long, for its standings
+const tzClock = ms => { const x = Math.max(0, Math.ceil(ms / 1000)), dd = Math.floor(x / 86400), hh = Math.floor(x % 86400 / 3600), mm = Math.floor(x % 3600 / 60), ss = x % 60;
+  return dd ? dd + 'd ' + hh + 'h' : (hh ? hh + ':' + String(mm).padStart(2, '0') : String(mm)) + ':' + String(ss).padStart(2, '0'); };
 const tzWhen = ms => new Date(ms).toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' });
 const tzTime = ms => new Date(ms).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
 
 const Tour = {
-  sc: null, doc: undefined, players: [], loaded: false, lastKey: '', joinTry: 0, sitTry: 0, repAt: 0, repBusy: false, busy: false, skip: false, hideBrief: false, noted: {},
+  sc: null, slots: {}, lastKey: '', repAt: 0, repBusy: false, busy: false, hideBrief: {}, popKey: '', popHide: {}, refunding: {}, pend: null, noted: {},
   sync() {
     const want = !!(S.user && S.authReady && (S.isAdmin || (S.profile && S.profile.banned !== true)));
     if (want && !Tour.sc) Tour.open(); else if (!want && Tour.sc) Tour.close();
@@ -6761,17 +6913,37 @@ const Tour = {
   open() {
     const sc = Tour.sc = Scopes.open('tour');
     // If the rules for tournaments are not published yet these listeners are refused: the rest of the app carries on without tournaments.
-    sc.listen(Repo.tourRef(), sn => { const T = sn.exists ? sn.data() : null; if (T && Tour.doc && T.startAt !== Tour.doc.startAt) { Tour.noted = {}; Tour.skip = false; Tour.hideBrief = false; } Tour.doc = T; Tour.loaded = true; Tour.applyCfg(); Tour.redraw(); },
-      () => { Tour.doc = null; Tour.loaded = true; });
-    sc.listen(Repo.tourPlayers(), sn => { Tour.players = sn.docs.map(d => d.data()).sort((a, b) => (a.seatNo || 0) - (b.seatNo || 0)); Tour.redraw(); }, () => { Tour.players = []; });
+    TOUR_SLOTS.forEach(s => {
+      Tour.slots[s] = { doc: undefined, players: [] };
+      sc.listen(Repo.tourRef(s), sn => { const T = sn.exists ? sn.data() : null, was = Tour.slots[s].doc; if (T && was && T.startAt !== was.startAt) { Tour.hideBrief[s] = false; } Tour.slots[s].doc = T; Tour.applyCfg(s); Tour.redraw(); },
+        () => { Tour.slots[s].doc = null; Tour.redraw(); });
+      sc.listen(Repo.tourPlayers(s), sn => { Tour.slots[s].players = sn.docs.map(d => d.data()).sort((a, b) => (a.seatNo || 0) - (b.seatNo || 0)); Tour.redraw(); }, () => { Tour.slots[s].players = []; });
+    });
     sc.every(Tour.tick, 1000);
   },
-  close() { Scopes.close(Tour.sc); Tour.sc = null; Tour.doc = undefined; Tour.players = []; Tour.loaded = false; Tour.lastKey = ''; },
-  // Every tournament table plays the tournament's numbers.
-  applyCfg() { const T = Tour.doc; if (!T) return; TOUR_TABLES.forEach(t => Object.assign(t, { boot: T.boot, min: T.entry, max: Math.max(T.entry, tourRe(T)), blind: T.maxBlind, chaal: T.maxChaal, pot: T.potLimit })); },
+  close() { Scopes.close(Tour.sc); Tour.sc = null; Tour.slots = {}; Tour.lastKey = ''; Tour.dropPop(); },
+  ready() { return TOUR_SLOTS.every(s => Tour.slots[s] && Tour.slots[s].doc !== undefined); },
+  T(s) { return (Tour.slots[s] && Tour.slots[s].doc) || null; },
+  P(s) { return (Tour.slots[s] && Tour.slots[s].players) || []; },
+  me(s) { return S.user ? Tour.P(s).find(x => x.uid === S.user.uid) || null : null; },
+  // Every tournament table plays its tournament's numbers.
+  applyCfg(s) { const T = Tour.T(s); if (!T) return; tourIds(s).forEach(id => Object.assign(TABLE_BY_ID[id], { boot: T.boot, min: T.entry, max: Math.max(T.entry, tourRe(T)), blind: T.maxBlind, chaal: T.maxChaal, pot: T.potLimit })); },
   redraw() {
     if (S.route && S.route.name === 'admin') { if ((Admin.st.view === 'tour' && !Admin.st.tf) || Admin.st.view === 'hub') Admin.paint(); }
     else scheduleRender();
+    if (Sheets.el && Sheets.el.querySelector('#tourList')) Sheets.tournaments(true);
+  },
+  // The tournaments a player sees: open ones, and finished ones for a few hours (cancelled ones only if they were in it).
+  list() {
+    const now = Date.now();
+    return TOUR_SLOTS.map(s => ({ s, T: Tour.T(s) })).filter(({ s, T }) => {
+      if (!T) return false;
+      const ph = Tour.phase(T, now);
+      if (ph.name === 'upcoming' || Tour.running(ph)) return true;
+      if (ph.name === 'ended') return now < Tour.sched(T).end + TOUR_SHOW_DONE_MS;
+      if (ph.name === 'cancelled') return !!Tour.me(s) && now < Tour.sched(T).end + TOUR_SHOW_DONE_MS;
+      return false;
+    }).sort((a, b) => a.T.startAt - b.T.startAt);
   },
 
   /* ---- the timetable ---- */
@@ -6792,19 +6964,27 @@ const Tour = {
     return { name: g.type, round: g.n, rounds: sch.rounds, until: g.to, sch };
   },
   running(ph) { return ph.name === 'lobby' || ph.name === 'play' || ph.name === 'break'; },
-  dealOk() { return Tour.phase(Tour.doc).name === 'play'; },
-  pickVariant() { const list = ((Tour.doc && Tour.doc.variants) || []).filter(v => ENGINE.VARIANT_IDS.includes(v)); return list.length ? list[secureRandInt(list.length)] : 'classic'; },
+  dealOk(s) { return Tour.phase(Tour.T(s)).name === 'play'; },
+  pickVariant(s) { const list = ((Tour.T(s) && Tour.T(s).variants) || []).filter(v => ENGINE.VARIANT_IDS.includes(v)); return list.length ? list[secureRandInt(list.length)] : 'classic'; },
   gameNames(T) { const v = (T.variants || ['classic']).map(id => (VARIANT_BY_ID[id] || {}).name || id); return v.length === 1 ? v[0] : v.length === VARIANT_DEFS.length ? 'All ' + v.length + ' games, a random one each hand' : v.join(', ') + ' (random each hand)'; },
+  statusOf(T, ph) {
+    return ph.name === 'upcoming' ? { label: 'STARTS IN', until: T.startAt, cls: 'up' } : ph.name === 'lobby' ? { label: 'STARTING IN', until: T.startAt, cls: 'soon' }
+      : ph.name === 'play' ? { label: 'LIVE  ·  ENDS IN', until: ph.sch.end, cls: 'live' } : ph.name === 'break' ? { label: 'BREAK  ·  RESUMES IN', until: ph.until, cls: 'live' }
+      : ph.name === 'ended' ? { label: 'FINISHED', cls: 'done' } : { label: 'CANCELLED', cls: 'off' };
+  },
 
-  /* ---- who sits where: registered players are dealt round the tables in the order they registered ---- */
-  tablesUsed() { return Math.max(1, Math.min(TOUR_IDS.length, Math.ceil(Tour.players.length / MAX_SEATS))); },
-  // the tables in play: the planned ones, plus any a player is actually sitting at
-  tablesLive() { return Math.max(Tour.tablesUsed(), ...Tour.players.map(x => TOUR_IDS.indexOf(x.table) + 1)); },
-  tableFor(uid) { const me = Tour.players.find(x => x.uid === uid); if (me && me.table && TABLE_BY_ID[me.table]) return me.table; const i = Tour.players.findIndex(x => x.uid === uid); return i < 0 ? '' : TOUR_IDS[i % Tour.tablesUsed()]; },
-  me() { return S.user ? Tour.players.find(x => x.uid === S.user.uid) || null : null; },
-  standings() {
-    const T = Tour.doc || {}, e = T.entry || 1;
-    return Tour.players.map(x => Object.assign({ uid: x.uid, name: x.name, avatar: x.avatar, bal: (x.final || 0) + (x.out || 0), now: x.final || 0, brought: x.brought || 0, net: (x.final || 0) + (x.out || 0) - (x.brought || 0), re: x.reentries || 0, played: (x.brought || 0) > 0, seated: (x.final || 0) > 0 && !!x.table, table: x.table || '' },
+  /* ---- who sits where: players are dealt round the tables in the order they registered; a full table sends a late arrival to the next ---- */
+  tablesUsed(s) { return Math.max(1, Math.min(TOUR_PER, Math.ceil(Tour.P(s).length / MAX_SEATS))); },
+  tablesLive(s) { return Math.max(Tour.tablesUsed(s), ...Tour.P(s).map(x => tourSlotOf(x.table) === s ? tableNoOf(x.table) : 0)); },
+  tableFor(s, uid) {
+    const list = Tour.P(s), me = list.find(x => x.uid === uid), ids = tourIds(s);
+    if (me && me.table && tourSlotOf(me.table) === s) return me.table;
+    const at = id => list.filter(x => x.table === id && x.uid !== uid).length, i = Math.max(0, list.findIndex(x => x.uid === uid));
+    const pref = ids[i % Tour.tablesUsed(s)];
+    return at(pref) < MAX_SEATS ? pref : (ids.find(id => at(id) < MAX_SEATS) || pref);
+  },
+  standings(s) {
+    return Tour.P(s).map(x => Object.assign({ uid: x.uid, name: x.name, avatar: x.avatar, bal: (x.final || 0) + (x.out || 0), now: x.final || 0, brought: x.brought || 0, net: (x.final || 0) + (x.out || 0) - (x.brought || 0), re: x.reentries || 0, played: !(x.held > 0) && (x.brought || 0) > 0, seated: (x.final || 0) > 0 && !!x.table, table: x.table || '', held: x.held || 0 },
       Object.fromEntries(TOUR_STATS.map(k => [k, x[k] || 0]))))
       .sort((a, b) => (b.played ? 1 : 0) - (a.played ? 1 : 0) || b.bal - a.bal || b.net - a.net);
   },
@@ -6812,28 +6992,34 @@ const Tour = {
   /* ---- once a second ---- */
   tick() {
     Tour.paintClock();
-    const T = Tour.doc, uid = S.user && S.user.uid;
-    if (!T || !uid || S.isAdmin || !S.route) return;
-    const now = Date.now(), ph = Tour.phase(T, now), prof = S.profile, R = S.room;
-    const atTour = S.route.name === 'table' && !!R && !!TABLE_BY_ID[R.id] && !!TABLE_BY_ID[R.id].tour;
+    const uid = S.user && S.user.uid, prof = S.profile;
+    if (!uid || S.isAdmin || !S.route || !prof) { Tour.dropPop(); return; }
+    const now = Date.now(), R = S.room;
+    const atSlot = S.route.name === 'table' && R ? tourSlotOf(R.id) : '';
     // announcements: once per change, only for players at a tournament table
-    const key = T.startAt + ':' + ph.name + ':' + (ph.round || 0);
-    if (atTour) { if (Tour.lastKey && key !== Tour.lastKey) Tour.announcePhase(ph, R); if (key !== Tour.lastKey) { Tour.lastKey = key; scheduleRender(); } } else Tour.lastKey = '';
-    const me = Tour.me();
-    if (!me || !prof) return;
-    if (atTour) Tour.scoreHand(me, R.game, uid);
-    Tour.report(me, prof, R, atTour);
-    if (Tour.running(ph) && S.route.name === 'lobby' && !Tour.skip && !Tour.busy && now - Tour.joinTry > 8000) {
-      if (!prof.tableId) Tour.join(false);
-      else if (TABLE_BY_ID[prof.tableId] && !TABLE_BY_ID[prof.tableId].tour && !Tour.noted.else) { Tour.noted.else = 1; toast('Your tournament is starting. Leave ' + tableName(TABLE_BY_ID[prof.tableId]) + ' to join it.'); }
+    if (atSlot && Tour.T(atSlot)) {
+      const T = Tour.T(atSlot), ph = Tour.phase(T, now), key = atSlot + ':' + T.startAt + ':' + ph.name + ':' + (ph.round || 0);
+      if (Tour.lastKey && key !== Tour.lastKey) Tour.announcePhase(ph, R, T);
+      if (key !== Tour.lastKey) { Tour.lastKey = key; scheduleRender(); }
+    } else Tour.lastKey = '';
+    // a held entry comes back on its own when the tournament is cancelled or ends before this player joined
+    for (const s of TOUR_SLOTS) {
+      const me = Tour.me(s), T = Tour.T(s); if (!me || !T || !(me.held > 0) || Tour.refunding[s]) continue;
+      const ph = Tour.phase(T, now);
+      if (ph.name === 'cancelled' || ph.name === 'ended') {
+        Tour.refunding[s] = 1;
+        Repo.tourRefund(s, uid).then(n => { if (n) toast(fmt(n) + ' entry chips from ' + T.name + ' are back in your wallet.'); }, e => { console.warn('[TeenPatti] tournament refund', e && e.code); setTimeout(() => { Tour.refunding[s] = 0; }, 15000); });
+      }
     }
-    if (atTour && R.loaded.members) {
-      const mm = myMember(R), cfg = TABLE_BY_ID[R.id];
-      // sit down on your own once you have chips for the boot (unless you chose to stand up)
-      if (mm && mm.seatState !== 'seated' && Tour.running(ph) && mm.stack >= cfg.boot && !S.pending && !S.busy.seat && S.stoodAt !== R.id && now - Tour.sitTry > 4000 && !sitBlockReason(R, mm, true)) { Tour.sitTry = now; handleSeatChange('sit', true); }
-      // three minutes after the end, anyone still at the table is taken back to the lobby with their chips
-      if (mm && ph.name === 'ended' && now > ph.sch.end + 180000 && !liveHand(R) && !S.busy.leave && !Tour.noted.left) { Tour.noted.left = 1; Repo.leaveTable(uid, R.id).then(() => { Session.reset(uid, R.id); toast('The tournament is over. Your chips are back in your wallet.'); }, () => { Tour.noted.left = 0; }); }
+    // my hand record and my line in the standings
+    if (atSlot) { const me = Tour.me(atSlot); if (me) { Tour.scoreHand(me, R.game, uid); Tour.report(atSlot, me, prof, R, true); } }
+    else for (const s of TOUR_SLOTS) { const me = Tour.me(s); if (me && (me.final || 0) > 0 && me.table && prof.tableId !== me.table) { Tour.report(s, me, prof, R, false); break; } }
+    // three minutes after the end, anyone still at the table is taken back to the lobby with their chips
+    if (atSlot && R.loaded.members) {
+      const mm = myMember(R), ph = Tour.phase(Tour.T(atSlot), now);
+      if (mm && (ph.name === 'ended' && now > ph.sch.end + 180000) && !liveHand(R) && !S.busy.leave && !Tour.noted['left' + atSlot]) { Tour.noted['left' + atSlot] = 1; Repo.leaveTable(uid, R.id).then(() => { Session.reset(uid, R.id); toast('The tournament is over. Your chips are back in your wallet.'); }, () => { Tour.noted['left' + atSlot] = 0; }); }
     }
+    Tour.paintPop();
   },
   // A finished hand I played in: hands, wins, biggest win and loss, winning and losing runs, pots won and the rake on them.
   scoreHand(me, G, uid) {
@@ -6849,45 +7035,46 @@ const Tour = {
     Tour.pend = Object.assign(x, { lastHand: R0.handId, base: R0.handId });
   },
   // Keeps my line in the standings true: what I hold now, what I took away when I left, and my hand record.
-  report(me, prof, R, atTour) {
+  report(s, me, prof, R, atTour) {
     if (Tour.repBusy || Date.now() - Tour.repAt < 2500) return;
     const pend = Tour.pend && Tour.pend.lastHand !== me.lastHand ? Tour.pend : null;
     let line = null;
     if (atTour && R.loaded.members) { const mm = myMember(R); if (mm && prof.tableId === R.id && (me.final !== mm.stack || me.table !== R.id || pend)) line = { table: R.id, final: mm.stack, brought: me.brought || 0, out: me.out || 0 }; }
-    else if (!prof.tableId && (me.final || 0) > 0 && me.table) { line = { table: me.table, final: 0, brought: me.brought || 0, out: (me.out || 0) + me.final }; Tour.skip = true; }
+    else if (!atTour && !prof.tableId && (me.final || 0) > 0 && me.table) line = { table: me.table, final: 0, brought: me.brought || 0, out: (me.out || 0) + me.final };
     if (!line) return;
-    if (pend) { TOUR_STATS.forEach(k => { line[k] = pend[k] || 0; }); line.lastHand = pend.lastHand; }
+    if (pend && atTour) { TOUR_STATS.forEach(k => { line[k] = pend[k] || 0; }); line.lastHand = pend.lastHand; }
     Tour.repBusy = true; Tour.repAt = Date.now();
-    Repo.tourReport(me.uid, line).catch(e => console.warn('[TeenPatti] tournament line', e && e.code)).then(() => { Tour.repBusy = false; });
+    Repo.tourReport(s, me.uid, line).catch(e => console.warn('[TeenPatti] tournament line', e && e.code)).then(() => { Tour.repBusy = false; });
   },
-  // Takes a registered player to their table: the entry chips are the buy-in.
-  async join(manual) {
-    const T = Tour.doc, me = Tour.me(), prof = S.profile, uid = S.user.uid;
-    Tour.joinTry = Date.now();
+  // Takes a registered player to their table. The held entry becomes their chips there.
+  async join(s) {
+    const T = Tour.T(s), me = Tour.me(s), prof = S.profile, uid = S.user.uid;
     if (!T || !me || !prof || Tour.busy) return;
-    const t = Tour.tableFor(uid);
-    if (!t) return;
-    if (prof.chips < T.entry) { if (manual || !Tour.noted.poor) { Tour.noted.poor = 1; toast('The tournament needs ' + fmt(T.entry) + ' entry chips and you have ' + fmt(prof.chips) + '.', 'err'); } return; }
+    if (prof.tableId) {
+      if (tourSlotOf(prof.tableId) === s) { S.forceLobby = false; Sheets.closeNow(); Tour.dropPop(); go(); return; }
+      return toast('Leave ' + tableName(TABLE_BY_ID[prof.tableId] || { boot: '?' }) + ' first, then join the tournament.', 'err');
+    }
+    if (!Tour.running(Tour.phase(T))) return toast('The tables open 5 minutes before the start.');
+    if (!(me.held > 0) && prof.chips < T.entry) return toast('Coming back costs the ' + fmt(T.entry) + ' entry chips and your wallet has ' + fmt(prof.chips) + '.', 'err');
+    if (!(me.held > 0) && !confirm('You left this tournament earlier. Come back for ' + fmt(T.entry) + ' chips from your wallet?')) return;
+    const t = Tour.tableFor(s, uid);
     Tour.busy = true;
     try {
-      S.forceLobby = false; S.stoodAt = '';
-      Tour.applyCfg(); await Repo.tourEnsureRoom(t);
-      await Repo.joinTable(uid, t, T.entry);
-      Session.reset(uid, t); Tour.skip = false; Tour.hideBrief = false; Sheets.closeNow();
-      toast('Taking you to ' + TABLE_BY_ID[t].title + '.');
-      Tour.repAt = Date.now();
-      await Repo.tourReport(uid, { table: t, final: T.entry, brought: (me.brought || 0) + T.entry, out: me.out || 0 }).catch(e => console.warn('[TeenPatti] tournament line', e && e.code));
-    } catch (e) { if (manual || !Tour.noted.joinErr) { Tour.noted.joinErr = 1; toast(friendlyError(e), 'err'); } }
+      Tour.applyCfg(s); await Repo.tourEnsureRoom(s, t);
+      await Repo.tourJoin(s, uid, t);
+      Session.reset(uid, t); S.forceLobby = false; S.stoodAt = ''; Tour.hideBrief[s] = false; Tour.dropPop(); Sheets.closeNow();
+      toast('Taking you to Table ' + tableNoOf(t) + '. Tap Take a seat when you are ready.');
+    } catch (e) { toast(friendlyError(e), 'err'); }
     finally { Tour.busy = false; }
   },
   canReenter(R, mm) {
-    const T = Tour.doc, cfg = TABLE_BY_ID[R.id], ph = Tour.phase(T), uid = S.user.uid, G = R.game;
+    const s = tourSlotOf(R.id), T = Tour.T(s), cfg = TABLE_BY_ID[R.id], ph = Tour.phase(T), uid = S.user.uid, G = R.game;
     if (!T || !mm || !T.reentry || !Tour.running(ph) || mm.stack >= cfg.boot) return false;
     return !(G && G.phase === 'playing' && G.players && G.players[uid]);
   },
-  // Out of chips: pay the entry again and carry on (only when the admin allowed re-entry).
+  // Out of chips: pay for the re-entry chips and carry on (only when the admin allowed re-entry).
   async reenter() {
-    const R = S.room, mm = myMember(R), T = Tour.doc, uid = S.user.uid, prof = S.profile;
+    const R = S.room, mm = myMember(R), s = tourSlotOf(R && R.id), T = Tour.T(s), uid = S.user.uid, prof = S.profile;
     if (!R || !mm || !T) return;
     if (!T.reentry) return toast('Re-entry is switched off for this tournament.', 'err');
     if (!Tour.running(Tour.phase(T))) return toast('The tournament is not running.', 'err');
@@ -6897,11 +7084,42 @@ const Tour = {
     if (!confirm('Re-enter the tournament for ' + fmt(n) + ' chips from your wallet?')) return;
     return withBusy('reenter', 're-enter', async () => {
       await Repo.topUp(uid, R.id, n);
-      const me = Tour.me(); Tour.repAt = Date.now();
-      if (me) await Repo.tourReport(uid, { table: R.id, final: mm.stack + n, brought: (me.brought || 0) + n, out: me.out || 0, reentries: (me.reentries || 0) + 1 }).catch(() => {});
+      const me = Tour.me(s); Tour.repAt = Date.now();
+      if (me) await Repo.tourReport(s, uid, { table: R.id, final: mm.stack + n, brought: (me.brought || 0) + n, out: me.out || 0, reentries: (me.reentries || 0) + 1 }).catch(() => {});
       S.stoodAt = ''; toast('You are back in with ' + fmt(tourRe(T)) + ' chips.');
     });
   },
+
+  /* ---- the join pop-up: a small card, never the whole screen ---- */
+  popWanted() {
+    const prof = S.profile, R = S.room, atSlot = S.route && S.route.name === 'table' && R ? tourSlotOf(R.id) : '';
+    for (const { s, T } of Tour.list()) {
+      const me = Tour.me(s), ph = Tour.phase(T);
+      if (!me || !(me.held > 0) || !Tour.running(ph) || atSlot === s || Tour.popHide[s + ':' + T.startAt + ':' + (ph.name === 'lobby' ? 'lobby' : 'live')]) continue;
+      const other = prof.tableId && tourSlotOf(prof.tableId) !== s ? TABLE_BY_ID[prof.tableId] : null;
+      return { s, T, me, ph, other };
+    }
+    return null;
+  },
+  paintPop() {
+    const w = Tour.popWanted();
+    if (!w) { Tour.dropPop(); return; }
+    const live = w.ph.name !== 'lobby', key = w.s + ':' + w.T.startAt + ':' + (live ? 'live' : 'lobby') + ':' + (w.other ? w.other.id : '') + ':' + w.me.held;
+    if (key === Tour.popKey && document.getElementById('tourPop')) return;
+    Tour.dropPop(); Tour.popKey = key;
+    const st = Tour.statusOf(w.T, w.ph);
+    const el = h('div', { class: 'tzpop' + (live ? ' live' : ''), id: 'tourPop', role: 'dialog', 'aria-label': 'Your tournament is starting' },
+      h('div', { class: 'tzpoptop' }, h('i', { text: live ? 'YOUR TOURNAMENT IS LIVE' : 'YOUR TOURNAMENT STARTS IN' }), Tour.clock(live ? w.T.startAt + w.T.durationMin * 60000 : w.T.startAt)),
+      h('b', { class: 'tzpopname', text: w.T.name }),
+      h('span', { class: 'tzpopsub', text: (live ? (w.ph.name === 'break' ? 'On a break' : 'Round ' + w.ph.round + ' of ' + w.ph.rounds) + '  ·  ' : '') + 'Boot ' + fmt(w.T.boot) + '  ·  your ' + fmt(w.me.held) + ' entry chips are ready' }),
+      w.other ? h('span', { class: 'tzpopwarn', text: 'Leave ' + tableName(w.other) + ' first to join.' }) : null,
+      h('div', { class: 'tzpopbtns' },
+        h('button', { type: 'button', class: 'btn-secondary btn-small', id: 'tourPopLater', text: 'Later', onclick: () => { Tour.popHide[w.s + ':' + w.T.startAt + ':' + (live ? 'live' : 'lobby')] = 1; Tour.dropPop(); } }),
+        h('button', { type: 'button', class: 'btn-primary btn-small', id: 'tourPopJoin', text: 'Join table', disabled: !!w.other, onclick: () => Tour.join(w.s) })));
+    document.body.appendChild(el);
+    try { Sfx.chime(); } catch (e) { /* sound is optional */ }
+  },
+  dropPop() { const el = document.getElementById('tourPop'); if (el) el.remove(); Tour.popKey = ''; },
 
   /* ---- announcements: a banner that crosses the table and never takes a tap ---- */
   announce(title, sub, kind) {
@@ -6910,8 +7128,8 @@ const Tour = {
     document.body.appendChild(el); setTimeout(() => el.remove(), 4600);
     try { if (kind === 'end') Sfx.win(); else Sfx.chime(); } catch (e) { /* sound is optional */ }
   },
-  announcePhase(ph, R) {
-    const live = liveHand(R), T = Tour.doc;
+  announcePhase(ph, R, T) {
+    const live = liveHand(R);
     if (ph.name === 'play') Tour.announce(ph.round === 1 ? 'Shuffle up and deal' : 'Round ' + ph.round + ' of ' + ph.rounds, ph.round === 1 ? 'The tournament has started. Good luck!' : 'The break is over. Cards are in the air.', 'start');
     else if (ph.name === 'break') Tour.announce('Break', (live ? 'After this hand. ' : '') + 'Play resumes at ' + tzTime(ph.until) + '.', 'break');
     else if (ph.name === 'ended') Tour.announce('Tournament over', live ? 'This is the last hand.' : 'Final standings are on the table.', 'end');
@@ -6920,18 +7138,18 @@ const Tour = {
   },
   paintClock() {
     const now = Date.now();
-    document.querySelectorAll('[data-tzuntil]').forEach(el => { el.textContent = tzClock(Number(el.getAttribute('data-tzuntil')) - now); });
+    document.querySelectorAll('[data-tzuntil]').forEach(el => { el.textContent = (el.getAttribute('data-tzpre') || '') + tzClock(Number(el.getAttribute('data-tzuntil')) - now); });
   },
-  clock(until, cls) { return h('b', { class: cls || '', 'data-tzuntil': String(until), text: tzClock(until - Date.now()) }); },
+  clock(until, cls, pre) { return h('b', { class: cls || '', 'data-tzuntil': String(until), 'data-tzpre': pre || '', text: (pre || '') + tzClock(until - Date.now()) }); },
 
-  /* ---- pieces shared by the table, the lobby pop-up and the admin page ---- */
+  /* ---- pieces shared by the table, the players' list and the admin page ---- */
   facts(T) {
     const sch = Tour.sched(T), f = (v, l) => h('div', {}, h('b', { text: v }), h('span', { text: l }));
     return h('div', { class: 'tzfacts' },
       f(fmt(T.boot), 'Boot'), f(fmt(T.entry), 'Entry chips'), f(fmt(T.maxBlind), 'Max blind'), f(fmt(T.maxChaal), 'Max chaal'), f(fmt(T.potLimit), 'Pot limit'),
       f(T.durationMin + ' min', 'Length'), f(String(sch.rounds), sch.rounds === 1 ? 'Round' : 'Rounds'), f(T.breaks ? T.breaks + ' × ' + T.breakMin + ' min' : 'None', 'Breaks'), f(T.reentry ? fmt(tourRe(T)) : 'Off', 'Re-entry chips'));
   },
-  // The hour as a bar: rounds in gold, breaks in grey, and a marker for now.
+  // The event as a bar: rounds in gold, breaks in grey, and a marker for now.
   bar(T, now) {
     const sch = Tour.sched(T), total = sch.end - sch.start, pos = Math.max(0, Math.min(1, ((now || Date.now()) - sch.start) / total));
     return h('div', { class: 'tzbarwrap' },
@@ -6939,8 +7157,8 @@ const Tour = {
         (now || Date.now()) >= sch.start && (now || Date.now()) < sch.end ? h('em', { style: 'left:' + (pos * 100).toFixed(2) + '%' }) : null),
       h('div', { class: 'tzbarends' }, h('span', { text: tzTime(sch.start) }), h('span', { text: tzTime(sch.end) })));
   },
-  board(limit) {
-    const rows = Tour.standings(), uid = S.user && S.user.uid;
+  board(s, limit) {
+    const rows = Tour.standings(s), uid = S.user && S.user.uid;
     if (!rows.length) return h('p', { class: 'tznote', text: 'Nobody has registered yet.' });
     return h('div', { class: 'tzboard', id: 'tourBoard' },
       h('div', { class: 'tzrow hd' }, h('span', { text: '#' }), h('span', { text: 'Player' }), h('span', { text: 'Balance' }), h('span', { text: 'Result' })),
@@ -6953,79 +7171,121 @@ const Tour = {
 
   /* ---- on the tournament table ---- */
   layer(R, me) {
-    const T = Tour.doc; if (!T) return null;
+    const s = tourSlotOf(R.id), T = Tour.T(s); if (!T) return null;
     const ph = Tour.phase(T), live = liveHand(R), wrap = h('div', { class: 'tzlayer', id: 'tourLayer' });
+    const standing = !!me && me.seatState !== 'seated', canSit = standing && Tour.running(ph) && me.stack >= TABLE_BY_ID[R.id].boot;
+    const sit = () => { if (!sitBlockReason(R, me, true)) handleSeatChange('sit', true); else toast(sitBlockReason(R, me, true), 'err'); };
     const label = ph.name === 'lobby' ? 'STARTS IN' : ph.name === 'play' ? 'ROUND ' + ph.round + '/' + ph.rounds : ph.name === 'break' ? 'BREAK' : ph.name === 'ended' ? 'FINISHED' : ph.name === 'cancelled' ? 'CANCELLED' : 'TOURNAMENT';
-    wrap.appendChild(h('button', { type: 'button', class: 'tzchip p-' + ph.name, id: 'tourChip', 'aria-label': 'Tournament rules and standings', onclick: () => Sheets.tournament() },
+    wrap.appendChild(h('button', { type: 'button', class: 'tzchip p-' + ph.name, id: 'tourChip', 'aria-label': 'Tournament rules and standings', onclick: () => Sheets.tourDetail(s) },
       h('i', { text: label }), ph.until ? Tour.clock(ph.until) : null, h('span', { 'aria-hidden': 'true', text: 'ℹ' })));
-    if (ph.name === 'lobby' && !Tour.hideBrief) wrap.appendChild(h('div', { class: 'tzcard tzbrief', id: 'tourBrief' },
+    if (ph.name === 'lobby' && !Tour.hideBrief[s]) wrap.appendChild(h('div', { class: 'tzcard tzbrief', id: 'tourBrief' },
       h('div', { class: 'tzhead' }, h('div', {}, h('i', { text: 'TOURNAMENT RULES' }), h('b', { text: T.name })), h('div', { class: 'tzcount' }, h('span', { text: 'STARTS IN' }), Tour.clock(ph.until))),
       Tour.facts(T), Tour.bar(T),
       h('p', { class: 'tznote', text: 'Games: ' + Tour.gameNames(T) + '.  Cards are dealt only while a round is running. When time is up the hand in play is finished, then chips are counted. What you hold is yours to keep.' }),
-      h('button', { type: 'button', class: 'btn-primary btn-small', id: 'tourBriefOk', text: 'Got it', onclick: () => { Tour.hideBrief = true; scheduleRender(); } })));
-    if (ph.name === 'break' && !live) wrap.appendChild(h('div', { class: 'tzpill', id: 'tourBreak' }, h('i', { text: 'BREAK' }), h('span', { text: 'Round ' + (ph.round + 1) + ' starts in' }), Tour.clock(ph.until)));
-    if (ph.name === 'play' && !live && readyHumans(R).length < 2) wrap.appendChild(h('div', { class: 'tzpill soft', id: 'tourWait' }, h('span', { text: 'Waiting for another player at this table' })));
+      h('div', { class: 'tzbriefbtns' },
+        canSit ? h('button', { type: 'button', class: 'btn-primary btn-small', id: 'tourSit', text: 'Take a seat', disabled: !!S.pending || !!S.busy.seat, onclick: sit })
+          : me && !standing ? h('span', { class: 'tzseated', id: 'tourSeated', text: '✓  You are seated' }) : null,
+        h('button', { type: 'button', class: 'btn-secondary btn-small', id: 'tourBriefOk', text: 'Hide rules', onclick: () => { Tour.hideBrief[s] = true; scheduleRender(); } }))));
+    else if (canSit) wrap.appendChild(h('button', { type: 'button', class: 'tzsit', id: 'tourSitPill', disabled: !!S.pending || !!S.busy.seat, onclick: sit },
+      h('i', { text: ph.name === 'lobby' ? 'STARTS IN' : ph.name === 'break' ? 'BREAK' : 'ROUND ' + ph.round }), ph.until ? Tour.clock(ph.until) : null, h('b', { text: 'Take a seat' })));
+    if (ph.name === 'break' && !live && !canSit) wrap.appendChild(h('div', { class: 'tzpill', id: 'tourBreak' }, h('i', { text: 'BREAK' }), h('span', { text: 'Round ' + (ph.round + 1) + ' starts in' }), Tour.clock(ph.until)));
+    if (ph.name === 'play' && !live && !canSit && readyHumans(R).length < 2) wrap.appendChild(h('div', { class: 'tzpill soft', id: 'tourWait' }, h('span', { text: 'Waiting for another player to sit down' })));
     if ((ph.name === 'ended' || ph.name === 'cancelled') && !live) wrap.appendChild(h('div', { class: 'tzcard tzfinal', id: 'tourFinal' },
       h('div', { class: 'tzhead' }, h('div', {}, h('i', { text: ph.name === 'ended' ? 'FINAL STANDINGS' : 'TOURNAMENT CANCELLED' }), h('b', { text: T.name }))),
-      ph.name === 'ended' ? Tour.board(24) : h('p', { class: 'tznote', text: 'The admin cancelled this tournament. Leave the table to take your chips back.' }),
+      ph.name === 'ended' ? Tour.board(s, 24) : h('p', { class: 'tznote', text: 'The admin cancelled this tournament. Leave the table to take your chips back.' }),
       me ? h('button', { type: 'button', class: 'btn-primary btn-small', id: 'tourLeave', text: 'Collect ' + fmt(me.stack) + ' chips and leave', disabled: !!S.busy.leave, onclick: () => handleLeave() }) : null));
     if (me && Tour.canReenter(R, me)) wrap.appendChild(h('button', { type: 'button', class: 'tzre', id: 'tourReenter', disabled: !!S.busy.reenter, onclick: () => Tour.reenter() },
       h('b', { text: 'Re-enter' }), h('span', { text: fmt(tourRe(T) - me.stack) + ' chips' })));
     return wrap;
   },
 
-  /* ---- in the lobby ---- */
+  /* ---- the lobby card: always open; says what is on ---- */
   lobbyCard() {
-    const T = Tour.doc, ph = Tour.phase(T), me = Tour.me();
-    if (ph.name === 'upcoming') return { kick: tzWhen(T.startAt).toUpperCase(), sub: me ? 'You are registered' : (T.count || 0) + ' registered', word: me ? 'YOU ARE IN' : 'REGISTER', sr: T.name + ', ' + tzWhen(T.startAt), live: false };
-    if (Tour.running(ph)) return { kick: ph.name === 'lobby' ? 'STARTING SOON' : 'LIVE NOW', sub: T.name, word: me ? 'JOIN NOW' : 'WATCH STANDINGS', sr: T.name + ' is on now', live: true };
-    if (ph.name === 'ended') return { kick: 'FINISHED', sub: T.name, word: 'STANDINGS', sr: T.name + ' has finished', live: false };
-    return { kick: 'NO EVENT YET', sub: 'Watch this space', word: 'DETAILS', sr: 'No tournament is scheduled', live: false };
+    const L = Tour.list(), open = L.filter(x => { const ph = Tour.phase(x.T); return ph.name === 'upcoming' || Tour.running(ph); });
+    const live = open.filter(x => Tour.running(Tour.phase(x.T))), mine = open.filter(x => Tour.me(x.s) && Tour.me(x.s).held > 0 && Tour.running(Tour.phase(x.T)));
+    const next = live[0] || open[0];
+    return { live: live.length > 0,
+      kick: live.length ? 'LIVE NOW' + (open.length > 1 ? '  •  ' + open.length + ' OPEN' : '') : open.length ? open.length + ' UPCOMING' : 'TOURNAMENTS',
+      sub: next ? next.T.name + (live.length ? '' : '  ·  ' + tzWhen(next.T.startAt)) : 'No events right now',
+      word: mine.length ? 'JOIN NOW' : 'ENTER', sr: open.length ? open.length + ' tournaments open' : 'No tournaments right now' };
   }
 };
 
-// The tournament pop-up: details, registration, standings. Opened from the lobby card and from the chip on a tournament table.
-Sheets.tournament = function () {
-  const T = Tour.doc, ph = Tour.phase(T), me = Tour.me(), prof = S.profile, uid = S.user.uid;
-  if (!T || ph.name === 'none') return Sheets.soon('Tournament', 'No tournament is scheduled right now. When the club announces one you can register here.');
-  const atTable = S.route.name === 'table';
-  const body = h('div', { class: 'tzsheet' });
-  body.appendChild(h('div', { class: 'tzhead' }, h('div', {}, h('i', { text: tzWhen(T.startAt).toUpperCase() }), h('b', { text: T.name })),
-    h('div', { class: 'tzcount' }, h('span', { text: ph.name === 'upcoming' || ph.name === 'lobby' ? 'STARTS IN' : ph.name === 'play' ? 'ROUND ' + ph.round + '/' + ph.rounds : ph.name === 'break' ? 'BREAK' : ph.name === 'ended' ? 'FINISHED' : 'CANCELLED' }),
-      ph.name === 'upcoming' ? Tour.clock(T.startAt) : ph.until ? Tour.clock(ph.until) : null)));
-  const cols = h('div', { class: 'tzcols' });
-  cols.appendChild(h('div', {}, Tour.facts(T), Tour.bar(T), h('p', { class: 'tznote', text: 'Games: ' + Tour.gameNames(T) + '.' })));
-  const right = h('div', {});
-  if (ph.name === 'upcoming') {
-    const full = false, poor = prof && prof.chips < T.entry;
-    right.appendChild(h('div', { class: 'tzreg' }, h('b', { id: 'tourCount', text: String(T.count || 0) }), h('span', { text: 'registered' })));
-    right.appendChild(me
-      ? h('button', { type: 'button', class: 'btn-secondary', id: 'tourUnreg', text: 'You are in  •  Cancel my place', disabled: !!S.busy.tourReg, onclick: () => withBusy('tourReg', 'unregister', async () => { await Repo.tourUnregister(uid); toast('Your place was cancelled.'); Sheets.close(); }) })
-      : h('button', { type: 'button', class: 'btn-primary', id: 'tourReg', text: full ? 'Tournament is full' : 'Register', disabled: full || !!S.busy.tourReg || S.isAdmin, onclick: () => withBusy('tourReg', 'register', async () => { await Repo.tourRegister(uid); toast('You are registered. Be in the app 5 minutes before the start.'); Sheets.close(); }) }));
-    right.appendChild(h('p', { class: 'tznote', text: (me ? 'Keep the app open 5 minutes before the start and you are taken to your table. ' : 'Registering is free. ') + 'The ' + fmt(T.entry) + ' entry chips leave your wallet when you sit down' + (poor ? ' (you have ' + fmt(prof.chips) + ' now).' : '.') }));
-    if (Tour.players.length) right.appendChild(h('div', { class: 'tznames' }, Tour.players.slice(0, 24).map(x => h('span', { text: x.name }))));
-  } else {
-    if (Tour.running(ph) && me && !atTable && !S.isAdmin) right.appendChild(h('button', { type: 'button', class: 'btn-primary', id: 'tourGo', text: prof && prof.tableId && TABLE_BY_ID[prof.tableId] && TABLE_BY_ID[prof.tableId].tour ? 'Return to my table' : 'Go to my table  •  ' + fmt(T.entry) + ' chips',
-      onclick: () => { if (prof && prof.tableId && TABLE_BY_ID[prof.tableId] && TABLE_BY_ID[prof.tableId].tour) { S.forceLobby = false; Sheets.close(); go(); } else { Tour.skip = false; Tour.join(true); } } }));
-    if (Tour.running(ph) && !me && !S.isAdmin) right.appendChild(h('p', { class: 'tznote', text: 'Registration closed 5 minutes before the start.' }));
-    if (ph.name === 'cancelled') right.appendChild(h('p', { class: 'tznote', text: 'This tournament was cancelled.' }));
-    right.appendChild(h('div', { class: 'cmlabel', style: 'margin-top:8px', text: ph.name === 'ended' ? 'FINAL STANDINGS' : 'STANDINGS' }));
-    right.appendChild(Tour.board(24));
-  }
-  cols.appendChild(right); body.appendChild(cols);
+/* ---- the players' Tournaments list, the entry pop-up and one tournament's details ---- */
+Sheets.tournaments = function (refresh) {
+  if (refresh && !(Sheets.el && Sheets.el.querySelector('#tourList'))) return;
+  const L = Tour.list(), prof = S.profile, uid = S.user.uid;
+  const card = ({ s, T }) => {
+    const ph = Tour.phase(T), st = Tour.statusOf(T, ph), me = Tour.me(s), f = (v, l) => h('div', {}, h('b', { text: v }), h('span', { text: l }));
+    const atMine = prof && prof.tableId && tourSlotOf(prof.tableId) === s, open = ph.name === 'upcoming' || Tour.running(ph);
+    let act = null;
+    if (!open) act = h('button', { type: 'button', class: 'btn-secondary btn-small', 'data-act': 'standings', text: ph.name === 'ended' ? 'Final standings' : 'Details', onclick: () => Sheets.tourDetail(s) });
+    else if (!me) act = h('button', { type: 'button', class: 'btn-primary btn-small', 'data-act': 'register', text: 'Register  ·  ' + fmt(T.entry), onclick: () => Sheets.tourPay(s) });
+    else if (atMine) act = h('button', { type: 'button', class: 'btn-primary btn-small', 'data-act': 'return', text: 'Return to my table', onclick: () => Tour.join(s) });
+    else if (Tour.running(ph)) act = h('button', { type: 'button', class: 'btn-primary btn-small' + (me.held > 0 ? ' tzglowbtn' : ''), 'data-act': 'join', text: me.held > 0 ? 'Join table' : 'Come back  ·  ' + fmt(T.entry), onclick: () => Tour.join(s) });
+    else act = h('button', { type: 'button', class: 'btn-secondary btn-small', 'data-act': 'cancel', text: 'Cancel my place', disabled: !!S.busy['tu_' + s], onclick: () => {
+      if (!confirm('Cancel your place in ' + T.name + '? Your ' + fmt(me.held || 0) + ' entry chips go back to your wallet.')) return;
+      return withBusy('tu_' + s, 'cancel place', async () => { await Repo.tourUnregister(s, uid); toast('Your place was cancelled and the entry chips are back in your wallet.'); });
+    } });
+    return h('div', { class: 'tzitem s-' + st.cls + (me ? ' mine' : ''), 'data-slot': s },
+      h('div', { class: 'tzitemtop' },
+        h('div', { class: 'tzitemname' }, h('b', { text: T.name }), h('span', { text: tzWhen(T.startAt) + '  ·  ' + (T.count || 0) + ' registered' })),
+        h('div', { class: 'tzstat ' + st.cls }, h('i', { text: st.label }), st.until ? Tour.clock(st.until, '', st.pre) : null)),
+      h('div', { class: 'tzfacts tzmini' }, f(fmt(T.boot), 'Boot'), f(fmt(T.entry), 'Entry'), f(T.reentry ? fmt(tourRe(T)) : 'Off', 'Re-entry'), f(T.durationMin + 'm', 'Length'), f(T.breaks ? T.breaks + '×' + T.breakMin + 'm' : 'None', 'Breaks')),
+      h('div', { class: 'tzitembot' },
+        h('span', { class: 'tzitemgames', text: (me ? (me.held > 0 ? '✓ Registered  ·  ' + fmt(me.held) + ' chips held  ·  ' : '✓ Playing  ·  ') : '') + Tour.gameNames(T) }),
+        h('div', { class: 'tzitembtns' }, open ? h('button', { type: 'button', class: 'tzlink', text: 'Details', onclick: () => Sheets.tourDetail(s) }) : null, act)));
+  };
+  const body = h('div', { class: 'tzsheet', id: 'tourList' },
+    h('div', { class: 'tzlisthead' }, h('span', { text: 'Wallet  ' }), h('b', { id: 'tourWallet', text: fmt(prof ? prof.chips : 0) })),
+    !Tour.ready() ? h('p', { class: 'tznote', text: 'Loading tournaments...' })
+      : L.length ? h('div', { class: 'tzlist' }, L.map(card)) : h('div', { class: 'tzempty' }, h('b', { text: 'No tournaments right now' }), h('span', { text: 'When the club announces one it shows up here, and you can register straight away.' })));
+  if (refresh && Sheets.el) { const old = Sheets.el.querySelector('#tourList'); if (old) { old.replaceWith(body); Tour.paintClock(); return; } }
+  Sheets.open('tourSheet', 'Tournaments', h('div', { class: 'setlist' }, body));
+};
+// Pay the entry and register: a separate, small pop-up.
+Sheets.tourPay = function (s) {
+  const T = Tour.T(s), prof = S.profile, uid = S.user.uid; if (!T || !prof) return;
+  const after = prof.chips - T.entry, poor = after < 0;
+  const err = h('div', { class: 'hnote', id: 'tourPayErr', style: 'color:#ff9aa9;min-height:16px;text-align:left' });
+  const go = h('button', { type: 'button', class: 'btn-primary', id: 'tourPayGo', text: poor ? 'Not enough chips' : 'Pay ' + fmt(T.entry) + ' and register', disabled: poor });
+  go.onclick = async () => {
+    go.disabled = true; err.textContent = '';
+    try { await Repo.tourRegister(s, uid); Sheets.close(); toast('You are registered for ' + T.name + '. ' + fmt(T.entry) + ' chips are held for you.'); setTimeout(() => Sheets.tournaments(), 420); }
+    catch (e) { err.textContent = e && e.code === 'permission-denied' ? 'Registration was refused. The admin may need to publish the latest database rules.' : friendlyError(e); go.disabled = false; }
+  };
+  const row = (l, v, cls) => h('div', { class: 'tzpayrow ' + (cls || '') }, h('span', { text: l }), h('b', { text: v }));
+  Sheets.open('tourPaySheet', 'Register', h('div', { class: 'setlist tzpay' },
+    h('div', { class: 'tzpayname' }, h('b', { text: T.name }), h('span', { text: tzWhen(T.startAt) + '  ·  boot ' + fmt(T.boot) })),
+    row('Entry chips', fmt(T.entry)), row('Your wallet', fmt(prof.chips)), row('Wallet after', poor ? '-' : fmt(after), 'total'),
+    h('p', { class: 'hnote', style: 'text-align:left;font-size:12px', text: 'The entry chips are held for you and become your chips at the table. You get them back if you cancel more than 5 minutes before the start, or if the tournament is cancelled or ends before you join.' }),
+    err, h('div', { class: 'leaverow' }, h('button', { type: 'button', class: 'btn-secondary', text: 'Back', onclick: () => { Sheets.close(); setTimeout(() => Sheets.tournaments(), 420); } }), go)));
+};
+// One tournament: rules, timetable and standings. Opened from the list and from the chip on a tournament table.
+Sheets.tourDetail = function (s) {
+  const T = Tour.T(s); if (!T) return Sheets.soon('Tournament', 'This tournament is no longer listed.');
+  const ph = Tour.phase(T), st = Tour.statusOf(T, ph);
+  const body = h('div', { class: 'tzsheet' },
+    h('div', { class: 'tzhead' }, h('div', {}, h('i', { text: tzWhen(T.startAt).toUpperCase() }), h('b', { text: T.name })),
+      h('div', { class: 'tzcount' }, h('span', { text: st.label }), st.until ? Tour.clock(st.until, '', st.pre) : null)),
+    h('div', { class: 'tzcols' },
+      h('div', {}, Tour.facts(T), Tour.bar(T), h('p', { class: 'tznote', text: 'Games: ' + Tour.gameNames(T) + '.' })),
+      h('div', {}, h('div', { class: 'cmlabel', text: ph.name === 'ended' ? 'FINAL STANDINGS' : ph.name === 'upcoming' ? 'REGISTERED  ·  ' + (T.count || 0) : 'STANDINGS' }),
+        ph.name === 'upcoming' ? (Tour.P(s).length ? h('div', { class: 'tznames' }, Tour.P(s).slice(0, 40).map(x => h('span', { text: x.name }))) : h('p', { class: 'tznote', text: 'Nobody yet. Be the first.' })) : Tour.board(s, 30))));
   Sheets.open('tourSheet', 'Tournament', h('div', { class: 'setlist' }, body));
 };
 
 /* ---- the admin's Tournaments page ---- */
 Admin.loadTourHist = function () { Repo.tourHistory().then(l => { Admin.st.tourHist = l; if (Admin.st.view === 'tour' && !Admin.st.tf) Admin.paint(); }, () => { Admin.st.tourHist = []; }); };
-// Every number of a tournament follows from its boot, like the public tables.
+// Every limit of a tournament follows from its boot.
 const TOUR_MULT = { blind: 8, chaal: 64, pot: 256, entry: 500 };       // the limits follow the boot; entry and re-entry chips are only defaults
 const tourNums = b => ({ boot: b, blind: b * TOUR_MULT.blind, chaal: b * TOUR_MULT.chaal, pot: b * TOUR_MULT.pot, entry: b * TOUR_MULT.entry, rechips: b * TOUR_MULT.entry });
 const tourRe = T => (T && T.reentryChips) || (T && T.entry) || 0;        // chips a re-entry brings a player back to
-Admin.tourForm = function (T) {
+const tourFreeSlot = () => TOUR_SLOTS.find(s => { const T = Tour.T(s); return !T || T.status !== 'published' || Date.now() >= Tour.sched(T).end; }) || '';
+Admin.tourForm = function (T, s) {
   const d = new Date(T ? T.startAt : Date.now() + 24 * 3600e3); if (!T) d.setHours(20, 0, 0, 0);
   const pad = n => String(n).padStart(2, '0');
-  Admin.st.tf = Object.assign({ edit: !!T, name: T ? T.name : 'Club Tournament', date: d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()), time: T ? pad(d.getHours()) + ':' + pad(d.getMinutes()) : '20:00',
+  Admin.st.tf = Object.assign({ edit: !!T, slot: s || '', name: T ? T.name : 'Club Tournament', date: d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()), time: T ? pad(d.getHours()) + ':' + pad(d.getMinutes()) : '20:00',
     duration: T ? T.durationMin : 60, breaks: T ? T.breaks : 2, breakMin: T ? (T.breakMin || 5) : 5, variants: T ? (T.variants || ['classic']).slice() : ['classic'], reentry: T ? !!T.reentry : true, err: '' }, tourNums(T ? T.boot : 10), T ? { entry: T.entry, rechips: tourRe(T) } : {});
   Admin.paint();
 };
@@ -7043,7 +7303,7 @@ function readTourForm(f) {
   if (!name) return { error: 'Give the tournament a name.' };
   const startAt = new Date(f.date + 'T' + f.time).getTime();
   if (!Number.isFinite(startAt)) return { error: 'Pick the date and the start time.' };
-  if (startAt < Date.now() + TOUR_LOBBY_MS + 60000) return { error: 'The start must be at least 6 minutes from now, so players can be taken to their tables.' };
+  if (startAt < Date.now() + TOUR_LOBBY_MS + 60000) return { error: 'The start must be at least 6 minutes from now, so players get the 5-minute call to their tables.' };
   if (![n('duration'), n('breaks'), n('breakMin')].every(Number.isInteger)) return { error: 'Use whole numbers.' };
   if (n('duration') < 10 || n('duration') > 240) return { error: 'The length must be between 10 and 240 minutes.' };
   if (n('breaks') < 0 || n('breaks') > 5) return { error: 'Choose 0 to 5 breaks.' };
@@ -7062,37 +7322,38 @@ function adminTourForm() {
   const a = Admin.st, f = a.tf;
   const inp = (id, k, type, extra) => h('input', Object.assign({ id, type, value: String(f[k]), 'aria-label': k, oninput: e => { f[k] = e.target.value; } }, extra || {}));
   const chips = (id, k, opts, lab, after) => h('div', { class: 'cmaud', id }, opts.map(v => h('button', { type: 'button', class: 'achip' + (Number(f[k]) === v ? ' on' : ''), 'data-v': v, text: lab ? lab(v) : String(v), onclick: () => { f[k] = v; if (after) after(v); Admin.paint(); } })));
-  const r = readTourForm(f), prev = { startAt: new Date(f.date + 'T' + f.time).getTime() || Date.now(), durationMin: Number(f.duration) || 60, breaks: Number(f.breaks) || 0, breakMin: Number(f.breakMin) || 0 };
+  const prev = { startAt: new Date(f.date + 'T' + f.time).getTime() || Date.now(), durationMin: Number(f.duration) || 60, breaks: Number(f.breaks) || 0, breakMin: Number(f.breakMin) || 0 };
   const sch = Tour.sched(prev), num = (v, l) => h('div', {}, h('b', { text: fmt(v) }), h('span', { text: l }));
   const save = () => {
     const rr = readTourForm(f); if (rr.error) { f.err = rr.error; Admin.paint(); return; }
     if (!f.edit && !confirm('Publish "' + rr.o.name + '" for ' + tzWhen(rr.o.startAt) + '? Players can register straight away.')) return;
     f.err = '';
     return adminBusy('tourSave', 'publish tournament', async () => {
-      try { await Repo.tourPublish(rr.o, f.edit); }
+      let s;
+      try { s = await Repo.tourPublish(rr.o, f.edit ? f.slot : ''); }
       catch (e) { if (e && e.code === 'permission-denied') throw new AppError('The database refused this. Publish the latest Firestore rules first (they add tournaments), then try again.'); throw e; }
-      a.tf = null; Admin.say(f.edit ? 'Tournament updated.' : 'Tournament published. Players can register from the lobby.'); Admin.loadTourHist();
+      a.tf = null; a.tourSlot = s || ''; Admin.say(f.edit ? 'Tournament updated.' : 'Tournament published. Players can register from the lobby.'); Admin.loadTourHist();
     });
   };
   return h('div', { class: 'cmcard t-tour', id: 'tourForm' },
-    f.test ? h('div', { class: 'tztestnote', id: 'tfTestNote', text: 'TEST TOURNAMENT  \u00B7  5 min play, 2 min break, 5 min play. Pick the date and time, then publish.' }) : null,
+    f.test ? h('div', { class: 'tztestnote', id: 'tfTestNote', text: 'TEST TOURNAMENT  ·  5 min play, 2 min break, 5 min play. Pick the date and time, then publish.' }) : null,
     h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'NAME' }), inp('tfName', 'name', 'text', { maxlength: 40 })),
     h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'DATE AND START TIME' }), h('div', { class: 'apfields even' }, inp('tfDate', 'date', 'date'), inp('tfTime', 'time', 'time'))),
     h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'LENGTH' }), chips('tfDur', 'duration', [30, 45, 60, 90].includes(Number(f.duration)) ? [30, 45, 60, 90] : [Number(f.duration), 30, 45, 60, 90], v => v + ' min' + (f.test && v === Number(f.duration) && ![30, 45, 60, 90].includes(v) ? ' (test)' : ''))),
     h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'BREAKS' }), chips('tfBreaks', 'breaks', [0, 1, 2, 3], v => v === 0 ? 'None' : v + (v === 1 ? ' break' : ' breaks')),
       Number(f.breaks) > 0 ? h('div', { style: 'margin-top:6px' }, chips('tfBreakMin', 'breakMin', [2, 3, 5, 10], v => v + ' min each')) : null,
       h('div', { style: 'margin-top:10px' }, Tour.bar(prev, 0)),
-      h('p', { class: 'tznote', id: 'tfPlan', text: sch.rounds + (sch.rounds === 1 ? ' round of ' : ' rounds of ') + Math.round(sch.playMs / 60000) + ' min' + (Number(f.breaks) > 0 ? ', with ' + f.breaks + ' × ' + f.breakMin + ' min break' + (Number(f.breaks) === 1 ? '' : 's') : '') + '. Tables open 5 minutes before the start to show the rules.' })),
+      h('p', { class: 'tznote', id: 'tfPlan', text: sch.rounds + (sch.rounds === 1 ? ' round of ' : ' rounds of ') + Math.round(sch.playMs / 60000) + ' min' + (Number(f.breaks) > 0 ? ', with ' + f.breaks + ' × ' + f.breakMin + ' min break' + (Number(f.breaks) === 1 ? '' : 's') : '') + '. Registered players get a call to their table 5 minutes before the start.' })),
     h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'BOOT (SETS THE LIMITS)' }), chips('tfBoot', 'boot', BOOTS, null, v => Object.assign(f, tourNums(v))),
       h('div', { class: 'tzfacts', id: 'tfNums', style: 'grid-template-columns:repeat(3,minmax(0,1fr));margin-top:10px' }, num(f.blind, 'Max blind'), num(f.chaal, 'Max chaal'), num(f.pot, 'Pot limit')),
-      h('p', { class: 'tznote', id: 'tfLadder', text: 'Blind ' + [1, 2, 4, 8].map(x => fmt(x * Number(f.boot))).join(' \u2192 ') + '  \u00B7  chaal up to ' + fmt(f.chaal) + '  \u00B7  pot limit ' + fmt(f.pot) }),
+      h('p', { class: 'tznote', id: 'tfLadder', text: 'Blind ' + [1, 2, 4, 8].map(x => fmt(x * Number(f.boot))).join(' → ') + '  ·  chaal up to ' + fmt(f.chaal) + '  ·  pot limit ' + fmt(f.pot) }),
       h('div', { class: 'field', style: 'margin-top:10px' }, h('label', { for: 'tfEntry', text: 'ENTRY CHIPS (AT LEAST ' + fmt(f.pot) + ')' }), inp('tfEntry', 'entry', 'number', { min: f.pot, inputmode: 'numeric' }))),
     h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'GAMES (A RANDOM ONE EACH HAND)' }),
       h('div', { class: 'cmaud', id: 'tfGames' }, VARIANT_DEFS.map(v => h('button', { type: 'button', class: 'achip' + (f.variants.includes(v.id) ? ' on' : ''), 'data-v': v.id, title: v.tag, text: v.name, onclick: () => { const i = f.variants.indexOf(v.id); if (i >= 0) f.variants.splice(i, 1); else f.variants.push(v.id); Admin.paint(); } })))),
     h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'RE-ENTRY WHEN OUT OF CHIPS' }),
       h('div', { class: 'cmaud', id: 'tfRe' }, [[true, 'Allowed'], [false, 'Not allowed']].map(([v, t]) => h('button', { type: 'button', class: 'achip' + (!!f.reentry === v ? ' on' : ''), text: t, onclick: () => { f.reentry = v; Admin.paint(); } }))),
       f.reentry ? h('div', { class: 'field', style: 'margin-top:10px' }, h('label', { for: 'tfReChips', text: 'RE-ENTRY CHIPS (A PLAYER WHO RE-ENTERS IS TOPPED BACK UP TO THIS)' }), inp('tfReChips', 'rechips', 'number', { min: Number(f.boot) * 10, inputmode: 'numeric' })) : null,
-      h('p', { class: 'tznote', text: 'No limit on players: a new table opens for every six who register.' })),
+      h('p', { class: 'tznote', text: 'No limit on players: a new table opens for every six who register. Players pay the entry when they register.' })),
     h('div', { id: 'tfErr', class: 'msg err', role: 'alert', hidden: !f.err, text: f.err }),
     h('div', { class: 'pvrow', style: 'margin-top:12px' },
       h('button', { type: 'button', class: 'btn-secondary btn-small', id: 'tfCancel', text: 'Back', onclick: () => { a.tf = null; Admin.paint(); } }),
@@ -7103,8 +7364,8 @@ function tourStatsBoard(rows, openKey) {
   const a = Admin.st, signed = n => (n > 0 ? '+' : n < 0 ? '−' : '') + fmt(Math.abs(n));
   if (!rows.length) return h('p', { class: 'muted', style: 'font-size:13px;margin:0', text: 'Nobody yet.' });
   return h('div', { class: 'tsboard', id: 'tourStats' }, rows.map((r, i) => {
-    const open = a[openKey] === r.uid, tno = TOUR_IDS.indexOf(r.table) + 1;
-    const state = !r.played ? 'Not joined' : r.seated ? 'Table ' + tno : 'Left';
+    const open = a[openKey] === r.uid, tno = tableNoOf(r.table);
+    const state = !r.played ? (r.held > 0 ? 'Registered, not joined yet' : 'Not joined') : r.seated ? 'Table ' + tno : 'Left';
     const tile = (v, l, cls) => h('div', { class: cls || '' }, h('b', { text: v }), h('span', { text: l }));
     return h('div', { class: 'tsrow' + (open ? ' open' : '') + (r.played ? '' : ' out'), 'data-uid': r.uid },
       h('button', { type: 'button', class: 'tshead', 'aria-expanded': open ? 'true' : 'false', onclick: () => { a[openKey] = open ? '' : r.uid; Admin.paint(); } },
@@ -7114,7 +7375,7 @@ function tourStatsBoard(rows, openKey) {
       open ? h('div', { class: 'tzfacts tsmore' },
         tile(fmt(r.now), 'At table'), tile(fmt(r.brought), 'Chips in'), tile(String(r.re), 'Re-entries'),
         tile(String(r.hands), 'Hands'), tile(String(r.wins) + (r.hands ? ' (' + Math.round(r.wins / r.hands * 100) + '%)' : ''), 'Won'), tile(r.winRun ? 'W' + r.winRun : r.lossRun ? 'L' + r.lossRun : '-', 'Current run', r.winRun ? 'up' : r.lossRun ? 'down' : ''),
-        tile(r.best ? '+' + fmt(r.best) : '-', 'Biggest win', r.best ? 'up' : ''), tile(r.worst ? '\u2212' + fmt(r.worst) : '-', 'Biggest loss', r.worst ? 'down' : ''), tile(String(r.bestStreak), 'Best win run'),
+        tile(r.best ? '+' + fmt(r.best) : '-', 'Biggest win', r.best ? 'up' : ''), tile(r.worst ? '−' + fmt(r.worst) : '-', 'Biggest loss', r.worst ? 'down' : ''), tile(String(r.bestStreak), 'Best win run'),
         tile(String(r.worstStreak), 'Worst losing run'), tile(r.bigPot ? fmt(r.bigPot) : '-', 'Top pot won'), tile(r.smallPot ? fmt(r.smallPot) : '-', 'Low pot won')) : null);
   }));
 }
@@ -7125,44 +7386,57 @@ function tourTotals(rows) {
   return { hands: Object.values(by).reduce((x, n) => x + n, 0), big: won.length ? Math.max(...won.map(r => r.bigPot)) : 0, small: won.length ? Math.min(...won.map(r => r.smallPot || r.bigPot)) : 0,
     rake: rows.reduce((x, r) => x + (r.rake || 0), 0), playing: rows.filter(r => r.seated).length, re: rows.reduce((x, r) => x + r.re, 0), joined: rows.filter(r => r.played).length };
 }
+// One tournament in full: the live numbers, standings, rules and controls.
+function adminTourDetail(s) {
+  const a = Admin.st, T = Tour.T(s), ph = Tour.phase(T), out = [];
+  const kpi = (v, l) => h('div', { class: 'akpi flat' }, h('b', { text: String(v) }), h('span', { text: l }));
+  out.push(h('button', { type: 'button', class: 'aplink', id: 'tourBackList', style: 'margin-bottom:10px', text: '←  All tournaments', onclick: () => { a.tourSlot = ''; Admin.paint(); } }));
+  if (!T) { out.push(h('p', { class: 'muted', text: 'This tournament is no longer open.' })); return out; }
+  const locked = ph.name !== 'upcoming', rows = Tour.standings(s), tot = tourTotals(rows), used = Tour.tablesLive(s);
+  const held = rows.filter(r => r.held > 0).length;
+  const big = ph.name === 'upcoming' ? ['STARTS IN', Tour.clock(T.startAt)] : ph.name === 'lobby' ? ['PLAYERS ARE BEING CALLED TO THEIR TABLES', Tour.clock(ph.until)] : ph.name === 'play' ? ['ROUND ' + ph.round + ' OF ' + ph.rounds, Tour.clock(ph.until)] : ph.name === 'break' ? ['BREAK', Tour.clock(ph.until)] : [ph.name === 'ended' ? 'FINISHED' : 'CANCELLED', h('b', { text: ph.name === 'ended' ? 'Final' : 'Off' })];
+  out.push(h('div', { class: 'ahero rxhero', id: 'tourHero' },
+    h('div', { class: 'rxbig' }, h('span', { text: big[0] }), big[1], h('i', { text: T.name + '  ·  ' + tzWhen(T.startAt) })),
+    locked ? h('div', { class: 'akpis three tzk' }, kpi(tot.joined + '/' + (T.count || 0), 'Joined'), kpi(tot.playing, 'At tables'), kpi(used, used === 1 ? 'Table' : 'Tables'), kpi(fmt(tot.hands), 'Hands'), kpi(tot.big ? fmt(tot.big) : '-', 'Biggest pot'), kpi(tot.small ? fmt(tot.small) : '-', 'Smallest pot'), kpi(tot.re, 'Re-entries'), kpi(fmt(tot.rake), 'Rake'), kpi(held, 'Not joined'))
+      : h('div', { class: 'akpis' }, kpi(T.count || 0, 'Registered'), kpi(fmt((T.count || 0) * T.entry), 'Entries paid'), kpi(fmt(T.entry), 'Entry'), kpi(fmt(T.boot), 'Boot')),
+    h('div', { style: 'margin-top:12px' }, Tour.bar(T))));
+  if (locked) out.push(h('div', { class: 'cmhist', id: 'tourPlayers' },
+    h('div', { class: 'cmlabel', text: (ph.name === 'ended' ? 'FINAL STANDINGS' : 'LIVE STANDINGS') + '  ·  ' + rows.length + '  ·  tap a player' }), tourStatsBoard(rows, 'tourSel')));
+  out.push(h('div', { class: 'pvcard t-tour' },
+    h('div', { class: 'cmlabel', text: 'RULES' }), Tour.facts(T), h('p', { class: 'tznote', text: 'Games: ' + Tour.gameNames(T) + '.' }),
+    ph.name === 'upcoming' ? h('div', { class: 'pvrow' },
+      h('button', { type: 'button', class: 'btn-secondary btn-small', id: 'tourEdit', text: 'Change the rules', onclick: () => Admin.tourForm(T, s) }),
+      h('button', { type: 'button', class: 'btn-danger btn-small', id: 'tourCancel', text: 'Cancel tournament', disabled: !!S.busy.tourCancel, onclick: () => { if (confirm('Cancel "' + T.name + '"? Registered players get their entry chips back.')) return adminBusy('tourCancel', 'cancel tournament', async () => { await Repo.tourCancel(s); Admin.say('Tournament cancelled. Entries are refunded as players open the app.'); }); } }))
+    : Tour.running(ph) ? h('div', {}, h('div', { class: 'cmlabel', style: 'margin-top:10px', text: 'WATCH A TABLE' }), h('div', { class: 'tzwatch' }, tourIds(s).slice(0, used).map((id, i) => h('button', { type: 'button', class: 'btn-secondary btn-small', 'data-enter': id, text: 'Table ' + (i + 1) + ' · ' + rows.filter(r => r.seated && r.table === id).length, onclick: () => { location.hash = '#/table/' + id; } }))),
+        h('button', { type: 'button', class: 'aplink bad', id: 'tourCancel', style: 'margin-top:10px', text: 'Stop the tournament now', disabled: !!S.busy.tourCancel, onclick: () => { if (confirm('Stop "' + T.name + '" now? No more hands are dealt. Players keep the chips they hold; anyone who has not joined gets the entry back.')) return adminBusy('tourCancel', 'cancel tournament', async () => { await Repo.tourCancel(s); Admin.say('Tournament stopped.'); }); } }))
+    : h('p', { class: 'tznote', text: 'This slot is reused for the next tournament you publish. Its standings are kept under Past tournaments.' })));
+  if (!locked) out.push(h('div', { class: 'cmhist', id: 'tourPlayers' }, h('div', { class: 'cmlabel', text: 'REGISTERED  ·  ' + Tour.P(s).length }),
+    Tour.P(s).length ? h('div', { class: 'tznames' }, Tour.P(s).map(x => h('span', { text: x.name }))) : h('p', { class: 'muted', style: 'font-size:13px;margin:0', text: 'Nobody yet. Send a notification to tell players about it.' })));
+  return out;
+}
 function adminTour() {
   const a = Admin.st;
   if (a.tf) return adminTourForm();
   if (a.tourHist === undefined) { a.tourHist = null; Admin.loadTourHist(); }
-  if (!Tour.loaded) return h('div', { class: 'card' }, h('p', { class: 'muted', text: 'Loading...' }));
-  const T = Tour.doc, ph = Tour.phase(T), out = [];
-  { const busy = !!T && (ph.name === 'upcoming' || Tour.running(ph));
-    out.push(h('div', { class: 'tztest', id: 'tourTestCard' },
-      h('div', { class: 'tztesttxt' }, h('b', { text: 'Test tournament' }), h('span', { text: busy ? 'Finish or cancel the current tournament first.' : '10 min of play (5 + 5, 2 min break)  \u00B7  boot 1  \u00B7  entry 500  \u00B7  re-entry 500  \u00B7  Classic + Joker' })),
-      h('button', { type: 'button', class: 'btn-primary btn-small', id: 'tourTestBtn', text: 'Set up test', disabled: busy, onclick: () => Admin.tourTest() }))); }
-  const newBtn = h('button', { type: 'button', class: 'btn-primary pvmain', id: 'tourNew', text: '+  Create a tournament', onclick: () => Admin.tourForm(null) });
-  const kpi = (v, l) => h('div', { class: 'akpi flat' }, h('b', { text: String(v) }), h('span', { text: l }));
-  if (!T || ph.name === 'none') out.push(h('div', { class: 'pvcard' }, h('div', { class: 'pvtop' }, h('div', { class: 'pvname' }, h('b', { text: 'No tournament scheduled' }), h('span', { text: 'Pick a boot and a time, publish, and players register from the lobby.' }))), newBtn));
-  else {
-    const locked = ph.name !== 'upcoming', rows = Tour.standings(), tot = tourTotals(rows), used = Tour.tablesLive();
-    const big = ph.name === 'upcoming' ? ['STARTS IN', Tour.clock(T.startAt)] : ph.name === 'lobby' ? ['PLAYERS ARE READING THE RULES', Tour.clock(ph.until)] : ph.name === 'play' ? ['ROUND ' + ph.round + ' OF ' + ph.rounds, Tour.clock(ph.until)] : ph.name === 'break' ? ['BREAK', Tour.clock(ph.until)] : [ph.name === 'ended' ? 'FINISHED' : 'CANCELLED', h('b', { text: ph.name === 'ended' ? 'Final' : 'Off' })];
-    out.push(h('div', { class: 'ahero rxhero', id: 'tourHero' },
-      h('div', { class: 'rxbig' }, h('span', { text: big[0] }), big[1], h('i', { text: T.name + '  ·  ' + tzWhen(T.startAt) })),
-      locked ? h('div', { class: 'akpis three tzk' }, kpi(tot.joined + '/' + (T.count || 0), 'Joined'), kpi(tot.playing, 'At tables'), kpi(used, used === 1 ? 'Table' : 'Tables'), kpi(fmt(tot.hands), 'Hands'), kpi(tot.big ? fmt(tot.big) : '-', 'Biggest pot'), kpi(tot.small ? fmt(tot.small) : '-', 'Smallest pot'), kpi(tot.re, 'Re-entries'), kpi(fmt(tot.rake), 'Rake'), kpi(fmt(T.boot), 'Boot'))
-        : h('div', { class: 'akpis' }, kpi(T.count || 0, 'Registered'), kpi(Math.max(1, Math.ceil((T.count || 0) / MAX_SEATS)), 'Tables'), kpi(fmt(T.entry), 'Entry'), kpi(fmt(T.boot), 'Boot')),
-      h('div', { style: 'margin-top:12px' }, Tour.bar(T))));
-    if (locked) out.push(h('div', { class: 'cmhist', id: 'tourPlayers' },
-      h('div', { class: 'cmlabel', text: (ph.name === 'ended' ? 'FINAL STANDINGS' : 'LIVE STANDINGS') + '  ·  ' + rows.length + '  ·  tap a player' }), tourStatsBoard(rows, 'tourSel')));
-    out.push(h('div', { class: 'pvcard t-tour' },
-      h('div', { class: 'cmlabel', text: 'RULES' }), Tour.facts(T), h('p', { class: 'tznote', text: 'Games: ' + Tour.gameNames(T) + '.' }),
-      ph.name === 'upcoming' ? h('div', { class: 'pvrow' },
-        h('button', { type: 'button', class: 'btn-secondary btn-small', id: 'tourEdit', text: 'Change the rules', onclick: () => Admin.tourForm(T) }),
-        h('button', { type: 'button', class: 'btn-danger btn-small', id: 'tourCancel', text: 'Cancel tournament', disabled: !!S.busy.tourCancel, onclick: () => { if (confirm('Cancel "' + T.name + '"? Registered players are told it is off.')) return adminBusy('tourCancel', 'cancel tournament', async () => { await Repo.tourCancel(); Admin.say('Tournament cancelled.'); }); } }))
-      : Tour.running(ph) ? h('div', {}, h('div', { class: 'cmlabel', style: 'margin-top:10px', text: 'WATCH A TABLE' }), h('div', { class: 'tzwatch' }, TOUR_IDS.slice(0, used).map((id, i) => h('button', { type: 'button', class: 'btn-secondary btn-small', 'data-enter': id, text: 'Table ' + (i + 1) + ' · ' + rows.filter(r => r.seated && r.table === id).length, onclick: () => { location.hash = '#/table/' + id; } }))),
-          h('button', { type: 'button', class: 'aplink bad', id: 'tourCancel', style: 'margin-top:10px', text: 'Stop the tournament now', disabled: !!S.busy.tourCancel, onclick: () => { if (confirm('Stop "' + T.name + '" now? No more hands are dealt. Players keep the chips they hold.')) return adminBusy('tourCancel', 'cancel tournament', async () => { await Repo.tourCancel(); Admin.say('Tournament stopped.'); }); } }))
-      : newBtn));
-    if (!locked) out.push(h('div', { class: 'cmhist', id: 'tourPlayers' }, h('div', { class: 'cmlabel', text: 'REGISTERED  ·  ' + Tour.players.length }),
-      Tour.players.length ? h('div', { class: 'tznames' }, Tour.players.map(x => h('span', { text: x.name }))) : h('p', { class: 'muted', style: 'font-size:13px;margin:0', text: 'Nobody yet. Send a notification to tell players about it.' })));
-  }
+  if (!Tour.ready()) return h('div', { class: 'card' }, h('p', { class: 'muted', text: 'Loading...' }));
+  if (a.tourSlot) return h('div', {}, adminTourDetail(a.tourSlot));
+  const out = [], free = tourFreeSlot();
+  out.push(h('div', { class: 'tztest', id: 'tourTestCard' },
+    h('div', { class: 'tztesttxt' }, h('b', { text: 'Test tournament' }), h('span', { text: free ? '10 min of play (5 + 5, 2 min break)  ·  boot 1  ·  entry 500  ·  re-entry 500  ·  Classic + Joker' : 'Five tournaments are open. Wait until one finishes, or cancel one.' })),
+    h('button', { type: 'button', class: 'btn-primary btn-small', id: 'tourTestBtn', text: 'Set up test', disabled: !free, onclick: () => Admin.tourTest() })));
+  const active = TOUR_SLOTS.map(s => ({ s, T: Tour.T(s) })).filter(x => x.T).sort((x, y) => x.T.startAt - y.T.startAt);
+  out.push(h('button', { type: 'button', class: 'btn-primary pvmain', id: 'tourNew', style: 'margin:0 0 12px', text: free ? '+  Create a tournament' : 'Five tournaments are open', disabled: !free, onclick: () => Admin.tourForm(null) }));
+  out.push(h('div', { class: 'cmhist', id: 'tourActive' }, h('div', { class: 'cmlabel', text: 'TOURNAMENTS  ·  ' + active.length + ' OF 5 SLOTS USED' }),
+    active.length ? active.map(({ s, T }) => {
+      const ph = Tour.phase(T), st = Tour.statusOf(T, ph), rows = Tour.standings(s);
+      return h('button', { type: 'button', class: 'tzaitem s-' + st.cls, 'data-slot': s, onclick: () => { a.tourSlot = s; a.tourSel = ''; Admin.paint(); } },
+        h('span', { class: 'tzaname' }, h('b', { text: T.name }), h('i', { text: tzWhen(T.startAt) + '  ·  boot ' + fmt(T.boot) + '  ·  ' + (T.count || 0) + ' registered' + (Tour.running(ph) ? '  ·  ' + rows.filter(r => r.seated).length + ' at tables' : '') })),
+        h('span', { class: 'tzstat ' + st.cls }, h('i', { text: st.label }), st.until ? Tour.clock(st.until, '', st.pre) : null));
+    }) : h('p', { class: 'muted', style: 'font-size:13px;margin:0', text: 'Nothing scheduled. Create a tournament, or try the test one.' })));
   const H = a.tourHist;
   if (H && H.length) out.push(h('div', { class: 'cmhist', id: 'tourHist' }, h('div', { class: 'cmlabel', text: 'PAST TOURNAMENTS  ·  ' + H.length }),
-    H.map(d => { const open = a.tourOpen === d.id, e = d.entry || 1;
-      const rows = (d.results || []).map(x => Object.assign({ uid: x.uid || x.name, name: x.name, bal: (x.final || 0) + (x.out || 0), now: x.final || 0, brought: x.brought || 0, net: (x.final || 0) + (x.out || 0) - (x.brought || 0), re: x.reentries || 0, played: (x.brought || 0) > 0, seated: false, table: '' },
+    H.map(d => { const open = a.tourOpen === d.id;
+      const rows = (d.results || []).map(x => Object.assign({ uid: x.uid || x.name, name: x.name, bal: (x.final || 0) + (x.out || 0), now: x.final || 0, brought: x.brought || 0, net: (x.final || 0) + (x.out || 0) - (x.brought || 0), re: x.reentries || 0, played: (x.brought || 0) > 0, seated: false, table: '', held: 0 },
         Object.fromEntries(TOUR_STATS.map(k => [k, x[k] || 0])))).filter(x => x.played).sort((x, y) => y.bal - x.bal);
       const tot = tourTotals(rows);
       return h('div', { class: 'tzpast' + (open ? ' open' : '') },
