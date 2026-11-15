@@ -2460,6 +2460,14 @@ body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
 .tsmore{margin:0;padding:0 10px 10px;grid-template-columns:repeat(3,minmax(0,1fr))}
 .tsrow .tzrank{flex:none;background:#f1e7c9;color:#5a4420}
 .tsrow .tzrank.r1{background:#f2c75c;color:#2a1d00}.tsrow .tzrank.r2{background:#d5dbe1;color:#26303a}.tsrow .tzrank.r3{background:#e0b08a;color:#3a2008}
+
+/* the admin's quick test tournament */
+.tztest{display:flex;align-items:center;gap:12px;margin-bottom:12px;padding:12px 14px;border-radius:16px;border:1px dashed #7c83ea;background:linear-gradient(160deg,#f3f3ff,#e7e8fb)}
+.tztesttxt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.tztesttxt b{font:800 14.5px system-ui;color:#2e3190}
+.tztesttxt span{font-size:11.5px;color:#4a4f8a;line-height:1.35}
+.tztest .btn-small{flex:none;margin:0}
+.tztestnote{margin:0 0 12px;padding:8px 10px;border-radius:10px;background:#e7e8fb;color:#2e3190;font:800 11px/1.4 system-ui;letter-spacing:.3px}
 </style>
 </head>
 <body>
@@ -6704,7 +6712,7 @@ Object.assign(Repo, {
   async tourEnsureRoom(id) {
     const ref = Repo.roomRef(id), snap = await ref.get(); if (snap.exists) return;
     const T = Tour.doc;
-    await ref.set({ tableId: id, name: TABLE_BY_ID[id].title, boot: T.boot, minBuyIn: T.entry, maxBuyIn: T.entry, maxBlind: T.maxBlind, maxChaal: T.maxChaal, potLimit: T.potLimit,
+    await ref.set({ tableId: id, name: TABLE_BY_ID[id].title, boot: T.boot, minBuyIn: T.entry, maxBuyIn: Math.max(T.entry, tourRe(T)), maxBlind: T.maxBlind, maxChaal: T.maxChaal, potLimit: T.potLimit,
       permanent: true, adminUid: ADMIN_UID, status: 'open', dealerAt: 0, seated: 0, createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() }).catch(e => { if (!e || e.code !== 'permission-denied') throw e; });
   },
   // Keeps the finished tournament's standings in the history and clears the registrations.
@@ -6713,7 +6721,7 @@ Object.assign(Repo, {
     const T = ts.data(), ps = await Repo.tourPlayers().get(), list = ps.docs.map(d => d.data());
     if (T.status === 'published' && list.some(x => (x.brought || 0) > 0)) {
       await db.collection('tournaments').add({ name: T.name, startAt: T.startAt, durationMin: T.durationMin, boot: T.boot, entry: T.entry, status: 'finished', count: list.length,
-        results: list.map(x => Object.assign({ uid: x.uid, name: x.name, final: x.final || 0, out: x.out || 0, brought: x.brought || 0 }, Object.fromEntries(TOUR_STATS.map(k => [k, x[k] || 0])))), endedAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
+        results: list.map(x => Object.assign({ uid: x.uid, name: x.name, final: x.final || 0, out: x.out || 0, brought: x.brought || 0, reentries: x.reentries || 0 }, Object.fromEntries(TOUR_STATS.map(k => [k, x[k] || 0])))), endedAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
     }
     for (let i = 0; i < ps.docs.length; i += 400) { const b = db.batch(); ps.docs.slice(i, i + 400).forEach(d => b.delete(d.ref)); await b.commit(); }
     await Repo.tourRef().delete();
@@ -6730,7 +6738,7 @@ Object.assign(Repo, {
     }
     if (!edit && old) await Repo.tourArchive();
     const doc = { name: o.name, startAt: o.startAt, durationMin: o.durationMin, breaks: o.breaks, breakMin: o.breakMin, boot: o.boot, entry: o.entry, maxBlind: o.blind, maxChaal: o.chaal, potLimit: o.pot,
-      variants: o.variants, reentry: !!o.reentry, tables: TOUR_IDS.length, maxPlayers: TOUR_IDS.length * MAX_SEATS, status: 'published', updatedAt: FV.serverTimestamp() };
+      variants: o.variants, reentry: !!o.reentry, reentryChips: o.rechips, tables: TOUR_IDS.length, maxPlayers: TOUR_IDS.length * MAX_SEATS, status: 'published', updatedAt: FV.serverTimestamp() };
     if (edit) await Repo.tourRef().update(doc);
     else await Repo.tourRef().set(Object.assign({ count: 0, seq: 0, createdAt: FV.serverTimestamp() }, doc));
   },
@@ -6760,7 +6768,7 @@ const Tour = {
   },
   close() { Scopes.close(Tour.sc); Tour.sc = null; Tour.doc = undefined; Tour.players = []; Tour.loaded = false; Tour.lastKey = ''; },
   // Every tournament table plays the tournament's numbers.
-  applyCfg() { const T = Tour.doc; if (!T) return; TOUR_TABLES.forEach(t => Object.assign(t, { boot: T.boot, min: T.entry, max: T.entry, blind: T.maxBlind, chaal: T.maxChaal, pot: T.potLimit })); },
+  applyCfg() { const T = Tour.doc; if (!T) return; TOUR_TABLES.forEach(t => Object.assign(t, { boot: T.boot, min: T.entry, max: Math.max(T.entry, tourRe(T)), blind: T.maxBlind, chaal: T.maxChaal, pot: T.potLimit })); },
   redraw() {
     if (S.route && S.route.name === 'admin') { if ((Admin.st.view === 'tour' && !Admin.st.tf) || Admin.st.view === 'hub') Admin.paint(); }
     else scheduleRender();
@@ -6796,7 +6804,7 @@ const Tour = {
   me() { return S.user ? Tour.players.find(x => x.uid === S.user.uid) || null : null; },
   standings() {
     const T = Tour.doc || {}, e = T.entry || 1;
-    return Tour.players.map(x => Object.assign({ uid: x.uid, name: x.name, avatar: x.avatar, bal: (x.final || 0) + (x.out || 0), now: x.final || 0, brought: x.brought || 0, net: (x.final || 0) + (x.out || 0) - (x.brought || 0), re: Math.max(0, Math.round((x.brought || 0) / e) - 1), played: (x.brought || 0) > 0, seated: (x.final || 0) > 0 && !!x.table, table: x.table || '' },
+    return Tour.players.map(x => Object.assign({ uid: x.uid, name: x.name, avatar: x.avatar, bal: (x.final || 0) + (x.out || 0), now: x.final || 0, brought: x.brought || 0, net: (x.final || 0) + (x.out || 0) - (x.brought || 0), re: x.reentries || 0, played: (x.brought || 0) > 0, seated: (x.final || 0) > 0 && !!x.table, table: x.table || '' },
       Object.fromEntries(TOUR_STATS.map(k => [k, x[k] || 0]))))
       .sort((a, b) => (b.played ? 1 : 0) - (a.played ? 1 : 0) || b.bal - a.bal || b.net - a.net);
   },
@@ -6884,14 +6892,14 @@ const Tour = {
     if (!T.reentry) return toast('Re-entry is switched off for this tournament.', 'err');
     if (!Tour.running(Tour.phase(T))) return toast('The tournament is not running.', 'err');
     if (mm.stack >= TABLE_BY_ID[R.id].boot) return toast('You can re-enter once you are out of chips.');
-    const n = T.entry - mm.stack;
+    const n = tourRe(T) - mm.stack;
     if (!prof || prof.chips < n) return toast('Re-entry costs ' + fmt(n) + ' chips and your wallet has ' + fmt(prof ? prof.chips : 0) + '.', 'err');
     if (!confirm('Re-enter the tournament for ' + fmt(n) + ' chips from your wallet?')) return;
     return withBusy('reenter', 're-enter', async () => {
       await Repo.topUp(uid, R.id, n);
       const me = Tour.me(); Tour.repAt = Date.now();
-      if (me) await Repo.tourReport(uid, { table: R.id, final: mm.stack + n, brought: (me.brought || 0) + n, out: me.out || 0 }).catch(() => {});
-      S.stoodAt = ''; toast('You are back in with ' + fmt(T.entry) + ' chips.');
+      if (me) await Repo.tourReport(uid, { table: R.id, final: mm.stack + n, brought: (me.brought || 0) + n, out: me.out || 0, reentries: (me.reentries || 0) + 1 }).catch(() => {});
+      S.stoodAt = ''; toast('You are back in with ' + fmt(tourRe(T)) + ' chips.');
     });
   },
 
@@ -6921,7 +6929,7 @@ const Tour = {
     const sch = Tour.sched(T), f = (v, l) => h('div', {}, h('b', { text: v }), h('span', { text: l }));
     return h('div', { class: 'tzfacts' },
       f(fmt(T.boot), 'Boot'), f(fmt(T.entry), 'Entry chips'), f(fmt(T.maxBlind), 'Max blind'), f(fmt(T.maxChaal), 'Max chaal'), f(fmt(T.potLimit), 'Pot limit'),
-      f(T.durationMin + ' min', 'Length'), f(String(sch.rounds), sch.rounds === 1 ? 'Round' : 'Rounds'), f(T.breaks ? T.breaks + ' × ' + T.breakMin + ' min' : 'None', 'Breaks'), f(T.reentry ? 'Allowed' : 'Off', 'Re-entry'));
+      f(T.durationMin + ' min', 'Length'), f(String(sch.rounds), sch.rounds === 1 ? 'Round' : 'Rounds'), f(T.breaks ? T.breaks + ' × ' + T.breakMin + ' min' : 'None', 'Breaks'), f(T.reentry ? fmt(tourRe(T)) : 'Off', 'Re-entry chips'));
   },
   // The hour as a bar: rounds in gold, breaks in grey, and a marker for now.
   bar(T, now) {
@@ -6962,7 +6970,7 @@ const Tour = {
       ph.name === 'ended' ? Tour.board(24) : h('p', { class: 'tznote', text: 'The admin cancelled this tournament. Leave the table to take your chips back.' }),
       me ? h('button', { type: 'button', class: 'btn-primary btn-small', id: 'tourLeave', text: 'Collect ' + fmt(me.stack) + ' chips and leave', disabled: !!S.busy.leave, onclick: () => handleLeave() }) : null));
     if (me && Tour.canReenter(R, me)) wrap.appendChild(h('button', { type: 'button', class: 'tzre', id: 'tourReenter', disabled: !!S.busy.reenter, onclick: () => Tour.reenter() },
-      h('b', { text: 'Re-enter' }), h('span', { text: fmt(T.entry - me.stack) + ' chips' })));
+      h('b', { text: 'Re-enter' }), h('span', { text: fmt(tourRe(T) - me.stack) + ' chips' })));
     return wrap;
   },
 
@@ -7011,12 +7019,22 @@ Sheets.tournament = function () {
 /* ---- the admin's Tournaments page ---- */
 Admin.loadTourHist = function () { Repo.tourHistory().then(l => { Admin.st.tourHist = l; if (Admin.st.view === 'tour' && !Admin.st.tf) Admin.paint(); }, () => { Admin.st.tourHist = []; }); };
 // Every number of a tournament follows from its boot, like the public tables.
-const tourNums = b => { const i = bootInfo(b); return { boot: b, entry: i.min, blind: i.blind, chaal: i.chaal, pot: i.pot }; };
+const TOUR_MULT = { blind: 8, chaal: 64, pot: 256, entry: 500 };       // the limits follow the boot; entry and re-entry chips are only defaults
+const tourNums = b => ({ boot: b, blind: b * TOUR_MULT.blind, chaal: b * TOUR_MULT.chaal, pot: b * TOUR_MULT.pot, entry: b * TOUR_MULT.entry, rechips: b * TOUR_MULT.entry });
+const tourRe = T => (T && T.reentryChips) || (T && T.entry) || 0;        // chips a re-entry brings a player back to
 Admin.tourForm = function (T) {
   const d = new Date(T ? T.startAt : Date.now() + 24 * 3600e3); if (!T) d.setHours(20, 0, 0, 0);
   const pad = n => String(n).padStart(2, '0');
   Admin.st.tf = Object.assign({ edit: !!T, name: T ? T.name : 'Club Tournament', date: d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()), time: T ? pad(d.getHours()) + ':' + pad(d.getMinutes()) : '20:00',
-    duration: T ? T.durationMin : 60, breaks: T ? T.breaks : 2, breakMin: T ? (T.breakMin || 5) : 5, variants: T ? (T.variants || ['classic']).slice() : ['classic'], reentry: T ? !!T.reentry : true, err: '' }, tourNums(T ? T.boot : 10));
+    duration: T ? T.durationMin : 60, breaks: T ? T.breaks : 2, breakMin: T ? (T.breakMin || 5) : 5, variants: T ? (T.variants || ['classic']).slice() : ['classic'], reentry: T ? !!T.reentry : true, err: '' }, tourNums(T ? T.boot : 10), T ? { entry: T.entry, rechips: tourRe(T) } : {});
+  Admin.paint();
+};
+// A short test event: two 5-minute rounds with a 2-minute break between them. Date and time stay open (they start 10 minutes from now).
+Admin.tourTest = function () {
+  Admin.tourForm(null);
+  const f = Admin.st.tf, d = new Date(Math.ceil((Date.now() + 10 * 60000) / 300000) * 300000), pad = n => String(n).padStart(2, '0');
+  Object.assign(f, tourNums(1), { test: true, name: 'Test Tournament', date: d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()), time: pad(d.getHours()) + ':' + pad(d.getMinutes()),
+    duration: 12, breaks: 1, breakMin: 2, entry: 500, rechips: 500, reentry: true, variants: ['classic', 'joker'] });
   Admin.paint();
 };
 // Reads and checks the form. Returns { error } or { o } ready to publish.
@@ -7032,9 +7050,13 @@ function readTourForm(f) {
   if (n('breaks') > 0 && (n('breakMin') < 1 || n('breakMin') > 30)) return { error: 'A break must be 1 to 30 minutes.' };
   if (n('breaks') * n('breakMin') > n('duration') - (n('breaks') + 1) * 3) return { error: 'The breaks leave too little time to play. Each round needs at least 3 minutes.' };
   if (!BOOTS.includes(n('boot'))) return { error: 'Pick a boot.' };
-  if (!f.variants.length) return { error: 'Pick at least one game.' };
   const v = tourNums(n('boot'));
-  return { o: { name, startAt, durationMin: n('duration'), breaks: n('breaks'), breakMin: n('breaks') ? n('breakMin') : 0, boot: v.boot, entry: v.entry, blind: v.blind, chaal: v.chaal, pot: v.pot, variants: f.variants.slice(), reentry: !!f.reentry } };
+  if (!Number.isInteger(n('entry')) || n('entry') < v.pot) return { error: 'Entry chips must be at least the pot limit (' + fmt(v.pot) + ').' };
+  if (n('entry') > 1e8) return { error: 'The entry chips are too large.' };
+  if (f.reentry && (!Number.isInteger(n('rechips')) || n('rechips') < v.boot * 10)) return { error: 'Re-entry chips must be at least ' + fmt(v.boot * 10) + ' (10 boots).' };
+  if (f.reentry && n('rechips') > 1e8) return { error: 'The re-entry chips are too large.' };
+  if (!f.variants.length) return { error: 'Pick at least one game.' };
+  return { o: { name, startAt, durationMin: n('duration'), breaks: n('breaks'), breakMin: n('breaks') ? n('breakMin') : 0, boot: v.boot, entry: n('entry'), rechips: f.reentry ? n('rechips') : n('entry'), blind: v.blind, chaal: v.chaal, pot: v.pot, variants: f.variants.slice(), reentry: !!f.reentry } };
 }
 function adminTourForm() {
   const a = Admin.st, f = a.tf;
@@ -7053,19 +7075,23 @@ function adminTourForm() {
     });
   };
   return h('div', { class: 'cmcard t-tour', id: 'tourForm' },
+    f.test ? h('div', { class: 'tztestnote', id: 'tfTestNote', text: 'TEST TOURNAMENT  \u00B7  5 min play, 2 min break, 5 min play. Pick the date and time, then publish.' }) : null,
     h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'NAME' }), inp('tfName', 'name', 'text', { maxlength: 40 })),
     h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'DATE AND START TIME' }), h('div', { class: 'apfields even' }, inp('tfDate', 'date', 'date'), inp('tfTime', 'time', 'time'))),
-    h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'LENGTH' }), chips('tfDur', 'duration', [30, 45, 60, 90], v => v + ' min')),
+    h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'LENGTH' }), chips('tfDur', 'duration', [30, 45, 60, 90].includes(Number(f.duration)) ? [30, 45, 60, 90] : [Number(f.duration), 30, 45, 60, 90], v => v + ' min' + (f.test && v === Number(f.duration) && ![30, 45, 60, 90].includes(v) ? ' (test)' : ''))),
     h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'BREAKS' }), chips('tfBreaks', 'breaks', [0, 1, 2, 3], v => v === 0 ? 'None' : v + (v === 1 ? ' break' : ' breaks')),
       Number(f.breaks) > 0 ? h('div', { style: 'margin-top:6px' }, chips('tfBreakMin', 'breakMin', [2, 3, 5, 10], v => v + ' min each')) : null,
       h('div', { style: 'margin-top:10px' }, Tour.bar(prev, 0)),
       h('p', { class: 'tznote', id: 'tfPlan', text: sch.rounds + (sch.rounds === 1 ? ' round of ' : ' rounds of ') + Math.round(sch.playMs / 60000) + ' min' + (Number(f.breaks) > 0 ? ', with ' + f.breaks + ' × ' + f.breakMin + ' min break' + (Number(f.breaks) === 1 ? '' : 's') : '') + '. Tables open 5 minutes before the start to show the rules.' })),
-    h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'BOOT (SETS EVERYTHING ELSE)' }), chips('tfBoot', 'boot', BOOTS, null, v => Object.assign(f, tourNums(v))),
-      h('div', { class: 'tzfacts four', id: 'tfNums' }, num(f.entry, 'Entry chips'), num(f.blind, 'Max blind'), num(f.chaal, 'Max chaal'), num(f.pot, 'Pot limit'))),
+    h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'BOOT (SETS THE LIMITS)' }), chips('tfBoot', 'boot', BOOTS, null, v => Object.assign(f, tourNums(v))),
+      h('div', { class: 'tzfacts', id: 'tfNums', style: 'grid-template-columns:repeat(3,minmax(0,1fr));margin-top:10px' }, num(f.blind, 'Max blind'), num(f.chaal, 'Max chaal'), num(f.pot, 'Pot limit')),
+      h('p', { class: 'tznote', id: 'tfLadder', text: 'Blind ' + [1, 2, 4, 8].map(x => fmt(x * Number(f.boot))).join(' \u2192 ') + '  \u00B7  chaal up to ' + fmt(f.chaal) + '  \u00B7  pot limit ' + fmt(f.pot) }),
+      h('div', { class: 'field', style: 'margin-top:10px' }, h('label', { for: 'tfEntry', text: 'ENTRY CHIPS (AT LEAST ' + fmt(f.pot) + ')' }), inp('tfEntry', 'entry', 'number', { min: f.pot, inputmode: 'numeric' }))),
     h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'GAMES (A RANDOM ONE EACH HAND)' }),
       h('div', { class: 'cmaud', id: 'tfGames' }, VARIANT_DEFS.map(v => h('button', { type: 'button', class: 'achip' + (f.variants.includes(v.id) ? ' on' : ''), 'data-v': v.id, title: v.tag, text: v.name, onclick: () => { const i = f.variants.indexOf(v.id); if (i >= 0) f.variants.splice(i, 1); else f.variants.push(v.id); Admin.paint(); } })))),
     h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'RE-ENTRY WHEN OUT OF CHIPS' }),
       h('div', { class: 'cmaud', id: 'tfRe' }, [[true, 'Allowed'], [false, 'Not allowed']].map(([v, t]) => h('button', { type: 'button', class: 'achip' + (!!f.reentry === v ? ' on' : ''), text: t, onclick: () => { f.reentry = v; Admin.paint(); } }))),
+      f.reentry ? h('div', { class: 'field', style: 'margin-top:10px' }, h('label', { for: 'tfReChips', text: 'RE-ENTRY CHIPS (A PLAYER WHO RE-ENTERS IS TOPPED BACK UP TO THIS)' }), inp('tfReChips', 'rechips', 'number', { min: Number(f.boot) * 10, inputmode: 'numeric' })) : null,
       h('p', { class: 'tznote', text: 'No limit on players: a new table opens for every six who register.' })),
     h('div', { id: 'tfErr', class: 'msg err', role: 'alert', hidden: !f.err, text: f.err }),
     h('div', { class: 'pvrow', style: 'margin-top:12px' },
@@ -7105,6 +7131,10 @@ function adminTour() {
   if (a.tourHist === undefined) { a.tourHist = null; Admin.loadTourHist(); }
   if (!Tour.loaded) return h('div', { class: 'card' }, h('p', { class: 'muted', text: 'Loading...' }));
   const T = Tour.doc, ph = Tour.phase(T), out = [];
+  { const busy = !!T && (ph.name === 'upcoming' || Tour.running(ph));
+    out.push(h('div', { class: 'tztest', id: 'tourTestCard' },
+      h('div', { class: 'tztesttxt' }, h('b', { text: 'Test tournament' }), h('span', { text: busy ? 'Finish or cancel the current tournament first.' : '10 min of play (5 + 5, 2 min break)  \u00B7  boot 1  \u00B7  entry 500  \u00B7  re-entry 500  \u00B7  Classic + Joker' })),
+      h('button', { type: 'button', class: 'btn-primary btn-small', id: 'tourTestBtn', text: 'Set up test', disabled: busy, onclick: () => Admin.tourTest() }))); }
   const newBtn = h('button', { type: 'button', class: 'btn-primary pvmain', id: 'tourNew', text: '+  Create a tournament', onclick: () => Admin.tourForm(null) });
   const kpi = (v, l) => h('div', { class: 'akpi flat' }, h('b', { text: String(v) }), h('span', { text: l }));
   if (!T || ph.name === 'none') out.push(h('div', { class: 'pvcard' }, h('div', { class: 'pvtop' }, h('div', { class: 'pvname' }, h('b', { text: 'No tournament scheduled' }), h('span', { text: 'Pick a boot and a time, publish, and players register from the lobby.' }))), newBtn));
@@ -7132,7 +7162,7 @@ function adminTour() {
   const H = a.tourHist;
   if (H && H.length) out.push(h('div', { class: 'cmhist', id: 'tourHist' }, h('div', { class: 'cmlabel', text: 'PAST TOURNAMENTS  ·  ' + H.length }),
     H.map(d => { const open = a.tourOpen === d.id, e = d.entry || 1;
-      const rows = (d.results || []).map(x => Object.assign({ uid: x.uid || x.name, name: x.name, bal: (x.final || 0) + (x.out || 0), now: x.final || 0, brought: x.brought || 0, net: (x.final || 0) + (x.out || 0) - (x.brought || 0), re: Math.max(0, Math.round((x.brought || 0) / e) - 1), played: (x.brought || 0) > 0, seated: false, table: '' },
+      const rows = (d.results || []).map(x => Object.assign({ uid: x.uid || x.name, name: x.name, bal: (x.final || 0) + (x.out || 0), now: x.final || 0, brought: x.brought || 0, net: (x.final || 0) + (x.out || 0) - (x.brought || 0), re: x.reentries || 0, played: (x.brought || 0) > 0, seated: false, table: '' },
         Object.fromEntries(TOUR_STATS.map(k => [k, x[k] || 0])))).filter(x => x.played).sort((x, y) => y.bal - x.bal);
       const tot = tourTotals(rows);
       return h('div', { class: 'tzpast' + (open ? ' open' : '') },
