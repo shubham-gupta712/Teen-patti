@@ -2548,6 +2548,310 @@ body.kp-num #buyModal .sheet,body.kp-num #buyModal{pointer-events:auto}
 .nlstage #mode_tournament .tzfb{display:flex;align-items:center;justify-content:center;width:100%;height:calc(var(--u) * 30);border-radius:99px;border:max(1px,calc(var(--u) * 1.5)) solid rgba(222,183,104,.9);background:linear-gradient(180deg,rgba(80,58,24,.55),rgba(40,28,12,.55));font:600 max(7.5px,calc(var(--u) * 16.5))/1 system-ui;letter-spacing:.16em;color:#fff6df;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,.55)}
 .nlstage #mode_tournament.tzlive .tzfb{background:linear-gradient(180deg,#f6d77a,#c9972e);color:#2a1d00;text-shadow:none;animation:tzgold 1.6s ease-in-out infinite alternate}
 @keyframes tzgold{to{box-shadow:0 0 calc(var(--u) * 14) rgba(246,215,122,.7)}}
+
+/* ===== 66. Sign-up gates: verify email, referral code, waiting for approval ===== */
+.authstage.reg .apanel{gap:calc(var(--u) * 14);top:calc(var(--u) * 700)}
+.anote{margin:0;font:500 max(11px,calc(var(--u) * 20))/1.4 system-ui;color:#d8c9a8;text-align:center}
+.amsg.ok{color:#c9f5dc;background:rgba(20,80,52,.6);border-color:rgba(120,230,170,.4)}
+.authstage.gate .apanel{top:calc(var(--u) * 760);gap:calc(var(--u) * 22)}
+.agate{display:flex;flex-direction:column;align-items:center;gap:calc(var(--u) * 8);text-align:center}
+.agate b{font:700 max(20px,calc(var(--u) * 40))/1.2 Georgia,serif;color:#fbecc8}
+.agate p{margin:0;font:500 max(13px,calc(var(--u) * 24))/1.45 system-ui;color:#e3d6b8}
+.agate em{font:700 max(13px,calc(var(--u) * 25)) system-ui;font-style:normal;color:#f2d27c;word-break:break-all}
+.agicon{display:grid;place-items:center;width:max(54px,calc(var(--u) * 96));height:max(54px,calc(var(--u) * 96));border-radius:50%;border:max(1px,calc(var(--u) * 2.4)) solid rgba(242,210,124,.7);background:rgba(36,25,18,.7);font:400 max(24px,calc(var(--u) * 44))/1 system-ui;font-style:normal;color:#f2d27c}
+.agicon.ok{color:#7dffc0;border-color:rgba(125,255,192,.6)}.agicon.bad{color:#ff9aa9;border-color:rgba(255,154,169,.6)}
+.agicon.wait{animation:agwait 2.4s ease-in-out infinite}
+@keyframes agwait{50%{transform:rotate(180deg)}}
+.agfacts{display:flex;flex-direction:column;gap:calc(var(--u) * 10)}
+.agfacts div{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:calc(var(--u) * 14) calc(var(--u) * 22);border-radius:calc(var(--u) * 22);background:rgba(36,25,18,.6);border:1px solid rgba(214,172,92,.35)}
+.agfacts span{font:600 max(10px,calc(var(--u) * 18)) system-ui;letter-spacing:.2em;color:#cdb98f}
+.agfacts b{min-width:0;overflow:hidden;text-overflow:ellipsis;font:700 max(13px,calc(var(--u) * 24)) system-ui;color:#fbecc8}
+
+/* the admin in the players' lobby: a small bar back to the console */
+.nlstage .nladmin{position:absolute;left:50%;top:1.2%;transform:translateX(-50%);z-index:20;display:flex;align-items:center;gap:10px;padding:5px 6px 5px 14px;border-radius:99px;background:rgba(10,18,26,.88);border:1px solid rgba(70,214,226,.55);box-shadow:0 4px 14px rgba(0,0,0,.5);font-family:system-ui,sans-serif}
+.nladmin span{font:800 10px system-ui;letter-spacing:.14em;color:#7fe7f0;white-space:nowrap}
+.nlstage .nladmin span,.nlstage .nladmin button{position:static;transform:none;width:auto;height:auto}
+.nladmin button{min-height:0;padding:6px 14px;border-radius:99px;border:0;background:linear-gradient(180deg,#46d6e2,#1d97a4);color:#04181b;font:800 12px system-ui;cursor:pointer;white-space:nowrap}
+.refbox{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 10px;padding:10px 12px;border-radius:14px;border:1px dashed rgba(242,199,92,.6);background:rgba(242,199,92,.08)}
+.refbox span{grid-column:1/-1;font:800 9.5px system-ui;letter-spacing:1.4px;color:#f2c75c}
+.refbox b{font:800 22px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.16em;color:#fff3d6;user-select:all}
+.refbox i{grid-column:1/-1;font-style:normal;font-size:11px;color:#cdb98f}
+
+/* ===== 67. Admin Command Center: charcoal and teal, cyan for what is active, antique gold for the premium touches ===== */
+body[data-screen=admin]{background:#090c10;color-scheme:dark}
+body[data-screen=admin] .topbar{display:none}
+body[data-screen=admin] .wrap{width:100%;max-width:none;padding:0}
+.cc{--bg:#090c10;--bg2:#0d1318;--surf:#111a21;--surf2:#15212a;--surf3:#1a2934;--line:rgba(126,178,196,.14);--line2:rgba(126,178,196,.24);--tx:#e4ecef;--mute:#8b9ea8;--dim:#5f727c;
+  --cy:#46d6e2;--cy2:#1d97a4;--gold:#c9a96a;--ok:#2fcf8e;--warn:#f2b544;--bad:#ef5b6b;
+  min-height:100vh;min-height:100dvh;background:radial-gradient(120% 60% at 50% -10%,#10242b 0%,rgba(9,12,16,0) 60%),var(--bg);color:var(--tx);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+body .cc *{box-sizing:border-box}
+.cci{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.cci.end{margin-left:auto;width:16px;height:16px;color:var(--dim)}
+/* header */
+.cchead{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;background:rgba(9,12,16,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.ccbrand{flex:1;min-width:0;display:flex;align-items:center;gap:10px}
+.ccmark{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:linear-gradient(150deg,#1b3a42,#0e1d23);border:1px solid rgba(201,169,106,.55);color:var(--gold);font-size:18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.ccbrand b{display:block;font:700 16px/1.15 system-ui;letter-spacing:.01em}
+.ccbrand i{display:block;font:500 10.5px/1.2 system-ui;font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.cclive{display:flex;align-items:center;gap:6px;padding:5px 9px;border-radius:99px;background:rgba(47,207,142,.1);border:1px solid rgba(47,207,142,.3);font:700 11px system-ui;color:#8ff0c2}
+.cclive i{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(47,207,142,.18);animation:ccpulse 2s infinite}
+.cclive.off{background:rgba(239,91,107,.12);border-color:rgba(239,91,107,.4);color:#ffb1ba}.cclive.off i{background:var(--bad);box-shadow:none;animation:none}
+@keyframes ccpulse{50%{box-shadow:0 0 0 6px rgba(47,207,142,0)}}
+.ccicon{position:relative;display:grid;place-items:center;width:40px;height:40px;min-height:0;padding:0;border-radius:12px;border:1px solid var(--line);background:var(--surf);color:var(--tx);cursor:pointer}
+.ccicon:active{transform:scale(.95)}
+.ccbadge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 5px;border-radius:99px;background:var(--cy);color:#04181b;font:800 10.5px/18px system-ui;font-style:normal;text-align:center;box-shadow:0 0 0 2px var(--bg)}
+.ccprofile{position:relative}
+.ccavatar{display:grid;place-items:center;width:40px;height:40px;min-height:0;padding:0;border-radius:50%;border:1px solid rgba(201,169,106,.6);background:linear-gradient(150deg,#2a2416,#14110b);color:var(--gold);font:800 15px system-ui;cursor:pointer}
+.ccmenu{position:absolute;right:0;top:48px;width:240px;padding:6px;border-radius:16px;background:var(--surf2);border:1px solid var(--line2);box-shadow:0 18px 40px rgba(0,0,0,.6);animation:ccin .16s ease-out}
+@keyframes ccin{from{opacity:0;transform:translateY(-4px)}}
+.ccmenuwho{padding:8px 10px 10px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.ccmenuwho b{display:block;font-size:13px}.ccmenuwho span{display:block;font-size:11.5px;color:var(--mute);overflow:hidden;text-overflow:ellipsis}
+.ccmenu button{display:flex;align-items:center;gap:10px;width:100%;min-height:42px;padding:0 10px;border:0;border-radius:10px;background:none;color:var(--tx);font:600 13.5px system-ui;text-align:left;cursor:pointer}
+.ccmenu button:hover,.ccmenu button:focus-visible{background:var(--surf3)}
+.ccmenu button.bad{color:#ff9ba6}
+/* messages */
+.ccmsg{position:sticky;top:62px;z-index:25;display:flex;align-items:center;gap:8px;margin:10px 16px 0;padding:10px 8px 10px 14px;border-radius:12px;font:600 13px/1.35 system-ui;animation:ccin .2s}
+.ccmsg.ok{background:rgba(47,207,142,.12);border:1px solid rgba(47,207,142,.35);color:#a9f3cf}
+.ccmsg.err{background:rgba(239,91,107,.13);border:1px solid rgba(239,91,107,.4);color:#ffc0c7}
+.ccmsg span{flex:1}.ccmsg button{display:grid;place-items:center;width:30px;height:30px;min-height:0;padding:0;border:0;background:none;color:inherit;cursor:pointer}
+.ccmsg[hidden]{display:none}
+/* page */
+.ccmain{padding:14px 16px 24px;max-width:760px;margin:0 auto}
+.ccpage{display:flex;flex-direction:column;gap:18px}
+.ccpagehead{display:flex;align-items:center;gap:10px}
+.ccpagehead h2{flex:1;margin:0;font:700 22px/1.2 system-ui;color:var(--tx)}
+.ccchip{padding:4px 10px;border-radius:99px;background:var(--surf2);border:1px solid var(--line);font:700 11.5px system-ui;color:var(--mute)}
+.ccchip.cyan{color:var(--cy);border-color:rgba(70,214,226,.4);background:rgba(70,214,226,.08)}.ccchip.ok{color:#8ff0c2;border-color:rgba(47,207,142,.35)}
+.ccnote{margin:0;font-size:12.5px;line-height:1.5;color:var(--mute)}.ccnote.bad{color:#ff9ba6}
+.ccsec{display:flex;flex-direction:column;gap:10px}
+.ccsechead{display:flex;align-items:center;justify-content:space-between}
+.ccsechead h3{margin:0;font:700 11px system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.cclinkbtn{display:inline-flex;align-items:center;gap:6px;min-height:0;padding:4px 0;border:0;background:none;color:var(--cy);font:700 12.5px system-ui;cursor:pointer}
+.cclinkbtn.center{align-self:center;margin-top:4px;color:var(--mute)}
+.cclinkbtn .cci{width:15px;height:15px}
+/* metrics */
+.ccmetrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ccmetric{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:0;padding:12px 12px 11px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(160deg,var(--surf2),var(--surf));color:var(--tx);text-align:left;cursor:pointer;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.ccmetric:active{transform:scale(.98)}
+.ccmetric:after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--line2)}
+.ccmetric.ok:after{background:var(--ok)}.ccmetric.cyan:after{background:var(--cy)}.ccmetric.warn:after{background:var(--warn)}.ccmetric.bad:after{background:var(--bad)}
+.ccmic{display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:rgba(70,214,226,.08);border:1px solid rgba(70,214,226,.18);color:var(--cy)}
+.ccmic .cci{width:17px;height:17px}
+.ccmetric .ccmic{margin-bottom:6px}
+.ccmetric.warn .ccmic{color:var(--warn);background:rgba(242,181,68,.08);border-color:rgba(242,181,68,.25)}.ccmetric.bad .ccmic{color:var(--bad);background:rgba(239,91,107,.08);border-color:rgba(239,91,107,.3)}
+.ccmetric b{font:800 26px/1.05 system-ui;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.ccmetric span{font:600 12px system-ui;color:var(--tx)}
+.ccmetric i{max-width:100%;font:500 11px system-ui;font-style:normal;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* request cards */
+.ccreqs{display:flex;flex-direction:column;gap:10px}
+.ccreq{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;padding:12px;border-radius:16px;border:1px solid rgba(70,214,226,.22);background:linear-gradient(160deg,#10232a,var(--surf));animation:ccin .2s}
+.ccrav{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;overflow:hidden;background:var(--surf3);border:1px solid var(--line2);color:var(--gold);font:800 16px system-ui}
+.ccrav img{width:100%;height:100%;object-fit:cover}
+.ccrav.sm{width:32px;height:32px}
+.ccrwho{min-width:0;display:flex;flex-direction:column;gap:3px}
+.ccrwho>b{font:700 15px system-ui;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ccrwho>span{font-size:12px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ccrwho>i{font-size:11.5px;font-style:normal;color:var(--dim)}
+.ccrtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+.ccrtags em,.ccpill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;background:var(--surf3);color:var(--mute);font:700 10.5px/1.5 system-ui;font-style:normal;white-space:nowrap}
+.ccpill.wait,.ccpill.s-cyan{background:rgba(70,214,226,.12);color:var(--cy)}
+.ccpill.s-live{background:rgba(47,207,142,.13);color:#8ff0c2}.ccpill.s-wait{background:var(--surf3);color:var(--mute)}
+.ccpill.s-paused{background:rgba(242,181,68,.13);color:#ffd27e}.ccpill.s-closed,.ccpill.s-off{background:rgba(239,91,107,.13);color:#ff9ba6}.ccpill.s-load{background:var(--surf3);color:var(--dim)}
+.ccracts{grid-column:1/-1;display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:8px}
+/* buttons */
+.ccbtn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:0 16px;border-radius:12px;border:1px solid var(--line2);background:var(--surf2);color:var(--tx);font:700 14px system-ui;cursor:pointer;transition:transform .08s,filter .15s}
+.ccbtn:active:not(:disabled){transform:scale(.97)}
+.ccbtn:disabled{opacity:.45;cursor:default}
+.ccbtn.primary{border-color:transparent;background:linear-gradient(180deg,#4fe0eb,#1f9fac);color:#04181b;box-shadow:0 6px 18px rgba(70,214,226,.18)}
+.ccbtn.danger{border-color:rgba(239,91,107,.5);background:rgba(239,91,107,.1);color:#ffb1ba}
+.ccbtn.ghost{background:transparent}
+.ccbtn.sm{min-height:38px;padding:0 12px;font-size:13px}
+.ccbtn.wide{width:100%}
+.ccbtn .cci{width:17px;height:17px}
+.ccspin{width:22px;height:22px;border-radius:50%;border:2.5px solid rgba(70,214,226,.2);border-top-color:var(--cy);animation:ccspin .8s linear infinite}
+.ccspin.sm{width:15px;height:15px;border-width:2px;border-color:rgba(0,0,0,.2);border-top-color:currentColor}
+@keyframes ccspin{to{transform:rotate(360deg)}}
+.ccempty{display:flex;flex-direction:column;align-items:center;gap:6px;padding:22px 14px;border-radius:16px;border:1px dashed var(--line2);text-align:center;color:var(--mute)}
+.ccempty .cci{width:26px;height:26px;color:var(--dim)}
+.ccempty b{font:700 14px system-ui;color:var(--tx)}.ccempty span{font-size:12px;max-width:300px}
+/* tables */
+.cctgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.cctlist{display:flex;flex-direction:column;gap:8px}
+.cctcard{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:4px;min-height:0;padding:11px 12px;border-radius:14px;border:1px solid var(--line);background:var(--surf);color:var(--tx);text-align:left;cursor:pointer}
+.cctcard:active{transform:scale(.98)}
+.cctcard.s-live{border-color:rgba(47,207,142,.35);background:linear-gradient(160deg,#0f2620,var(--surf))}
+.cctcard.s-closed,.cctcard.s-off{opacity:.75}
+.cctctop{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.cctctop b{font:700 14px system-ui;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cctcid{font:500 11px ui-monospace,Menlo,Consolas,monospace;color:var(--dim)}
+.cctcrow{display:flex;align-items:center;gap:14px;margin-top:4px;font-size:12px;color:var(--mute)}
+.cctcrow span{display:flex;align-items:center;gap:5px}.cctcrow .cci{width:15px;height:15px}.cctcrow b{font-weight:600;color:var(--tx)}
+.cctcard.mini{padding:9px 9px 8px}
+.cctcard.mini .cctctop{flex-direction:column;align-items:flex-start;gap:4px}
+.cctcard.mini .cctctop b{font-size:12.5px;max-width:100%}
+.cctcard.mini .cctcid{display:none}
+.cctcseats{font-size:11px;font-style:normal;color:var(--mute)}
+/* tools */
+.cctools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.cctool{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-height:0;padding:11px;border-radius:14px;border:1px solid var(--line);background:var(--surf);color:var(--tx);text-align:left;cursor:pointer}
+.cctool .ccmic{margin-bottom:5px;color:var(--gold);background:rgba(201,169,106,.08);border-color:rgba(201,169,106,.22)}
+.cctool b{font:700 13px system-ui}.cctool i{max-width:100%;font-size:11px;font-style:normal;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* activity */
+.ccfeed{list-style:none;margin:0;padding:4px 14px;border-radius:16px;border:1px solid var(--line);background:var(--surf)}
+.ccfeed li{position:relative;display:flex;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
+.ccfeed li:first-child{border-top:0}
+.ccdot{flex:none;width:9px;height:9px;margin-top:5px;border-radius:50%;background:var(--dim)}
+.k-ok>.ccdot{background:var(--ok)}.k-warn>.ccdot{background:var(--warn)}.k-bad>.ccdot{background:var(--bad)}.k-info>.ccdot{background:var(--cy)}
+.ccfeed li>div{flex:1;min-width:0}
+.ccfeedtop{display:flex;justify-content:space-between;gap:8px}
+.ccfeedtop em{font:700 10px system-ui;font-style:normal;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.ccfeedtop time{font-size:11px;color:var(--dim)}
+.ccfeed b{display:block;font:600 13.5px/1.35 system-ui}.ccfeed li>div>span{display:block;font-size:12px;color:var(--mute)}
+/* health */
+.cchealth{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cchrow{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:var(--surf)}
+.cchrow .ccdot{grid-row:span 2;margin-top:4px}
+.cchrow span:not(.ccdot){font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.cchrow b{font:600 13px system-ui}
+.ccalerts{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.ccalert{display:flex;align-items:flex-start;gap:10px;width:100%;min-height:0;padding:11px 12px;border-radius:14px;border:1px solid var(--line);background:var(--surf);color:var(--tx);text-align:left;font:inherit}
+button.ccalert{cursor:pointer}
+.ccalert b{display:block;font:700 13px system-ui}.ccalert span{display:block;font-size:12px;color:var(--mute);margin-top:1px}
+.ccalert .cci{margin-top:1px}
+.ccalert.k-warn{border-color:rgba(242,181,68,.35)}.ccalert.k-warn .cci{color:var(--warn)}
+.ccalert.k-bad{border-color:rgba(239,91,107,.4);background:rgba(239,91,107,.06)}.ccalert.k-bad .cci{color:var(--bad)}
+.ccalert.k-info .cci{color:var(--cy)}
+/* bottom navigation */
+.ccnav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template-columns:repeat(5,1fr);padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:rgba(11,16,21,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
+.ccnav button{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:52px;padding:6px 0 4px;border:0;background:none;color:var(--dim);font:600 10.5px system-ui;cursor:pointer}
+.ccnav button:before{content:"";position:absolute;top:-7px;left:30%;right:30%;height:2px;border-radius:2px;background:transparent;transition:background .2s}
+.ccnav button.on{color:var(--cy)}.ccnav button.on:before{background:var(--cy);box-shadow:0 0 10px rgba(70,214,226,.6)}
+.ccnavic{position:relative;display:grid;place-items:center;width:44px;height:26px;border-radius:99px}
+.ccnav button.on .ccnavic{background:rgba(70,214,226,.1)}
+.ccnav .ccbadge{top:-6px;right:0}
+/* search and filters */
+.ccsearch{display:flex;align-items:center;gap:8px;height:46px;padding:0 14px;border-radius:14px;border:1px solid var(--line2);background:var(--surf);color:var(--mute)}
+.ccsearch:focus-within{border-color:var(--cy);box-shadow:0 0 0 3px rgba(70,214,226,.12)}
+.ccsearch input{flex:1;min-width:0;height:100%;padding:0;border:0;outline:0;background:none;box-shadow:none;color:var(--tx);font:500 15px system-ui}
+.ccfilters{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px}
+.ccfilters::-webkit-scrollbar{display:none}
+.ccfilters button{flex:none;display:flex;align-items:center;gap:6px;min-height:36px;padding:0 13px;border-radius:99px;border:1px solid var(--line2);background:var(--surf);color:var(--mute);font:600 13px system-ui;cursor:pointer}
+.ccfilters button i{font-style:normal;font-size:11px;padding:0 6px;border-radius:99px;background:var(--surf3);color:var(--mute)}
+.ccfilters button.on{border-color:var(--cy);background:rgba(70,214,226,.1);color:var(--cy)}.ccfilters button.on i{background:rgba(70,214,226,.2);color:var(--cy)}
+/* settings */
+.cclist{display:flex;flex-direction:column;border-radius:16px;border:1px solid var(--line);background:var(--surf);overflow:hidden}
+.ccrow{display:flex;align-items:center;gap:12px;width:100%;min-height:58px;padding:10px 14px;border:0;border-top:1px solid var(--line);background:none;color:var(--tx);text-align:left;font:inherit}
+.ccrow:first-child{border-top:0}
+.ccrow.btn{cursor:pointer}.ccrow.btn:active{background:var(--surf2)}
+.ccrow>div{min-width:0;display:flex;flex-direction:column}
+.ccrow b{font:600 14px system-ui}.ccrow span{font-size:12px;color:var(--mute);overflow:hidden;text-overflow:ellipsis}
+.ccrow.bad{color:#ff9ba6}.ccrow.bad b{color:#ff9ba6}
+.ccrow>.cci:first-child{color:var(--cy)}
+.ccref{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:16px;border:1px solid rgba(201,169,106,.35);background:linear-gradient(160deg,#1c1911,var(--surf))}
+.ccrefcode{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ccrefcode b{font:800 28px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.18em;color:var(--gold);user-select:all}
+.ccdanger{display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:16px;border:1px solid rgba(239,91,107,.35);background:rgba(239,91,107,.05)}
+.ccdanger b{display:block;font:700 14px system-ui;color:#ffb1ba}.ccdanger span{display:block;font-size:12px;color:var(--mute);margin-top:2px}
+.cclog{margin:0;padding:8px 12px 8px 30px;border-radius:12px;background:var(--bg2);border:1px solid var(--line);font:500 12px/1.6 ui-monospace,Menlo,Consolas,monospace;color:var(--mute)}
+/* the table sheet */
+.ccsheetback{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center;background:rgba(2,5,8,.62);animation:ccfade .18s}
+@keyframes ccfade{from{opacity:0}}
+.ccsheet{width:min(100%,640px);max-height:88vh;overflow:auto;padding:8px 16px calc(18px + env(safe-area-inset-bottom));border-radius:22px 22px 0 0;background:var(--bg2);border:1px solid var(--line2);border-bottom:0;box-shadow:0 -20px 50px rgba(0,0,0,.6);animation:ccup .24s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;gap:14px}
+@keyframes ccup{from{transform:translateY(40px);opacity:.4}}
+.ccgrab{align-self:center;width:42px;height:4px;border-radius:99px;background:var(--line2)}
+.ccsheethead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.ccsheethead b{display:block;font:700 19px system-ui}.ccsheethead span{display:block;font-size:12px;color:var(--mute);margin-top:2px}
+.ccsheet>div{display:flex;flex-direction:column;gap:14px}
+.cckvs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cckv{padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:var(--surf)}
+.cckv span{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.cckv b{display:block;margin-top:2px;font:700 14px system-ui}
+.cckv.s-live b{color:#8ff0c2}.cckv.s-paused b{color:#ffd27e}.cckv.s-closed b,.cckv.s-off b{color:#ff9ba6}
+.ccseats{display:flex;flex-direction:column;border-radius:14px;border:1px solid var(--line);background:var(--surf);overflow:hidden}
+.ccseat{display:flex;align-items:center;gap:10px;padding:8px 12px;border-top:1px solid var(--line)}
+.ccseat:first-child{border-top:0}
+.ccseat b{flex:1;min-width:0;font:600 13.5px system-ui;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ccseat .num{font:700 13px system-ui;font-variant-numeric:tabular-nums;color:var(--gold)}
+.ccacts{display:grid !important;grid-template-columns:1fr 1fr;gap:8px}
+/* the confirmation dialog */
+.ccmodal{position:fixed;inset:0;z-index:99995;display:grid;place-items:center;padding:20px;background:rgba(2,5,8,.7);animation:ccfade .15s}
+.ccmbox{width:min(100%,400px);display:flex;flex-direction:column;align-items:center;gap:10px;padding:22px 18px 16px;border-radius:20px;background:#111a21;border:1px solid rgba(126,178,196,.24);color:#e4ecef;text-align:center;box-shadow:0 30px 60px rgba(0,0,0,.6);font-family:system-ui,sans-serif;animation:ccup .2s}
+.ccmicon{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:rgba(70,214,226,.1);color:#46d6e2}
+.ccmbox.danger .ccmicon{background:rgba(239,91,107,.12);color:#ef5b6b}
+.ccmicon .cci{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ccmbox b{font:700 17px/1.3 system-ui}.ccmbox p{margin:0;font-size:13.5px;line-height:1.5;color:#8b9ea8}
+.ccmbox ul{margin:0;padding-left:18px;text-align:left;font-size:13px;line-height:1.6;color:#c9d6db}
+.ccmbox input{width:100%;height:46px;padding:0 14px;border-radius:12px;border:1px solid rgba(126,178,196,.3);background:#0d1318;color:#e4ecef;font:700 16px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.2em;text-align:center}
+.ccmbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin-top:6px}
+.ccmbox .ccbtn{--line2:rgba(126,178,196,.24);--surf2:#15212a;--tx:#e4ecef}
+/* the older tools inside the console: same dark surfaces */
+.cctoolbar{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.cctoolbar h2{margin:0;font:700 20px system-ui;color:var(--tx)}
+body .cc .cctool:not(button){display:block;padding:0;border:0;background:none}
+body .cc .card,body .cc .pvcard,body .cc .cmcard,body .cc .cmhist,body .cc .aplayer,body .cc .rxrow,body .cc .tsrow,body .cc .aback,body .cc .vqhelp,body .cc .tzaitem,body .cc .pttile,body .cc .tzpast{background:var(--surf);border-color:var(--line);color:var(--tx);box-shadow:none}
+body .cc .ahero{background:linear-gradient(160deg,#10262c,#0e171d);border-color:rgba(70,214,226,.25);box-shadow:none}
+body .cc .ahero h2,body .cc .rxbig b,body .cc .akpi b{color:var(--tx)}
+body .cc .ahero .eyebrow,body .cc .rxbig span{color:var(--cy)}
+body .cc .rxbig i,body .cc .akpi span{color:var(--mute)}
+body .cc .akpi{background:rgba(255,255,255,.03);border-color:var(--line)}
+body .cc .herobtn{background:rgba(70,214,226,.08);border-color:rgba(70,214,226,.35);color:var(--cy)}
+body .cc .herobtn.gold{background:linear-gradient(180deg,#4fe0eb,#1f9fac);color:#04181b;border-color:transparent;box-shadow:none}
+body .cc .pvcard:before,body .cc .cmcard:before{opacity:.0}
+body .cc .pvname b,body .cc .cmtxt b,body .cc .rxname b,body .cc .tswho b,body .cc .apwho b,body .cc .apline b,body .cc .pvfacts b,body .cc .apstats b,body .cc h2,body .cc h3,body .cc strong,body .cc .tzaname b{color:var(--tx)}
+body .cc .pvname span,body .cc .cmtxt p,body .cc .cmtxt i,body .cc .rxname i,body .cc .tswho i,body .cc .apwho i,body .cc .tznote,body .cc .muted,body .cc .rxwhen,body .cc .tzaname i,body .cc .ptkey{color:var(--mute)}
+body .cc .cmlabel,body .cc .apline span,body .cc .pvfacts span,body .cc .apstats span,body .cc .pvcode span,body .cc .apwhead span,body .cc label,body .cc .tzfacts span{color:var(--mute)}
+body .cc .pvfacts div,body .cc .apstats div,body .cc .aplines,body .cc .tzfacts div,body .cc .cmhist .tzfacts div,body .cc .pvcard .tzfacts div,body .cc .cmcard .tzfacts div{background:var(--bg2);border-color:var(--line)}
+body .cc .tzfacts b,body .cc .pvcard .tzfacts b,body .cc .cmcard .tzfacts b,body .cc .cmhist .tzfacts b{color:var(--tx)}
+body .cc .apline{border-color:var(--line)}
+body .cc .adetail{background:var(--bg2);border-color:var(--line)}
+body .cc .apwallet,body .cc .pvcode,body .cc .cmreach,body .cc .cmtotal{background:linear-gradient(160deg,#1c1911,var(--surf));border-color:rgba(201,169,106,.35)}
+body .cc .apwhead b,body .cc .pvcode b,body .cc .apchips b,body .cc .rxamt,body .cc .tsbal b,body .cc .cmtotal b,body .cc .cmreach span{color:var(--gold)}
+body .cc .apchips i,body .cc .apcar{color:var(--dim)}
+body .cc input:not([type=checkbox]),body .cc textarea,body .cc select,body .cc .cmsec input,body .cc .cmsec textarea,body .cc .apfields input{background:var(--bg2);border:1px solid var(--line2);color:var(--tx);border-radius:12px}
+body .cc input::placeholder,body .cc textarea::placeholder{color:var(--dim)}
+body .cc input:focus,body .cc textarea:focus{outline:0;border-color:var(--cy);box-shadow:0 0 0 3px rgba(70,214,226,.12)}
+body .cc .btn-primary{background:linear-gradient(180deg,#4fe0eb,#1f9fac);color:#04181b;border:0;box-shadow:none;text-shadow:none}
+body .cc .btn-secondary,body .cc .btn-ghost{background:var(--surf2);color:var(--tx);border:1px solid var(--line2);box-shadow:none;text-shadow:none}
+body .cc .btn-danger,body .cc .adetail .btn-danger,body .cc .pvcard .btn-danger{background:rgba(239,91,107,.1);color:#ffb1ba;border:1px solid rgba(239,91,107,.5);box-shadow:none}
+body .cc .achip{background:var(--surf2);border:1px solid var(--line2);color:var(--mute);box-shadow:none}
+body .cc .achip.on,body .cc .cmaud .achip.on,body .cc .apquick .achip.on{background:rgba(70,214,226,.12);border-color:var(--cy);color:var(--cy)}
+body .cc .cmaud .achip,body .cc .apquick .achip{background:var(--surf2)}
+body .cc .achip i{background:var(--surf3);color:var(--mute)}
+body .cc .aplink,body .cc .apcopy,body .cc .pvcopy{background:var(--surf2);border-color:var(--line2);color:var(--tx)}
+body .cc .aplink.bad{color:#ff9ba6;border-color:rgba(239,91,107,.45)}.cc .aplink.good{color:#8ff0c2;border-color:rgba(47,207,142,.4);background:rgba(47,207,142,.08)}
+body .cc .aptag{background:var(--surf3);color:var(--mute)}.cc .aptag.ok{background:rgba(47,207,142,.13);color:#8ff0c2}.cc .aptag.bad{background:rgba(239,91,107,.13);color:#ff9ba6}.cc .aptag.cyan{background:rgba(70,214,226,.12);color:var(--cy)}
+.aptag.cyan{background:#e0f7f9;color:#0d6f7a}
+body .cc .pvpill{background:var(--surf3);color:var(--mute)}.cc .pvpill.on{background:rgba(47,207,142,.13);color:#8ff0c2}.cc .pvpill.off{background:rgba(239,91,107,.13);color:#ff9ba6}
+body .cc .cmbadge,body .cc .vqtier,body .cc .rxtip,body .cc .tznames span,body .cc .cmhist .tznames span,body .cc .rxzero span{background:var(--surf3);color:var(--mute)}
+body .cc .cmitem,body .cc .tzpasthead,body .cc .cmhist .tzrow,body .cc .tzrow{border-color:var(--line);color:var(--tx)}
+body .cc .cmhist .tzboard{border-color:var(--line)}
+body .cc .rxbar,body .cc .apbar{background:var(--surf3)}
+body .cc .rxquiet{border-color:var(--line2);color:var(--mute)}
+body .cc .tsrow .tzrank,body .cc .cmhist .tzrank{background:var(--surf3);color:var(--mute)}
+body .cc .tsrow .tzrank.r1,body .cc .cmhist .tzrank.r1{background:var(--gold);color:#1a1404}
+body .cc .tshead{color:var(--tx)}
+body .cc .tztest{background:linear-gradient(160deg,#10232a,var(--surf));border-color:rgba(70,214,226,.4)}
+body .cc .tztesttxt b{color:var(--cy)}.cc .tztesttxt span{color:var(--mute)}
+body .cc .tztestnote{background:rgba(70,214,226,.1);color:var(--cy)}
+body .cc .tzaitem .tzstat b{color:var(--tx)}.cc .tzaitem .tzstat i{background:var(--surf3);color:var(--gold)}.cc .tzaitem .tzstat.live i{background:rgba(47,207,142,.13);color:#8ff0c2}
+body .cc .pttile b{color:var(--tx)}.cc .pttile small,body .cc .pttile i{color:var(--mute)}.cc .pttile em{background:var(--surf3);color:var(--mute)}
+body .cc .pttile.s-on em{background:rgba(47,207,142,.13);color:#8ff0c2}.cc .pttile.s-off{background:rgba(239,91,107,.05)}.cc .pttile.s-off em{background:rgba(239,91,107,.13);color:#ff9ba6}
+body .cc .msg.err{background:rgba(239,91,107,.12);color:#ffc0c7;border-color:rgba(239,91,107,.4)}.cc .msg.ok{background:rgba(47,207,142,.1);color:#a9f3cf}
+body .cc .tsrow.open{border-color:var(--cy)}.cc .aplayer.open{border-color:rgba(70,214,226,.45)}
+body .cc .aplayer.banned{background:rgba(239,91,107,.05);border-color:rgba(239,91,107,.3)}
+body .cc .apav.live:after{border-color:var(--surf)}
+body .cc .gold{color:var(--gold)}
+/* club access block in a player's details */
+.apaccess{margin-bottom:10px;padding:10px;border-radius:14px;border:1px solid rgba(70,214,226,.25);background:rgba(70,214,226,.04)}
+.apacchead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.apacchead span{font:800 10px system-ui;letter-spacing:1.4px;color:var(--cy,#0d6f7a)}
+.apaccess .aplines{margin-top:0}
+@media (min-width:620px){.ccmetrics{grid-template-columns:repeat(4,minmax(0,1fr))}.cctgrid{grid-template-columns:repeat(4,minmax(0,1fr))}.cctools{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media (max-width:370px){.ccmain{padding:12px 12px 20px}.cchead{padding-left:12px;padding-right:12px}.cctgrid,.cctools{grid-template-columns:1fr 1fr}.cclive span{display:none}}
+body .cc .ccsearch input{background:none!important;border:0!important;box-shadow:none!important;min-height:0}
+.ccsheet>div.ccsheethead{flex-direction:row;align-items:flex-start;gap:10px}
+.ccsheet>div.ccgrab{display:block}
+body[data-screen=admin] .footer{display:none}
 </style>
 </head>
 <body>
@@ -2836,6 +3140,7 @@ function fail(err, context) {
 }
 
 function setConnection(online) {
+  S.online = !!online; if (online) S.lastSync = Date.now();
   const c = $('conn');
   if (!c) return;
   c.textContent = online ? '● Connected' : '● Offline';
@@ -2998,19 +3303,52 @@ const Scopes = {
    chosen from the authenticated UID and the rules decide what is permitted.
    ========================================================================== */
 const Auth = {
-  async register(name, email, password) {
+  // Sign-up: the referral code is checked first, then the account is made and a verification link is emailed.
+  // The profile itself is only created once the email is verified (rules: users create needs email_verified).
+  async register(name, email, password, ref) {
     const clean = cleanName(name);
     if (!clean) throw new AppError('Enter a display name (up to ' + NAME_MAX + ' characters).');
-    S.pendingName = clean;
+    const code = cleanRef(ref);
+    if (!code) throw new AppError('Enter the referral code a club member gave you.');
+    if (!(await Repo.referralOk(code))) throw new AppError('That referral code was not found. Check it with the player who gave it to you.');
+    S.pendingName = clean; saveSignup({ name: clean, ref: code });
     const cred = await auth.createUserWithEmailAndPassword(email, password);
     try { await cred.user.updateProfile({ displayName: clean }); }
     catch (e) { console.error('[TeenPatti] could not set auth display name', e && e.code); }
+    await Auth.sendVerify(cred.user).catch(e => console.error('[TeenPatti] verification email', e && e.code));
     return cred.user;
+  },
+  // The link brings the player back to the club after they tap it.
+  async sendVerify(user) {
+    const url = location.origin + location.pathname;
+    try { await user.sendEmailVerification({ url }); }
+    catch (e) { if (e && /continue-uri|unauthorized/.test(e.code || '')) await user.sendEmailVerification(); else throw e; }
+  },
+  // After the link was tapped: reload the account and refresh the token so the database sees the verified email.
+  async refreshVerified() {
+    const u = auth.currentUser; if (!u) return false;
+    await u.reload();
+    if (!auth.currentUser.emailVerified) return false;
+    await auth.currentUser.getIdToken(true);
+    return true;
   },
   signIn(email, password) { return auth.signInWithEmailAndPassword(email, password); },
   signOut() { return auth.signOut(); },
   sendReset(email) { return auth.sendPasswordResetEmail(email); }
 };
+// Referral codes: capital letters and digits only.
+const REF_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const cleanRef = v => String(v || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12);
+const newRefCode = () => Array.from({ length: 6 }, () => REF_CHARS[secureRandInt(REF_CHARS.length)]).join('');
+// What was typed at sign-up is kept on this phone until the email is verified and the profile is made.
+function saveSignup(o) { try { localStorage.setItem('tp_signup', JSON.stringify(o)); } catch (e) { /* private window */ } }
+function loadSignup() { try { return JSON.parse(localStorage.getItem('tp_signup') || '{}') || {}; } catch (e) { return {}; } }
+// Passwords: at least 8 characters with a letter and a number.
+function passwordProblem(p) {
+  if (p.length < 8) return 'Use at least 8 characters for the password.';
+  if (!/[A-Za-z]/.test(p) || !/[0-9]/.test(p)) return 'Use letters and numbers in the password.';
+  return '';
+}
 
 /* ==========================================================================
    SECTION 15 - FIRESTORE REPOSITORY
@@ -3031,20 +3369,18 @@ const Repo = {
   unlockRef: uid => db.collection('rooms').doc(PRIVATE_ID).collection('unlocked').doc(uid),
 
   /* ---- profile (rules: users) ---- */
-  // Rule: users create (owner, chips = 10,000, tableId '')
-  async ensureProfile(user) {
+  async getProfile(uid) { const snap = await Repo.userRef(uid).get(); return snap.exists ? snap.data() : null; },
+  // Rule: referrals get (anyone may look up one code).
+  async referralOk(code) { if (!code) return null; const s = await db.collection('referrals').doc(code).get(); return s.exists ? s.data() : null; },
+  // Rule: users create (verified email, valid referral code, status pending, no chips until the admin approves).
+  async createProfile(user, name, code) {
     const ref = Repo.userRef(user.uid);
-    const snap = await ref.get();
-    if (snap.exists) return snap.data();
-    const name = cleanName(S.pendingName || user.displayName) || nameFromEmail(user.email);
-    try {
-      await ref.set({ uid: user.uid, name, avatar: AVATAR_IDS[Math.abs([...user.uid].reduce((a, ch) => a * 31 + ch.charCodeAt(0), 7)) % AVATAR_IDS.length], chips: START_CHIPS, tableId: '', ...(user.email ? { email: user.email } : {}), createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
-    } catch (e) {
-      const again = await ref.get();          // another tab may have created it first
-      if (again.exists) return again.data();
-      throw e;
-    }
-    S.pendingName = '';
+    const r = await Repo.referralOk(code);
+    if (!r) throw new AppError('That referral code was not found. Check it with the player who gave it to you.');
+    if (r.uid === user.uid) throw new AppError('You cannot use your own referral code.');
+    await ref.set({ uid: user.uid, name, avatar: AVATAR_IDS[Math.abs([...user.uid].reduce((a, ch) => a * 31 + ch.charCodeAt(0), 7)) % AVATAR_IDS.length], chips: 0, tableId: '', email: user.email,
+      status: 'pending', statusAt: FV.serverTimestamp(), referredBy: code, referrerUid: r.uid, createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
+    try { localStorage.removeItem('tp_signup'); } catch (e) { /* private window */ }
     return (await ref.get()).data();
   },
   // Rule: users update (name/avatar, only while not seated)
@@ -3430,16 +3766,20 @@ function closeAllScopes() {
 async function onAuthChange(user) {
   const seq = ++authSeq;
   closeAllScopes();
-  S.user = user; S.profile = null; S.isAdmin = false; S.loadError = '';
+  Admin.stopLive(); Admin.st.users = null; Admin.st.presenceAt = 0; Admin.st.myRef = undefined;
+  S.user = user; S.profile = null; S.isAdmin = false; S.loadError = ''; S.gate = '';
   S.room = null; S.rooms = {}; S.roomsLoaded = {}; S.route = { name: 'loading' };
   if (!user) { try { sessionStorage.removeItem('tp_uid'); } catch (e) { /* private mode */ } S.forceLobby = false; S.authReady = true; S.myStats = null; Stats.applyTheme('velvet'); go(); return; }
   { let seen = ''; try { seen = sessionStorage.getItem('tp_uid') || ''; sessionStorage.setItem('tp_uid', user.uid); } catch (e) { /* private mode */ } S.forceLobby = seen !== user.uid; }   // a fresh sign-in starts in the lobby; a reload in the same tab goes back to your table
   S.isAdmin = user.uid === ADMIN_UID;
   if (S.isAdmin) { S.authReady = true; go(); return; }
-  S.authReady = false; go();
+  S.authReady = false; S.gate = ''; go();
   try {
-    const prof = await Repo.ensureProfile(user);
+    // 1. the email must be verified  2. a profile must exist (made with a referral code)  3. the admin must approve it
+    if (!user.emailVerified) { S.gate = 'verify'; S.authReady = true; go(); return; }
+    const prof = await Repo.getProfile(user.uid);
     if (seq !== authSeq) return;                 // a newer sign-in replaced this one
+    if (!prof) { S.gate = 'join'; S.authReady = true; go(); return; }
     S.profile = await Repo.syncEmail(user, prof);
     await StaleSeat.begin(user.uid, prof);       // a seat left idle for over 15 minutes is given up before anything is drawn
     if (seq !== authSeq) return;
@@ -3479,14 +3819,23 @@ function desiredRoute() {
   if (S.isAdmin) {
     const h0 = parseHash();
     if (h0.name === 'table' && TABLE_BY_ID[h0.id]) return { name: 'table', tableId: h0.id };
-    return { name: 'admin' };
+    return { name: AdminView.player() ? 'lobby' : 'admin' };
   }
+  if (S.gate === 'verify') return { name: 'verify' };
+  if (S.gate === 'join') return { name: 'join' };
   if (!S.profile) return { name: 'loading' };
   if (S.profile.banned === true) return { name: 'banned' };
+  if (S.profile.status !== 'approved') return { name: S.profile.status === 'rejected' ? 'rejected' : 'pending' };
   if (S.profile.tableId && TABLE_BY_ID[S.profile.tableId] && !S.forceLobby) return { name: 'table', tableId: S.profile.tableId };
   return { name: 'lobby' };
 }
 
+// The admin can switch between the console and the players' lobby (watch only). Kept for this tab.
+const AdminView = {
+  player() { try { return sessionStorage.getItem('tp_adminview') === 'player'; } catch (e) { return false; } },
+  set(v) { try { sessionStorage.setItem('tp_adminview', v); } catch (e) { /* private mode */ } location.hash = v === 'player' ? '#/lobby' : '#/admin'; go(); },
+  watchOnly() { toast('You are watching as the admin. Players use this.'); }
+};
 function go() {
   Tour.sync();
   const want = desiredRoute();
@@ -3623,6 +3972,9 @@ function render() {
     case 'table': node = renderTable(); break;
     case 'admin': node = renderAdmin(); break;
     case 'banned': node = renderBanned(); break;
+    case 'verify': node = renderVerify(); break;
+    case 'join': node = renderJoin(); break;
+    case 'pending': case 'rejected': node = renderPending(r.name); break;
     case 'error': node = renderLoadError(); break;
     default: node = renderLoading();
   }
@@ -3743,7 +4095,10 @@ function renderAuth() {
   const keep = id => { const e = $(id); return e ? e.value : ''; };
   const email = h('input', { id: 'authEmail', type: 'email', placeholder: 'you@example.com', autocomplete: 'username', autocapitalize: 'none', spellcheck: 'false', value: keep('authEmail') });
   const name = h('input', { id: 'authName', type: 'text', maxlength: NAME_MAX, placeholder: 'Shown at the table', autocomplete: 'nickname', value: keep('authName') });
-  const pass = h('input', { id: 'authPassword', type: 'password', placeholder: reg ? 'At least 6 characters' : 'Enter your password', autocomplete: reg ? 'new-password' : 'current-password' });
+  const pass = h('input', { id: 'authPassword', type: 'password', placeholder: reg ? '8+ letters and numbers' : 'Enter your password', autocomplete: reg ? 'new-password' : 'current-password' });
+  const pass2 = h('input', { id: 'authPassword2', type: 'password', placeholder: 'Type the password again', autocomplete: 'new-password' });
+  const refIn = h('input', { id: 'authRef', type: 'text', maxlength: 12, placeholder: 'From a club member', autocapitalize: 'characters', autocomplete: 'off', spellcheck: 'false', value: keep('authRef') || loadSignup().ref || '',
+    oninput: e => { const v = cleanRef(e.target.value); if (v !== e.target.value) e.target.value = v; } });
   const eye = h('button', { id: 'authEye', class: 'aeye', type: 'button', 'aria-label': 'Show password', onclick: () => {
     const show = pass.type === 'password'; pass.type = show ? 'text' : 'password';
     eye.replaceChildren(icon(show ? 'eyeOff' : 'eye')); eye.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
@@ -3751,7 +4106,7 @@ function renderAuth() {
   const msg = h('div', { id: 'authMsg', class: 'amsg', role: 'alert', hidden: true });
   const submit = h('button', { id: 'authSubmit', class: 'agold', type: 'button', onclick: submitAuth }, h('span', { text: reg ? 'Create account' : 'Login' }), icon('chevron'));
   const onEnter = e => { if (e.key === 'Enter') submitAuth(); };
-  [email, name, pass].forEach(i => i.addEventListener('keydown', onEnter));
+  [email, name, pass, pass2, refIn].forEach(i => i.addEventListener('keydown', onEnter));
   const field = (label, inputEl, ic, extra) => h('div', { class: 'afield' }, h('label', { for: inputEl.id, text: label }), h('div', { class: 'abox' }, icon(ic, 'lead'), inputEl, extra));
   const remember = h('label', { class: 'arem' }, h('input', { id: 'authRemember', type: 'checkbox', checked: getRemember(), onchange: e => setRemember(e.target.checked) }), h('span', { class: 'box' }, icon('check', 'tick')), h('span', { text: 'Remember me' }));
   return h('div', { class: 'authwrap' }, h('div', { class: 'authstage' + (reg ? ' reg' : '') },
@@ -3762,6 +4117,9 @@ function renderAuth() {
       reg ? field('DISPLAY NAME', name, 'user') : null,
       field('EMAIL', email, 'mail'),
       field('PASSWORD', pass, 'lock', eye),
+      reg ? field('CONFIRM PASSWORD', pass2, 'lock') : null,
+      reg ? field('REFERRAL CODE', refIn, 'userPlus') : null,
+      reg ? h('p', { class: 'anote', text: 'We email you a link to verify your address. After that the club admin approves your account.' }) : null,
       reg ? null : h('div', { class: 'arow' }, remember, h('button', { id: 'forgotBtn', class: 'alink', type: 'button', text: 'Forgot password?', onclick: handleForgot })),
       msg,
       submit,
@@ -3993,7 +4351,7 @@ function renderFelt(R, me, msgs) {
 
   /* top left: the crown is replaced by an exit button to the lobby; the pill says which room this is and how many seats are taken */
   stage.appendChild(S.isAdmin
-    ? h('button', { id: 'backBtn', class: 'tbexit', type: 'button', 'aria-label': 'Back to the dashboard', style: tbAt(103, 55), onclick: () => { location.hash = '#/admin'; } }, icon('logout'))
+    ? h('button', { id: 'backBtn', class: 'tbexit', type: 'button', 'aria-label': AdminView.player() ? 'Back to the lobby' : 'Back to the console', style: tbAt(103, 55), onclick: () => { location.hash = AdminView.player() ? '#/lobby' : '#/admin'; } }, icon('logout'))
     : h('button', { id: 'leaveBtn', class: 'tbexit', type: 'button', 'aria-label': 'Exit to the lobby', style: tbAt(103, 55), onclick: () => handleLeave() }, icon('logout')));
   stage.appendChild(h('div', { class: 'tbpatch tbroom', style: tbBox(155, 20, 372, 90) },
     h('div', { class: 'r1', text: 'Room: ' + cfg.room }),
@@ -4136,6 +4494,7 @@ function tileState(t) {
 const tileLimitsText = t => t.min ? fmt(t.min) + ' - ' + fmt(t.max) : '';
 
 function tileClick(t) {
+  if (S.isAdmin) { location.hash = '#/table/' + t.id; return; }      // the admin watches
   const st = tileState(t);
   if (!st.usable) { toast(t.private ? 'The private table is not open right now.' : 'That table is not available right now.', 'err'); return; }
   if (st.mine) { S.forceLobby = false; go(); return; }
@@ -4156,18 +4515,20 @@ const NL_W = 1870, NL_H = 841;
 const nlBox = (x0, y0, x1, y1) => 'left:' + (x0 / NL_W * 100).toFixed(3) + '%;top:' + (y0 / NL_H * 100).toFixed(3) + '%;width:' + ((x1 - x0) / NL_W * 100).toFixed(3) + '%;height:' + ((y1 - y0) / NL_H * 100).toFixed(3) + '%';
 // Tapping Private Table always offers the room code / password form. The database decides whether they are right.
 function privateTap() {
+  if (S.isAdmin) { location.hash = '#/table/' + PRIVATE_ID; return; }
   const st = tileState(PRIVATE_CFG);
   if (st.mine) { S.forceLobby = false; go(); return; }
   openPrivateEntry();
 }
 function renderLobby() {
-  const p = S.profile, parts = [];
-  const hit = (id, rect, label, fn, cls) => h('button', { id, class: 'nlhit' + (cls ? ' ' + cls : ''), type: 'button', style: nlBox(...rect), 'aria-label': label, onclick: fn });
+  const A = S.isAdmin, p = S.profile || { name: 'Club Admin', avatar: 'crown', chips: 0, tableId: '' }, parts = [];
+  const watchOnly = fn => A ? () => AdminView.watchOnly() : fn;
+  const hit = (id, rect, label, fn, cls) => h('button', { id, class: 'nlhit' + (cls ? ' ' + cls : ''), type: 'button', style: nlBox(...rect), 'aria-label': label, onclick: watchOnly(fn) });
 
   /* the left panel: your badge (gold ring, picture, name plate) over the menu rows, all drawn live */
   const nm = p.name, fs = Math.max(12, Math.min(24, 158 / (0.6 * Math.max(nm.length, 1))));
   parts.push(h('div', { class: 'nlpanel', 'aria-hidden': 'true', style: nlBox(0, 0, 340, 636) }));
-  parts.push(h('button', { id: 'lbProfile', class: 'nlbadge', type: 'button', 'aria-label': 'Your profile', style: nlBox(88, 24, 268, 218), onclick: () => Sheets.profile() },
+  parts.push(h('button', { id: 'lbProfile', class: 'nlbadge', type: 'button', 'aria-label': 'Your profile', style: nlBox(88, 24, 268, 218), onclick: watchOnly(() => Sheets.profile()) },
     h('span', { class: 'nlav' }, avatarNode(p.avatar)),
     h('span', { class: 'nlbimg', 'aria-hidden': 'true' }),
     h('span', { class: 'nlname' }, h('b', { id: 'lbName', title: nm, style: 'font-size:max(8px,calc(var(--u) * ' + fs.toFixed(1) + '))', text: nm }))));
@@ -4181,7 +4542,7 @@ function renderLobby() {
   { const bell = hit('lbBell', [1792, 28, 1848, 84], 'Notifications', () => Sheets.inbox()), un = Notices.unread('info').length; if (un) bell.appendChild(h('i', { class: 'nldot', text: String(un) })); parts.push(bell); }
 
   /* the side menu: leather rows with a gold edge, like the badge */
-  const row = (id, y, label, ic, fn, cls) => h('button', { id, class: 'nlrow' + (cls ? ' ' + cls : ''), type: 'button', 'aria-label': label, style: nlBox(40, y, 308, y + 68), onclick: fn },
+  const row = (id, y, label, ic, fn, cls) => h('button', { id, class: 'nlrow' + (cls ? ' ' + cls : ''), type: 'button', 'aria-label': label, style: nlBox(40, y, 308, y + 68), onclick: A && id !== 'lbPrivate' ? () => AdminView.watchOnly() : fn },
     iconF(ic), h('span', { text: label }), h('i', { class: 'nlchev' }, icon('chevron')));
   parts.push(row('lbPrivate', 262, 'Private Table', 'people', privateTap));
   parts.push(row('lbBoard', 350, 'LeaderBoard', 'trophy', () => Sheets.soon('Leaderboard', 'Who has won the most chips. This arrives once lifetime stats are tracked.')));
@@ -4213,6 +4574,8 @@ function renderLobby() {
         h('span', { class: 'tzfb', text: tk.word })),
       h('button', { type: 'button', class: 'mbtn nlhit', id: 'modeBtn_tournament', 'aria-label': 'Tournament. ' + tk.sr, style: 'left:0;top:0;width:100%;height:100%', onclick: () => Sheets.tournaments() }))); }
 
+  if (A) parts.push(h('div', { class: 'nladmin', id: 'adminWatchBar' }, h('span', { text: 'ADMIN · WATCH ONLY' }),
+    h('button', { type: 'button', id: 'backToConsole', text: 'Open console', onclick: () => AdminView.set('console') })));
   return h('div', { class: 'lobwrap nlwrap' }, h('div', { class: 'lobstage nlstage', id: 'lobStage' }, parts));
 }
 
@@ -4251,17 +4614,21 @@ async function submitAuth() {
   if (S.busy.auth) return;
   const reg = S.mode === 'register';
   const email = $('authEmail').value.trim(), password = $('authPassword').value;
-  const name = reg ? $('authName').value : '';
+  const name = reg ? $('authName').value : '', ref = reg ? cleanRef($('authRef').value) : '';
   $('authMsg').hidden = true;
   if (reg && !cleanName(name)) return showAuthMsg('Enter a display name (up to ' + NAME_MAX + ' characters).');
   if (!email) return showAuthMsg('Enter your email address.');
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return showAuthMsg('Enter a valid email address.');
   if (!password) return showAuthMsg('Enter your password.');
+  if (reg && passwordProblem(password)) return showAuthMsg(passwordProblem(password));
+  if (reg && password !== $('authPassword2').value) return showAuthMsg('The two passwords do not match.');
+  if (reg && !ref) return showAuthMsg('Enter the referral code a club member gave you.');
   S.busy.auth = true; setBtnBusy('authSubmit', true);
   try {
     // "Remember me": stay signed in on this phone, or only until the tab is closed
     try { const P = firebase.auth.Auth.Persistence; if (auth.setPersistence && P) await auth.setPersistence(!reg && $('authRemember') && !$('authRemember').checked ? P.SESSION : P.LOCAL); } catch (e) { /* the default persistence is fine */ }
     S.freshLogin = !S.keepSeat;                                  // typed credentials: any old seat is let go, not offered as "Return"
-    if (reg) await Auth.register(name, email, password);
+    if (reg) await Auth.register(name, email, password, ref);
     else await Auth.signIn(email, password);
   } catch (e) {
     console.error('[TeenPatti] auth failed', e && e.code);
@@ -5767,6 +6134,9 @@ const Sheets = {
       row('soundBtn', 'Sound effects', Sfx.on, () => Sfx.toggle()),
       row('vibBtn', 'Vibration', Sfx.vibOn, () => Sfx.toggleVib()),
       h('p', { class: 'hnote', text: 'These are saved on this phone only.' }),
+      S.profile && S.profile.refCode ? h('div', { class: 'refbox', id: 'myRefCode' }, h('span', { text: 'YOUR REFERRAL CODE' }), h('b', { text: S.profile.refCode }),
+        h('button', { type: 'button', class: 'pvcopy', text: 'Copy', onclick: () => { const ok = () => toast('Referral code copied.'); if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(S.profile.refCode).then(ok, () => toast(S.profile.refCode)); else toast(S.profile.refCode); } }),
+        h('i', { text: 'Friends need this code to sign up. The admin still approves them.' })) : null,
       S.user && !S.profile.tableId ? h('button', { id: 'signOutRow', type: 'button', class: 'btn-ghost', text: 'Sign out', onclick: () => { Sheets.close(); handleSignOut(); } }) : h('p', { class: 'hnote', text: 'Leave your table to sign out.' })));
   },
 
@@ -6053,7 +6423,7 @@ const ADMIN_ONLINE_MS = 60000;               // a seat stamped within this long 
    ========================================================================== */
 const Admin = {
   st: { view: 'hub', users: null, stats: {}, loading: false, q: '', filter: 'all', sel: '', edit: '', tab: '', pf: null, rake: null, vip: null, batches: null, draft: {}, notices: null, aud: { type: 'all', n: 1000, picked: [] }, nTitle: '', nBody: '', rAmt: '', rNote: 'A gift from the club', chipAmt: '', chipNote: '', msg: '', msgKind: 'ok' },
-  go(view) { Admin.st.aud = { type: 'all', n: 1000, picked: [] }; Admin.st.view = view; Admin.st.msg = ''; Admin.st.sel = ''; Admin.st.edit = ''; Admin.st.tab = ''; Admin.st.pf = null; Admin.st.tf = null; if (view === 'vip') Admin.loadVip(); if (view === 'rake') Admin.watchRake(); else Admin.unwatchRake(); if (view === 'private') Admin.watchSessions(); else Admin.unwatchSessions(); if (view === 'players' || view === 'notify' || view === 'rewards') Admin.loadUsers(); if (view === 'notify' || view === 'rewards') Admin.loadNotices(); Admin.paint(); },
+  go(view) { if (view === 'players') return Admin.nav('players'); Admin.st.aud = { type: 'all', n: 1000, picked: [] }; Admin.st.view = view; Admin.st.msg = ''; Admin.st.sel = ''; Admin.st.edit = ''; Admin.st.tab = ''; Admin.st.pf = null; Admin.st.tf = null; if (view === 'vip') Admin.loadVip(); if (view === 'rake') Admin.watchRake(); else Admin.unwatchRake(); if (view === 'private') Admin.watchSessions(); else Admin.unwatchSessions(); if (view === 'players' || view === 'notify' || view === 'rewards') Admin.loadUsers(); if (view === 'notify' || view === 'rewards') Admin.loadNotices(); Admin.paint(); },
   paint() { Admin.force = true; scheduleRender(); },
   say(text, kind) { Admin.st.msg = text; Admin.st.msgKind = kind || 'ok'; Admin.paint(); },
   async loadUsers(force) {
@@ -6237,7 +6607,66 @@ Object.assign(Repo, {
   sendNotice(o) {
     return db.collection('notices').add({ title: o.title, body: o.body, kind: o.kind, all: !!o.all, uids: o.uids || [], count: o.count || 0, amount: o.amount || 0, createdAt: FV.serverTimestamp() });
   },
-  deleteNotice(id) { return db.collection('notices').doc(id).delete(); }
+  deleteNotice(id) { return db.collection('notices').doc(id).delete(); },
+
+  /* ---- club access: approve, reject, revoke (rules: users update validAdminStatus + referrals create) ---- */
+  // The first approval gives the starting chips and the player's own referral code, in one transaction.
+  async approveUser(uid) {
+    let code = '';
+    await db.runTransaction(async tx => {
+      const ref = Repo.userRef(uid), s = await tx.get(ref);
+      if (!s.exists) throw new AppError('That player was not found.');
+      const u = s.data(), first = !u.approvedAt, upd = { status: 'approved', statusAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() };
+      if (first) { upd.approvedAt = FV.serverTimestamp(); upd.chips = (u.chips || 0) + START_CHIPS; }
+      if (!u.refCode) {
+        for (let i = 0; i < 6 && !code; i++) { const c = newRefCode(), r = await tx.get(db.collection('referrals').doc(c)); if (!r.exists) code = c; }
+        if (!code) throw new AppError('Could not make a referral code. Try again.');
+        tx.set(db.collection('referrals').doc(code), { uid, name: String(u.name || '').slice(0, 40), createdAt: FV.serverTimestamp() });
+        upd.refCode = code;
+      } else code = u.refCode;
+      tx.update(ref, upd);
+    });
+    return code;
+  },
+  setUserStatus(uid, status) { return Repo.userRef(uid).update({ status, statusAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() }); },
+  // The admin's own invite code, so the first players can sign up (rules: referrals list/create by the admin).
+  async adminRefCode(create) {
+    const sn = await db.collection('referrals').where('uid', '==', ADMIN_UID).limit(1).get();
+    if (!sn.empty) return sn.docs[0].id;
+    if (!create) return '';
+    for (let i = 0; i < 6; i++) {
+      const c = newRefCode(), ref = db.collection('referrals').doc(c);
+      if ((await ref.get()).exists) continue;
+      await ref.set({ uid: ADMIN_UID, name: 'Club Admin', createdAt: FV.serverTimestamp() });
+      return c;
+    }
+    throw new AppError('Could not make a referral code. Try again.');
+  },
+
+  /* ---- the club reset: every player, game, rake and record is deleted (rules: admin deletes) ---- */
+  async resetClub(step) {
+    const del = async (q, label, keep) => {
+      const sn = await q.get(); let n = 0;
+      const docs = sn.docs.filter(d => !(keep && keep(d)));
+      for (let i = 0; i < docs.length; i += 400) { const b = db.batch(); docs.slice(i, i + 400).forEach(d => b.delete(d.ref)); await b.commit(); n += Math.min(400, docs.length - i); }
+      if (step) step(label, n);
+      return n;
+    };
+    const tables = TABLES.map(t => t.id);
+    for (const sl of TOUR_SLOTS) for (const id of tourIds(sl)) { if (!(await Repo.roomRef(id).get()).exists) break; tables.push(id); }
+    for (const id of tables) {
+      const r = Repo.roomRef(id);
+      if (!(await r.get()).exists) continue;
+      for (const sub of ['members', 'bots', 'hands', 'actions', 'tips', 'feed', 'game'].concat(id === PRIVATE_ID ? ['unlocked'] : [])) await del(r.collection(sub), null);
+      await r.update({ hostUid: '', dealerAt: 0, seated: 0, updatedAt: FV.serverTimestamp() }).catch(e => console.warn('[TeenPatti] reset room', id, e && e.code));
+      if (step) step('Table ' + (TABLE_BY_ID[id] ? tableName(TABLE_BY_ID[id]) : id), 0);
+    }
+    for (const sl of TOUR_SLOTS) await del(db.collection('tournaments').doc(sl).collection('players'), null);
+    await del(db.collection('tournaments'), 'Tournaments');
+    for (const c of ['rake', 'tipjar', 'sessions', 'notices', 'vipLedger', 'vipBatches', 'vip', 'seen', 'stats']) await del(db.collection(c), c);
+    await del(db.collection('referrals'), 'Referral codes', d => d.data().uid === ADMIN_UID);
+    await del(db.collection('users'), 'Players');
+  }
 });
 
 /* Runs an admin action; any error is shown at the top of the page instead of a passing toast. */
@@ -6245,7 +6674,7 @@ async function adminBusy(key, context, fn) {
   if (S.busy[key]) return undefined;
   S.busy[key] = true; Admin.paint();
   try { return await fn(); }
-  catch (e) { console.error('[TeenPatti] ' + context, e && e.code, e && e.message); Admin.say(friendlyError(e), 'err'); return undefined; }
+  catch (e) { console.error('[TeenPatti] ' + context, e && e.code, e && e.message); if (e && e.code === 'permission-denied') Admin.st.rulesAt = Date.now(); Admin.say(friendlyError(e), 'err'); return undefined; }
   finally { S.busy[key] = false; Admin.paint(); }
 }
 /* ---------------------------------------------------------------- views ---- */
@@ -6260,48 +6689,358 @@ const ADMIN_TILES = [
   ['vip', 'tileVip', 'Rakeback', 'Review and approve the Friday payout']];
 const ADMIN_ICON = { tour: '♜', tables: '♠', private: '♛', players: '☺', notify: '✉', rewards: '★', rake: '◈', vip: '♦' };
 
+/* ==========================================================================
+   ADMIN COMMAND CENTER
+   One shell for the whole console: a header (brand, connection, alerts, the admin's menu), the page, and a bottom bar
+   with five places: Overview, Tables, Players, Requests, Settings. The older tools (tournaments, private table,
+   notifications, rewards, rake, rakeback, a table's limits) open inside the same shell with a back arrow.
+   Every number comes from the database; nothing here is made up.
+   ========================================================================== */
+const CC_NAV = [['overview', 'Overview', 'grid'], ['tables', 'Tables', 'table'], ['players', 'Players', 'users'], ['requests', 'Requests', 'inbox'], ['settings', 'Settings', 'gear']];
+const CC_TOOLS = { tables: 'Table limits', private: 'Private table', tour: 'Tournaments', players: 'Players', notify: 'Notifications', rewards: 'Rewards', rake: 'Rake', vip: 'Weekly rakeback' };
+const CC_ICON = {
+  grid: ['M4 4h7v7H4z', 'M13 4h7v7h-7z', 'M4 13h7v7H4z', 'M13 13h7v7h-7z'],
+  table: ['M12 5c-5 0-9 2.2-9 5s4 5 9 5 9-2.2 9-5-4-5-9-5z', 'M5 13.5V18', 'M19 13.5V18', 'M12 15v4'],
+  users: ['M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2', 'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z', 'M23 21v-2a4 4 0 0 0-3-3.9', 'M16 3.1a4 4 0 0 1 0 7.8'],
+  inbox: ['M22 12h-6l-2 3h-4l-2-3H2', 'M5.5 5.1L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.7 1.1z'],
+  gear: ICON.gear, bell: ICON.bell, check: ['M5 12l5 5L20 7'], x: ['M6 6l12 12', 'M18 6L6 18'], chev: ['M9 18l6-6-6-6'], back: ['M15 18l-6-6 6-6'],
+  search: ['M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z', 'M21 21l-4.3-4.3'], eye: ICON.eye, refresh: ['M21 12a9 9 0 1 1-2.6-6.4', 'M21 4v5h-5'],
+  pulse: ['M3 12h4l3-8 4 16 3-8h4'], alert: ['M12 3l10 18H2z', 'M12 10v4', 'M12 17.5v.5'], shield: ['M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z'],
+  link: ['M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1', 'M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1'], logout: ICON.logout,
+  trophy: ICON.trophy, crown: ICON.crown, mail: ICON.mail, gift: ICON.gift, stats: ICON.stats, lock: ICON.lock, play: ['M7 4l13 8-13 8z'], power: ['M12 3v9', 'M6.3 6.3a8 8 0 1 0 11.4 0']
+};
+const ccI = (k, cls) => h('svg', { class: 'cci' + (cls ? ' ' + cls : ''), viewBox: '0 0 24 24', 'aria-hidden': 'true' }, (CC_ICON[k] || []).map(d => h('path', { d })));
+const ccMs = v => (v && v.toMillis ? v.toMillis() : typeof v === 'number' ? v : 0);
+const ccAgo = ms => { if (!ms) return '-'; const d = Math.max(0, Date.now() - ms), m = Math.round(d / 60000); return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' h ago' : Math.round(m / 1440) + ' d ago'; };
+const ccStatus = u => u.banned === true ? 'blocked' : u.status === 'approved' ? 'approved' : u.status === 'rejected' ? 'rejected' : 'pending';
+
+/* ---- live data the console keeps open ---- */
+Object.assign(Admin, {
+  live: false,
+  ensureLive() {
+    if (Admin.live || !db) return;
+    Admin.live = true;
+    // every player, live: a sign-up or an approval shows up at once
+    Admin.usersUnsub = db.collection('users').onSnapshot(snap => {
+      const old = {}; (Admin.st.users || []).forEach(u => { old[u.uid] = u; });
+      Admin.st.users = snap.docs.map(d => { const o = old[d.id] || {}; return Object.assign({ _seen: o._seen || 0, _held: o._held, _stack: o._stack }, d.data()); }).sort((x, y) => String(x.name).localeCompare(String(y.name)));
+      Admin.st.usersAt = Date.now(); Admin.st.usersErr = '';
+      if (!Admin.st.presenceAt) Admin.loadPresence().then(() => Admin.paint());
+      Admin.paint();
+    }, e => { Admin.st.usersErr = friendlyError(e); Admin.paint(); });
+    Admin.watchRake();
+    Admin.loadNotices();
+    Repo.adminRefCode(false).then(c => { Admin.st.myRef = c; Admin.paint(); }, () => { Admin.st.myRef = ''; });
+    Admin.timer = setInterval(() => { if (S.route && S.route.name === 'admin') Admin.loadPresence().then(() => Admin.paint()); }, 60000);
+  },
+  stopLive() {
+    if (!Admin.live) return;
+    Admin.live = false;
+    if (Admin.usersUnsub) Admin.usersUnsub(); Admin.usersUnsub = null;
+    Admin.unwatchRake(); clearInterval(Admin.timer);
+  },
+  nav(n) { const a = Admin.st; a.nav = n; a.view = 'hub'; a.msg = ''; a.sel = ''; a.tab = ''; a.pf = null; a.tf = null; a.menu = false; a.tsheet = ''; Admin.paint(); const m = $('ccMain'); if (m) m.scrollTop = 0; window.scrollTo(0, 0); },
+  pending() { return (Admin.st.users || []).filter(u => ccStatus(u) === 'pending').sort((x, y) => ccMs(x.createdAt) - ccMs(y.createdAt)); },
+  match(u) {
+    const a = Admin.st, q = (a.q || '').trim().toLowerCase(), st = ccStatus(u);
+    if (q && !(String(u.name).toLowerCase().includes(q) || String(u.email || '').toLowerCase().includes(q) || u.uid.toLowerCase().includes(q))) return false;
+    return a.filter === 'pending' ? st === 'pending' : a.filter === 'approved' ? st === 'approved' : a.filter === 'online' ? Admin.stateOf(u) === 'playing' : a.filter === 'blocked' ? (st === 'blocked' || st === 'rejected') : true;
+  },
+  // Things that need the admin's attention, worst first.
+  alerts() {
+    const a = Admin.st, out = [], pub = TABLES.filter(t => !t.private), us = a.users || [];
+    if (!S.online) out.push({ k: 'bad', t: 'Offline', d: 'The console cannot reach the database. Changes will not save.' });
+    if (a.usersErr) out.push({ k: 'bad', t: 'Players could not load', d: a.usersErr });
+    if (a.rulesAt && Date.now() - a.rulesAt < 10 * 60000) out.push({ k: 'bad', t: 'A change was refused', d: 'The database rules refused an action. Publish the latest rules if this keeps happening.' });
+    const missing = pub.filter(t => S.roomsLoaded[t.id] && !S.rooms[t.id]).length;
+    if (missing) out.push({ k: 'warn', t: missing + (missing === 1 ? ' table is' : ' tables are') + ' not set up', d: 'Open Tables and set them up.', go: 'tables' });
+    TABLES.forEach(t => { const d = S.rooms[t.id]; if (d && (d.seated || 0) > 0 && d.hostUid && !hostLive(d, 60000)) out.push({ k: 'warn', t: tableName(t) + ': dealer offline', d: 'Players are seated but nobody is dealing. A player there takes over within seconds, or reassign it.', table: t.id }); });
+    const held = us.filter(u => Admin.stateOf(u) === 'held').length;
+    if (held) out.push({ k: 'warn', t: held + (held === 1 ? ' seat is' : ' seats are') + ' held', d: 'Players left the app without leaving their table.', go: 'players', f: 'all' });
+    const old = Admin.pending().filter(u => Date.now() - ccMs(u.createdAt) > 864e5).length;
+    if (old) out.push({ k: 'warn', t: old + (old === 1 ? ' request has' : ' requests have') + ' waited over a day', d: 'New players cannot play until you decide.', go: 'requests' });
+    if (a.myRef === '') out.push({ k: 'info', t: 'No invite code yet', d: 'Create your referral code in Settings so the first players can sign up.', go: 'settings' });
+    return out;
+  },
+  // What happened lately, from the records the club keeps.
+  activity() {
+    const ev = [], us = Admin.st.users || [], names = {};
+    us.forEach(u => { names[u.uid] = u.name; });
+    us.forEach(u => {
+      if (u.createdAt) ev.push({ at: ccMs(u.createdAt), cat: 'Access', t: u.name + ' signed up', d: u.referredBy ? 'Referral ' + u.referredBy + (names[u.referrerUid] ? ' from ' + names[u.referrerUid] : u.referrerUid === ADMIN_UID ? ' from you' : '') : 'Existing player', k: 'info' });
+      if (u.approvedAt) ev.push({ at: ccMs(u.approvedAt), cat: 'Access', t: u.name + ' approved', d: 'Given ' + fmt(START_CHIPS) + ' starting chips', k: 'ok' });
+      if (u.status === 'rejected' && u.statusAt) ev.push({ at: ccMs(u.statusAt), cat: 'Access', t: u.name + ' not approved', d: 'Access refused or revoked', k: 'bad' });
+      if (u.lastGrant && u.lastGrant.at) ev.push({ at: ccMs(u.lastGrant.at), cat: 'Chips', t: (u.lastGrant.amount > 0 ? '+' : '−') + fmt(Math.abs(u.lastGrant.amount)) + ' to ' + u.name, d: u.lastGrant.note || '', k: u.lastGrant.amount > 0 ? 'ok' : 'warn' });
+    });
+    (Admin.st.notices || []).forEach(n => ev.push({ at: ccMs(n.createdAt), cat: n.kind === 'reward' ? 'Reward' : 'Message', t: n.title, d: (n.all ? 'All players' : (n.uids || []).length + ' players') + (n.amount ? '  ·  ' + fmt(n.amount) + ' chips' : ''), k: 'info' }));
+    TOUR_SLOTS.forEach(s => { const T = Tour.T(s); if (T && T.createdAt) ev.push({ at: ccMs(T.createdAt), cat: 'Tournament', t: T.name + ' published', d: tzWhen(T.startAt) + '  ·  ' + (T.count || 0) + ' registered', k: 'info' }); });
+    Object.keys(Admin.st.rake || {}).forEach(id => { const r = Admin.st.rake[id]; if (r.updatedAt && TABLE_BY_ID[id]) ev.push({ at: ccMs(r.updatedAt), cat: 'Table', t: 'Hand finished at ' + tableName(TABLE_BY_ID[id]), d: fmt(r.total || 0) + ' rake over ' + (r.hands || 0) + ' hands', k: 'info' }); });
+    return ev.filter(e => e.at).sort((x, y) => y.at - x.at).slice(0, 20);
+  }
+});
+
+/* A confirmation dialog of our own (not the browser's). Resolves true when confirmed. `typed` asks for a word to be typed first. */
+function ccConfirm(o) {
+  return new Promise(res => {
+    const done = v => { el.remove(); res(v); };
+    const inp = o.typed ? h('input', { id: 'ccTyped', type: 'text', autocomplete: 'off', autocapitalize: 'characters', placeholder: 'Type ' + o.typed, oninput: e => { ok.disabled = e.target.value.trim().toUpperCase() !== o.typed; } }) : null;
+    const ok = h('button', { type: 'button', id: 'ccOk', class: 'ccbtn ' + (o.danger ? 'danger' : 'primary'), text: o.ok || 'Confirm', disabled: !!o.typed, onclick: () => done(true) });
+    const el = h('div', { class: 'ccmodal', role: 'dialog', 'aria-modal': 'true', onclick: e => { if (e.target === el) done(false); } },
+      h('div', { class: 'ccmbox' + (o.danger ? ' danger' : '') },
+        h('div', { class: 'ccmicon' }, ccI(o.danger ? 'alert' : 'shield')),
+        h('b', { text: o.title }), o.body ? h('p', { text: o.body }) : null, o.list ? h('ul', {}, o.list.map(t => h('li', { text: t }))) : null, inp,
+        h('div', { class: 'ccmbtns' }, h('button', { type: 'button', class: 'ccbtn ghost', id: 'ccCancel', text: 'Cancel', onclick: () => done(false) }), ok)));
+    document.body.appendChild(el);
+    if (inp) setTimeout(() => inp.focus(), 50);
+  });
+}
+
+/* ---- the shell ---- */
 function renderAdmin() {
   const a = Admin.st;
-  const back = title => h('div', { class: 'aback t-' + a.view },
-    h('button', { id: 'adminBack', type: 'button', class: 'abackbtn', 'aria-label': 'Back to the control room', onclick: () => Admin.go('hub') }, h('span', { 'aria-hidden': 'true', text: '←' })),
-    h('span', { class: 'aic', 'aria-hidden': 'true', text: ADMIN_ICON[a.view] || '' }),
-    h('h2', { text: title }));
-  const msg = h('div', { id: 'adminMsg', class: 'msg ' + (a.msgKind === 'err' ? 'err' : 'ok'), role: 'status', hidden: !a.msg, text: a.msg });
-  if (a.view === 'tables') return h('div', {}, back('Public tables'), adminTables(msg));
-  if (a.view === 'private') return h('div', {}, back('Private table'), msg, adminPrivate(), a.pf ? null : adminSessions());
-  if (a.view === 'tour') return h('div', {}, back('Tournaments'), msg, adminTour());
-  if (a.view === 'players') return h('div', {}, back('Players'), msg, adminPlayers());
-  if (a.view === 'notify') return h('div', {}, back('Notifications'), msg, adminNotify());
-  if (a.view === 'rewards') return h('div', {}, back('Rewards'), msg, adminRewards());
-  if (a.view === 'vip') return h('div', {}, back('Weekly rakeback'), msg, adminVip());
-  if (a.view === 'rake') return h('div', {}, back('Rake'), msg, adminRake());
-  // the control room: the club at a glance, then one tile per job
-  Admin.watchRake();
-  if (!a.users && !a.loading && !a.hubTried) { a.hubTried = true; Admin.loadUsers(); }
-  const pub = TABLES.filter(t => !t.private), live = pub.filter(t => hostLive(S.rooms[t.id])).length;
-  const pd = S.rooms[PRIVATE_ID], us = a.users, playing = us ? us.filter(u => Admin.stateOf(u) === 'playing').length : 0;
-  const rakeAll = a.rake ? Object.values(a.rake).reduce((x, d) => x + (d.total || 0), 0) : null;
-  const info = {
-    tables: pub.length + ' tables' + (live ? ' · ' + live + ' live' : ''),
-    private: !pd ? 'Not created yet' : pd.status === 'open' ? 'Open' + (hostLive(pd) ? ' · ' + (pd.seated || 0) + ' seated' : '') : 'Closed',
-    players: us ? us.length + ' players' : 'View and manage',
-    tour: (() => { const L = TOUR_SLOTS.map(Tour.T).filter(T => T && (Tour.phase(T).name === 'upcoming' || Tour.running(Tour.phase(T)))); const live = L.filter(T => Tour.running(Tour.phase(T))).length; return !L.length ? 'Nothing scheduled' : live ? live + ' live now' + (L.length > live ? ' · ' + (L.length - live) + ' upcoming' : '') : L.length + ' upcoming · ' + L.reduce((x, T) => x + (T.count || 0), 0) + ' in'; })(),
-    notify: 'Send a message', rewards: 'Send chips', vip: 'Friday payout', rake: rakeAll !== null ? fmt(rakeAll) + ' collected' : 'Per-table totals'
+  Admin.ensureLive();
+  if (!a.nav) a.nav = 'overview';
+  const tool = a.view && a.view !== 'hub';
+  const msg = h('div', { id: 'adminMsg', class: 'ccmsg ' + (a.msgKind === 'err' ? 'err' : 'ok'), role: 'status', hidden: !a.msg },
+    h('span', { text: a.msg || '' }), h('button', { type: 'button', 'aria-label': 'Dismiss', onclick: () => { a.msg = ''; Admin.paint(); } }, ccI('x')));
+  let page;
+  if (tool) {
+    const back = h('div', { class: 'cctoolbar' },
+      h('button', { id: 'adminBack', type: 'button', class: 'ccicon', 'aria-label': 'Back', onclick: () => { if (a.view === 'tables' && a.tab) { a.tab = ''; a.view = 'hub'; a.nav = 'tables'; Admin.paint(); } else Admin.go('hub'); } }, ccI('back')),
+      h('h2', { text: CC_TOOLS[a.view] || '' }));
+    const body = a.view === 'tables' ? adminTables(null) : a.view === 'private' ? h('div', {}, adminPrivate(), a.pf ? null : adminSessions()) : a.view === 'tour' ? adminTour()
+      : a.view === 'notify' ? adminNotify() : a.view === 'rewards' ? adminRewards() : a.view === 'vip' ? adminVip() : a.view === 'rake' ? adminRake() : adminPlayers();
+    page = h('div', { class: 'cctool t-' + a.view }, back, body);
+  } else page = a.nav === 'tables' ? ccTables() : a.nav === 'players' ? ccPlayers() : a.nav === 'requests' ? ccRequests() : a.nav === 'settings' ? ccSettings() : ccOverview();
+  return h('div', { class: 'cc', id: 'cc' }, ccHeader(), msg, h('main', { class: 'ccmain', id: 'ccMain' }, page), ccNavBar(), a.tsheet ? ccTableSheet(a.tsheet) : null);
+}
+function ccHeader() {
+  const a = Admin.st, nPend = Admin.pending().length, nAlert = Admin.alerts().filter(x => x.k !== 'info').length, bell = nPend + nAlert;
+  const who = (S.user && S.user.email) || 'Administrator';
+  return h('header', { class: 'cchead' },
+    h('div', { class: 'ccbrand' }, h('span', { class: 'ccmark', text: '♠' }), h('div', {}, h('b', { text: 'Admin Console' }), h('i', { text: 'Teen Patti Club' }))),
+    h('span', { class: 'cclive' + (S.online ? '' : ' off'), id: 'ccLive', title: S.online ? 'Connected to the database' : 'Offline' }, h('i'), h('span', { text: S.online ? 'Live' : 'Offline' })),
+    h('button', { type: 'button', class: 'ccicon', id: 'ccBell', 'aria-label': bell + ' items need attention', onclick: () => Admin.nav(nPend ? 'requests' : 'overview') }, ccI('bell'), bell ? h('em', { class: 'ccbadge', text: String(bell > 99 ? '99+' : bell) }) : null),
+    h('div', { class: 'ccprofile' },
+      h('button', { type: 'button', class: 'ccavatar', id: 'ccMe', 'aria-label': 'Admin menu', 'aria-expanded': a.menu ? 'true' : 'false', onclick: () => { a.menu = !a.menu; Admin.paint(); } }, h('span', { text: who.slice(0, 1).toUpperCase() })),
+      a.menu ? h('div', { class: 'ccmenu', id: 'ccMenu' },
+        h('div', { class: 'ccmenuwho' }, h('b', { text: 'Administrator' }), h('span', { text: who })),
+        h('button', { type: 'button', id: 'ccToPlayer', onclick: () => { a.menu = false; AdminView.set('player'); } }, ccI('eye'), h('span', { text: 'Player view (watch only)' })),
+        h('button', { type: 'button', id: 'ccToSettings', onclick: () => Admin.nav('settings') }, ccI('gear'), h('span', { text: 'Settings' })),
+        h('button', { type: 'button', id: 'ccSignOut', class: 'bad', onclick: () => { a.menu = false; handleSignOut(); } }, ccI('logout'), h('span', { text: 'Sign out' }))) : null));
+}
+function ccNavBar() {
+  const a = Admin.st, tool = a.view && a.view !== 'hub', nPend = Admin.pending().length;
+  return h('nav', { class: 'ccnav', 'aria-label': 'Console sections' }, CC_NAV.map(([k, label, ic]) => {
+    const on = !tool && a.nav === k;
+    return h('button', { type: 'button', id: 'nav_' + k, class: on ? 'on' : '', 'aria-current': on ? 'page' : null, onclick: () => Admin.nav(k) },
+      h('span', { class: 'ccnavic' }, ccI(ic), k === 'requests' && nPend ? h('em', { class: 'ccbadge', text: String(nPend) }) : null), h('span', { text: label }));
+  }));
+}
+const ccSec = (title, right, kids, id) => h('section', { class: 'ccsec', id }, h('div', { class: 'ccsechead' }, h('h3', { text: title }), right || null), kids);
+const ccEmpty = (ic, t, d) => h('div', { class: 'ccempty' }, ccI(ic), h('b', { text: t }), d ? h('span', { text: d }) : null);
+const ccLoading = t => h('div', { class: 'ccempty' }, h('div', { class: 'ccspin' }), h('span', { text: t || 'Loading…' }));
+
+/* ---- Overview ---- */
+function ccOverview() {
+  const a = Admin.st, us = a.users, pub = TABLES.filter(t => !t.private), allT = TABLES;
+  const active = allT.filter(t => hostLive(S.rooms[t.id])).length, setup = allT.filter(t => S.rooms[t.id]).length;
+  const online = us ? us.filter(u => Admin.stateOf(u) === 'playing').length : null, pend = Admin.pending(), alerts = Admin.alerts();
+  const metric = (id, ic, v, l, sub, cls, fn) => h('button', { type: 'button', class: 'ccmetric ' + (cls || ''), id, onclick: fn }, h('span', { class: 'ccmic' }, ccI(ic)), h('b', { text: v }), h('span', { text: l }), h('i', { text: sub }));
+  const out = [];
+  out.push(h('div', { class: 'ccmetrics', id: 'ccMetrics' },
+    metric('mTables', 'table', active + '/' + setup, 'Active tables', setup ? (setup - active) + ' quiet' : 'None set up', active ? 'ok' : '', () => Admin.nav('tables')),
+    metric('mOnline', 'pulse', online === null ? '…' : String(online), 'Players online', us ? us.filter(u => ccStatus(u) === 'approved').length + ' approved' : '', online ? 'ok' : '', () => { a.filter = 'online'; Admin.nav('players'); a.filter = 'online'; Admin.paint(); }),
+    metric('mRequests', 'inbox', String(pend.length), 'Pending requests', pend.length ? 'oldest ' + ccAgo(ccMs(pend[0].createdAt)) : 'All clear', pend.length ? 'cyan' : '', () => Admin.nav('requests')),
+    metric('mAlerts', 'alert', String(alerts.filter(x => x.k !== 'info').length), 'System alerts', alerts.length ? alerts[0].t : 'All systems normal', alerts.some(x => x.k === 'bad') ? 'bad' : alerts.some(x => x.k === 'warn') ? 'warn' : '', () => { const el = $('ccHealth'); if (el) el.scrollIntoView({ behavior: 'smooth' }); })));
+  // the approval queue, first three
+  out.push(ccSec('Pending requests', pend.length > 3 ? h('button', { type: 'button', class: 'cclinkbtn', text: 'See all ' + pend.length, onclick: () => Admin.nav('requests') }) : null,
+    !us ? ccLoading('Loading requests…') : pend.length ? h('div', { class: 'ccreqs' }, pend.slice(0, 3).map(ccRequestCard)) : ccEmpty('check', 'No one is waiting', 'New sign-ups appear here for you to approve.'), 'ovRequests'));
+  // tables at a glance
+  out.push(ccSec('Tables', h('button', { type: 'button', class: 'cclinkbtn', text: 'Manage', onclick: () => Admin.nav('tables') }),
+    h('div', { class: 'cctgrid' }, allT.map(t => ccTableCard(t, true))), 'ovTables'));
+  // the other jobs
+  const tools = [['tour', 'trophy', 'Tournaments', (() => { const L = TOUR_SLOTS.map(Tour.T).filter(T => T && (Tour.phase(T).name === 'upcoming' || Tour.running(Tour.phase(T)))); return L.length ? L.length + ' open' : 'None open'; })()],
+    ['private', 'crown', 'Private table', S.rooms[PRIVATE_ID] ? (S.rooms[PRIVATE_ID].status === 'open' ? 'Open' : 'Closed') : 'Not created'],
+    ['notify', 'mail', 'Notifications', 'Message players'], ['rewards', 'gift', 'Rewards', 'Send chips'],
+    ['rake', 'stats', 'Rake', a.rake ? fmt(Object.values(a.rake).reduce((x, d) => x + (d.total || 0), 0)) + ' collected' : '…'], ['vip', 'shield', 'Rakeback', 'Friday payout']];
+  out.push(ccSec('Tools', null, h('div', { class: 'cctools', id: 'ccTools' }, tools.map(([v, ic, t, sub]) => h('button', { type: 'button', class: 'cctool', id: 'tool_' + v, onclick: () => Admin.go(v) }, h('span', { class: 'ccmic' }, ccI(ic)), h('b', { text: t }), h('i', { text: sub })))), 'ovTools'));
+  out.push(ccActivity());
+  out.push(ccHealth());
+  return h('div', { class: 'ccpage' }, out);
+}
+function ccActivity() {
+  const ev = Admin.activity();
+  return ccSec('Activity', null, ev.length ? h('ol', { class: 'ccfeed', id: 'ccFeed' }, ev.map(e => h('li', { class: 'k-' + e.k },
+    h('span', { class: 'ccdot' }), h('div', {}, h('div', { class: 'ccfeedtop' }, h('em', { text: e.cat }), h('time', { text: ccAgo(e.at) })), h('b', { text: e.t }), e.d ? h('span', { text: e.d }) : null))))
+    : ccEmpty('pulse', 'Nothing yet', 'Sign-ups, approvals, chips and messages show up here.'), 'ccActivity');
+}
+function ccHealth() {
+  const a = Admin.st, alerts = Admin.alerts(), withPlayers = TABLES.filter(t => (S.rooms[t.id] || {}).seated > 0), dealers = withPlayers.filter(t => hostLive(S.rooms[t.id]));
+  const row = (t, v, k) => h('div', { class: 'cchrow k-' + k }, h('span', { class: 'ccdot' }), h('span', { text: t }), h('b', { text: v }));
+  return ccSec('System health', null, h('div', {},
+    h('div', { class: 'cchealth' },
+      row('Database', S.online ? 'Connected' : 'Offline', S.online ? 'ok' : 'bad'),
+      row('Sync', S.lastSync ? 'Updated ' + ccAgo(S.lastSync) : 'Waiting', S.lastSync && Date.now() - S.lastSync < 120000 ? 'ok' : 'warn'),
+      row('Dealers', withPlayers.length ? dealers.length + ' of ' + withPlayers.length + ' busy tables' : 'No busy tables', dealers.length === withPlayers.length ? 'ok' : 'warn'),
+      row('Rules', a.rulesAt && Date.now() - a.rulesAt < 600000 ? 'Refused a change' : 'No refusals', a.rulesAt && Date.now() - a.rulesAt < 600000 ? 'bad' : 'ok')),
+    alerts.length ? h('div', { class: 'ccalerts' }, alerts.map(x => h(x.go || x.table ? 'button' : 'div', { type: x.go || x.table ? 'button' : null, class: 'ccalert k-' + x.k, onclick: x.go ? () => { Admin.nav(x.go); } : x.table ? () => { a.tsheet = x.table; Admin.paint(); } : null },
+      ccI(x.k === 'info' ? 'shield' : 'alert'), h('div', {}, h('b', { text: x.t }), h('span', { text: x.d }))))) : null), 'ccHealth');
+}
+
+/* ---- Requests: the approval queue ---- */
+function ccRequestCard(u) {
+  const a = Admin.st, names = {}; (a.users || []).forEach(x => { names[x.uid] = x.name; });
+  const by = u.referrerUid === ADMIN_UID ? 'You' : names[u.referrerUid] || (u.referredBy ? 'Unknown player' : 'Existing player');
+  const busy = !!S.busy['apr_' + u.uid];
+  return h('div', { class: 'ccreq', 'data-uid': u.uid },
+    h('span', { class: 'ccrav' }, avatarNode(u.avatar)),
+    h('div', { class: 'ccrwho' }, h('b', { text: u.name }), h('span', { text: u.email || '' }),
+      h('div', { class: 'ccrtags' }, h('em', { class: 'ccpill wait', text: 'Waiting' }), h('em', { text: 'Club access' }), h('em', { text: ccAgo(ccMs(u.createdAt)) })),
+      h('i', { text: u.referredBy ? 'Invited by ' + by + '  ·  code ' + u.referredBy : 'Signed up before referral codes' })),
+    h('div', { class: 'ccracts' },
+      h('button', { type: 'button', class: 'ccbtn danger sm', 'data-act': 'reject', disabled: busy, onclick: () => ccDecide(u, false) }, busy ? h('span', { class: 'ccspin sm' }) : ccI('x'), h('span', { text: 'Reject' })),
+      h('button', { type: 'button', class: 'ccbtn primary sm', 'data-act': 'approve', disabled: busy, onclick: () => ccDecide(u, true) }, busy ? h('span', { class: 'ccspin sm' }) : ccI('check'), h('span', { text: 'Approve' }))));
+}
+async function ccDecide(u, yes) {
+  if (!yes && !(await ccConfirm({ title: 'Reject ' + u.name + '?', body: 'They will not be able to play. You can approve them later from Players.', ok: 'Reject', danger: true }))) return;
+  return adminBusy('apr_' + u.uid, yes ? 'approve player' : 'reject player', async () => {
+    if (yes) { const code = await Repo.approveUser(u.uid); toast(u.name + ' is approved' + (u.approvedAt ? '.' : ' with ' + fmt(START_CHIPS) + ' chips. Their referral code is ' + code + '.')); }
+    else { await Repo.setUserStatus(u.uid, 'rejected'); toast(u.name + ' was not approved.'); }
+  });
+}
+function ccRequests() {
+  const a = Admin.st, pend = Admin.pending();
+  if (!a.users) return h('div', { class: 'ccpage' }, ccLoading('Loading requests…'));
+  return h('div', { class: 'ccpage' },
+    h('div', { class: 'ccpagehead' }, h('h2', { text: 'Requests' }), h('span', { class: 'ccchip' + (pend.length ? ' cyan' : ''), text: pend.length + ' waiting' })),
+    h('p', { class: 'ccnote', text: 'Every new player has verified their email and used a referral code. They cannot play until you approve them. Approving gives ' + fmt(START_CHIPS) + ' starting chips and their own referral code.' }),
+    pend.length ? h('div', { class: 'ccreqs', id: 'reqList' }, pend.map(ccRequestCard)) : ccEmpty('check', 'No pending requests', 'When someone signs up with a referral code they appear here.'));
+}
+
+/* ---- Tables ---- */
+function ccTableState(t) {
+  const d = S.rooms[t.id], loaded = !!S.roomsLoaded[t.id];
+  if (!loaded) return ['load', 'Loading'];
+  if (!d) return ['off', 'Not set up'];
+  if (d.status !== 'open') return ['closed', 'Closed'];
+  if (hostLive(d)) return ['live', 'Live'];
+  if ((d.seated || 0) > 0 || d.hostUid) return ['paused', 'Paused'];
+  return ['wait', 'Waiting'];
+}
+function ccTableCard(t, mini) {
+  const d = S.rooms[t.id] || {}, [k, label] = ccTableState(t), on = hostLive(S.rooms[t.id]), seats = on ? (d.seated || 0) : 0;
+  return h('button', { type: 'button', class: 'cctcard s-' + k + (mini ? ' mini' : ''), id: 'tcard_' + t.id, 'data-table': t.id, onclick: () => { Admin.st.tsheet = t.id; Admin.st.tsData = null; Admin.paint(); ccLoadTable(t.id); } },
+    h('div', { class: 'cctctop' }, h('b', { text: t.private ? 'Private' : (t.mode === 'variant' ? 'Variant ' : 'Classic ') + fmt(t.boot) }), h('em', { class: 'ccpill s-' + k, text: label })),
+    h('span', { class: 'cctcid', text: t.id }),
+    mini ? null : h('div', { class: 'cctcrow' }, h('span', {}, ccI('users'), h('b', { text: seats + '/' + MAX_SEATS })), h('span', {}, ccI('pulse'), h('b', { text: on ? 'Dealer online' : d.hostUid ? 'Dealer away' : 'No dealer' })), ccI('chev', 'end')),
+    mini ? h('i', { class: 'cctcseats', text: seats + '/' + MAX_SEATS + ' seated' }) : null);
+}
+function ccTables() {
+  const pub = TABLES.filter(t => !t.private), groups = [['Classic tables', pub.filter(t => t.mode !== 'variant')], ['Variant tables', pub.filter(t => t.mode === 'variant')], ['Private', TABLES.filter(t => t.private)]];
+  const live = TABLES.filter(t => hostLive(S.rooms[t.id])).length, missing = pub.filter(t => S.roomsLoaded[t.id] && !S.rooms[t.id]).length;
+  return h('div', { class: 'ccpage' },
+    h('div', { class: 'ccpagehead' }, h('h2', { text: 'Tables' }), h('span', { class: 'ccchip' + (live ? ' ok' : ''), text: live + ' live' })),
+    missing ? h('button', { type: 'button', class: 'ccbtn primary wide', id: 'setupBtn', disabled: !!S.busy.setup, onclick: handleSetup }, ccI('refresh'), h('span', { text: 'Set up ' + missing + ' missing table' + (missing === 1 ? '' : 's') })) : null,
+    groups.map(([g, list]) => list.length ? ccSec(g, null, h('div', { class: 'cctlist' }, list.map(t => ccTableCard(t, false)))) : null),
+    h('p', { class: 'ccnote', text: 'Live: a dealer is running hands. Waiting: open, nobody playing. Paused: players seated but no dealer right now. Closed: no new players can join.' }));
+}
+// One table's details, read when its sheet opens (rules: members list, game get by the admin).
+async function ccLoadTable(id) {
+  const a = Admin.st;
+  try {
+    const [ms, gs] = await Promise.all([Repo.membersCol(id).get(), Repo.gameRef(id).get()]);
+    if (a.tsheet !== id) return;
+    a.tsData = { members: ms.docs.map(d => d.data()), game: gs.exists ? gs.data() : null, at: Date.now() };
+  } catch (e) { if (a.tsheet === id) a.tsData = { err: friendlyError(e) }; }
+  Admin.paint();
+}
+function ccTableSheet(id) {
+  const a = Admin.st, t = TABLE_BY_ID[id], d = S.rooms[id], D = a.tsData, [k, label] = ccTableState(t), on = hostLive(d);
+  const close = () => { a.tsheet = ''; a.tsData = null; Admin.paint(); };
+  const G = D && D.game, phase = !G ? 'No hand yet' : G.phase === 'playing' ? 'Hand ' + (G.handNo || '') + ' in play' : G.phase === 'result' ? 'Showing the result' : 'Between hands';
+  const host = D && D.members && d && d.hostUid ? (D.members.find(m => m.uid === d.hostUid) || {}).name : '';
+  const kv = (l, v, cls) => h('div', { class: 'cckv' + (cls ? ' ' + cls : '') }, h('span', { text: l }), h('b', { text: v }));
+  const toggle = async () => {
+    const open = d.status === 'open';
+    if (!(await ccConfirm({ title: (open ? 'Close ' : 'Open ') + tableName(t) + '?', body: open ? 'No new players can join. Players already seated can finish their hand and leave.' : 'Players can join this table again.', ok: open ? 'Close table' : 'Open table', danger: open }))) return;
+    return adminBusy('tstat_' + id, 'change table', async () => { await Repo.setTableStatus(id, open ? 'closed' : 'open'); toast(tableName(t) + (open ? ' is closed.' : ' is open.')); });
   };
-  const hot = { tables: live > 0, private: !!pd && pd.status === 'open', players: playing > 0, tour: TOUR_SLOTS.some(x => Tour.running(Tour.phase(Tour.T(x)))) };
-  const kpi = (id, v, l, view) => h('button', { type: 'button', class: 'akpi', id, onclick: () => Admin.go(view) }, h('b', { text: v }), h('span', { text: l }));
-  return h('div', { class: 'ahub' },
-    h('div', { class: 'ahero' },
-      h('div', { class: 'aherotop' }, h('div', {}, h('div', { class: 'eyebrow', text: 'Administrator' }), h('h2', { text: 'Control room' })),
-        h('span', { class: 'aherowho', text: S.user.email || S.user.uid })),
-      h('div', { class: 'akpis', id: 'adminKpis' },
-        kpi('kpiPlayers', us ? fmt(us.length) : '…', 'Players', 'players'), kpi('kpiPlaying', us ? String(playing) : '…', 'Playing', 'players'),
-        kpi('kpiLive', String(live), 'Tables live', 'tables'), kpi('kpiRake', rakeAll !== null ? fmt(rakeAll) : '…', 'Rake', 'rake'))),
-    h('div', { class: 'atiles', id: 'adminTiles' }, ADMIN_TILES.map(([v, id, title, sub]) =>
-      h('button', { id, type: 'button', class: 'atile t-' + v, onclick: () => Admin.go(v) },
-        h('span', { class: 'aic', 'aria-hidden': 'true', text: ADMIN_ICON[v] }),
-        h('span', { class: 'atxt' }, h('b', { text: title }), h('span', { class: 'asub', text: sub })),
-        h('i', { class: 'astat' + (hot[v] ? ' hot' : ''), text: info[v] })))));
+  const reassign = async () => {
+    if (!(await ccConfirm({ title: 'Reassign the dealer?', body: 'The current dealer phone has stopped answering. Another player at the table takes over the dealing within seconds.', ok: 'Reassign' }))) return;
+    return adminBusy('thost_' + id, 'reassign dealer', async () => { await Repo.roomRef(id).update({ hostUid: '', dealerAt: 0, updatedAt: FV.serverTimestamp() }); toast('The dealer role is free. A player at the table picks it up.'); });
+  };
+  return h('div', { class: 'ccsheetback', onclick: e => { if (e.target.classList.contains('ccsheetback')) close(); } },
+    h('div', { class: 'ccsheet', id: 'tableSheet', role: 'dialog', 'aria-label': tableName(t) },
+      h('div', { class: 'ccgrab' }),
+      h('div', { class: 'ccsheethead' }, h('div', {}, h('b', { text: tableName(t) }), h('span', { text: t.id + (d ? '  ·  boot ' + fmt(t.boot) + '  ·  buy-in ' + fmt(t.min) + ' - ' + fmt(t.max) : '') })),
+        h('button', { type: 'button', class: 'ccicon', id: 'tsClose', 'aria-label': 'Close', onclick: close }, ccI('x'))),
+      !d ? h('div', {}, ccEmpty('table', 'Not set up', 'This table has no record yet.'), t.private ? null : h('button', { type: 'button', class: 'ccbtn primary wide', disabled: !!S.busy.setup, onclick: handleSetup, text: 'Set up missing tables' }))
+        : h('div', {},
+          h('div', { class: 'cckvs' }, kv('Status', label, 's-' + k), kv('Seats', (on ? d.seated || 0 : 0) + ' / ' + MAX_SEATS), kv('Game phase', D ? phase : '…'), kv('Dealer', on ? 'Online' + (host ? ' · ' + host : '') : d.hostUid ? 'Not answering' : 'None', on ? 's-live' : d.hostUid ? 's-paused' : '')),
+          ccSec('Seats and players', null, !D ? ccLoading() : D.err ? h('p', { class: 'ccnote bad', text: D.err }) : D.members.length ? h('div', { class: 'ccseats' }, D.members.map(m => h('div', { class: 'ccseat' },
+            h('span', { class: 'ccrav sm' }, avatarNode(m.avatar)), h('b', { text: m.name }), h('em', { class: 'ccpill ' + (m.seatState === 'seated' ? 's-live' : 's-wait'), text: m.seatState === 'seated' ? 'Seated' : 'Watching' }), h('span', { class: 'num', text: fmt(m.stack) }))))
+            : ccEmpty('users', 'Nobody at this table', '')),
+          ccSec('Recent events', null, !D ? ccLoading() : G && G.log && G.log.length ? h('ol', { class: 'cclog' }, G.log.slice(-8).reverse().map(x => h('li', { text: x }))) : h('p', { class: 'ccnote', text: 'No hand has been played since the table was last reset.' })),
+          h('div', { class: 'ccacts' },
+            h('button', { type: 'button', class: 'ccbtn ghost', id: 'tsWatch', onclick: () => { location.hash = '#/table/' + id; } }, ccI('eye'), h('span', { text: 'Watch table' })),
+            h('button', { type: 'button', class: 'ccbtn ' + (d.status === 'open' ? 'danger' : 'primary'), id: 'tsToggle', disabled: !!S.busy['tstat_' + id], onclick: toggle }, ccI('power'), h('span', { text: d.status === 'open' ? 'Close table' : 'Open table' })),
+            t.private ? h('button', { type: 'button', class: 'ccbtn ghost', id: 'tsPrivate', onclick: () => { a.tsheet = ''; Admin.go('private'); } }, ccI('crown'), h('span', { text: 'Private table tools' }))
+              : h('button', { type: 'button', class: 'ccbtn ghost', id: 'tsEdit', onclick: () => { a.tsheet = ''; Admin.go('tables'); Admin.st.tab = id; Admin.paint(); } }, ccI('gear'), h('span', { text: 'Edit limits' })),
+            h('button', { type: 'button', class: 'ccbtn ghost', id: 'tsHost', disabled: !d.hostUid || on || !!S.busy['thost_' + id], title: !d.hostUid ? 'There is no dealer to reassign' : on ? 'The dealer is online' : '', onclick: reassign }, ccI('refresh'), h('span', { text: 'Reassign dealer' }))),
+          h('button', { type: 'button', class: 'cclinkbtn center', id: 'tsRefresh', onclick: () => { a.tsData = null; Admin.paint(); ccLoadTable(id); } }, ccI('refresh'), h('span', { text: D && D.at ? 'Refreshed ' + ccAgo(D.at) + ' · refresh' : 'Refresh' })))));
+}
+
+/* ---- Players ---- */
+function ccPlayers() {
+  const a = Admin.st, us = a.users;
+  if (!us) return h('div', { class: 'ccpage' }, ccLoading('Loading players…'));
+  if (!a.filter || !['all', 'pending', 'approved', 'online', 'blocked'].includes(a.filter)) a.filter = 'all';
+  const cnt = f => us.filter(u => f === 'pending' ? ccStatus(u) === 'pending' : f === 'approved' ? ccStatus(u) === 'approved' : f === 'online' ? Admin.stateOf(u) === 'playing' : f === 'blocked' ? ['blocked', 'rejected'].includes(ccStatus(u)) : true).length;
+  const shown = us.filter(Admin.match);
+  return h('div', { class: 'ccpage' },
+    h('div', { class: 'ccpagehead' }, h('h2', { text: 'Players' }), h('span', { class: 'ccchip', text: us.length + ' total' }),
+      h('button', { type: 'button', class: 'ccicon', id: 'exportCsv', 'aria-label': 'Export CSV', title: 'Export CSV', onclick: () => { Admin.csv(); toast('The player list was saved as a CSV file.'); } }, ccI('inbox'))),
+    h('label', { class: 'ccsearch' }, ccI('search'), h('input', { id: 'pSearch', type: 'search', placeholder: 'Search name, email or ID', value: a.q || '', oninput: e => { a.q = e.target.value; Admin.listOnly(); } })),
+    h('div', { class: 'ccfilters', id: 'pFilters' }, [['all', 'All'], ['pending', 'Pending'], ['approved', 'Approved'], ['online', 'Online'], ['blocked', 'Blocked']].map(([v, t]) =>
+      h('button', { type: 'button', class: a.filter === v ? 'on' : '', 'data-f': v, onclick: () => { a.filter = v; a.sel = ''; Admin.paint(); } }, h('span', { text: t }), h('i', { text: String(cnt(v)) })))),
+    h('div', { id: 'pList' }, playerRows(shown)));
+}
+Admin.listOnly = function () { const el = $('pList'); if (!el) return; el.replaceChildren(playerRows((Admin.st.users || []).filter(Admin.match))); };
+
+/* ---- Settings ---- */
+function ccSettings() {
+  const a = Admin.st, code = a.myRef;
+  const copy = v => { const ok = () => toast('Copied.'); if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(v).then(ok, () => toast(v)); else toast(v); };
+  const reset = async () => {
+    const yes = await ccConfirm({ title: 'Reset the whole club?', danger: true, ok: 'Reset now', typed: 'RESET',
+      body: 'This deletes, for good:', list: ['Every player profile and wallet (they must sign up again)', 'All games, hands, seats and bots at every table', 'Rake, tips, rakeback, sessions and stats', 'Tournaments, notifications and referral codes (yours is kept)'] });
+    if (!yes) return;
+    a.resetLog = []; a.resetting = true; Admin.paint();
+    await adminBusy('reset', 'reset the club', async () => {
+      await Repo.resetClub((label, n) => { if (label) { a.resetLog.push(label + (n ? ': ' + n + ' deleted' : '')); Admin.paint(); } });
+      a.users = []; a.stats = {}; a.presenceAt = 0; a.notices = []; a.tourHist = undefined;
+      toast('The club was reset. Share your referral code to invite players.');
+    });
+    a.resetting = false; Admin.paint();
+  };
+  return h('div', { class: 'ccpage' },
+    h('div', { class: 'ccpagehead' }, h('h2', { text: 'Settings' })),
+    ccSec('Your account', null, h('div', { class: 'cclist' },
+      h('div', { class: 'ccrow' }, h('span', { class: 'ccrav' }, h('b', { text: ((S.user && S.user.email) || 'A').slice(0, 1).toUpperCase() })), h('div', {}, h('b', { text: 'Administrator' }), h('span', { text: (S.user && S.user.email) || '' }))),
+      h('button', { type: 'button', class: 'ccrow btn', id: 'setPlayerView', onclick: () => AdminView.set('player') }, ccI('eye'), h('div', {}, h('b', { text: 'Player view' }), h('span', { text: 'See the lobby and watch tables as players see them' })), ccI('chev', 'end')),
+      h('button', { type: 'button', class: 'ccrow btn bad', id: 'setSignOut', onclick: handleSignOut }, ccI('logout'), h('div', {}, h('b', { text: 'Sign out' })), ccI('chev', 'end')))),
+    ccSec('Your referral code', null, h('div', { class: 'ccref', id: 'adminRef' },
+      code === undefined ? ccLoading() : code ? h('div', { class: 'ccrefcode' }, h('b', { text: code }), h('button', { type: 'button', class: 'ccbtn ghost sm', onclick: () => copy(code) }, ccI('link'), h('span', { text: 'Copy' })))
+        : h('button', { type: 'button', class: 'ccbtn primary wide', id: 'makeRef', disabled: !!S.busy.ref, onclick: () => adminBusy('ref', 'create referral code', async () => { a.myRef = await Repo.adminRefCode(true); toast('Your referral code is ' + a.myRef + '.'); }) }, ccI('link'), h('span', { text: 'Create my referral code' })),
+      h('p', { class: 'ccnote', text: 'New players need a referral code to sign up: yours, or the code of any approved player (each gets one when you approve them). Every sign-up still waits for your approval.' }))),
+    ccSec('Tools', null, h('div', { class: 'cclist' }, ADMIN_TILES.map(([v, id, title, sub]) => h('button', { type: 'button', class: 'ccrow btn', id: 'set_' + v, onclick: () => v === 'tables' ? Admin.nav('tables') : v === 'players' ? Admin.nav('players') : Admin.go(v) },
+      h('span', { class: 'ccmic' }, ccI({ tour: 'trophy', tables: 'table', private: 'crown', players: 'users', notify: 'mail', rewards: 'gift', rake: 'stats', vip: 'shield' }[v])), h('div', {}, h('b', { text: title }), h('span', { text: sub })), ccI('chev', 'end'))))),
+    ccHealth(),
+    ccSec('Danger zone', null, h('div', { class: 'ccdanger', id: 'dangerZone' },
+      h('div', {}, h('b', { text: 'Reset club data' }), h('span', { text: 'Deletes every player, game, rake and record. Tables, their limits and your referral code stay.' })),
+      h('button', { type: 'button', class: 'ccbtn danger', id: 'resetClub', disabled: !!S.busy.reset, onclick: reset }, S.busy.reset ? h('span', { class: 'ccspin sm' }) : ccI('alert'), h('span', { text: S.busy.reset ? 'Resetting…' : 'Reset everything' })),
+      a.resetLog && a.resetLog.length ? h('ol', { class: 'cclog', id: 'resetLog' }, a.resetLog.slice(-8).map(x => h('li', { text: x }))) : null)));
 }
 
 /* ---- 1. public tables ---- */
@@ -6575,7 +7314,6 @@ function adminPlayers() {
       return h('button', { type: 'button', class: 'achip' + (a.filter === v ? ' on' : ''), 'data-f': v, onclick: () => { a.filter = v; Admin.paint(); } }, h('span', { text: t }), h('i', { text: String(n) })); })));
   return h('div', {}, head, h('div', { id: 'pList' }, playerRows(shown)));
 }
-Admin.listOnly = function () { const el = $('pList'); if (!el) return; const us = Admin.st.users || [], a = Admin.st, q = a.q.trim().toLowerCase(); const now = Date.now(), ms = v => (v && v.toMillis ? v.toMillis() : 0); el.replaceChildren(playerRows(us.filter(u => (!q || String(u.name).toLowerCase().includes(q) || String(u.email || '').toLowerCase().includes(q) || u.uid.toLowerCase().includes(q)) && (a.filter === 'playing' ? Admin.stateOf(u) === 'playing' : a.filter === 'banned' ? u.banned === true : a.filter === 'low' ? u.chips < 1000 : a.filter === 'new' ? now - ms(u.createdAt) < 7 * 864e5 : true)))); };
 function playerRows(list) {
   const a = Admin.st;
   if (!list.length) return h('div', { class: 'card tight' }, h('p', { class: 'muted', text: 'No players match.' }));
@@ -6585,7 +7323,7 @@ function playerRows(list) {
       h('button', { type: 'button', class: 'aprow', 'data-open': u.uid, 'aria-expanded': open ? 'true' : 'false', onclick: () => { a.sel = open ? '' : u.uid; a.chipAmt = ''; a.chipNote = ''; Admin.paint(); } },
         h('span', { class: 'apav' + (st === 'playing' ? ' live' : '') }, avatarNode(u.avatar)),
         h('span', { class: 'apwho' }, h('b', { text: u.name }), h('i', { text: u.email || 'email not seen yet' })),
-        u.banned ? h('span', { class: 'aptag bad', text: 'Banned' }) : st === 'playing' ? h('span', { class: 'aptag ok', text: 'Playing' }) : st === 'held' ? h('span', { class: 'aptag', text: 'Seat held' }) : null,
+        u.banned ? h('span', { class: 'aptag bad', text: 'Blocked' }) : ccStatus(u) === 'pending' ? h('span', { class: 'aptag cyan', text: 'Pending' }) : ccStatus(u) === 'rejected' ? h('span', { class: 'aptag bad', text: 'No access' }) : st === 'playing' ? h('span', { class: 'aptag ok', text: 'Online' }) : st === 'held' ? h('span', { class: 'aptag', text: 'Seat held' }) : null,
         h('span', { class: 'apchips' }, h('b', { text: fmt(u.chips) }), h('i', { text: 'chips' })),
         h('span', { class: 'apcar', 'aria-hidden': 'true', text: open ? '▴' : '▾' })),
       open ? playerDetail(u, s, hd) : null);
@@ -6622,7 +7360,21 @@ function playerDetail(u, s, hd) {
   };
   const copyId = () => { const ok = () => toast('Player ID copied.'), no = () => toast('Could not copy the ID.', 'err'); if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u.uid).then(ok, no); else no(); };
   const busy = !!S.busy['chips_' + u.uid];
+  const names = {}; (a.users || []).forEach(x => { names[x.uid] = x.name; });
+  const acc = ccStatus(u), abusy = !!S.busy['apr_' + u.uid];
+  const access = h('div', { class: 'apaccess', id: 'apAccess' },
+    h('div', { class: 'apacchead' }, h('span', { text: 'CLUB ACCESS' }), h('em', { class: 'ccpill s-' + (acc === 'approved' ? 'live' : acc === 'pending' ? 'cyan' : 'closed'), text: acc === 'approved' ? 'Approved' : acc === 'pending' ? 'Pending' : acc === 'blocked' ? 'Blocked' : 'No access' })),
+    h('div', { class: 'aplines' },
+      line('Invited by', u.referredBy ? (u.referrerUid === ADMIN_UID ? 'You' : names[u.referrerUid] || 'Unknown') + '  ·  ' + u.referredBy : 'Before referral codes'),
+      line('Their code', u.refCode || 'Given when approved')),
+    h('div', { class: 'apacts' },
+      acc === 'approved' ? h('button', { type: 'button', class: 'btn-danger btn-small', id: 'revokeBtn', disabled: abusy, text: 'Revoke access', onclick: async () => {
+        if (!(await ccConfirm({ title: 'Revoke ' + u.name + '?', body: 'They keep their chips but cannot join tables or tournaments until you approve them again. A player seated right now can finish and leave.', ok: 'Revoke access', danger: true }))) return;
+        return adminBusy('apr_' + u.uid, 'revoke access', async () => { await Repo.setUserStatus(u.uid, 'rejected'); toast(u.name + ' no longer has access.'); }); } })
+        : h('button', { type: 'button', class: 'btn-primary btn-small', id: 'approveBtn', disabled: abusy || u.banned, text: 'Approve', onclick: () => ccDecide(u, true) }),
+      acc === 'pending' ? h('button', { type: 'button', class: 'btn-danger btn-small', id: 'rejectBtn', disabled: abusy, text: 'Reject', onclick: () => ccDecide(u, false) }) : null));
   return h('div', { class: 'adetail', id: 'playerDetail' },
+    access,
     h('div', { class: 'apstats', id: 'apStats' },
       stat('Hands', hd), stat('Won', wins), stat('Win rate', hd ? rate + '%' : '-'), stat('Best streak', s.best || 0),
       stat('Biggest pot', fmt(s.bigPot || 0)), stat('Peak chips', fmt(s.peak || 0)), stat('Packs', s.packs || 0), stat('Blind hands', s.blindHands || 0)),
@@ -6642,9 +7394,9 @@ function playerDetail(u, s, hd) {
     h('div', { class: 'apmore' },
       st === 'held' ? h('button', { id: 'releaseSeat', class: 'aplink', type: 'button', text: 'Release held seat', title: 'The chips at the table go back to the wallet', onclick: () => adminBusy('rel_' + u.uid, 'release seat', async () => { await Repo.adminRemoveMember(u.uid, u.tableId); await Admin.loadUsers(true); Admin.say('The seat was released.'); }) }) : null,
       u.email ? h('button', { id: 'resetPw', class: 'aplink', type: 'button', text: 'Send password reset', onclick: () => adminBusy('pw_' + u.uid, 'send reset', async () => { await Auth.sendReset(u.email); Admin.say('A password reset email was sent to ' + u.email + '.'); }) }) : null,
-      h('button', { id: 'banBtn', class: 'aplink ' + (u.banned ? 'good' : 'bad'), type: 'button', text: u.banned ? 'Lift the ban' : 'Ban player',
-        onclick: () => {
-          if (!u.banned && !confirm('Ban ' + u.name + '? They will be locked out of the game until you lift the ban.')) return;
+      h('button', { id: 'banBtn', class: 'aplink ' + (u.banned ? 'good' : 'bad'), type: 'button', text: u.banned ? 'Unblock' : 'Block player',
+        onclick: async () => {
+          if (!u.banned && !(await ccConfirm({ title: 'Block ' + u.name + '?', body: 'They are locked out of the game until you unblock them.', ok: 'Block', danger: true }))) return;
           return adminBusy('ban_' + u.uid, 'ban player', async () => { await Repo.setBanned(u.uid, !u.banned); u.banned = !u.banned; Admin.say(u.name + (u.banned ? ' is banned.' : ' can play again.')); });
         } })));
 }
@@ -7240,7 +7992,8 @@ Sheets.tournaments = function (refresh) {
     const ph = Tour.phase(T), st = Tour.statusOf(T, ph), me = Tour.me(s), f = (v, l) => h('div', {}, h('b', { text: v }), h('span', { text: l }));
     const atMine = prof && prof.tableId && tourSlotOf(prof.tableId) === s, open = ph.name === 'upcoming' || Tour.running(ph);
     let act = null;
-    if (!open) act = h('button', { type: 'button', class: 'btn-secondary btn-small', 'data-act': 'standings', text: ph.name === 'ended' ? 'Final standings' : 'Details', onclick: () => Sheets.tourDetail(s) });
+    if (S.isAdmin) act = h('button', { type: 'button', class: 'btn-secondary btn-small', 'data-act': 'standings', text: 'Standings', onclick: () => Sheets.tourDetail(s) });
+    else if (!open) act = h('button', { type: 'button', class: 'btn-secondary btn-small', 'data-act': 'standings', text: ph.name === 'ended' ? 'Final standings' : 'Details', onclick: () => Sheets.tourDetail(s) });
     else if (!me) act = h('button', { type: 'button', class: 'btn-primary btn-small', 'data-act': 'register', text: 'Register', onclick: () => Sheets.tourPay(s) });
     else if (atMine) act = h('button', { type: 'button', class: 'btn-primary btn-small', 'data-act': 'return', text: 'My table', onclick: () => Tour.join(s) });
     else if (Tour.running(ph)) act = h('button', { type: 'button', class: 'btn-primary btn-small' + (me.held > 0 ? ' tzglowbtn' : ''), 'data-act': 'join', text: me.held > 0 ? 'Join table' : 'Rejoin', onclick: () => Tour.join(s) });
@@ -7531,6 +8284,74 @@ Object.assign(Sheets, {
     Notices.markSeen('info');
   }
 });
+/* ---- after sign-up: verify the email, give a referral code, wait for the admin ---- */
+function authCard(id, kids) {
+  return h('div', { class: 'authwrap' }, h('div', { class: 'authstage gate' }, h('div', { class: 'apanel', id }, kids)));
+}
+function renderVerify() {
+  const u = S.user, msg = h('div', { id: 'verifyMsg', class: 'amsg', role: 'alert', hidden: true });
+  const say = (t, ok) => { msg.textContent = t; msg.hidden = false; msg.classList.toggle('ok', !!ok); };
+  const check = async (quiet) => {
+    if (S.busy.verify) return;
+    S.busy.verify = true; setBtnBusy('verifyDone', true);
+    try { if (await Auth.refreshVerified()) { Gate.stop(); onAuthChange(auth.currentUser); } else if (!quiet) say('Not verified yet. Tap the link in the email first, then try again.'); }
+    catch (e) { if (!quiet) say(friendlyError(e)); }
+    finally { S.busy.verify = false; setBtnBusy('verifyDone', false); }
+  };
+  Gate.poll(() => check(true));
+  return authCard('verifyCard', [
+    h('div', { class: 'agate' }, h('i', { class: 'agicon', text: '✉' }), h('b', { text: 'Verify your email' }),
+      h('p', { text: 'We sent a link to ' }), h('em', { text: u.email || '' }), h('p', { text: 'Tap the link in that email, then come back here. Check the spam folder if it is not in your inbox.' })),
+    msg,
+    h('button', { id: 'verifyDone', class: 'agold', type: 'button', onclick: () => check(false) }, h('span', { text: "I've verified my email" }), icon('chevron')),
+    h('div', { class: 'arow' },
+      h('button', { id: 'verifyResend', class: 'alink', type: 'button', text: 'Send the email again', onclick: async () => {
+        if (Gate.sentAt && Date.now() - Gate.sentAt < 60000) return say('Please wait a minute before asking for another email.');
+        try { await Auth.sendVerify(auth.currentUser); Gate.sentAt = Date.now(); say('A new link is on its way to ' + u.email + '.', true); } catch (e) { say(friendlyError(e)); }
+      } }),
+      h('button', { id: 'verifyOut', class: 'alink', type: 'button', text: 'Use another account', onclick: () => { Gate.stop(); handleSignOut(); } }))]);
+}
+function renderJoin() {
+  const u = S.user, saved = loadSignup();
+  const nameIn = h('input', { id: 'joinName', type: 'text', maxlength: NAME_MAX, placeholder: 'Shown at the table', value: cleanName(saved.name || u.displayName || '') || '' });
+  const refIn = h('input', { id: 'joinRef', type: 'text', maxlength: 12, placeholder: 'From a club member', autocapitalize: 'characters', autocomplete: 'off', value: saved.ref || '', oninput: e => { const v = cleanRef(e.target.value); if (v !== e.target.value) e.target.value = v; } });
+  const msg = h('div', { id: 'joinMsg', class: 'amsg', role: 'alert', hidden: true });
+  const field = (label, inputEl, ic) => h('div', { class: 'afield' }, h('label', { for: inputEl.id, text: label }), h('div', { class: 'abox' }, icon(ic, 'lead'), inputEl));
+  const go2 = async () => {
+    const name = cleanName(nameIn.value), code = cleanRef(refIn.value);
+    msg.hidden = true;
+    if (!name) { msg.textContent = 'Enter a display name (up to ' + NAME_MAX + ' characters).'; msg.hidden = false; return; }
+    if (!code) { msg.textContent = 'Enter the referral code a club member gave you.'; msg.hidden = false; return; }
+    if (S.busy.join) return;
+    S.busy.join = true; setBtnBusy('joinGo', true);
+    try { await auth.currentUser.getIdToken(true); await Repo.createProfile(auth.currentUser, name, code); onAuthChange(auth.currentUser); }
+    catch (e) { msg.textContent = e && e.code === 'permission-denied' ? 'The club could not accept this sign-up. Check the referral code, or sign out and in again.' : friendlyError(e); msg.hidden = false; }
+    finally { S.busy.join = false; setBtnBusy('joinGo', false); }
+  };
+  return authCard('joinCard', [
+    h('div', { class: 'agate' }, h('i', { class: 'agicon ok', text: '✓' }), h('b', { text: 'Email verified' }), h('p', { text: 'One last step: your name at the table and the referral code a club member gave you.' })),
+    field('DISPLAY NAME', nameIn, 'user'), field('REFERRAL CODE', refIn, 'userPlus'), msg,
+    h('button', { id: 'joinGo', class: 'agold', type: 'button', onclick: go2 }, h('span', { text: 'Ask to join the club' }), icon('chevron')),
+    h('div', { class: 'arow', style: 'justify-content:center' }, h('button', { id: 'joinOut', class: 'alink', type: 'button', text: 'Sign out', onclick: handleSignOut }))]);
+}
+function renderPending(kind) {
+  const p = S.profile || {}, rej = kind === 'rejected';
+  return authCard('pendingCard', [
+    h('div', { class: 'agate' }, h('i', { class: 'agicon' + (rej ? ' bad' : ' wait'), text: rej ? '✕' : '⌛' }),
+      h('b', { text: rej ? 'Not approved' : 'Waiting for approval' }),
+      h('p', { text: rej ? 'The club admin has not approved this account. If you think this is a mistake, speak to the player who invited you.' : 'Thanks, ' + (p.name || 'player') + '. The club admin checks every new member. You can play as soon as you are approved: this screen opens the lobby by itself.' })),
+    h('div', { class: 'agfacts' },
+      h('div', {}, h('span', { text: 'EMAIL' }), h('b', { text: p.email || (S.user && S.user.email) || '' })),
+      h('div', {}, h('span', { text: 'REFERRAL CODE' }), h('b', { text: p.referredBy || '-' }))),
+    h('div', { class: 'arow', style: 'justify-content:center' }, h('button', { id: 'pendingOut', class: 'alink', type: 'button', text: 'Sign out', onclick: handleSignOut }))]);
+}
+// While the verify screen is up, it checks every few seconds whether the link was tapped.
+const Gate = {
+  t: 0, sentAt: 0,
+  poll(fn) { if (Gate.t) return; Gate.t = setInterval(() => { if (!S.route || S.route.name !== 'verify') return Gate.stop(); fn(); }, 5000); },
+  stop() { clearInterval(Gate.t); Gate.t = 0; }
+};
+
 function renderBanned() {
   return h('div', { class: 'card auth', id: 'bannedCard' },
     h('h2', { text: 'Your account is paused' }),
