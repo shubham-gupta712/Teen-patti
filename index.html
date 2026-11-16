@@ -3156,6 +3156,142 @@ body .tbv3>.tbstage#tbStage{--u:calc(var(--vh) / 1774);--sw:calc(var(--vh) * 887
 .ccbot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
 .ccbot>div:first-child{display:flex;flex-direction:column;gap:2px;min-width:0}.ccbot b{font-size:14px}.ccbot span{font-size:12px;opacity:.7}
 .ccbotbtns{display:flex;gap:6px}.ccbotbtns .ccbtn{padding:6px 10px;min-height:0;font-size:12px}
+
+/* ===== 74. Tidy-up: smaller type and tiles, emerald pop-ups, a calmer table, the profile sheet ===== */
+body[data-screen="verify"],body[data-screen="join"],body[data-screen="pending"],body[data-screen="rejected"]{background:#0a0408}
+body[data-screen="verify"] .topbar,body[data-screen="verify"] .footer,body[data-screen="join"] .topbar,body[data-screen="join"] .footer,body[data-screen="pending"] .topbar,body[data-screen="pending"] .footer,body[data-screen="rejected"] .topbar,body[data-screen="rejected"] .footer{display:none}
+body[data-screen="verify"] .wrap,body[data-screen="join"] .wrap,body[data-screen="pending"] .wrap,body[data-screen="rejected"] .wrap{width:100%;max-width:none;padding:0}
+/* login card */
+.lwrap .lpanel{width:min(82vw,340px);gap:12px !important;padding:16px 16px !important;border-radius:22px !important}
+.lwrap .lseg{height:36px}.lwrap .lseg button{font-size:14px}
+.lwrap .lfield{height:40px;padding:0 12px 0 14px;gap:8px}.lwrap .lfield input{font-size:14px}.lwrap .lfield .lic{width:16px;height:16px}
+.lwrap .lgo{height:42px;font-size:14px}.lwrap .larrow{font-size:22px}
+.lwrap .lrem,.lwrap .llink{font-size:12px}.lwrap .lnote,.lwrap .lfine{font-size:11px}.lwrap .lmsg{font-size:12px}
+.lwrap .lpanel.gate{gap:10px !important}
+.lpanel.gate .agate b{font-size:19px}.lpanel.gate .agate p,.lpanel.gate .agate em{font-size:13px;line-height:1.4}
+.lpanel.gate .agicon{width:44px;height:44px;font-size:18px}
+.lpanel.gate .agold{min-height:42px;font-size:14px}.lpanel.gate .alink{font-size:12.5px}.lpanel.gate .amsg{font-size:12px}
+/* home */
+.htop{gap:6px;padding:calc(env(safe-area-inset-top) + 10px) 10px 6px}
+.hme{flex:0 1 auto;padding:3px 12px 3px 3px !important;gap:7px}
+.hav2{width:32px;height:32px;font-size:18px}
+.hwho b{font-size:12.5px}.hwho small{font-size:9px}
+.htop .hchips{margin-left:auto}
+.hchips{height:34px;gap:5px}.hchips .pchip{width:20px;height:20px}.hchips b{font-size:13px;min-width:28px}.hchips .pplus{width:22px;height:22px;font-size:15px}
+.hgear{width:34px;height:34px;padding:8px !important}
+.hadmin{padding:4px 12px !important;font-size:11px}.hadmin b{font-size:9.5px}
+.htiles{max-width:340px;gap:14px;padding:8px 18px}
+.htile2{aspect-ratio:815/255;border-radius:18px !important;border-width:2px !important}
+.httx b{font:900 clamp(20px,6.4vw,28px)/1 Georgia,serif !important;letter-spacing:.1em}
+.htplay{width:clamp(44px,14vw,60px);height:clamp(22px,7vw,30px);box-shadow:0 3px 0 #7a5410,0 6px 10px rgba(0,0,0,.3),inset 0 1px 0 #fff3c4}
+.htsoon{font-size:8px !important;padding:4px 9px !important;border-width:1px !important}
+/* inner screens */
+.stop{padding:calc(env(safe-area-inset-top) + 10px) 10px 8px}
+.pback2{width:34px;height:34px;padding:8px !important}
+.tptitle{font-size:max(10px,calc(var(--u) * 26));border-width:1.5px;letter-spacing:.18em}
+.tpcard{gap:calc(var(--u) * 6);border-radius:calc(var(--u) * 28) !important;border-width:max(1.5px,calc(var(--u) * 3)) !important}
+.tpic{width:calc(var(--u) * 70);height:calc(var(--u) * 70);padding:calc(var(--u) * 16)}
+.tpcard b{font-size:max(12px,calc(var(--u) * 31))}
+.tpsub{font-size:max(8.5px,calc(var(--u) * 17))}
+.tptag{font-size:max(7.5px,calc(var(--u) * 15));padding:calc(var(--u) * 5) calc(var(--u) * 13)}
+.fstage .gtrackwrap{overflow:hidden}
+.fstage .gtrack{gap:calc(var(--u) * 14);padding:0 calc(50% - var(--u) * 130)}
+.fstage .gtile{width:calc(var(--u) * 260);height:calc(var(--u) * 285);gap:calc(var(--u) * 5);padding:calc(var(--u) * 12) calc(var(--u) * 10) calc(var(--u) * 16) !important;border-radius:calc(var(--u) * 28);border-width:max(1.5px,calc(var(--u) * 3)) !important}
+.fstage .gart{top:calc(var(--u) * 14);height:calc(var(--u) * 130)}
+.fstage .gfan .tcard{width:calc(var(--u) * 58);height:calc(var(--u) * 82);margin:0 calc(var(--u) * -9);border-radius:calc(var(--u) * 8);font-size:calc(var(--u) * 26)}
+.fstage .gspade{right:calc(var(--u) * 16);width:calc(var(--u) * 34);height:calc(var(--u) * 34)}
+.fstage .glock{width:calc(var(--u) * 70);height:calc(var(--u) * 70);padding:calc(var(--u) * 16)}
+.fstage .gname{font-size:max(12px,calc(var(--u) * 30))}
+.fstage .gsub{font-size:max(8px,calc(var(--u) * 15))}
+.fstage .gcta{margin-top:calc(var(--u) * 3);padding:calc(var(--u) * 7) calc(var(--u) * 22);font-size:max(8px,calc(var(--u) * 16));box-shadow:0 calc(var(--u) * 3) 0 #7a5a12}
+.fstage .gtile.soon .gcta{font-size:max(6.5px,calc(var(--u) * 11.5));padding:calc(var(--u) * 6) calc(var(--u) * 10)}
+.fstage .gdot{background:rgba(255,240,200,.45)}
+/* ---- the table ---- */
+.tbv3 .tbmark{position:absolute;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u) * 14);pointer-events:none;color:#f2d27c;opacity:.13}
+.tbv3 .tbmark .pico{width:calc(var(--u) * 190);height:calc(var(--u) * 190)}
+.tbv3 .tbmark b{font:800 calc(var(--u) * 26)/1 Georgia,serif;letter-spacing:.34em;white-space:nowrap}
+.tbv3 #tbStage .tbring{width:calc(var(--u) * 100);height:calc(var(--u) * 100);border-width:calc(var(--u) * 3.5);box-shadow:0 calc(var(--u) * 6) calc(var(--u) * 14) rgba(0,0,0,.5),0 0 0 calc(var(--u) * 2) rgba(0,0,0,.35)}
+.tbv3 #tbStage .tbring.big{width:calc(var(--u) * 122);height:calc(var(--u) * 122)}
+.tbv3 #tbStage .tbplate{width:calc(var(--u) * 172);height:calc(var(--u) * 42);gap:calc(var(--u) * 9);background:linear-gradient(180deg,rgba(9,44,28,.94),rgba(5,28,18,.96));border:max(1px,calc(var(--u) * 2)) solid rgba(226,189,107,.85)}
+.tbv3 #tbStage .tbplate.big{width:calc(var(--u) * 214);height:calc(var(--u) * 48)}
+.tbv3 #tbStage .tbpname{font-size:max(9px,calc(var(--u) * 20));font-weight:600}.tbv3 #tbStage .tbpchips{font-size:max(9px,calc(var(--u) * 20))}
+.tbv3 #tbStage .tbplate.big .tbpname,.tbv3 #tbStage .tbplate.big .tbpchips{font-size:max(10px,calc(var(--u) * 23))}
+.tbv3 #tbStage .tbpst{font-size:max(7.5px,calc(var(--u) * 16));padding:calc(var(--u) * 2) calc(var(--u) * 11);transform:translate(-50%,calc(var(--u) * 5))}
+.tbv3 #tbStage .tbslot{width:calc(var(--u) * 40);height:calc(var(--u) * 56);margin:0 calc(var(--u) * -5)}
+.tbv3 #tbStage .tbhand .tcard{width:calc(var(--u) * 74);height:calc(var(--u) * 104);font-size:max(13px,calc(var(--u) * 34))}
+.tbv3 #tbStage .tbdisc{min-width:calc(var(--u) * 52);height:calc(var(--u) * 32);font-size:max(8px,calc(var(--u) * 19))}
+.tbv3 #tbStage .opencover .od{left:calc(var(--u) * -38);top:calc(var(--u) * -38);width:calc(var(--u) * 76);height:calc(var(--u) * 76);background:rgba(0,0,0,.16);border:max(1px,calc(var(--u) * 2)) dashed rgba(226,189,107,.4);box-shadow:none}
+.tbv3 #tbStage .opencover .od .ico{width:40%;height:40%;color:rgba(226,189,107,.45)}
+.tbv3 #tbStage .opencover .ol{display:none}
+.tbv3 #tbStage .tbsit.sitlive .od{left:calc(50% - var(--u) * 45);top:calc(var(--u) * 22);width:calc(var(--u) * 90);height:calc(var(--u) * 90)}
+.tbv3 #tbStage .tbsit.sitlive .ol{left:calc(50% - var(--u) * 62);top:calc(var(--u) * 120);width:calc(var(--u) * 124);height:calc(var(--u) * 34);font-size:max(7.5px,calc(var(--u) * 16))}
+.tbv3 #tbStage .tbpot{border-radius:99px;background:linear-gradient(180deg,rgba(6,30,19,.92),rgba(3,18,11,.94));border:max(1px,calc(var(--u) * 2.5)) solid #e2bd6b;box-shadow:0 calc(var(--u) * 6) calc(var(--u) * 16) rgba(0,0,0,.45),inset 0 0 calc(var(--u) * 14) rgba(242,199,92,.12)}
+.tbv3 #tbStage .tbplabel{font-size:max(7px,calc(var(--u) * 15));letter-spacing:.24em;color:#cdb98f}
+.tbv3 #tbStage .tbpnum{font-size:max(13px,calc(var(--u) * 34))}
+.tbv3 #tbStage .tbtalk>*{font-size:max(8.5px,calc(var(--u) * 19));background:rgba(4,22,14,.7)}
+.tbv3 .ttop.tbstage{gap:6px;padding:calc(env(safe-area-inset-top) + 7px) 8px 16px}
+.tbv3 .ttop .tbexit{width:32px;height:32px}.tbv3 .ttop .tbexit .ico{width:15px;height:15px}
+.tbv3 .ttop .tbroom{padding:3px 10px;border-radius:10px}.tbv3 .ttop .tbroom .r1{font-size:11.5px}.tbv3 .ttop .tbroom .r2{font-size:10px}
+.tbv3 .ttop .tbtop{width:30px;height:30px;padding:7px;border-radius:10px}
+.tbv3 .tpanel.tbstage{gap:5px;padding:12px 10px calc(env(safe-area-inset-bottom) + 8px)}
+.tbv3 .tpanel .tbnote{min-height:13px;font-size:11px;font-weight:700;letter-spacing:.04em;color:#f6e3b0}
+.tbv3 .tbmrow{gap:5px}
+.tbv3 .tpanel .tbm{max-width:none;height:38px;flex-direction:column;gap:1px;border-radius:11px;border-width:1px;box-shadow:0 2px 0 rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.18)}
+.tbv3 .tpanel .tbm .mi{display:none}
+.tbv3 .tpanel .tbm .ml{flex-direction:column;gap:0}
+.tbv3 .tpanel .tbm .lb{font-size:10.5px;letter-spacing:.06em}.tbv3 .tpanel .tbm .am{font-size:9.5px;opacity:.9}
+.tbv3 .tpanel .tbm:disabled{opacity:.42;filter:saturate(.5)}
+.tbv3 .tpanel .tbside{gap:8px;min-height:24px}
+.tbv3 .tpanel .tbnotes .tbn{font-size:10px;text-align:left;-webkit-line-clamp:2}
+.tbv3 .tpanel .tbstand{height:24px;padding:0 12px;font-size:10.5px;margin-left:auto}
+.tbv3 .tpanel .tbwatch{font-size:11.5px;padding:6px 12px}
+/* ---- pop-ups: emerald and gold instead of brown ---- */
+.sheetback.tile{background:rgba(3,16,10,.62)}
+.sheetback .sheet{background:linear-gradient(165deg,#15603f 0,#0b3a26 48%,#0a3020 100%) !important;border:1.5px solid #dfba68 !important;border-radius:18px !important;box-shadow:0 22px 54px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,240,200,.25) !important;color:#f2ecd9}
+.sheetback .sheet:before{background:radial-gradient(120% 50% at 20% -10%,rgba(255,230,160,.14),transparent 60%) !important}
+.sheetback.sz-s .sheet{width:min(90vw,340px)}.sheetback.sz-m .sheet{width:min(94vw,400px)}.sheetback.sz-l .sheet{width:min(96vw,460px)}
+.sheetback .shead{padding:8px 10px 8px 14px !important;font:700 14px Georgia,serif !important;letter-spacing:.04em;color:#f6d98a !important;border-bottom:1px solid rgba(223,186,104,.3) !important}
+.sheetback .sclose{background:rgba(0,0,0,.28) !important;color:#f6d98a !important;border-color:rgba(223,186,104,.6) !important;width:26px !important;height:26px !important;min-width:26px !important;min-height:26px !important;font-size:12px !important}
+.sheetback .sbodyx{padding:10px 12px 12px !important;font-size:13px}
+.sheetback .trow,.sheetback .vopt,.sheetback .vdetail,.sheetback .giftbtn,.sheetback .gwho,.sheetback .chatbtn,.sheetback .stkbtn,.sheetback .htab{background:rgba(0,0,0,.22);border-color:rgba(223,186,104,.4)}
+.sheetback .sheet input[type=text],.sheetback .sheet input[type=password],.sheetback .sheet input[type=number],.sheetback .sheet input[type=search]{background:rgba(0,0,0,.28);border-color:rgba(223,186,104,.5);color:#fff6dc}
+.sheetback .seatrow .av{background:#0b3f28}
+.sheetback .hnote{font-size:12px !important}
+.sheetback .setrow{font-size:13px}
+.sheetback .btn-primary,.sheetback .btn-ghost,.sheetback .btn-secondary{min-height:38px;font-size:13px}
+/* profile sheet */
+.mebody{display:flex;flex-direction:column;gap:8px}
+.mesec{font-size:9.5px;font-weight:800;letter-spacing:.16em;color:#d9c48c;margin-top:2px}
+.mefield{display:flex;flex-direction:column;gap:3px}.mefield span{font-size:11px;color:#cfe0d4}
+.mefield input{width:100%;height:36px;padding:0 12px !important;border-radius:10px !important;font-size:14px !important}
+.mehint,.menote{font-size:10.5px;line-height:1.35;color:#b9cdbf;margin:0}
+.menote{font-size:12px;padding:14px 12px;border-radius:12px;background:rgba(0,0,0,.2);border:1px dashed rgba(223,186,104,.35);text-align:center}
+.meavs{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.meav{aspect-ratio:1;min-height:0;padding:0 !important;border-radius:50% !important;overflow:hidden;display:grid;place-items:center;background:rgba(0,0,0,.25) !important;border:1.5px solid rgba(223,186,104,.3) !important;font-size:18px;box-shadow:none !important;cursor:pointer}
+.meav img,.meav .avimg{width:100%;height:100%;object-fit:cover}
+.meav.on{border-color:#ffe08a !important;box-shadow:0 0 0 2px rgba(255,224,138,.45) !important}
+.mesave{height:38px;min-height:0;border-radius:99px !important;border:1px solid #dfba68 !important;background:linear-gradient(180deg,#f6d77a,#c9972e) !important;color:#2a1a02 !important;font:800 13px system-ui !important;letter-spacing:.04em;cursor:pointer}
+.mesave:disabled{opacity:.6}
+.metabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:3px;border-radius:99px;background:rgba(0,0,0,.25)}
+.metabs button{height:28px;min-height:0;padding:0 !important;border:0 !important;border-radius:99px !important;background:transparent !important;color:#cfe0d4 !important;font:700 12px system-ui !important;box-shadow:none !important;cursor:pointer}
+.metabs button.on{background:linear-gradient(180deg,#f6d77a,#c9972e) !important;color:#2a1a02 !important}
+.mestats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mest{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.22);border:1px solid rgba(223,186,104,.25)}
+.mest span{font-size:11px;color:#b9cdbf}.mest b{font:800 18px system-ui;color:#fff6dc;font-variant-numeric:tabular-nums}
+
+.sheetback .bnote,.sheetback .hnote{white-space:normal !important}
+.sheetback .brow.trow,.sheetback .bhead{grid-template-columns:.45fr 1.5fr .7fr .75fr .95fr .35fr .8fr !important;gap:3px 4px !important;padding:3px 6px !important}
+.sheetback .brow.trow>*,.sheetback .bhead>*{font-size:10.5px !important;min-width:0}
+.sheetback .brow.trow .bboot{font-size:13px !important}
+.sheetback .brow.trow .tgo{padding:4px 6px !important;font-size:9.5px !important}
+.sheetback .brow.trow .tcnt .ico{width:11px;height:11px}
+
+.sheetback .sheet .sbodyx .brow.trow,.sheetback .sheet .sbodyx .brow.bhead{display:grid !important;grid-template-columns:.3fr 1.65fr .5fr .65fr .9fr .7fr .8fr !important;gap:2px 3px !important;padding:3px 5px !important;align-items:center}
+.sheetback .sheet .sbodyx .brow.trow>*{font-size:9.5px !important;min-width:0;white-space:nowrap;letter-spacing:0 !important}
+.sheetback .sheet .sbodyx .brow.bhead>*{font-size:7.5px !important;letter-spacing:.02em !important;min-width:0;white-space:nowrap;text-align:center}
+.sheetback .sheet .sbodyx .brow.trow .bboot{font-size:13px !important}
+.sheetback .sheet .sbodyx .brow.trow .tgo{padding:4px 0 !important;font-size:9px !important;width:100%;text-align:center}
+.sheetback .sheet .sbodyx .brow.trow .tcnt{gap:2px}
 </style>
 </head>
 <body>
@@ -3402,6 +3538,10 @@ function tsMs(v) {
   return 0;
 }
 
+// Names are unique whatever the capitals: letters, digits, spaces, _ and - only.
+const nameKey = s => String(s || '').trim().toLowerCase();
+const nameOk = s => /^[\p{L}\p{M}\p{N} _-]{3,20}$/u.test(String(s || ''));
+const NAME_RULE = 'Use 3 to 20 letters, digits, spaces, _ or -.';
 function cleanName(s) {
   return String(s || '').replace(/\s+/g, ' ').trim().slice(0, NAME_MAX);
 }
@@ -3635,11 +3775,13 @@ const Auth = {
     const code = cleanRef(ref);
     if (!code) throw new AppError('Enter the referral code a club member gave you.');
     if (!(await Repo.referralOk(code))) throw new AppError('That referral code was not found. Check it with the player who gave it to you.');
+    if (!nameOk(clean)) throw new AppError(NAME_RULE);
+    if (!(await Repo.nameFree(clean))) throw new AppError('That name is already taken. Choose another one.');
     S.pendingName = clean; saveSignup({ name: clean, ref: code });
     const cred = await auth.createUserWithEmailAndPassword(email, password);
     try { await cred.user.updateProfile({ displayName: clean }); }
     catch (e) { console.error('[TeenPatti] could not set auth display name', e && e.code); }
-    await Auth.sendVerify(cred.user).catch(e => console.error('[TeenPatti] verification email', e && e.code));
+    S.verifyErr = ''; await Auth.sendVerify(cred.user).catch(e => { console.error('[TeenPatti] verification email', e && e.code); S.verifyErr = friendlyError(e); });
     return cred.user;
   },
   // The link brings the player back to the club after they tap it.
@@ -3708,15 +3850,33 @@ const Repo = {
     const r = await Repo.referralOk(code);
     if (!r) throw new AppError('That referral code was not found. Check it with the player who gave it to you.');
     if (r.uid === user.uid) throw new AppError('You cannot use your own referral code.');
-    await ref.set({ uid: user.uid, name, avatar: AVATAR_IDS[Math.abs([...user.uid].reduce((a, ch) => a * 31 + ch.charCodeAt(0), 7)) % AVATAR_IDS.length], chips: 0, tableId: '', email: user.email,
+    if (!nameOk(name)) throw new AppError(NAME_RULE);
+    if (!(await Repo.nameFree(name, user.uid))) throw new AppError('That name is already taken. Choose another one.');
+    const batch = db.batch();
+    batch.set(Repo.nameRef(name), { uid: user.uid, name, updatedAt: FV.serverTimestamp() });
+    batch.set(ref, { uid: user.uid, name, avatar: AVATAR_IDS[Math.abs([...user.uid].reduce((a, ch) => a * 31 + ch.charCodeAt(0), 7)) % AVATAR_IDS.length], chips: 0, tableId: '', email: user.email,
       status: 'pending', statusAt: FV.serverTimestamp(), referredBy: code, referrerUid: r.uid, createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
+    await batch.commit();
     try { localStorage.removeItem('tp_signup'); } catch (e) { /* private window */ }
     return (await ref.get()).data();
   },
   // Rule: users update (name/avatar, only while not seated)
+  nameRef: name => db.collection('usernames').doc(nameKey(name)),
+  async nameFree(name, uid) { const d = await Repo.nameRef(name).get(); return !d.exists || d.data().uid === uid; },
+  // Rule: users update (name/avatar, only while not seated) + usernames (one owner per name)
   updateProfile(uid, name, avatar) {
-    return Repo.userRef(uid).update({ name, avatar, updatedAt: FV.serverTimestamp() });
+    const user = Repo.userRef(uid);
+    return db.runTransaction(async tx => {
+      const cur = (await tx.get(user)).data(), nref = Repo.nameRef(name), nd = await tx.get(nref);
+      if (nd.exists && nd.data().uid !== uid) throw new AppError('That name is already taken. Choose another one.');
+      const oref = nameOk(cur.name) && nameKey(cur.name) !== nameKey(name) ? Repo.nameRef(cur.name) : null, od = oref ? await tx.get(oref) : null;
+      if (od && od.exists && od.data().uid === uid) tx.delete(oref);
+      if (!nd.exists) tx.set(nref, { uid, name, updatedAt: FV.serverTimestamp() });
+      tx.update(user, { name, avatar, updatedAt: FV.serverTimestamp() });
+    });
   },
+  // A player from before names were unique keeps theirs if nobody holds it yet.
+  async claimName(uid, name) { if (!nameOk(name)) return; const ref = Repo.nameRef(name), d = await ref.get(); if (!d.exists) await ref.set({ uid, name, updatedAt: FV.serverTimestamp() }); },
 
   /* ---- joining and leaving (rules: users update + members create/delete) ---- */
   // One transaction: member created and wallet lowered together, so a retry or a
@@ -4116,7 +4276,7 @@ async function onAuthChange(user) {
     S.profile = await Repo.syncEmail(user, prof);
     await StaleSeat.begin(user.uid, prof);       // a seat left idle for over 15 minutes is given up before anything is drawn
     if (seq !== authSeq) return;
-    Stats.load(user.uid);
+    Stats.load(user.uid); Repo.claimName(user.uid, prof.name).catch(() => {});
     scopeProfile = Scopes.open('profile');
     Repo.watchProfile(scopeProfile, user.uid, p => { S.profile = p; setConnection(true); go(); });
     Notices.first = true; Notices.announced = new Set(); Notices.all = [];
@@ -4480,9 +4640,9 @@ const TB_W = 887, TB_T = 0, TB_PIC = 1774, TB_H = 1774;   // the table picture f
 const tbAt = (x, y) => 'left:' + (x / TB_W * 100).toFixed(3) + '%;top:' + (y / TB_H * 100).toFixed(3) + '%';
 const tbBox = (x0, y0, x1, y1) => 'left:' + (x0 / TB_W * 100).toFixed(3) + '%;top:' + (y0 / TB_H * 100).toFixed(3) + '%;width:' + ((x1 - x0) / TB_W * 100).toFixed(3) + '%;height:' + ((y1 - y0) / TB_H * 100).toFixed(3) + '%';
 // the centre of each seat circle on the picture, and the three card outlines that belong to it (centre + tilt)
-const TB_SEATS = { TL: [250, 375], TR: [637, 375], ML: [190, 760], MR: [697, 760], BL: [220, 1050], BR: [667, 1050], B: [443, 1262] };
-const TB_PLATE = { TL: 450, TR: 450, ML: 835, MR: 835, BL: 1125, BR: 1125, B: 1347 };        // centre line of each name plate
-const TB_CARDS = { TL: [250, 575, 0], TR: [637, 575, 0], ML: [190, 945, 0], MR: [697, 945, 0], BL: [345, 965, -6], BR: [542, 965, 6], B: [443, 1098, 0] };
+const TB_SEATS = { TL: [212, 392], TR: [675, 392], ML: [160, 745], MR: [727, 745], BL: [172, 1075], BR: [715, 1075], B: [443, 1292] };
+const TB_PLATE = { TL: 462, TR: 462, ML: 815, MR: 815, BL: 1145, BR: 1145, B: 1372 };        // centre line of each name plate
+const TB_CARDS = { TL: [212, 570, 0], TR: [675, 570, 0], ML: [160, 923, 0], MR: [727, 923, 0], BL: [172, 1253, 0], BR: [715, 1253, 0], B: [443, 1118, 0] };
 const TB_CYCLE = ['B', 'BL', 'ML', 'TL', 'TR', 'MR', 'BR'];     // the seats in clockwise order, starting at the bottom centre (yours once you sit)
 const rupee = n => fmt(n);
 
@@ -4522,7 +4682,7 @@ function tbSeat(sp, key, c) {
       h('div', { class: 'tbpchips' }, h('span', { text: rupee(sp.chips) }), isMe && c.me ? h('button', { id: 'addChipsBtn', class: 'tbadd', type: 'button', 'aria-label': 'Add chips', text: '+', onclick: e => { e.stopPropagation(); Sheets.topup(); } }) : null),
       label ? h('div', { class: 'tbpst ' + stKind, text: label }) : null),
     Social.prop(sp.id) ? h('div', { class: 'tbprop', style: tbAt(ax + (ax < 443 ? 70 : -70), ay - 70), title: GIFTS[Social.prop(sp.id).code].name, text: GIFTS[Social.prop(sp.id).code].icon }) : null,
-    turn ? h('div', { class: 'tbdisc', style: tbAt(key === 'B' ? ax - 105 : ax + (ax > 443 ? -66 : 66), key === 'B' ? ay - 50 : ay - 60), text: fmtSecs(G.turnEndsAt - Date.now() - 500) }) : null];
+    turn ? h('div', { class: 'tbdisc', style: tbAt(key === 'B' ? ax - 95 : ax + (ax > 443 ? -60 : 60), key === 'B' ? ay - 45 : ay - 52), text: fmtSecs(G.turnEndsAt - Date.now() - 500) }) : null];
   if (!isMe) {
     const [gx, gy, rot] = TB_CARDS[key], show = c.live && !out;
     kids.push(h('div', { class: 'tbmcs', style: tbAt(gx, gy) + ';--rot:' + rot + 'deg' }, [0, 1, 2].map(i => h('div', { class: 'tbslot' }, show ? tMini(c.reveal[sp.id] ? c.reveal[sp.id][i] : '', i) : null))));
@@ -4625,8 +4785,8 @@ function renderMoves(G, uid, live) {
   const ic = k => h('svg', { class: 'mi', viewBox: '0 0 24 24', 'aria-hidden': 'true', fill: k === 'coin' ? 'currentColor' : 'none', stroke: 'currentColor', 'stroke-width': 2.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, h('path', { d: art[k] }), k === 'eye' ? h('circle', { cx: 12, cy: 12, r: 3, fill: 'currentColor' }) : null);
   
   // Off your turn (or with an Auto switched on) the row shows the two Auto switches; on your turn it shows the moves.
-  const showAutos = live && lm.inHand && (!lm.myTurn || S.auto || S.autoPack);
-  const seeStay = showAutos && lm.see.ok && lm.status !== 'seen';   // you may still look at your cards while waiting
+  const showAutos = false;                 // the Auto switches are gone: the buttons wait, dimmed, until it is your turn
+  const seeStay = false; S.auto = false; S.autoPack = false;   // you may still look at your cards while waiting
   
   const btns = defs.map(([id, type, cls, text, cost, ik, fn, ok], i) => h('button', { id: live ? id : null, class: 'tbm ' + cls + (live ? '' : ' idle') + (S.act && S.act.type === type ? ' busy' : '') + (showAutos && !(type === 'see' && seeStay) ? ' hideb' : '') + (type === 'see' && live && lm.status === 'seen' ? ' gone' : ''), type: 'button', disabled: !ok || busy || !live, onclick: fn },
       ic(ik), h('span', { class: 'ml' }, h('span', { class: 'lb', text: text }), cost > 0 ? h('span', { class: 'am', text: rupee(cost) }) : null)));
@@ -4710,22 +4870,22 @@ function renderFelt(R, me, msgs) {
     tb('setBtn', 'Settings', 'gear', () => Sheets.settings())));
 
   /* dealt cards fly out from the top of the felt */
-  stage.appendChild(h('div', { class: 'dealerfig', id: 'dealerFigure', style: tbAt(443, 330), 'aria-label': 'Dealer' }, h('div', { class: 'tbdeck', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'))));
-  stage.appendChild(h('div', { class: 'tbdealer2', 'aria-hidden': 'true', style: tbBox(358, 205, 528, 400) }));
+  stage.appendChild(h('div', { class: 'dealerfig', id: 'dealerFigure', style: tbAt(443, 290), 'aria-label': 'Dealer' }, h('div', { class: 'tbdeck', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'))));
+  stage.appendChild(h('div', { class: 'tbmark', 'aria-hidden': 'true', style: tbBox(283, 520, 603, 980) }, pI('spade', '', true), h('b', { text: 'TEEN PATTI CLUB' })));
 
   /* which variant this table plays, and the joker rank when the hand has one */
   const cfgV = variantOfGame(cfg, G), fresh = cfg.random && !(G && G.handNo > 0);
   const showIcon = !fresh && (cfgV.id !== 'classic' || cfg.random);
   if (showIcon) {
     const wildRank = G && G.joker && G.phase !== 'idle' ? G.joker : '';
-    stage.appendChild(h('button', { id: 'variantBadge', type: 'button', class: 'tbvi', style: tbBox(388, 445, 498, 570), 'aria-label': 'Game: ' + cfgV.name + '. Tap for the rules', onclick: () => Sheets.ranks() },
+    stage.appendChild(h('button', { id: 'variantBadge', type: 'button', class: 'tbvi', style: tbBox(393, 330, 493, 445), 'aria-label': 'Game: ' + cfgV.name + '. Tap for the rules', onclick: () => Sheets.ranks() },
       h('img', { class: 'vimg', src: IMG['vi_' + cfgV.id] || '', alt: '', draggable: 'false' }),
       h('span', { class: wildRank ? 'vwild' : 'sr', text: wildRank ? 'WILD ' + wildRank : cfgV.name.toUpperCase() })));
   }
   if (cfg.random && G && G.phase === 'playing' && G.handId) {
     if (S.annHand !== G.handId) { S.annHand = G.handId; S.annAt = Date.now(); setTimeout(scheduleRender, 4300); }
     const el = (Date.now() - S.annAt) / 1000;
-    if (el < 4.2) stage.appendChild(h('div', { id: 'variantAnnounce', class: 'tbann', style: tbAt(443, 640) + ';animation-delay:-' + el.toFixed(2) + 's', role: 'status' },
+    if (el < 4.2) stage.appendChild(h('div', { id: 'variantAnnounce', class: 'tbann', style: tbAt(443, 560) + ';animation-delay:-' + el.toFixed(2) + 's', role: 'status' },
       h('small', { text: 'THIS HAND' }), h('b', { text: cfgV.name.toUpperCase() }), h('span', { text: G.joker ? 'Wild rank: ' + G.joker : cfgV.tag })));
   }
 
@@ -4764,7 +4924,7 @@ function renderFelt(R, me, msgs) {
     const hidden = !rv && (mine.status === 'blind' || !hd);
     const canSee = playing && mine.status === 'blind';
     const shown = rv || (hd && !hidden ? hd : null), wm = shown && cfgV.id !== 'classic' ? wildMask(shown, G) : null;
-    stage.appendChild(h('div', { class: 'tbhand' + (canSee ? ' tappable' : ''), id: 'myCards', style: tbAt(443, 1098), onclick: canSee ? () => handleGameAction('see') : null }, [0, 1, 2].map(i => tCard(rv ? rv[i] : hd && !hidden ? hd[i] : '', hidden, !!(wm && wm[i])))));
+    stage.appendChild(h('div', { class: 'tbhand' + (canSee ? ' tappable' : ''), id: 'myCards', style: tbAt(443, 1118), onclick: canSee ? () => handleGameAction('see') : null }, [0, 1, 2].map(i => tCard(rv ? rv[i] : hd && !hidden ? hd[i] : '', hidden, !!(wm && wm[i])))));
   }
 
   /* the action row, under the cards: only for a seated player */
@@ -4902,7 +5062,7 @@ function homeTop() {
   return h('div', { class: 'htop' },
     h('button', { type: 'button', class: 'hme', id: 'hubProfile', 'aria-label': 'Your profile', onclick: () => openMe() },
       h('span', { class: 'hav2' }, avatarNode(p.avatar)),
-      h('span', { class: 'hwho' }, h('b', { id: 'lbName', text: p.name }), h('small', { text: S.realAdmin ? 'Admin · testing' : v.tier.name }))),
+      h('span', { class: 'hwho' }, h('b', { id: 'lbName', text: p.name }), h('small', { text: S.realAdmin ? 'Admin · testing' : 'View profile' }))),
     h('button', { type: 'button', class: 'hchips', id: 'lbWallet', 'aria-label': 'Wallet', onclick: watchOr(() => Sheets.wallet()) },
       h('i', { class: 'pchip', 'aria-hidden': 'true' }), h('b', { id: 'walletBal', text: fmt(p.chips) }), h('span', { class: 'pplus', 'aria-hidden': 'true', text: '+' })),
     h('button', { type: 'button', class: 'hgear', id: 'lbGear', 'aria-label': 'Settings', onclick: watchOr(() => Sheets.settings()) }, pI('gear')));
@@ -4916,15 +5076,37 @@ function homeNav(on) {
     it('navMe', 'me', 'Profile', 'user', () => openMe()));
 }
 const adminPill = () => S.realAdmin && !S.isAdmin ? h('button', { type: 'button', class: 'hadmin', id: 'backToConsole', onclick: () => AdminView.set('console') }, h('b', { text: 'ADMIN VIEW' }), h('span', { text: 'Open console ›' })) : null;
-/* Profile: your stats, hand history, invite, rules and settings in one place */
-function openMe() {
-  const row = (id, ic, title, sub, fn) => h('button', { type: 'button', class: 'merow', id, onclick: () => fn() }, h('span', { class: 'meic' }, pI(ic)), h('span', { class: 'metx' }, h('b', { text: title }), h('small', { text: sub })), pI('chev', 'mechev'));
-  Sheets.open('meSheet', 'Profile', h('div', { class: 'melist' },
-    row('meStats', 'chart', 'My stats', 'Hands, wins, streaks and your VIP tier', watchOr(() => Sheets.profile())),
-    row('meHistory', 'history', 'Hand history', 'Your last hands, card by card', () => Sheets.history()),
-    row('meInvite', 'invite', 'Invite friends', 'Your referral code', watchOr(() => openReferral())),
-    row('meRules', 'book', 'Rules and hand ranks', 'How Teen Patti and the variants work', () => Sheets.ranks()),
-    row('meSettings', 'gear', 'Settings', 'Name, picture, sound and sign out', watchOr(() => Sheets.settings()))));
+/* Profile: edit your name (no two players share one) and picture, and see your numbers. Card games and sports are kept apart. */
+function openMe(tab) {
+  const p = S.profile; if (!p) return AdminView.watchOnly();
+  tab = tab === 'sports' ? 'sports' : 'cards';
+  let av = p.avatar;
+  const nameIn = h('input', { id: 'meName', type: 'text', maxlength: NAME_MAX, value: p.name, autocomplete: 'off', spellcheck: 'false' });
+  const grid = h('div', { class: 'meavs', id: 'meAvatars' }, AVATAR_IDS.map(id => h('button', { type: 'button', class: 'meav' + (id === av ? ' on' : ''), 'data-av': id, 'aria-label': id,
+    onclick: e => { av = id; grid.querySelectorAll('.meav').forEach(b => b.classList.toggle('on', b.dataset.av === id)); } }, avatarNode(id))));
+  const save = () => {
+    const name = cleanName(nameIn.value);
+    if (!nameOk(name)) return toast(NAME_RULE, 'err');
+    if (p.tableId) return toast('Leave your table first, then change your profile.', 'err');
+    if (name === p.name && av === p.avatar) return Sheets.close();
+    return withBusy('rename', 'save profile', async () => { await Repo.updateProfile(S.user.uid, name, av); toast('Profile saved.'); Sheets.close(); });
+  };
+  const tile = (id, label, v) => h('div', { class: 'mest' }, h('span', { text: label }), h('b', { id, text: v }));
+  const nums = st => ({ meHands: fmt(st.hands), meWins: fmt(st.wins), meLosses: fmt(Math.max(0, st.hands - st.wins)), meWagered: fmt(st.wagered || 0) });
+  const st0 = nums(Stats.full(S.myStats));
+  const stats = tab === 'cards'
+    ? h('div', { class: 'mestats' }, tile('meHands', 'Total hands', st0.meHands), tile('meWins', 'Wins', st0.meWins), tile('meLosses', 'Losses', st0.meLosses), tile('meWagered', 'Chips wagered', st0.meWagered))
+    : h('p', { class: 'menote', text: 'Sports games are under construction. Your sports numbers will show here once they open.' });
+  Sheets.open('meSheet', 'Profile', h('div', { class: 'mebody' },
+    h('div', { class: 'mesec', text: 'EDIT PROFILE' }),
+    h('label', { class: 'mefield' }, h('span', { text: 'Username' }), nameIn),
+    h('div', { class: 'mehint', text: 'Each username belongs to one player. ' + NAME_RULE }),
+    grid,
+    h('button', { type: 'button', class: 'mesave', id: 'meSave', disabled: !!S.busy.rename, text: 'Save profile', onclick: save }),
+    h('div', { class: 'mesec', text: 'STATISTICS' }),
+    h('div', { class: 'metabs' }, [['cards', 'Card games'], ['sports', 'Sports']].map(([k, t]) => h('button', { type: 'button', class: k === tab ? 'on' : '', id: 'meTab_' + k, text: t, onclick: () => openMe(k) }))),
+    stats));
+  if (tab === 'cards' && S.user && db) Repo.getStats(S.user.uid).then(d => { S.myStats = Stats.full(d); const n = nums(S.myStats); Object.keys(n).forEach(k => { const e = $(k); if (e) e.textContent = n[k]; }); }).catch(() => {});
 }
 function renderHome() {
   if (!S.isAdmin && !Vip.doc && !Vip.tried) { Vip.tried = true; Vip.load().then(scheduleRender, () => {}); }
@@ -4935,8 +5117,7 @@ function renderHome() {
     homeTop(), adminPill(),
     h('div', { class: 'htiles' },
       tile('tileCards', 'cards', 't_cards', 'CARDS', '', () => goTo('games')),
-      tile('tileSports', 'sports', 't_sports', 'SPORTS', 'UNDER CONSTRUCTION', () => Sheets.soon('Sports', 'Sports games are under construction. They arrive here soon.'))),
-    homeNav('home')], 'phome');
+      tile('tileSports', 'sports', 't_sports', 'SPORTS', 'UNDER CONSTRUCTION', () => Sheets.soon('Sports', 'Sports games are under construction. They arrive here soon.')))], 'phome');
 }
 
 /* ---- Card games: a curved row of tiles in the middle of the room. Teen Patti, and more to come ---- */
@@ -4945,7 +5126,7 @@ const CARD_GAMES = [
   { id: 'soon1', name: 'Coming soon', sub: 'Under construction' },
   { id: 'soon2', name: 'Coming soon', sub: 'Under construction' }];
 function renderGames() {
-  const B = pb('games'), parts = [], idx = Math.min(CARD_GAMES.length - 1, S.gameIx || 0);
+  const B = fbox(TPL_W, TPL_H), parts = [], idx = Math.min(CARD_GAMES.length - 1, S.gameIx || 0);
   const tiles = CARD_GAMES.map((g, i) => pressable(h('button', { type: 'button', class: 'gtile' + (g.live ? ' live' : ' soon'), id: 'game_' + g.id, 'data-i': i, 'aria-label': g.name + (g.live ? '' : ', under construction'),
     onclick: () => {
       const tr = $('gameTrack'); if (tr && Number(tr.dataset.ix) !== i) return Games.center(i, true);
@@ -4955,15 +5136,12 @@ function renderGames() {
       : h('div', { class: 'gart soon' }, h('i', { class: 'glock' }, pI('lock'))),
     h('b', { class: 'gname', text: g.name }), h('span', { class: 'gsub', text: g.sub }),
     h('span', { class: 'gcta', text: g.live ? 'PLAY' : 'UNDER CONSTRUCTION' }))));
-  parts.push(h('div', { class: 'gtrackwrap', style: B(20, 312, 1179, 806) }, h('div', { class: 'gtrack', id: 'gameTrack', 'data-ix': String(idx), onscroll: () => Games.onScroll() }, tiles)));
+  parts.push(h('div', { class: 'gtrackwrap', style: B(0, 585, 934, 900) }, h('div', { class: 'gtrack', id: 'gameTrack', 'data-ix': String(idx), onscroll: () => Games.onScroll() }, tiles)));
   // the three gold dots in the picture follow the tile in the middle
-  [563, 599, 634].forEach((x, i) => { if (i < CARD_GAMES.length) parts.push(h('i', { class: 'gdot' + (i === idx ? ' on' : ''), 'data-i': i, style: B(x - 14, 806, x + 14, 834) })); });
-  parts.push(h('b', { class: 'gtitle pill', style: B(400, 846, 800, 900), text: 'CARD GAMES' }));
-  parts.push(pBack(B, [34, 40, 134, 140], 'Back to home', () => goTo('home')));
-  parts.push(pWallet(B, [810, 52, 1170, 128]));
-  parts.push(adminBar());
+  CARD_GAMES.forEach((g, i) => parts.push(h('i', { class: 'gdot' + (i === idx ? ' on' : ''), 'data-i': i, style: B(467 + (i - (CARD_GAMES.length - 1) / 2) * 34 - 9, 912, 467 + (i - (CARD_GAMES.length - 1) / 2) * 34 + 9, 930) })));
+  parts.push(h('b', { class: 'tptitle', style: B(317, 405, 617, 462), text: 'CARD GAMES' }));
   setTimeout(() => Games.center(idx, false), 0);
-  return pStage('games', 'gamesStage', parts, 'pgames');
+  return fitStage('p_tplobby2', TPL_W, TPL_H, 'gamesStage', parts, 'pgames', screenTop('Back to home', () => goTo('home')));
 }
 // Each tile turns away from you the further it is from the middle, so the row looks like a curve.
 const Games = {
@@ -5013,14 +5191,14 @@ function renderTPLobby() {
     h('b', { text: title }), h('span', { class: 'tpsub', text: sub }),
     h('em', { class: 'tptag ' + (tagCls || ''), text: tag })));
   const nC = seatedAt(LB_CLASSIC_IDS), nV = seatedAt(LB_VARIANT_IDS);
-  parts.push(h('b', { class: 'tptitle', style: B(287, 395, 647, 470), text: 'TEEN PATTI' }));
-  parts.push(card('modeBtn_classic', [96, 612, 459, 900], 'spade', 'Classic', 'Boot ' + fmt(BOOTS[0]) + ' – ' + fmt(BOOTS[BOOTS.length - 1]),
+  parts.push(h('b', { class: 'tptitle', style: B(317, 405, 617, 462), text: 'TEEN PATTI' }));
+  parts.push(card('modeBtn_classic', [152, 618, 457, 868], 'spade', 'Classic', 'Boot ' + fmt(BOOTS[0]) + ' – ' + fmt(BOOTS[BOOTS.length - 1]),
     myMode === 'classic' ? 'RETURN' : nC ? nC + ' PLAYING' : 'PLAY', nC || myMode === 'classic' ? 'on' : '', () => myMode === 'classic' ? tileClick(mySeat) : Sheets.boots('classic')));
-  parts.push(card('modeBtn_variant', [475, 612, 838, 900], 'layers', 'Variant', 'New game every hand',
+  parts.push(card('modeBtn_variant', [477, 618, 782, 868], 'layers', 'Variant', 'New game every hand',
     myMode === 'variant' ? 'RETURN' : nV ? nV + ' PLAYING' : 'PLAY', nV || myMode === 'variant' ? 'on' : '', () => myMode === 'variant' ? tileClick(mySeat) : Sheets.boots('variant')));
-  parts.push(card('modeBtn_tournament', [96, 930, 459, 1218], 'trophy', 'Tournament', tk.live ? 'Playing now' : tk.sub,
+  parts.push(card('modeBtn_tournament', [152, 918, 457, 1168], 'trophy', 'Tournament', tk.live ? 'Playing now' : tk.sub,
     tk.live ? 'LIVE' : tk.kick === 'CLUB EVENTS' ? 'VIEW' : tk.kick.replace(/\s+•.*/, ''), tk.live ? 'live' : '', () => Sheets.tournaments()));
-  parts.push(card('lbPrivate', [475, 930, 838, 1218], 'key', 'Private', 'Code and password',
+  parts.push(card('lbPrivate', [477, 918, 782, 1168], 'key', 'Private', 'Code and password',
     pv.mine ? 'RETURN' : pv.usable ? 'OPEN' : 'CLOSED', pv.usable ? 'on' : 'off', () => privateTap()));
   return fitStage('p_tplobby2', TPL_W, TPL_H, 'lobStage', parts, 'ptplobby', screenTop('Back to card games', () => goTo('games')));
 }
@@ -5118,7 +5296,7 @@ async function handleSignOut() {
 /* ---- profile ---- */
 function handleRename() {
   const name = cleanName(S.nameDraft);
-  if (!name) return toast('Enter a display name (up to ' + NAME_MAX + ' characters).', 'err');
+  if (!nameOk(name)) return toast(NAME_RULE, 'err');
   const avatar = AVATAR_IDS.includes(S.avatarDraft) ? S.avatarDraft : DEFAULT_AVATAR;
   return withBusy('rename', 'save profile', async () => {
     await Repo.updateProfile(S.user.uid, name, avatar);
@@ -5667,7 +5845,7 @@ const Dealer = {
     const R = S.room, cfg = TABLE_BY_ID[R.id], prev = Dealer.G;
     const humans = readyHumans(R);
     const parts = R.members.filter(m => m.seatState === 'seated').slice(0, seatCap(R.id)).map(m => ({ id: m.uid, name: m.name, avatar: m.avatar, chips: m.stack }));
-    if ((cfg.tour ? humans.length >= 1 : humans.length === 1) && Dealer.botSeated()) tableBots(R.id).forEach(t => { const b = Dealer.botDoc(t.id); parts.push({ id: b.botId, name: b.name, avatar: 'bot', chips: b.stack, bot: true }); });
+    if ((cfg.tour ? humans.length >= 1 : humans.length === 1) && Dealer.botSeated()) tableBots(R.id).filter(t => Dealer.botOk(t.id)).forEach(t => { const b = Dealer.botDoc(t.id); parts.push({ id: b.botId, name: b.name, avatar: 'bot', chips: b.stack, bot: true }); });
     const r = startHand({ tableId: R.id, boot: cfg.boot, blindMax: cfg.blind, chaalMax: cfg.chaal, potMax: cfg.pot, variant: cfg.tour ? Tour.pickVariant(tourSlotOf(R.id)) : cfg.random ? ENGINE.VARIANT_IDS[secureRandInt(ENGINE.VARIANT_IDS.length)] : cfg.variant, participants: parts, prev, now: Date.now(), rnd: secureRandInt });
     if (r.error) { S.dealerInfo.lastError = r.error; scheduleRender(); return; }
     S.dealerInfo.lastError = '';
@@ -6240,12 +6418,14 @@ const Stats = {
     d.showWin = won && shown ? 1 : 0; d.foldWin = won && !shown ? 1 : 0;
     const cat = won && shown ? { 'Trail': 'trail', 'Pure sequence': 'pseq', 'Sequence': 'seq', 'Color': 'color', 'Pair': 'pair' }[R.rank] || '' : '';
     d.cat = cat; d.aces = cat === 'trail' && (R.reveal[uid] || []).every(c => c.slice(0, -1) === 'A') ? 1 : 0;
+    d.wagered = me.invested || 0;
     d.low = (me.chips - (R.shares[uid] || 0) + me.invested) < G.boot * 10;     // stack before the hand was small
     return d;
   },
   // Pure: the new stats document from the old one and the hand's delta (so it can be tested without a database).
   apply(o, d) {
     const n = Object.assign({ hands: 0, wins: 0, streak: 0, best: 0, showWins: 0, foldWins: 0, packs: 0, blindHands: 0, trail: 0, pseq: 0, seq: 0, color: 0, pair: 0, aces: 0, night: 0, comeback: 0, houdini: 0, lowRun: 0, bigPot: 0, peak: 0 }, o);
+    n.wagered = (n.wagered || 0) + (d.wagered || 0);
     n.hands += 1; n.packs += d.packs; n.blindHands += d.blindHands; n.night += d.night;
     n.peak = Math.max(n.peak, d.peak);
     if (d.won) {
@@ -6334,7 +6514,7 @@ const Sheets = {
   DRAWERS: new Set(['logSheet', 'historySheet', 'playersSheet', 'chatSheet', 'ranksSheet', 'infoSheet', 'setSheet', 'classicSheet', 'variantSheet', 'walletSheet']),
   // Table pop-ups that sit at the side so the table stays visible; everything else is a centred glossy tile.
   DOCKED: new Set(['logSheet', 'playersSheet', 'chatSheet']),
-  SIZES: { walletSheet: 's', soonSheet: 's', tipSheet: 's', topupSheet: 's', setSheet: 's', privSheet: 's', giftSheet: 'm', tourSheet: 'l', tourListSheet: 'm', tourPaySheet: 's', historySheet: 'l', profileSheet: 'm', privAdminSheet: 'm', playerSheet: 'm', variantSheet: 'm', myProfileSheet: 'l', clubSheet: 'l', infoSheet: 'l', ranksSheet: 'l', bootSheet: 'l' },
+  SIZES: { meSheet: 's', walletSheet: 's', soonSheet: 's', tipSheet: 's', topupSheet: 's', setSheet: 's', privSheet: 's', giftSheet: 'm', tourSheet: 'l', tourListSheet: 'm', tourPaySheet: 's', historySheet: 'l', profileSheet: 'm', privAdminSheet: 'm', playerSheet: 'm', variantSheet: 'm', myProfileSheet: 'l', clubSheet: 'l', infoSheet: 'l', ranksSheet: 'l', bootSheet: 'l' },
   origin: null,
   // Where the pop-up grows from and shrinks back to: the button that was just pressed.
   keyframe(r, o) {
@@ -7133,6 +7313,7 @@ Object.assign(Repo, {
     await del(db.collection('tournaments'), 'Tournaments');
     for (const c of ['rake', 'tipjar', 'sessions', 'notices', 'vipLedger', 'vipBatches', 'vip', 'seen', 'stats']) await del(db.collection(c), c);
     await del(db.collection('referrals'), 'Referral codes', d => d.data().uid === ADMIN_UID);
+    await del(db.collection('usernames'), 'Player names', d => d.data().uid === ADMIN_UID);
     await del(db.collection('users'), 'Players');
   }
 });
@@ -8782,15 +8963,16 @@ function renderVerify() {
     finally { S.busy.verify = false; setBtnBusy('verifyDone', false); }
   };
   Gate.poll(() => check(true));
+  if (S.verifyErr) { say('The email could not be sent (' + S.verifyErr + '). Tap "Send the email again".'); }
   return authCard('verifyCard', [
     h('div', { class: 'agate' }, h('i', { class: 'agicon', text: '✉' }), h('b', { text: 'Verify your email' }),
-      h('p', { text: 'We sent a link to ' }), h('em', { text: u.email || '' }), h('p', { text: 'Tap the link in that email, then come back here. Check the spam folder if it is not in your inbox.' })),
+      h('p', { text: 'We sent a link to ' }), h('em', { text: u.email || '' }), h('p', { text: 'Tap the link in that email, then come back here. It can take a minute, and it often lands in Spam or Promotions. If the address above is wrong, use another account.' })),
     msg,
     h('button', { id: 'verifyDone', class: 'agold', type: 'button', onclick: () => check(false) }, h('span', { text: "I've verified my email" }), icon('chevron')),
     h('div', { class: 'arow' },
       h('button', { id: 'verifyResend', class: 'alink', type: 'button', text: 'Send the email again', onclick: async () => {
         if (Gate.sentAt && Date.now() - Gate.sentAt < 60000) return say('Please wait a minute before asking for another email.');
-        try { await Auth.sendVerify(auth.currentUser); Gate.sentAt = Date.now(); say('A new link is on its way to ' + u.email + '.', true); } catch (e) { say(friendlyError(e)); }
+        try { await Auth.sendVerify(auth.currentUser); S.verifyErr = ''; Gate.sentAt = Date.now(); say('A new link is on its way to ' + u.email + '. Look in Spam and Promotions too.', true); } catch (e) { say(friendlyError(e)); }
       } }),
       h('button', { id: 'verifyOut', class: 'alink', type: 'button', text: 'Use another account', onclick: () => { Gate.stop(); handleSignOut(); } }))]);
 }
@@ -9279,7 +9461,7 @@ function noteBlind(G, id, wasBlind) {
 }
 // Records exactly what a player just did (blind, chaal, doubleblind, doublechaal, seen, pack, show, side) with a move number,
 // so every screen shows the real move instead of guessing it from chips and status.
-function markMove(G, id, what) { const p = G.players[id]; G.mv = (G.mv || 0) + 1; p.last = what; p.mv = G.mv; }
+function markMove(G, id, what) { const p = G.players[id]; p.last = what; p.mv = Object.keys(G.players).reduce((n, k) => Math.max(n, G.players[k].mv || 0), 0) + 1; }
 
 // The single entry point for a move. Returns { ok, G } or { ok:false, error }.
 function applyAction(G0, id, type, now, hands) {
