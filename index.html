@@ -3781,7 +3781,6 @@ const Auth = {
     const cred = await auth.createUserWithEmailAndPassword(email, password);
     try { await cred.user.updateProfile({ displayName: clean }); }
     catch (e) { console.error('[TeenPatti] could not set auth display name', e && e.code); }
-    S.verifyErr = ''; await Auth.sendVerify(cred.user).catch(e => { console.error('[TeenPatti] verification email', e && e.code); S.verifyErr = friendlyError(e); });
     return cred.user;
   },
   // The link brings the player back to the club after they tap it.
@@ -4268,10 +4267,14 @@ async function onAuthChange(user) {
   S.authReady = false; S.gate = ''; go();
   try {
     // 1. the email must be verified  2. a profile must exist (made with a referral code)  3. the admin must approve it
-    if (!user.emailVerified && !S.realAdmin) { S.gate = 'verify'; S.authReady = true; go(); return; }
     let prof = await Repo.getProfile(user.uid);
     if (seq !== authSeq) return;                 // a newer sign-in replaced this one
     if (!prof && S.realAdmin) prof = await Repo.createAdminProfile(user);
+    if (!prof) {      // just signed up: the name and referral code from the form make the profile straight away; if that fails the form asks again
+      const sv = loadSignup();
+      if (sv.name && sv.ref) { try { prof = await Repo.createProfile(user, cleanName(sv.name), cleanRef(sv.ref)); } catch (e) { console.warn('[TeenPatti] sign-up profile', e && e.code, e && e.message); prof = null; } }
+      if (seq !== authSeq) return;
+    }
     if (!prof) { S.gate = 'join'; S.authReady = true; go(); return; }
     S.profile = await Repo.syncEmail(user, prof);
     await StaleSeat.begin(user.uid, prof);       // a seat left idle for over 15 minutes is given up before anything is drawn
@@ -4619,7 +4622,7 @@ function renderAuth() {
       field(pass, 'lock', eye),
       reg ? field(pass2, 'lock') : null,
       reg ? field(refIn, 'userPlus') : null,
-      reg ? h('p', { class: 'lnote', text: 'We email you a link to verify your address. Then the club admin approves your account.' })
+      reg ? h('p', { class: 'lnote', text: 'You need a referral code from a club member. The club admin approves every new account before it can play.' })
         : h('div', { class: 'lrow' }, remember, h('button', { id: 'forgotBtn', class: 'llink', type: 'button', text: 'Forgot password?', onclick: handleForgot })),
       msg, submit,
       h('p', { class: 'lfine', text: 'Play chips only. No real money, no cash value.' }))], 'plogin');
