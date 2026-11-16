@@ -7343,10 +7343,13 @@ Object.assign(Repo, {
       if (!(await r.get()).exists) continue;
       const ms = await r.collection('members').get();
       for (const m of ms.docs) await Repo.adminRemoveMember(m.id, id);
-      for (const sub of ['members', 'bots', 'hands', 'actions', 'tips', 'feed', 'game']) {
-        const sn = await r.collection(sub).get();
-        for (let i = 0; i < sn.docs.length; i += 400) { const b = db.batch(); sn.docs.slice(i, i + 400).forEach(d => b.delete(d.ref)); await b.commit(); }
+      for (const sub of ['members', 'bots', 'hands', 'actions', 'tips', 'feed']) {
+        try {
+          const sn = await r.collection(sub).get();
+          for (let i = 0; i < sn.docs.length; i += 400) { const b = db.batch(); sn.docs.slice(i, i + 400).forEach(d => b.delete(d.ref)); await b.commit(); }
+        } catch (e) { console.warn('[TeenPatti] clear', id, sub, e && e.code); if (step) step((TABLE_BY_ID[id] ? tableName(TABLE_BY_ID[id]) : id) + ': could not clear ' + sub); }
       }
+      await Repo.gameRef(id).delete();        // the game is one document that can be read and deleted by name, but not listed
       await r.update({ hostUid: '', dealerAt: 0, seated: 0, updatedAt: FV.serverTimestamp() }).catch(e => console.warn('[TeenPatti] clear room', id, e && e.code));
       n++; if (step) step((TABLE_BY_ID[id] ? tableName(TABLE_BY_ID[id]) : id) + ' cleared');
     }
@@ -7365,7 +7368,8 @@ Object.assign(Repo, {
     for (const id of tables) {
       const r = Repo.roomRef(id);
       if (!(await r.get()).exists) continue;
-      for (const sub of ['members', 'bots', 'hands', 'actions', 'tips', 'feed', 'game'].concat(id === PRIVATE_ID ? ['unlocked'] : [])) await del(r.collection(sub), null);
+      for (const sub of ['members', 'bots', 'hands', 'actions', 'tips', 'feed'].concat(id === PRIVATE_ID ? ['unlocked'] : [])) await del(r.collection(sub), null);
+      await Repo.gameRef(id).delete();        // the game is one document that can be read and deleted by name, but not listed
       await r.update({ hostUid: '', dealerAt: 0, seated: 0, updatedAt: FV.serverTimestamp() }).catch(e => console.warn('[TeenPatti] reset room', id, e && e.code));
       if (step) step('Table ' + (TABLE_BY_ID[id] ? tableName(TABLE_BY_ID[id]) : id), 0);
     }
