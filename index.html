@@ -3292,6 +3292,45 @@ body[data-screen="verify"] .wrap,body[data-screen="join"] .wrap,body[data-screen
 .sheetback .sheet .sbodyx .brow.trow .bboot{font-size:13px !important}
 .sheetback .sheet .sbodyx .brow.trow .tgo{padding:4px 0 !important;font-size:9px !important;width:100%;text-align:center}
 .sheetback .sheet .sbodyx .brow.trow .tcnt{gap:2px}
+
+/* ===== 75. Console on a fixed screen: the page stays put, only lists scroll ===== */
+body .cc{position:fixed;inset:0;height:auto;min-height:0;padding-bottom:0 !important;margin:0;display:flex;flex-direction:column;overflow:hidden}
+body .cc .cctcard .end{display:none}
+body .cc .cchead{flex:none}
+body .cc .ccmsg{flex:none}
+body .cc .ccmain{flex:1 1 auto;min-height:0;width:100%;padding:10px 12px 0;overflow:auto;-webkit-overflow-scrolling:touch}
+body .cc .ccnav{position:static;flex:none}
+body .cc .ccpage{gap:10px;padding-bottom:12px}
+body .cc .ccpage.fixed{height:100%;padding-bottom:0;overflow:hidden}
+body .cc .ccpage.fixed>*{flex:none}
+body .cc .ccpage.fixed>.ccscroll{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:12px;display:flex;flex-direction:column;gap:10px}
+body .cc .ccnote.foot{margin:0;padding:6px 0 8px;font-size:11px}
+body .cc .ccpagehead h2{font-size:18px}
+body .cc .ccmetric{padding:10px 12px;min-height:0}
+body .cc .ccmetric b{font-size:22px}
+body .cc .ccmetric .ccmic{width:28px;height:28px}
+body .cc .cctlist{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+body .cc .cctcard{padding:10px 12px}
+body .cc .cctcard .cctcid{display:none}
+body .cc .cctcard .cctcrow{gap:8px;font-size:11px;flex-wrap:wrap}
+body .cc .ccreq{padding:10px 12px}
+body .cc .aplist{display:flex;flex-direction:column;gap:6px}
+body .cc .aprow{padding:8px 10px}
+body .cc .ccphead{display:flex;align-items:center;gap:10px;padding:2px 0 8px;border-bottom:1px solid var(--line)}
+body .cc .ccphead .apav{flex:none;width:40px;height:40px}
+body .cc .ccpwho{flex:1;min-width:0;display:flex;flex-direction:column}
+body .cc .ccpwho b{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body .cc .ccpwho i{font-style:normal;font-size:12px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body .cc .ccplayer .adetail{border:0;padding:0;margin:0;background:none;display:flex;flex-direction:column;gap:10px}
+body .cc .ccplayer .apstats{grid-template-columns:repeat(4,1fr);gap:6px}
+body .cc .ccplayer .apstats>div{padding:8px 4px}
+body .cc .ccplayer .apstats b{font-size:15px}.cc .ccplayer .apstats span{font-size:9px}
+body .cc .ccplayer .apacts{display:flex;gap:6px}
+body .cc .ccplayer .apacts>button{flex:1}
+body .cc .ccplayer .apquick{flex-wrap:wrap;overflow:visible}
+body .cc .btn-danger.ghost{background:transparent}
+body .cc .ccplayer .apaccess{order:-2}
+body .cc .ccplayer .apwallet{order:-1}
 </style>
 </head>
 <body>
@@ -7295,6 +7334,24 @@ Object.assign(Repo, {
   },
 
   /* ---- the club reset: every player, game, rake and record is deleted (rules: admin deletes) ---- */
+  // Every table back to empty: seated players get their table chips back in the wallet, then the old hand, cards, bots and chat go.
+  async clearTables(step) {
+    const tables = TABLES.map(t => t.id); let n = 0;
+    for (const sl of TOUR_SLOTS) for (const id of tourIds(sl)) { if (!(await Repo.roomRef(id).get()).exists) break; tables.push(id); }
+    for (const id of tables) {
+      const r = Repo.roomRef(id);
+      if (!(await r.get()).exists) continue;
+      const ms = await r.collection('members').get();
+      for (const m of ms.docs) await Repo.adminRemoveMember(m.id, id);
+      for (const sub of ['members', 'bots', 'hands', 'actions', 'tips', 'feed', 'game']) {
+        const sn = await r.collection(sub).get();
+        for (let i = 0; i < sn.docs.length; i += 400) { const b = db.batch(); sn.docs.slice(i, i + 400).forEach(d => b.delete(d.ref)); await b.commit(); }
+      }
+      await r.update({ hostUid: '', dealerAt: 0, seated: 0, updatedAt: FV.serverTimestamp() }).catch(e => console.warn('[TeenPatti] clear room', id, e && e.code));
+      n++; if (step) step((TABLE_BY_ID[id] ? tableName(TABLE_BY_ID[id]) : id) + ' cleared');
+    }
+    return n;
+  },
   async resetClub(step) {
     const del = async (q, label, keep) => {
       const sn = await q.get(); let n = 0;
@@ -7495,7 +7552,7 @@ const ccLoading = t => h('div', { class: 'ccempty' }, h('div', { class: 'ccspin'
 
 /* ---- Overview ---- */
 function ccOverview() {
-  const a = Admin.st, us = a.users, pub = TABLES.filter(t => !t.private), allT = TABLES;
+  const a = Admin.st, us = a.users, pub = TABLES.filter(t => !t.private), allT = pub;
   const active = allT.filter(t => hostLive(S.rooms[t.id])).length, setup = allT.filter(t => S.rooms[t.id]).length;
   const online = us ? us.filter(u => Admin.stateOf(u) === 'playing').length : null, pend = Admin.pending(), alerts = Admin.alerts();
   const metric = (id, ic, v, l, sub, cls, fn) => h('button', { type: 'button', class: 'ccmetric ' + (cls || ''), id, onclick: fn }, h('span', { class: 'ccmic' }, ccI(ic)), h('b', { text: v }), h('span', { text: l }), h('i', { text: sub }));
@@ -7505,21 +7562,8 @@ function ccOverview() {
     metric('mOnline', 'pulse', online === null ? '…' : String(online), 'Players online', us ? us.filter(u => ccStatus(u) === 'approved').length + ' approved' : '', online ? 'ok' : '', () => { a.filter = 'online'; Admin.nav('players'); a.filter = 'online'; Admin.paint(); }),
     metric('mRequests', 'inbox', String(pend.length), 'Pending requests', pend.length ? 'oldest ' + ccAgo(ccMs(pend[0].createdAt)) : 'All clear', pend.length ? 'cyan' : '', () => Admin.nav('requests')),
     metric('mAlerts', 'alert', String(alerts.filter(x => x.k !== 'info').length), 'System alerts', alerts.length ? alerts[0].t : 'All systems normal', alerts.some(x => x.k === 'bad') ? 'bad' : alerts.some(x => x.k === 'warn') ? 'warn' : '', () => { const el = $('ccHealth'); if (el) el.scrollIntoView({ behavior: 'smooth' }); })));
-  // the approval queue, first three
-  out.push(ccSec('Pending requests', pend.length > 3 ? h('button', { type: 'button', class: 'cclinkbtn', text: 'See all ' + pend.length, onclick: () => Admin.nav('requests') }) : null,
-    !us ? ccLoading('Loading requests…') : pend.length ? h('div', { class: 'ccreqs' }, pend.slice(0, 3).map(ccRequestCard)) : ccEmpty('check', 'No one is waiting', 'New sign-ups appear here for you to approve.'), 'ovRequests'));
-  // tables at a glance
-  out.push(ccSec('Tables', h('button', { type: 'button', class: 'cclinkbtn', text: 'Manage', onclick: () => Admin.nav('tables') }),
-    h('div', { class: 'cctgrid' }, allT.map(t => ccTableCard(t, true))), 'ovTables'));
-  // the other jobs
-  const tools = [['tour', 'trophy', 'Tournaments', (() => { const L = TOUR_SLOTS.map(Tour.T).filter(T => T && (Tour.phase(T).name === 'upcoming' || Tour.running(Tour.phase(T)))); return L.length ? L.length + ' open' : 'None open'; })()],
-    ['private', 'crown', 'Private table', S.rooms[PRIVATE_ID] ? (S.rooms[PRIVATE_ID].status === 'open' ? 'Open' : 'Closed') : 'Not created'],
-    ['notify', 'mail', 'Notifications', 'Message players'], ['rewards', 'gift', 'Rewards', 'Send chips'],
-    ['rake', 'stats', 'Rake', a.rake ? fmt(Object.values(a.rake).reduce((x, d) => x + (d.total || 0), 0)) + ' collected' : '…'], ['vip', 'shield', 'Rakeback', 'Friday payout']];
-  out.push(ccSec('Tools', null, h('div', { class: 'cctools', id: 'ccTools' }, tools.map(([v, ic, t, sub]) => h('button', { type: 'button', class: 'cctool', id: 'tool_' + v, onclick: () => Admin.go(v) }, h('span', { class: 'ccmic' }, ccI(ic)), h('b', { text: t }), h('i', { text: sub })))), 'ovTools'));
-  out.push(ccActivity());
-  out.push(ccHealth());
-  return h('div', { class: 'ccpage' }, out);
+  out.push(h('div', { class: 'ccscroll' }, ccHealth()));
+  return h('div', { class: 'ccpage fixed' }, out);
 }
 function ccActivity() {
   const ev = Admin.activity();
@@ -7564,10 +7608,10 @@ async function ccDecide(u, yes) {
 function ccRequests() {
   const a = Admin.st, pend = Admin.pending();
   if (!a.users) return h('div', { class: 'ccpage' }, ccLoading('Loading requests…'));
-  return h('div', { class: 'ccpage' },
+  return h('div', { class: 'ccpage fixed' },
     h('div', { class: 'ccpagehead' }, h('h2', { text: 'Requests' }), h('span', { class: 'ccchip' + (pend.length ? ' cyan' : ''), text: pend.length + ' waiting' })),
-    h('p', { class: 'ccnote', text: 'Every new player has verified their email and used a referral code. They cannot play until you approve them. Approving gives them their own referral code; they start with 0 chips until you add some from Players.' }),
-    pend.length ? h('div', { class: 'ccreqs', id: 'reqList' }, pend.map(ccRequestCard)) : ccEmpty('check', 'No pending requests', 'When someone signs up with a referral code they appear here.'));
+    h('div', { class: 'ccscroll' }, pend.length ? h('div', { class: 'ccreqs', id: 'reqList' }, pend.map(ccRequestCard)) : ccEmpty('check', 'No pending requests', 'When someone signs up with a referral code they appear here.')),
+    h('p', { class: 'ccnote foot', text: 'New players cannot play until you approve them. They start with 0 chips.' }));
 }
 
 /* ---- Tables ---- */
@@ -7589,13 +7633,12 @@ function ccTableCard(t, mini) {
     mini ? h('i', { class: 'cctcseats', text: seats + '/' + MAX_SEATS + ' seated' }) : null);
 }
 function ccTables() {
-  const pub = TABLES.filter(t => !t.private), groups = [['Classic tables', pub.filter(t => t.mode !== 'variant')], ['Variant tables', pub.filter(t => t.mode === 'variant')], ['Private', TABLES.filter(t => t.private)]];
-  const live = TABLES.filter(t => hostLive(S.rooms[t.id])).length, missing = pub.filter(t => S.roomsLoaded[t.id] && !S.rooms[t.id]).length;
-  return h('div', { class: 'ccpage' },
+  const pub = TABLES.filter(t => !t.private), groups = [['Classic tables', pub.filter(t => t.mode !== 'variant')], ['Variant tables', pub.filter(t => t.mode === 'variant')]];
+  const live = pub.filter(t => hostLive(S.rooms[t.id])).length, missing = pub.filter(t => S.roomsLoaded[t.id] && !S.rooms[t.id]).length;
+  return h('div', { class: 'ccpage fixed' },
     h('div', { class: 'ccpagehead' }, h('h2', { text: 'Tables' }), h('span', { class: 'ccchip' + (live ? ' ok' : ''), text: live + ' live' })),
     missing ? h('button', { type: 'button', class: 'ccbtn primary wide', id: 'setupBtn', disabled: !!S.busy.setup, onclick: handleSetup }, ccI('refresh'), h('span', { text: 'Set up ' + missing + ' missing table' + (missing === 1 ? '' : 's') })) : null,
-    groups.map(([g, list]) => list.length ? ccSec(g, null, h('div', { class: 'cctlist' }, list.map(t => ccTableCard(t, false)))) : null),
-    h('p', { class: 'ccnote', text: 'Live: a dealer is running hands. Waiting: open, nobody playing. Paused: players seated but no dealer right now. Closed: no new players can join.' }));
+    h('div', { class: 'ccscroll' }, groups.map(([g, list]) => list.length ? ccSec(g, null, h('div', { class: 'cctlist' }, list.map(t => ccTableCard(t, false)))) : null)));
 }
 // One table's details, read when its sheet opens (rules: members list, game get by the admin).
 async function ccLoadTable(id) {
@@ -7665,16 +7708,30 @@ function ccTableSheet(id) {
 function ccPlayers() {
   const a = Admin.st, us = a.users;
   if (!us) return h('div', { class: 'ccpage' }, ccLoading('Loading players…'));
+  const one = a.sel && us.find(u => u.uid === a.sel);
+  if (one) return ccPlayerPage(one);
   if (!a.filter || !['all', 'pending', 'approved', 'online', 'blocked'].includes(a.filter)) a.filter = 'all';
   const cnt = f => us.filter(u => f === 'pending' ? ccStatus(u) === 'pending' : f === 'approved' ? ccStatus(u) === 'approved' : f === 'online' ? Admin.stateOf(u) === 'playing' : f === 'blocked' ? ['blocked', 'rejected'].includes(ccStatus(u)) : true).length;
   const shown = us.filter(Admin.match);
-  return h('div', { class: 'ccpage' },
+  return h('div', { class: 'ccpage fixed' },
     h('div', { class: 'ccpagehead' }, h('h2', { text: 'Players' }), h('span', { class: 'ccchip', text: us.length + ' total' }),
       h('button', { type: 'button', class: 'ccicon', id: 'exportCsv', 'aria-label': 'Export CSV', title: 'Export CSV', onclick: () => { Admin.csv(); toast('The player list was saved as a CSV file.'); } }, ccI('inbox'))),
     h('label', { class: 'ccsearch' }, ccI('search'), h('input', { id: 'pSearch', type: 'search', placeholder: 'Search name, email or ID', value: a.q || '', oninput: e => { a.q = e.target.value; Admin.listOnly(); } })),
     h('div', { class: 'ccfilters', id: 'pFilters' }, [['all', 'All'], ['pending', 'Pending'], ['approved', 'Approved'], ['online', 'Online'], ['blocked', 'Blocked']].map(([v, t]) =>
       h('button', { type: 'button', class: a.filter === v ? 'on' : '', 'data-f': v, onclick: () => { a.filter = v; a.sel = ''; Admin.paint(); } }, h('span', { text: t }), h('i', { text: String(cnt(v)) })))),
-    h('div', { id: 'pList' }, playerRows(shown)));
+    h('div', { class: 'ccscroll', id: 'pList' }, playerRows(shown)));
+}
+/* One player's own screen: who they are at the top, then access, numbers, wallet and actions. */
+function ccPlayerPage(u) {
+  const a = Admin.st, s = a.stats[u.uid] || {}, st = Admin.stateOf(u), acc = ccStatus(u);
+  const tag = u.banned ? ['bad', 'Blocked'] : acc === 'pending' ? ['cyan', 'Pending'] : acc === 'rejected' ? ['bad', 'No access'] : st === 'playing' ? ['ok', 'Online'] : st === 'held' ? ['', 'Seat held'] : ['ok', 'Approved'];
+  return h('div', { class: 'ccpage fixed ccplayer', id: 'playerPage', 'data-uid': u.uid },
+    h('div', { class: 'ccphead' },
+      h('button', { type: 'button', class: 'ccicon', id: 'playerBack', 'aria-label': 'Back to players', onclick: () => { a.sel = ''; a.chipAmt = ''; a.chipNote = ''; Admin.paint(); } }, ccI('back')),
+      h('span', { class: 'apav' + (st === 'playing' ? ' live' : '') }, avatarNode(u.avatar)),
+      h('div', { class: 'ccpwho' }, h('b', { text: u.name }), h('i', { text: u.email || 'email not seen yet' })),
+      h('span', { class: 'aptag ' + tag[0], text: tag[1] })),
+    h('div', { class: 'ccscroll' }, playerDetail(u, s, s.hands || 0)));
 }
 Admin.listOnly = function () { const el = $('pList'); if (!el) return; el.replaceChildren(playerRows((Admin.st.users || []).filter(Admin.match))); };
 
@@ -7694,8 +7751,20 @@ function ccSettings() {
     });
     a.resetting = false; Admin.paint();
   };
-  return h('div', { class: 'ccpage' },
+  const clearT = async () => {
+    const yes = await ccConfirm({ title: 'Clear every table?', danger: true, ok: 'Clear tables',
+      body: 'This ends whatever is on the tables now:', list: ['Old and unfinished hands are deleted', 'Everyone still seated is stood up; the chips in front of them go back to their wallet', 'Bots start again with ' + fmt(BOT_START_CHIPS) + ' chips', 'Wallets, stats, rake and tournaments are not touched'] });
+    if (!yes) return;
+    a.resetLog = []; Admin.paint();
+    await adminBusy('cleart', 'clear the tables', async () => {
+      const n = await Repo.clearTables(label => { a.resetLog.push(label); Admin.paint(); });
+      await Admin.loadUsers(true);
+      toast(n + ' table' + (n === 1 ? ' was' : 's were') + ' cleared.');
+    });
+  };
+  return h('div', { class: 'ccpage fixed' },
     h('div', { class: 'ccpagehead' }, h('h2', { text: 'Settings' })),
+    h('div', { class: 'ccscroll' },
     ccSec('Your account', null, h('div', { class: 'cclist' },
       h('div', { class: 'ccrow' }, h('span', { class: 'ccrav' }, h('b', { text: ((S.user && S.user.email) || 'A').slice(0, 1).toUpperCase() })), h('div', {}, h('b', { text: 'Administrator' }), h('span', { text: (S.user && S.user.email) || '' }))),
       h('button', { type: 'button', class: 'ccrow btn', id: 'setPlayerView', onclick: () => AdminView.set('player') }, ccI('eye'), h('div', {}, h('b', { text: 'Player view' }), h('span', { text: 'See the lobby and watch tables as players see them' })), ccI('chev', 'end')),
@@ -7706,11 +7775,13 @@ function ccSettings() {
       h('p', { class: 'ccnote', text: 'New players need a referral code to sign up: yours, or the code of any approved player (each gets one when you approve them). Every sign-up still waits for your approval.' }))),
     ccSec('Tools', null, h('div', { class: 'cclist' }, ADMIN_TILES.map(([v, id, title, sub]) => h('button', { type: 'button', class: 'ccrow btn', id: 'set_' + v, onclick: () => v === 'tables' ? Admin.nav('tables') : v === 'players' ? Admin.nav('players') : Admin.go(v) },
       h('span', { class: 'ccmic' }, ccI({ tour: 'trophy', tables: 'table', private: 'crown', players: 'users', notify: 'mail', rewards: 'gift', rake: 'stats', vip: 'shield' }[v])), h('div', {}, h('b', { text: title }), h('span', { text: sub })), ccI('chev', 'end'))))),
-    ccHealth(),
+    ccSec('Clean up', null, h('div', { class: 'ccdanger', id: 'clearZone' },
+      h('div', {}, h('b', { text: 'Clear all table data' }), h('span', { text: 'Removes old hands and empties every seat. Chips at the tables go back to the players\' wallets.' })),
+      h('button', { type: 'button', class: 'ccbtn danger', id: 'clearTables', disabled: !!S.busy.cleart, onclick: clearT }, S.busy.cleart ? h('span', { class: 'ccspin sm' }) : ccI('refresh'), h('span', { text: S.busy.cleart ? 'Clearing…' : 'Clear tables' })))),
     ccSec('Danger zone', null, h('div', { class: 'ccdanger', id: 'dangerZone' },
       h('div', {}, h('b', { text: 'Reset club data' }), h('span', { text: 'Deletes every player, game, rake and record. Tables, their limits and your referral code stay.' })),
       h('button', { type: 'button', class: 'ccbtn danger', id: 'resetClub', disabled: !!S.busy.reset, onclick: reset }, S.busy.reset ? h('span', { class: 'ccspin sm' }) : ccI('alert'), h('span', { text: S.busy.reset ? 'Resetting…' : 'Reset everything' })),
-      a.resetLog && a.resetLog.length ? h('ol', { class: 'cclog', id: 'resetLog' }, a.resetLog.slice(-8).map(x => h('li', { text: x }))) : null)));
+      a.resetLog && a.resetLog.length ? h('ol', { class: 'cclog', id: 'resetLog' }, a.resetLog.slice(-8).map(x => h('li', { text: x }))) : null))));
 }
 
 /* ---- 1. public tables ---- */
@@ -7988,15 +8059,14 @@ function playerRows(list) {
   const a = Admin.st;
   if (!list.length) return h('div', { class: 'card tight' }, h('p', { class: 'muted', text: 'No players match.' }));
   return h('div', { class: 'aplist' }, list.map(u => {
-    const open = a.sel === u.uid, s = a.stats[u.uid] || {}, hd = s.hands || 0, st = Admin.stateOf(u);
-    return h('div', { class: 'aplayer' + (u.banned ? ' banned' : '') + (open ? ' open' : ''), 'data-uid': u.uid },
-      h('button', { type: 'button', class: 'aprow', 'data-open': u.uid, 'aria-expanded': open ? 'true' : 'false', onclick: () => { a.sel = open ? '' : u.uid; a.chipAmt = ''; a.chipNote = ''; Admin.paint(); } },
+    const st = Admin.stateOf(u);
+    return h('div', { class: 'aplayer' + (u.banned ? ' banned' : ''), 'data-uid': u.uid },
+      h('button', { type: 'button', class: 'aprow', 'data-open': u.uid, onclick: () => { a.sel = u.uid; a.chipAmt = ''; a.chipNote = ''; Admin.paint(); } },
         h('span', { class: 'apav' + (st === 'playing' ? ' live' : '') }, avatarNode(u.avatar)),
         h('span', { class: 'apwho' }, h('b', { text: u.name }), h('i', { text: u.email || 'email not seen yet' })),
         u.banned ? h('span', { class: 'aptag bad', text: 'Blocked' }) : ccStatus(u) === 'pending' ? h('span', { class: 'aptag cyan', text: 'Pending' }) : ccStatus(u) === 'rejected' ? h('span', { class: 'aptag bad', text: 'No access' }) : st === 'playing' ? h('span', { class: 'aptag ok', text: 'Online' }) : st === 'held' ? h('span', { class: 'aptag', text: 'Seat held' }) : null,
         h('span', { class: 'apchips' }, h('b', { text: fmt(u.chips) }), h('i', { text: 'chips' })),
-        h('span', { class: 'apcar', 'aria-hidden': 'true', text: open ? '▴' : '▾' })),
-      open ? playerDetail(u, s, hd) : null);
+        h('span', { class: 'apcar', 'aria-hidden': 'true', text: '›' })));
   }));
 }
 function playerDetail(u, s, hd) {
@@ -8016,6 +8086,19 @@ function playerDetail(u, s, hd) {
       u.chips += n; a.chipAmt = ''; a.chipNote = '';
       await Admin.loadUsers(true);
       Admin.say('Added ' + fmt(n) + ' chips. ' + u.name + ' now has ' + fmt((a.users.find(x => x.uid === u.uid) || u).chips) + '.');
+    });
+  };
+  const take = async () => {
+    const n = Number(a.chipAmt);
+    if (!Number.isInteger(n) || n <= 0) return Admin.say('Type a whole number of chips above zero, or tap one of the quick amounts.', 'err');
+    if (n > u.chips) return Admin.say(u.name + ' only has ' + fmt(u.chips) + ' chips in the wallet.', 'err');
+    const why = a.chipNote.trim() || 'Chips removed by the admin';
+    if (!(await ccConfirm({ title: 'Remove ' + fmt(n) + ' chips?', body: u.name + ' will have ' + fmt(u.chips - n) + ' left in the wallet.' + (u.tableId ? ' Chips they hold at a table are not touched.' : ''), ok: 'Remove chips', danger: true }))) return;
+    return adminBusy('chips_' + u.uid, 'remove chips', async () => {
+      await Repo.grantChips(u.uid, -n, why);
+      u.chips -= n; a.chipAmt = ''; a.chipNote = '';
+      await Admin.loadUsers(true);
+      Admin.say('Removed ' + fmt(n) + ' chips. ' + u.name + ' now has ' + fmt((a.users.find(x => x.uid === u.uid) || u).chips) + '.');
     });
   };
   const wipe = () => {
@@ -8056,11 +8139,12 @@ function playerDetail(u, s, hd) {
       line('Player ID', u.uid, h('button', { type: 'button', class: 'apcopy', id: 'copyId', text: 'Copy', onclick: copyId }))),
     h('div', { class: 'apwallet' },
       h('div', { class: 'apwhead' }, h('span', { text: 'WALLET' }), h('b', { id: 'apWallet', text: fmt(u.chips) })),
-      h('div', { class: 'apquick', id: 'chipQuick' }, [100, 500, 1000, 5000, 10000].map(n => h('button', { type: 'button', class: 'achip' + (Number(a.chipAmt) === n ? ' on' : ''), 'data-amt': n, text: '+' + fmt(n), onclick: () => { a.chipAmt = String(n); Admin.paint(); } }))),
+      h('div', { class: 'apquick', id: 'chipQuick' }, [100, 500, 1000, 5000, 10000].map(n => h('button', { type: 'button', class: 'achip' + (Number(a.chipAmt) === n ? ' on' : ''), 'data-amt': n, text: fmt(n), onclick: () => { a.chipAmt = String(n); Admin.paint(); } }))),
       h('div', { class: 'apfields' }, amt, note),
       h('div', { class: 'apacts' },
-        h('button', { id: 'chipAdd', class: 'btn-primary btn-small', type: 'button', text: 'Add chips', disabled: busy, onclick: add }),
-        h('button', { id: 'chipWipe', class: 'btn-danger btn-small', type: 'button', text: 'Wipe chips', disabled: busy || !(u.chips > 0), onclick: wipe }))),
+        h('button', { id: 'chipAdd', class: 'btn-primary btn-small', type: 'button', text: 'Add', disabled: busy, onclick: add }),
+        h('button', { id: 'chipTake', class: 'btn-danger btn-small', type: 'button', text: 'Remove', disabled: busy || !(u.chips > 0), onclick: take }),
+        h('button', { id: 'chipWipe', class: 'btn-danger btn-small ghost', type: 'button', text: 'Wipe all', disabled: busy || !(u.chips > 0), onclick: wipe }))),
     h('div', { class: 'apmore' },
       st === 'held' ? h('button', { id: 'releaseSeat', class: 'aplink', type: 'button', text: 'Release held seat', title: 'The chips at the table go back to the wallet', onclick: () => adminBusy('rel_' + u.uid, 'release seat', async () => { await Repo.adminRemoveMember(u.uid, u.tableId); await Admin.loadUsers(true); Admin.say('The seat was released.'); }) }) : null,
       u.email ? h('button', { id: 'resetPw', class: 'aplink', type: 'button', text: 'Send password reset', onclick: () => adminBusy('pw_' + u.uid, 'send reset', async () => { await Auth.sendReset(u.email); Admin.say('A password reset email was sent to ' + u.email + '.'); }) }) : null,
