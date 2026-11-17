@@ -3475,6 +3475,64 @@ body .cc .ccglines i{font-style:normal;font-size:10px;color:var(--mute);white-sp
 .lwrap .lpanel[data-lg]>*{position:relative;z-index:3}
 .lwrap:has(.lpanel[data-lg]){transform:none !important;animation:none !important;filter:none !important}
 .lwrap .lpanel[data-lg] .lfield{background:rgba(255,255,255,.72) !important}
+/* ===== 85. Lounge restyle: smoked glass, thin gold edges, gold titles (home, card games, Teen Patti lobby) ===== */
+:root{--gl-bg:linear-gradient(160deg,rgba(14,22,18,.72),rgba(6,14,10,.6));--gl-edge:rgba(242,199,92,.6);--gl-hi:inset 0 1px 0 rgba(255,244,214,.22);--gold-text:linear-gradient(180deg,#fff6d8 0%,#f6d27a 45%,#c9952f 100%)}
+/* top bars */
+.htop .hme,.htop .hchips,.htop .hgear,.stop .hchips,.stop .pback2{background:var(--gl-bg) !important;-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);border:1px solid var(--gl-edge) !important;box-shadow:0 8px 22px rgba(0,0,0,.35),var(--gl-hi) !important}
+.htop .hme{gap:9px !important;padding:3px 10px 3px 3px !important}
+.htop .hav2{position:relative;width:38px;height:38px;padding:2px;border:0;overflow:visible;background:conic-gradient(from 200deg,#fff3c4,#d9a441,#7a5410,#f2c75c,#fff3c4)}
+.htop .hav2>*{width:100%;height:100%;border-radius:50%;overflow:hidden;background:#0e3b26;display:grid;place-items:center}
+.htop .hav2:after{content:"";position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border-radius:50%;background:#35e08f;border:2px solid #0b1410;box-shadow:0 0 8px rgba(53,224,143,.8)}
+.htop .hwho b{color:#fff7e3;font-size:14px;letter-spacing:.01em}
+.htop .hwho small{color:#e7bf63;font-size:9px;letter-spacing:.16em}
+.hmechev{flex:none;width:14px;height:14px;color:#e7bf63;opacity:.85}.hmechev .pico{width:100%;height:100%}
+.htop .hchips b,.stop .hchips b{color:#ffe7a3;text-shadow:0 1px 6px rgba(242,199,92,.35)}
+.htop .hchips .pplus,.stop .hchips .pplus{background:linear-gradient(180deg,#ffe9a6,#d2a03f) !important;border:0 !important;color:#2a1a02 !important;font-weight:900;box-shadow:inset 0 1px 0 #fff6d0,0 2px 6px rgba(0,0,0,.35)}
+.htop .hgear,.stop .pback2{color:#f2c75c !important}
+/* home tiles */
+.phome .htiles{gap:16px}
+.phome .htile2{aspect-ratio:auto !important;height:clamp(118px,19vh,150px);max-height:none;border:1px solid var(--gl-edge) !important;border-radius:22px !important;
+  background:linear-gradient(115deg,rgba(4,16,10,.88) 0%,rgba(7,40,25,.78) 50%,rgba(12,62,39,.64) 100%) !important;-webkit-backdrop-filter:blur(12px) saturate(1.3);backdrop-filter:blur(12px) saturate(1.3);
+  box-shadow:0 20px 40px rgba(0,0,0,.38),var(--gl-hi),inset 0 0 0 1px rgba(255,255,255,.03) !important;overflow:hidden}
+.phome .htile2:before{content:"";position:absolute;left:16%;right:16%;top:0;height:1px;background:linear-gradient(90deg,transparent,#ffe7a3,transparent);opacity:.9;pointer-events:none}
+.phome .htile2:after{background:linear-gradient(110deg,transparent 30%,rgba(255,236,190,.14) 45%,transparent 60%) !important;background-size:250% 100% !important;animation:hsheen 6s ease-in-out infinite}
+.phome .htile2.sports:after{animation-delay:3s}
+@keyframes hsheen{0%,55%{background-position:120% 0}85%,100%{background-position:-60% 0}}
+.phome .htart{left:-2% !important;top:6% !important;bottom:-2% !important;width:46% !important;filter:drop-shadow(0 10px 14px rgba(0,0,0,.55)) saturate(1.1)}
+.phome .httx{top:auto !important;bottom:auto !important;right:16px !important;top:14px !important;align-items:flex-end;gap:3px !important;text-align:right}
+.phome .htkick{font-style:normal;font:800 9px/1 system-ui;letter-spacing:.24em;color:#e7bf63;opacity:.9}
+.phome .httx b{font:700 clamp(26px,8.4vw,34px)/1.05 Georgia,'Times New Roman',serif !important;letter-spacing:.04em !important;-webkit-text-stroke:0 !important;
+  background:var(--gold-text);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 4px rgba(0,0,0,.55))}
+.phome .htline{font:600 11px/1.2 system-ui;color:#dbe7df;letter-spacing:.02em}
+.phome .htcta{position:absolute;right:16px;bottom:14px;display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 16px;border-radius:12px;background:linear-gradient(180deg,#ffe9a6,#d2a03f);color:#251600;
+  font:900 12px/1 system-ui;letter-spacing:.16em;box-shadow:0 6px 16px rgba(210,160,63,.35),inset 0 1px 0 #fff6d0}
+.phome .htcta .pico{width:12px;height:12px}
+.phome .htcta.soon{background:rgba(255,255,255,.06);color:#e7cf96;border:1px solid rgba(231,191,99,.55);box-shadow:none;letter-spacing:.12em;font-size:10.5px;padding:0 12px}
+.phome .htile2.sports .htart{filter:drop-shadow(0 10px 14px rgba(0,0,0,.55)) saturate(.9) brightness(.92)}
+.phome .htile2.pressed{transform:scale(.975) !important}
+@media (prefers-reduced-motion:reduce){.phome .htile2:after{animation:none}}
+/* Teen Patti lobby */
+.ptplobby .tptitle,.pgames .tptitle{background:linear-gradient(180deg,rgba(8,26,17,.82),rgba(4,16,10,.82)) !important;border:1px solid var(--gl-edge) !important;box-shadow:0 8px 20px rgba(0,0,0,.35),var(--gl-hi);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.tpcard{position:absolute;align-items:stretch !important;justify-content:space-between !important;text-align:left;overflow:hidden;padding:calc(var(--u) * 22) calc(var(--u) * 18) calc(var(--u) * 20) calc(var(--u) * 22) !important;
+  background:linear-gradient(160deg,rgba(5,20,13,.88),rgba(8,44,28,.76) 60%,rgba(14,66,42,.66)) !important;-webkit-backdrop-filter:blur(10px) saturate(1.3);backdrop-filter:blur(10px) saturate(1.3);
+  border:1px solid var(--gl-edge) !important;border-radius:calc(var(--u) * 30) !important;box-shadow:0 calc(var(--u) * 18) calc(var(--u) * 36) rgba(0,0,0,.4),var(--gl-hi) !important}
+.tpcard:before{content:"";position:absolute;left:18%;right:18%;top:0;height:1px;background:linear-gradient(90deg,transparent,#ffe7a3,transparent)}
+.tpwm{position:absolute;right:-12%;bottom:-16%;width:66%;height:66%;color:#f2c75c;opacity:.07;pointer-events:none}.tpwm .pico{width:100%;height:100%}
+.tpcard .tpic{flex:none;width:calc(var(--u) * 64) !important;height:calc(var(--u) * 64) !important;padding:calc(var(--u) * 14) !important;background:rgba(242,199,92,.08) !important;border:1px solid rgba(242,199,92,.6) !important;color:#f6d27a}
+.tpcard .tptag{position:absolute;top:calc(var(--u) * 26);right:calc(var(--u) * 22);display:inline-flex;align-items:center;gap:calc(var(--u) * 8);padding:calc(var(--u) * 6) calc(var(--u) * 12) !important;border-radius:99px;
+  background:rgba(0,0,0,.35) !important;border:1px solid rgba(255,255,255,.12) !important;color:#e8e2d0 !important;font-size:max(7px,calc(var(--u) * 14)) !important;letter-spacing:.12em}
+.tpcard .tptag i{width:calc(var(--u) * 10);height:calc(var(--u) * 10);min-width:5px;min-height:5px;border-radius:50%;background:#f2c75c;box-shadow:0 0 6px rgba(242,199,92,.8)}
+.tpcard .tptag.on i{background:#35e08f;box-shadow:0 0 8px rgba(53,224,143,.9)}.tpcard .tptag.on{color:#bff5d9 !important}
+.tpcard .tptag.live i{background:#ff5d6c;box-shadow:0 0 8px rgba(255,93,108,.9);animation:tzblink 1.2s ease-in-out infinite}.tpcard .tptag.live{color:#ffd2d6 !important;animation:none}
+.tpcard .tptag.off i{background:#8a8f8c;box-shadow:none}.tpcard .tptag.off{opacity:.85}
+.tpbot{display:flex;align-items:flex-end;justify-content:space-between;gap:calc(var(--u) * 10);min-width:0}
+.tptxt{display:flex;flex-direction:column;gap:calc(var(--u) * 4);min-width:0}
+.tpcard b{font:700 max(13px,calc(var(--u) * 31))/1.05 Georgia,serif !important;white-space:nowrap;background:var(--gold-text);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none !important;filter:drop-shadow(0 2px 3px rgba(0,0,0,.6))}
+.tpcard .tpsub{font-size:max(8px,calc(var(--u) * 15)) !important;color:#d4e2d9 !important;font-weight:600;white-space:normal !important;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.25}
+.tpgo{flex:none;width:calc(var(--u) * 40);height:calc(var(--u) * 40);min-width:18px;min-height:18px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(180deg,#ffe9a6,#d2a03f);color:#251600;box-shadow:inset 0 1px 0 #fff6d0,0 4px 10px rgba(0,0,0,.35)}
+.tpgo .pico{width:55%;height:55%;stroke-width:3}
+.tpcard.pressed{transform:scale(.96);filter:brightness(1.1)}
 /* ===== 79. Console: the Test tab (create a test table, its runs, their stats and games) ===== */
 body .cc .ccnav{grid-template-columns:repeat(6,1fr)}
 body .cc .ccnav button{font-size:10px}
@@ -14401,7 +14459,7 @@ function homeTop() {
   return h('div', { class: 'htop' },
     h('button', { type: 'button', class: 'hme', id: 'hubProfile', 'aria-label': 'Your profile', onclick: () => openMe() },
       h('span', { class: 'hav2' }, avatarNode(p.avatar)),
-      h('span', { class: 'hwho' }, h('b', { id: 'lbName', text: p.name }), h('small', { text: S.realAdmin ? 'Admin · testing' : 'View profile' }))),
+      h('span', { class: 'hwho' }, h('b', { id: 'lbName', text: p.name }), h('small', { text: S.realAdmin ? 'Admin · testing' : 'View profile' })), h('span', { class: 'hmechev', 'aria-hidden': 'true' }, pI('chev'))),
     h('button', { type: 'button', class: 'hchips', id: 'lbWallet', 'aria-label': 'Wallet', onclick: watchOr(() => Sheets.wallet()) },
       h('i', { class: 'pchip', 'aria-hidden': 'true' }), h('b', { id: 'walletBal', text: fmt(p.chips) }), h('span', { class: 'pplus', 'aria-hidden': 'true', text: '+' })),
     h('button', { type: 'button', class: 'hgear', id: 'lbGear', 'aria-label': 'Settings', onclick: watchOr(() => Sheets.settings()) }, pI('gear')));
@@ -14449,14 +14507,16 @@ function openMe(tab) {
 }
 function renderHome() {
   if (!S.isAdmin && !Vip.doc && !Vip.tried) { Vip.tried = true; Vip.load().then(scheduleRender, () => {}); }
-  const tile = (id, cls, img, word, sub, fn) => pressable(h('button', { type: 'button', class: 'htile2 ' + cls, id, 'aria-label': word, onclick: fn },
-    h('span', { class: 'htart', style: 'background-image:var(--i-' + img + ')' }), h('span', { class: 'htplay', 'aria-hidden': 'true' }, pI('play', '', true)),
-    h('span', { class: 'httx' }, h('b', { text: word })), sub ? h('em', { class: 'htsoon', text: sub }) : null));
+  // a smoked-glass tile: the art on the left, a small label, the title in gold and what it holds on the right, and the button
+  const tile = (id, cls, img, word, kick, line, live, fn) => pressable(h('button', { type: 'button', class: 'htile2 ' + cls, id, 'aria-label': word + (live ? '' : ', coming soon'), onclick: fn },
+    h('span', { class: 'htart', style: 'background-image:var(--i-' + img + ')' }),
+    h('span', { class: 'httx' }, h('i', { class: 'htkick', text: kick }), h('b', { text: word }), h('span', { class: 'htline', text: line })),
+    live ? h('span', { class: 'htcta' }, h('span', { text: 'PLAY' }), pI('play', '', true)) : h('span', { class: 'htcta soon' }, pI('lock'), h('span', { text: 'COMING SOON' }))));
   return lounge('homeStage', [
     homeTop(), adminPill(),
     h('div', { class: 'htiles' },
-      tile('tileCards', 'cards', 't_cards', 'CARDS', '', () => goTo('games')),
-      tile('tileSports', 'sports', 't_sports', 'SPORTS', 'UNDER CONSTRUCTION', () => Sheets.soon('Sports', 'Sports games are under construction. They arrive here soon.')))], 'phome');
+      tile('tileCards', 'cards', 't_cards', 'Cards', 'CARD ROOM', 'Teen Patti · Tournaments', true, () => goTo('games')),
+      tile('tileSports', 'sports', 't_sports', 'Sports', 'SPORTS ARENA', 'Cricket · Football', false, () => Sheets.soon('Sports', 'Sports games are under construction. They arrive here soon.')))], 'phome');
 }
 
 /* ---- Card games: a curved row of tiles in the middle of the room. Teen Patti, and more to come ---- */
@@ -14525,9 +14585,10 @@ function renderTPLobby() {
   const mySeat = S.profile && S.profile.tableId && TABLE_BY_ID[S.profile.tableId], myMode = mySeat && mySeat.mode;
   const tk = Tour.lobbyCard(), pv = tileState(PRIVATE_CFG);
   const card = (id, rect, ic, title, sub, tag, tagCls, fn) => pressable(h('button', { type: 'button', class: 'tpcard', id, style: B(...rect), 'aria-label': title, onclick: fn },
+    h('i', { class: 'tpwm', 'aria-hidden': 'true' }, pI(ic, '', ic === 'spade')),
     h('span', { class: 'tpic' }, pI(ic, '', ic === 'spade')),
-    h('b', { text: title }), h('span', { class: 'tpsub', text: sub }),
-    h('em', { class: 'tptag ' + (tagCls || ''), text: tag })));
+    h('em', { class: 'tptag ' + (tagCls || '') }, h('i'), h('span', { text: tag })),
+    h('span', { class: 'tpbot' }, h('span', { class: 'tptxt' }, h('b', { text: title }), h('span', { class: 'tpsub', text: sub })), h('span', { class: 'tpgo', 'aria-hidden': 'true' }, pI('chev')))));
   const nC = seatedAt(LB_CLASSIC_IDS), nV = seatedAt(LB_VARIANT_IDS);
   parts.push(h('b', { class: 'tptitle', style: B(317, 405, 617, 462), text: 'TEEN PATTI' }));
   parts.push(card('modeBtn_classic', [152, 618, 457, 868], 'spade', 'Classic', 'Boot ' + fmt(BOOTS[0]) + ' – ' + fmt(BOOTS[BOOTS.length - 1]),
