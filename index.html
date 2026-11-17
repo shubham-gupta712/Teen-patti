@@ -3331,6 +3331,138 @@ body .cc .ccplayer .apquick{flex-wrap:wrap;overflow:visible}
 body .cc .btn-danger.ghost{background:transparent}
 body .cc .ccplayer .apaccess{order:-2}
 body .cc .ccplayer .apwallet{order:-1}
+
+/* ===== 76. Cards turned over at a show sit side by side and clear of the label; Stand up sits apart from the move buttons ===== */
+.tbv3 #tbStage .tbslot:has(.tmini.face){width:calc(var(--u) * 50);height:calc(var(--u) * 70);margin:0 calc(var(--u) * 2)}
+.tbv3 #tbStage .tbmcs:has(.tmini.face){margin-top:calc(var(--u) * 16);z-index:8}
+.tbv3 #tbStage .tmini.face{font-size:max(9px,calc(var(--u) * 24));border-radius:calc(var(--u) * 7)}
+.tbv3 #tbStage .tbseat.win .tbmcs{padding:calc(var(--u) * 4) !important}
+.tbv3 #tbStage .tbpst{z-index:9}
+.tbv3 .tpanel .tbside{margin-top:14px;padding-top:8px;border-top:1px solid rgba(226,189,107,.22)}
+.tbv3 .tpanel .tbstand{height:26px;padding:0 14px}
+
+/* ===== 77. Table pop-ups in portrait: hand history top to bottom, chat as a small centred card, a chat button by your seat ===== */
+.sheetback .hist{display:flex !important;flex-direction:column;gap:8px}
+.sheetback .hist .hlist{flex-direction:row !important;gap:6px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+.sheetback .hist .htile{flex:none;width:auto;flex-direction:column;align-items:flex-start;gap:3px;padding:7px 10px !important;border-radius:12px;background:rgba(0,0,0,.25) !important;border:1px solid rgba(223,186,104,.4) !important}
+.sheetback .hist .htile.on{background:linear-gradient(180deg,#f6d77a,#c9972e) !important;border-color:transparent !important}
+.sheetback .hist .htile b{font:800 12px system-ui !important}
+.sheetback .hist .htile span{font-size:10px !important;text-align:left;max-width:130px}
+.sheetback .hist .hno{gap:6px}
+.sheetback .hvar{font-size:8.5px;padding:1px 6px;text-transform:uppercase;background:rgba(0,0,0,.3)}
+.sheetback .hvar.big{font-size:9.5px;padding:3px 8px;align-self:flex-start}
+.sheetback .hist .hbar{align-items:flex-start;gap:8px;margin:0}
+.sheetback .hist .hbar .hsum{flex:1;min-width:0;flex-direction:column;align-items:flex-start !important;gap:6px !important}
+.sheetback .hist .hbar .btn-small{font-size:11px;padding:6px 10px;min-height:0}
+.hwin{display:grid;grid-template-columns:1fr auto;gap:1px 10px;width:100%;padding:8px 12px;border-radius:12px;background:linear-gradient(180deg,rgba(246,215,122,.2),rgba(246,215,122,.07));border:1px solid rgba(246,215,122,.55)}
+.hwin small{grid-column:1/-1;font-size:8.5px;font-weight:800;letter-spacing:.16em;color:#d9c48c}
+.hwin b{font-size:15px;color:#fff6dc;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hwin em{font-style:normal;font:800 16px system-ui;color:#7df0b0;font-variant-numeric:tabular-nums}
+.hwin span{grid-column:1/-1;font-size:11px;color:#cfe0d4}
+.hwin.live{border-style:dashed}
+.sheetback .hist .hhands{flex-direction:column;align-items:stretch;gap:5px;overflow:visible;padding:0}
+.sheetback .hist .hhand{justify-content:space-between;padding:6px 10px;background:rgba(0,0,0,.22);border-color:rgba(223,186,104,.25)}
+.sheetback .hist .hhand.win{background:rgba(246,215,122,.14);border-color:#f6d77a}
+.sheetback .hist .hhand .hwho{order:-1;display:flex;flex-direction:column;min-width:0;text-align:left}
+.sheetback .hist .hhand .hwho b{font-size:12.5px}.sheetback .hist .hhand .hwho span{font-size:10.5px;color:#cfe0d4}
+.sheetback .hist .hcards .tcard{width:30px;height:42px;font-size:13px;border-radius:5px}
+.sheetback .hist .hnoshow{margin:0;font-size:11px;color:#b9cdbf}
+.sheetback .hist .hsteps{max-height:min(34vh,260px) !important;gap:4px;margin:0}
+.sheetback .hist .hstep{grid-template-columns:78px 1fr auto auto;gap:6px;padding:5px 8px;font-size:11.5px;background:rgba(0,0,0,.22);border-color:rgba(223,186,104,.2)}
+.sheetback .hist .hstep .hw{font-size:8.5px;white-space:nowrap}
+.sheetback .hist .hstep b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sheetback .hist .hstep i{font-size:10px;white-space:nowrap}
+.sheetback .hist .hstep.note{grid-template-columns:1fr auto}
+.sheetback.chatdock{padding:8px !important}
+.sheetback.chatdock .sheet{width:min(90vw,340px) !important;border-radius:18px !important}
+.sheetback .chatlog{max-height:26vh;overflow:auto}
+.sheetback .chatq{display:flex;flex-wrap:wrap;gap:6px}
+.sheetback .chatbtn{font-size:12px !important;padding:6px 10px !important}
+.sheetback .stkrow{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
+.sheetback .stkbtn{font-size:19px !important;padding:3px 0 !important}
+.tbv3 #tbStage .tbchat{position:absolute;z-index:6;transform:translate(-50%,-50%);width:calc(var(--u) * 62);height:calc(var(--u) * 62);min-width:24px;min-height:24px;padding:calc(var(--u) * 14);border-radius:50%;background:radial-gradient(circle at 40% 30%,#1f7a4d,#0b3f28);border:max(1px,calc(var(--u) * 2.5)) solid #e2bd6b;color:#f6d77a;box-shadow:0 calc(var(--u) * 5) calc(var(--u) * 12) rgba(0,0,0,.45)}
+.tbv3 #tbStage .tbchat:active{transform:translate(-50%,-50%) scale(.92)}
+
+.sheetback .hist,.sheetback .hist>*{width:100% !important;max-width:none !important;min-width:0}
+.sheetback .hist .hdetail{display:flex;flex-direction:column;gap:8px}
+.sheetback .hist .hbar{background:none !important;border:0 !important;border-radius:0 !important;padding:0 !important;overflow:visible !important;box-shadow:none !important;width:100%}
+.sheetback .hist .hbar .hsum{background:none !important;padding:0 !important;border:0 !important}
+.sheetback .hist .hhands,.sheetback .hist .hsteps{width:100%}
+
+/* ===== 78. Console: game activity under each table ===== */
+body .cc .ccgames{display:flex;flex-direction:column;gap:6px}
+body .cc .ccgrange{display:grid;grid-template-columns:1fr 1fr auto;gap:6px;align-items:end}
+body .cc .ccgrange label{display:flex;flex-direction:column;gap:2px;min-width:0}
+body .cc .ccgrange span{font-size:10px;color:var(--mute);letter-spacing:.08em;text-transform:uppercase}
+body .cc .ccgrange input{width:100%;min-width:0;height:34px;padding:0 6px;border-radius:9px;border:1px solid var(--line2);background:var(--surf);color:var(--tx);font-size:11px;color-scheme:dark}
+body .cc .ccgame{border:1px solid var(--line);border-radius:12px;background:var(--surf);overflow:hidden}
+body .cc .ccgame.open{border-color:var(--line2)}
+body .cc .ccgamehead{display:flex;flex-direction:column;gap:4px;width:100%;min-height:0;padding:9px 11px;background:none;border:0;color:var(--tx);text-align:left;cursor:pointer}
+body .cc .ccgamehead>div{display:flex;align-items:center;gap:8px;min-width:0}
+body .cc .ccgamehead b{font-size:13px}
+body .cc .ccgamehead time{margin-left:auto;font-size:11px;color:var(--mute)}
+body .cc .ccgamehead span{flex:1;min-width:0;font-size:12px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body .cc .ccgamt{color:#e9c877;font-variant-numeric:tabular-nums}
+body .cc .ccgamehead .end{width:14px;height:14px;color:var(--dim)}
+body .cc .ccgame.open .ccgamehead .end{transform:rotate(90deg)}
+body .cc .ccgamebody{display:flex;flex-direction:column;gap:8px;padding:0 11px 11px}
+body .cc .ccgmeta{font-size:11px;color:var(--mute)}
+body .cc .ccgplayers{display:flex;flex-direction:column;gap:4px}
+body .cc .ccgp{display:grid;grid-template-columns:1fr auto auto;gap:1px 10px;padding:6px 9px;border-radius:9px;background:var(--surf2)}
+body .cc .ccgp b{font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body .cc .ccgp span{grid-column:1;font:600 12px ui-monospace,monospace;color:var(--mute)}
+body .cc .ccgp i{grid-row:1;grid-column:2;font-style:normal;font-size:11px;color:var(--mute)}
+body .cc .ccgp em{grid-row:1;grid-column:3;font-style:normal;font-weight:800;font-size:12px;font-variant-numeric:tabular-nums}
+body .cc .ccgp em.up{color:#3ddc97}body .cc .ccgp em.down{color:#ff8e9d}
+body .cc .ccglines{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;max-height:240px;overflow:auto}
+body .cc .ccglines li{display:grid;grid-template-columns:auto 1fr auto auto;gap:8px;align-items:baseline;padding:4px 2px;border-bottom:1px solid var(--line);font-size:11.5px}
+body .cc .ccglines time{font-size:10px;color:var(--dim);font-variant-numeric:tabular-nums}
+body .cc .ccglines em{font-style:normal;font-weight:700;color:#e9c877}
+body .cc .ccglines i{font-style:normal;font-size:10px;color:var(--mute);white-space:nowrap}
+/* ===== 79. Console: the Test tab (create a test table, its runs, their stats and games) ===== */
+body .cc .ccnav{grid-template-columns:repeat(6,1fr)}
+body .cc .ccnav button{font-size:10px}
+body .cc .cctform{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--surf)}
+body .cc .cctform .wide{grid-column:1/-1}
+body .cc .cctf{display:flex;flex-direction:column;gap:3px;min-width:0}
+body .cc .cctf>span{font:700 10px system-ui;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+body .cc .cctf>i{font:500 10px system-ui;font-style:normal;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body .cc .cctf input{width:100%;min-width:0;height:38px;padding:0 10px;border-radius:10px;border:1px solid var(--line2);background:var(--surf2);color:var(--tx);font:700 14px system-ui;font-variant-numeric:tabular-nums}
+body .cc .cctf input:focus{outline:none;border-color:var(--cy)}
+body .cc .cctseg{display:flex;gap:6px}
+body .cc .cctseg button{flex:1;min-height:36px;padding:0 6px;border-radius:10px;border:1px solid var(--line2);background:var(--surf2);color:var(--mute);font:700 12.5px system-ui;cursor:pointer}
+body .cc .cctseg button.on{border-color:var(--cy);background:rgba(70,214,226,.12);color:var(--cy)}
+body .cc .cctlistx{display:flex;flex-direction:column;gap:8px}
+body .cc .cctitem{border:1px solid var(--line);border-radius:14px;background:var(--surf);overflow:hidden}
+body .cc .cctitem.on{border-color:var(--line2)}
+body .cc .cctihead{display:flex;flex-direction:column;gap:4px;width:100%;padding:10px 12px;border:0;background:none;color:var(--tx);text-align:left;cursor:pointer}
+body .cc .cctihead>div{display:flex;align-items:center;gap:8px;min-width:0}
+body .cc .cctihead b{flex:1;min-width:0;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body .cc .cctihead span{flex:1;min-width:0;font-size:11.5px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body .cc .cctihead .end{width:14px;height:14px;color:var(--dim)}
+body .cc .cctitem.on .cctihead .end{transform:rotate(90deg)}
+body .cc .cctrun{display:flex;flex-direction:column;gap:10px;padding:0 12px 12px}
+body .cc .cctcfg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+body .cc .cctcfg>div{display:flex;flex-direction:column;gap:1px;min-width:0;padding:6px 8px;border-radius:9px;background:var(--surf2)}
+body .cc .cctcfg span{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);white-space:nowrap}
+body .cc .cctcfg b{font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body .cc .cctacts{display:flex;gap:8px}
+body .cc .cctacts .ccbtn{flex:1;min-height:40px;padding:0 10px;font-size:13px}
+body .cc .cctacts .ccbtn.danger{flex:0 0 auto}
+body .cc .cctstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+body .cc .cctstats>div{display:flex;flex-direction:column;gap:1px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:linear-gradient(160deg,var(--surf2),var(--surf))}
+body .cc .cctstats b{font:800 16px system-ui;font-variant-numeric:tabular-nums}
+body .cc .cctstats span{font-size:10.5px;color:var(--mute)}
+body .cc .cctplayers{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+body .cc .cctprow{display:grid;grid-template-columns:minmax(0,1.5fr) 1fr 1fr 1fr;gap:6px;align-items:center;padding:6px 10px;border-top:1px solid var(--line);font-size:12px;font-variant-numeric:tabular-nums}
+body .cc .cctprow:first-child{border-top:0}
+body .cc .cctprow.hd{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);background:var(--surf2)}
+body .cc .cctprow>span{min-width:0;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body .cc .cctprow>span:first-child{text-align:left;display:flex;flex-direction:column}
+body .cc .cctprow b{font-size:12.5px;overflow:hidden;text-overflow:ellipsis}
+body .cc .cctprow i{font-style:normal;font-size:10px;color:var(--mute)}
+body .cc .cctprow .up{color:#3ddc97;font-weight:800}body .cc .cctprow .down{color:#ff8e9d;font-weight:800}
+body .cc .cctrun .ccsec{margin:0}
 </style>
 </head>
 <body>
@@ -3467,8 +3599,10 @@ const STAKES = [                                 // the stakes (and buy-in limit
   { boot: 50,  min: 1000, max: 5000 },
   { boot: 100, min: 2000, max: 10000 }
 ];
-const TEST_BOTS = [{ id: 'bot_lucky', name: 'Lucky Bot' }, { id: 'bot_dealer', name: 'Royal Bot' }];   // test opponents for a lone player
-const TOUR_BOTS = TEST_BOTS.concat([{ id: 'bot_ace', name: 'Ace Bot' }]);   // the admin's test tournament seats three bots at every table
+// Bots never sit with players at the public tables. They play only at the admin's test table (up to six) and at a test tournament (three).
+const TEST_BOTS = [{ id: 'bot_lucky', name: 'Lucky Bot' }, { id: 'bot_dealer', name: 'Royal Bot' }, { id: 'bot_ace', name: 'Ace Bot' }, { id: 'bot_king', name: 'King Bot' }, { id: 'bot_queen', name: 'Queen Bot' }, { id: 'bot_jack', name: 'Jack Bot' }];
+const TOUR_BOTS = TEST_BOTS.slice(0, 3);   // the admin's test tournament seats three bots at every table
+const TEST_ID = 'test_1';                  // the admin's test table: made on the console's Test tab, never shown in the lobby
 /* The game variants. `table` is the retired one-table-per-variant id (still known to the rules). `id` is what the game state stores (G.variant). */
 const VARIANT_DEFS = [
   { id: 'classic',  table: '',            name: 'Classic',    tag: 'Standard rules', rule: 'Standard Teen Patti. Best hand first: Trail, Pure sequence, Sequence, Color, Pair, High card. A-K-Q is the highest sequence and A-2-3 the second highest.' },
@@ -3511,12 +3645,14 @@ const tableNoOf = id => { const m = /_(\d+)$/.exec(id || ''); return m ? Number(
 const TOUR_IDS = [].concat(...TOUR_SLOTS.map(tourIds));
 const TOUR_TABLES = TOUR_IDS.map(id => ({ id, boot: 0, min: 0, max: 0, blind: 0, chaal: 0, pot: 0, title: 'Tournament Table ' + tableNoOf(id), tier: 'Tournament', tour: true, random: true, room: 'TP8' + TOUR_SLOTS.indexOf(tourSlotOf(id)) + String(tableNoOf(id)).padStart(2, '0') }));
 const TOUR_LOBBY_MS = 5 * 60000;           // players are taken to their table this long before the start, and shown the rules
-const TABLE_BY_ID = Object.fromEntries(TABLES.concat(LEGACY_TABLES, TOUR_TABLES).map(t => [t.id, t]));
-const seatCap = id => (TABLE_BY_ID[id] && TABLE_BY_ID[id].tour) ? MAX_SEATS - tourBots(tourSlotOf(id)) : MAX_HUMAN_SEATS;
+const TEST_CFG = { id: TEST_ID, boot: 0, min: 0, max: 0, blind: 0, chaal: 0, pot: 0, title: 'Test Table', tier: 'Test', test: true, bots: 0, botChips: BOT_START_CHIPS, room: 'TP7000' };
+const TABLE_BY_ID = Object.fromEntries(TABLES.concat(LEGACY_TABLES, TOUR_TABLES, [TEST_CFG]).map(t => [t.id, t]));
+// Seats for people: all seven at a public table; a test table or a test tournament keeps some for its bots.
+const seatCap = id => { const t = TABLE_BY_ID[id]; return t && t.tour ? MAX_SEATS - tourBots(tourSlotOf(id)) : t && t.test ? MAX_SEATS - (t.bots || 0) : MAX_SEATS; };
 // Bots at a tournament's tables (only the admin's test tournament has them).
 const tourBots = s => { const T = typeof Tour !== 'undefined' && Tour.T(s); return T && T.status === 'published' ? Math.max(0, Math.min(3, T.bots || 0)) : 0; };
 // The bots this table plays with: the test pair at a public table, or the tournament's bots.
-const tableBots = id => TABLE_BY_ID[id] && TABLE_BY_ID[id].tour ? TOUR_BOTS.slice(0, tourBots(tourSlotOf(id))) : TEST_BOTS;     // a tournament table has no bots, so all six seats are for players
+const tableBots = id => { const t = TABLE_BY_ID[id]; return !t ? [] : t.tour ? TOUR_BOTS.slice(0, tourBots(tourSlotOf(id))) : t.test ? TEST_BOTS.slice(0, t.bots || 0) : []; };     // a public table has no bots
 const PRIVATE_CFG = TABLE_BY_ID[PRIVATE_ID];
 // Keeps the private table's config in step with its room document (stake, buy-in limits, name).
 function applyPrivateCfg(doc) {
@@ -3528,6 +3664,7 @@ function applyRoomCfg(id, doc) {
   if (!t || t.tour || !doc || !Number.isInteger(doc.boot)) return;     // a tournament table takes its numbers from the tournament (Tour.applyCfg)
   Object.assign(t, { boot: doc.boot, min: doc.minBuyIn, max: doc.maxBuyIn, blind: doc.maxBlind || doc.boot * ENGINE_MULT.blind, chaal: doc.maxChaal || doc.boot * ENGINE_MULT.chaal, pot: doc.potLimit || doc.boot * ENGINE_MULT.pot });
   if (t.private) t.title = doc.name || 'Private Table';
+  if (t.test) { t.title = doc.name || 'Test Table'; t.bots = Math.max(0, Math.min(TEST_BOTS.length, doc.bots || 0)); t.botChips = doc.botChips || BOT_START_CHIPS; t.random = doc.mode === 'variant'; }
 }
 const ENGINE_MULT = { blind: 16, chaal: 64, pot: 512 };       // what a limit is when the admin has not set one, in boots
 const tableName = t => (t.title || ('Boot ' + t.boot)) + (t.mode ? ' \u00B7 Boot ' + t.boot : '');     // the table's name, e.g. "Mehfil Lounge"
@@ -4062,6 +4199,24 @@ const Repo = {
   // Rule: game create/update (validGame)
   // `syncs` ([{id, stack}]): players who just packed get their table stack set to what they hold, in the same batch,
   // so they can leave the table while the others play on. Rule: members update (packed player, stack = public chips).
+  historyCol: t => db.collection('rooms').doc(t).collection('history'),
+  saveHandLog: (t, d) => Repo.historyCol(t).doc(String(d.handId).replace(/[^A-Za-z0-9_-]/g, '_') + '_' + d.at).set(d),
+  async pruneHandLogs(t, before) {
+    const sn = await Repo.historyCol(t).where('at', '<', before).limit(200).get();
+    if (sn.empty) return 0;
+    const b = db.batch(); sn.docs.forEach(d => b.delete(d.ref)); await b.commit(); return sn.size;
+  },
+  async handLogs(t, from, to, max) { const sn = await Repo.historyCol(t).where('at', '>=', from).where('at', '<=', to).orderBy('at', 'desc').limit(max || 300).get(); return sn.docs.map(d => d.data()); },
+  // The last player to go takes an unfinished hand with them, so a table nobody is at never reads "in play".
+  async closeEmptyTable(t) {
+    const R = S.room; if (!R || R.id !== t || !Dealer.active) return;
+    const others = R.members.filter(m => m.uid !== (S.user && S.user.uid)).length;
+    const G = Dealer.G || R.game; if (others > 0 || !G || G.phase === 'idle') return;
+    const idle = idleState(G); idle.order = []; idle.log = [];
+    await Repo.writeGame(t, idle).catch(() => {});
+    for (const b of (R.bots || [])) if (b.seatState === 'seated') await Repo.setBot(t, b.botId, b.name, 'standing', b.stack).catch(() => {});
+    Repo.clearHands(t, G.order || []).catch(() => {});
+  },
   writeGame(t, G, syncs) {
     if (!syncs || !syncs.length) return Repo.gameRef(t).set(Repo._game(G));
     const b = db.batch();
@@ -4074,8 +4229,8 @@ const Repo = {
   // The private table keeps a summary of itself (rules: sessions). This works out what one finished hand adds to it:
   // games played, rake, highest and lowest pot, time played and each player's line. Returns null when there is nothing to add.
   async _sessionPatch(t, G) {
-    const room = S.rooms[t], sid = room && room.sessionId, cfg = TABLE_BY_ID[t];
-    if (!sid || !cfg || !cfg.private || G.phase !== 'result' || !G.result) return null;
+    const room = (S.room && S.room.id === t && S.room.doc) || S.rooms[t], sid = room && room.sessionId, cfg = TABLE_BY_ID[t];
+    if (!sid || !cfg || !(cfg.private || cfg.test) || G.phase !== 'result' || !G.result) return null;
     const snap = await Repo.sessionRef(sid).get();                                  // rule: sessions get (host)
     if (!snap.exists) return null;
     const s = snap.data(), rs = G.result, now = Date.now(), n = s.hands || 0;
@@ -4131,7 +4286,7 @@ const Repo = {
     }
     b.set(Repo.gameRef(t), Repo._game(G));
     // The house's take for this hand goes in the table's rake ledger in the same write (rules: rake create/update).
-    if (withRake && G.phase === 'result' && G.result && G.result.rake > 0) b.set(Repo.rakeRef(t), { tableId: t, total: FV.increment(G.result.rake), hands: FV.increment(1), lastHandId: G.handId, updatedAt: FV.serverTimestamp() }, { merge: true });
+    if (withRake && !(TABLE_BY_ID[t] && TABLE_BY_ID[t].test) && G.phase === 'result' && G.result && G.result.rake > 0) b.set(Repo.rakeRef(t), { tableId: t, total: FV.increment(G.result.rake), hands: FV.increment(1), lastHandId: G.handId, updatedAt: FV.serverTimestamp() }, { merge: true });
     if (sess) b.update(sess.ref, sess.patch);                                       // rule: sessions update (validSessionHand)
     return b.commit();
   },
@@ -4229,6 +4384,58 @@ const Repo = {
     try { await b.commit(); }
     catch (e) { if (e && e.code === 'permission-denied') throw new AppError('The database refused this. Publish the latest Firestore rules first (they add the table summaries), then try again.'); throw e; }
     return { code, password };
+  },
+  /* ---- the admin's test table (rules: rooms test_1, sessions, history) ---- */
+  // Empties the test table: anyone seated gets their chips back, then the hand, cards, bots and chat go.
+  async emptyTest() {
+    const r = Repo.roomRef(TEST_ID);
+    const ms = await r.collection('members').get();
+    for (const m of ms.docs) await Repo.adminRemoveMember(m.id, TEST_ID).catch(() => m.ref.delete());
+    for (const sub of ['bots', 'hands', 'actions', 'tips', 'feed']) {
+      try { const sn = await r.collection(sub).get(); for (let i = 0; i < sn.docs.length; i += 400) { const b = db.batch(); sn.docs.slice(i, i + 400).forEach(d => b.delete(d.ref)); await b.commit(); } }
+      catch (e) { console.warn('[TeenPatti] test table', sub, e && e.code); }
+    }
+    await Repo.gameRef(TEST_ID).delete();
+  },
+  // A new test table. The run before it (if it was not dissolved) is closed and kept under Saved test runs.
+  async createTest(o) {
+    const max = Math.max(o.buy, o.boot * 500);
+    const chk = readLimits({ boot: o.boot, min: o.buy, max, blind: o.blind, chaal: o.chaal, pot: o.pot });
+    if (chk.error) throw new AppError(chk.error.replace('lowest buy-in', 'buy-in'));
+    if (!Number.isInteger(o.bots) || o.bots < 1 || o.bots > TEST_BOTS.length) throw new AppError('Pick 1 to ' + TEST_BOTS.length + ' bots.');
+    if (!Number.isInteger(o.botChips) || o.botChips < o.boot || o.botChips > 1e9) throw new AppError('Each bot needs at least the boot in chips.');
+    const name = String(o.name || '').replace(/\s+/g, ' ').trim().slice(0, 24) || 'Test Table';
+    const ref = Repo.roomRef(TEST_ID);
+    try {
+      const snap = await ref.get(), old = snap.exists ? snap.data() : null;
+      if (old) { await Repo.emptyTest(); if (old.status === 'open') await ref.update({ status: 'closed', hostUid: '', dealerAt: 0, seated: 0, updatedAt: FV.serverTimestamp() }); }
+      const oldSid = old ? (old.sessionId || '') : '', oldSess = oldSid ? await Repo.sessionRef(oldSid).get() : null;
+      const sid = 'x' + Date.now().toString(36) + privRnd(4).toLowerCase();
+      const base = { tableId: TEST_ID, name, boot: o.boot, minBuyIn: o.buy, maxBuyIn: max, maxBlind: o.blind, maxChaal: o.chaal, potLimit: o.pot, permanent: true, adminUid: ADMIN_UID,
+        status: 'open', sessionId: sid, test: true, bots: o.bots, botChips: o.botChips, mode: o.mode === 'variant' ? 'variant' : 'classic', hostUid: '', dealerAt: 0, seated: 0 };
+      const b = db.batch();
+      b.set(Repo.sessionRef(sid), { sessionId: sid, tableId: TEST_ID, name, boot: o.boot, minBuyIn: o.buy, maxBuyIn: max, code: '', status: 'open', openedAt: FV.serverTimestamp(),
+        hands: 0, rake: 0, potMax: 0, potMin: 0, playMs: 0, players: {}, updatedAt: FV.serverTimestamp(),
+        maxBlind: o.blind, maxChaal: o.chaal, potLimit: o.pot, bots: o.bots, botChips: o.botChips, mode: base.mode });
+      if (oldSess && oldSess.exists && oldSess.data().status !== 'closed') b.update(Repo.sessionRef(oldSid), { status: 'closed', closedAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
+      if (!old) b.set(ref, Object.assign({ createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() }, base));
+      else b.update(ref, Object.assign({ updatedAt: FV.serverTimestamp() }, base));
+      await b.commit();
+      return sid;
+    } catch (e) { if (e && e.code === 'permission-denied') throw new AppError('The database refused this. Publish the latest Firestore rules first (they add the test table), then try again.'); throw e; }
+  },
+  // One run's games (its hands in the table's history) and its summary are deleted for good.
+  async deleteTestRun(sid) {
+    const sn = await Repo.historyCol(TEST_ID).get(), docs = sn.docs.filter(d => d.data().run === sid);
+    for (let i = 0; i < docs.length; i += 400) { const b = db.batch(); docs.slice(i, i + 400).forEach(d => b.delete(d.ref)); await b.commit(); }
+    await Repo.sessionRef(sid).delete();
+    return docs.length;
+  },
+  // Dissolve: the table is emptied and closed, and everything that run recorded is wiped.
+  async dissolveTest(sid) {
+    await Repo.emptyTest();
+    await Repo.roomRef(TEST_ID).update({ status: 'closed', hostUid: '', dealerAt: 0, seated: 0, updatedAt: FV.serverTimestamp() });
+    return Repo.deleteTestRun(sid);
   },
   // Admin only. Stops new players joining; people already seated can finish and leave. Rule: rooms update (validRoom).
   async closePrivate() {
@@ -4403,6 +4610,7 @@ function openRoomsScope() {
       if (!d && !t.private && !t.tour && !S.isAdmin && !ensuring[t.id]) { ensuring[t.id] = true; Repo.ensureRoom(t).catch(() => { ensuring[t.id] = false; }); }
     });
   }
+  if (S.realAdmin) scopeRooms.listen(Repo.roomRef(TEST_ID), s => { const d = s.exists ? s.data() : null; applyRoomCfg(TEST_ID, d); S.rooms[TEST_ID] = d; S.roomsLoaded[TEST_ID] = true; scheduleRender(); }, () => { S.rooms[TEST_ID] = null; S.roomsLoaded[TEST_ID] = true; scheduleRender(); });
   scopeRooms.every(scheduleRender, 15000);
   if (S.isAdmin) loadPrivSecret();                          // the admin sees the private table's room code and password
 }
@@ -4905,11 +5113,9 @@ function renderFelt(R, me, msgs) {
   stage.appendChild(h('div', { class: 'sr' }, h('span', { id: 'roomTitle', text: tableName(cfg) }), h('span', { id: 'tableState', text: online ? 'Table live' : 'Connecting…' }),
     live ? h('span', { id: 'handNo', text: 'Hand ' + G.handNo }) : null, me ? h('span', { id: 'mySeatState', text: seated ? 'Seated' : 'Standing' }) : null));
   const tb = (id, label, ic, fn, cls) => h('button', { id, class: 'tbtop' + (cls ? ' ' + cls : ''), type: 'button', 'aria-label': label, onclick: fn }, icon(ic));
-  const chatB = tb('chatBtn', seated ? 'Chat' : 'Chat (take a seat first)', 'chat', () => seated ? Sheets.chat() : toast('Take a seat to use the table chat.', 'err'), seated ? '' : 'locked');
-  if (!seated) chatB.setAttribute('aria-disabled', 'true');
-  top.appendChild(h('div', { class: 'ttools' }, tb('logBtn', 'Hand history', 'list', () => Sheets.history()), chatB,
-    tb('playersBtn', 'Players', 'users', () => Sheets.players()), tb('infoBtn', 'Hand ranks', 'stats', () => Sheets.ranks()),
-    tb('setBtn', 'Settings', 'gear', () => Sheets.settings())));
+  top.appendChild(h('div', { class: 'ttools' }, tb('logBtn', 'Hand history', 'list', () => Sheets.history()),
+    tb('infoBtn', 'Hand ranks', 'stats', () => Sheets.ranks()), tb('setBtn', 'Settings', 'gear', () => Sheets.settings())));
+  if (seated && meSeat) stage.appendChild(h('button', { id: 'chatBtn', class: 'tbchat', type: 'button', 'aria-label': 'Chat', style: tbAt(600, TB_PLATE.B), onclick: () => Sheets.chat() }, icon('chat')));
 
   /* dealt cards fly out from the top of the felt */
   stage.appendChild(h('div', { class: 'dealerfig', id: 'dealerFigure', style: tbAt(443, 290), 'aria-label': 'Dealer' }, h('div', { class: 'tbdeck', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'))));
@@ -5426,6 +5632,7 @@ function resolvePending() {
   const me = myMember(S.room);
   if (me && ((S.pending.type === 'sit' && me.seatState === 'seated') || (S.pending.type === 'stand' && me.seatState === 'standing'))) {
     if (S.pending.type === 'stand') S.stoodAt = S.pending.tableId;
+    if (S.pending.type === 'stand' && TABLE_BY_ID[S.pending.tableId] && TABLE_BY_ID[S.pending.tableId].test) setTimeout(() => { if (S.room && S.room.id === TEST_ID && myMember(S.room)) handleLeave(); }, 60);   // at the test table, standing up ends the session and opens its results
     if (S.pending.type === 'sit') S.stoodAt = '';
     S.pending = null;        // standing up keeps you at the table as a watcher; your session result stays until you leave and join again
   }
@@ -5437,8 +5644,11 @@ function handleLeave() {
   if (why && /Pack first/.test(why)) return confirmLeaveLive();
   if (why) return toast(why, 'err');
   return withBusy('leave', 'leave table', async () => {
-    await Repo.leaveTable(S.user.uid, R.id);
-    Session.reset(S.user.uid, R.id);
+    const t = R.id;
+    await Repo.closeEmptyTable(t);
+    await Repo.leaveTable(S.user.uid, t);
+    Session.reset(S.user.uid, t);
+    TestLab.left(t);
   });
 }
 // Leaving in the middle of a hand: ask first. Yes packs your cards, then takes you to the lobby.
@@ -5462,7 +5672,7 @@ function leaveLiveHand() {
       if (!S.room || S.room.id !== t) return;                       // already taken to the lobby
       const R2 = S.room, m2 = myMember(R2);
       if (!m2) return;
-      if (!leaveBlockReason(R2, m2)) { await Repo.leaveTable(uid, t); Session.reset(uid, t); return; }
+      if (!leaveBlockReason(R2, m2)) { await Repo.leaveTable(uid, t); Session.reset(uid, t); TestLab.left(t); return; }
     }
     toast('The table did not answer. Try again.', 'err');
   });
@@ -5664,6 +5874,7 @@ const Inactive = {
     Inactive.busy = true;
     try {
       Session.reset(uid, R.id);
+      await Repo.closeEmptyTable(R.id);
       await Repo.leaveTable(uid, R.id); Inactive.t = ''; S.forceLobby = true;
       toast('You missed two turns in a row, so you were stood up and removed from the table. Your chips are back in your wallet.');
     } catch (e) { /* the table was not ready yet: try again on the next tick */ }
@@ -5686,6 +5897,31 @@ const Hosting = {
   }
 };
 
+/* The full story of the hand being dealt, kept by the dealer's phone and saved when the hand ends (the admin reads it; kept 72 hours). */
+const HandLog = {
+  id: '', lines: [], KEEP_MS: 72 * 3600 * 1000, pruneAt: 0,
+  track(G) {
+    if (!G || !G.handId || G.phase === 'idle') return;
+    if (HandLog.id !== G.handId) { HandLog.id = G.handId; HandLog.lines = []; }
+    const L = G.log || [], last = HandLog.lines.length ? HandLog.lines[HandLog.lines.length - 1].text : null, ix = last === null ? -1 : L.lastIndexOf(last);
+    const pot = G.phase === 'result' && G.result ? G.result.amount : G.pot || 0;
+    for (let i = ix + 1; i < L.length && HandLog.lines.length < 300; i++) HandLog.lines.push({ at: Date.now(), text: String(L[i]).slice(0, 160), pot });
+  },
+  doc(t, G) {
+    const cfg = TABLE_BY_ID[t], v = variantOfGame(cfg, G), R = G.result || {};
+    const run = cfg && cfg.test && S.room && S.room.id === t && S.room.doc ? (S.room.doc.sessionId || '') : '';
+    return Object.assign(run ? { run } : {}, { tableId: t, handId: G.handId, handNo: G.handNo, at: Date.now(), boot: G.boot || 0, variant: v ? v.name : 'Classic', joker: G.joker || '',
+      players: G.order.map(id => { const p = G.players[id] || {}; return { name: p.name || '', bot: !!p.bot, put: p.invested || 0, won: (R.shares && R.shares[id]) || 0, cards: R.reveal && R.reveal[id] ? R.reveal[id].join(' ') : '' }; }),
+      winners: (R.winners || []).map(id => (G.players[id] || {}).name || ''), amount: R.amount || 0, rake: R.rake || 0, reason: R.reason || '', rank: R.rank || '',
+      lines: HandLog.lines.slice(0, 300) });
+  },
+  save(t, G) {
+    if (HandLog.id !== G.handId) return;
+    Repo.saveHandLog(t, HandLog.doc(t, G)).catch(e => console.warn('[TeenPatti] hand log', e && e.code));
+    if (TABLE_BY_ID[t] && TABLE_BY_ID[t].test) return;                 // a test run keeps its games until the admin dissolves or deletes it
+    if (Date.now() - HandLog.pruneAt > 600000) { HandLog.pruneAt = Date.now(); Repo.pruneHandLogs(t, Date.now() - HandLog.KEEP_MS).catch(() => {}); }
+  }
+};
 const Dealer = {
   sc: null, tableId: null, active: false, queue: [], running: false, seen: new Set(), lastSeated: -1, localN: 0,
   G: null, hands: {}, booted: false, chain: Promise.resolve(), wchain: Promise.resolve(),
@@ -5800,27 +6036,29 @@ const Dealer = {
   botOk(id) { const b = Dealer.botDoc(id), cfg = TABLE_BY_ID[S.room.id]; return !!(b && b.seatState === 'seated' && b.stack >= cfg.boot); },
   botSeated() { const L = tableBots(S.room.id); return L.length > 0 && L.some(b => Dealer.botOk(b.id)); },
   // A bot can sit if it has never sat here (it brings BOT_START_CHIPS) or still has chips for the boot. Tournament bots get the entry.
-  botCanSit(id) { const b = Dealer.botDoc(id), cfg = TABLE_BY_ID[S.room.id]; return cfg.tour || !b || b.stack >= cfg.boot; },
+  botCanSit(id) { const b = Dealer.botDoc(id), cfg = TABLE_BY_ID[S.room.id]; return cfg.tour || cfg.test || !b || b.stack >= cfg.boot; },
   canDeal() {
     if (!Dealer.booted || !Dealer.G || Dealer.G.phase !== 'idle') return false;
     const humans = readyHumans(S.room).length;
     // a tournament deals only while a round is running; a test tournament's bots make up the numbers
     if (TABLE_BY_ID[S.room.id].tour) return Tour.dealOk(tourSlotOf(S.room.id)) && (humans >= 2 || (humans >= 1 && Dealer.botSeated()));
-    return humans >= 2 || (humans === 1 && Dealer.botSeated());
+    return humans >= 2 || (humans >= 1 && Dealer.botSeated());
   },
   // Between hands: exactly one human waiting -> both bots sit; two or more -> they leave.
   async manageBot(now) {
     const R = S.room, cfg = TABLE_BY_ID[R.id], humans = readyHumans(R).length, slot = cfg.tour ? tourSlotOf(R.id) : '';
-    const want = cfg.tour ? humans >= 1 && tourBots(slot) > 0 && Tour.running(Tour.phase(Tour.T(slot))) : humans === 1;
-    const all = cfg.tour ? TOUR_BOTS : TEST_BOTS, mine = tableBots(R.id);
+    // Bots sit only at a test tournament and at the admin's test table. At a public table any bot left over from before stands up.
+    const want = cfg.tour ? humans >= 1 && tourBots(slot) > 0 && Tour.running(Tour.phase(Tour.T(slot))) : !!cfg.test && humans >= 1;
+    const all = TEST_BOTS, mine = tableBots(R.id);
     const todo = all.filter(t => { const b = Dealer.botDoc(t.id); return want && mine.includes(t) && Dealer.botCanSit(t.id) ? !Dealer.botOk(t.id) : !!(b && b.seatState === 'seated'); });
     if (!todo.length) return false;                                              // nothing to change
     if (Dealer.botOp.seat === want && now - Dealer.botOp.at < 3000) return true;  // already asked; wait for the table to update
     Dealer.botOp = { seat: want, at: now };
     for (const t of todo) {
       const b = Dealer.botDoc(t.id);
-      const sit = want && mine.includes(t) && Dealer.botCanSit(t.id), fresh = cfg.tour ? Tour.T(slot).entry : BOT_START_CHIPS;
-      const stack = cfg.tour ? (sit ? ((b && b.stack >= cfg.boot * 20) ? b.stack : fresh) : (b ? b.stack : 0)) : (b ? b.stack : fresh);
+      const sit = want && mine.includes(t) && Dealer.botCanSit(t.id), fresh = cfg.tour ? Tour.T(slot).entry : cfg.test ? cfg.botChips : BOT_START_CHIPS;
+      // a test-table bot that cannot pay the boot buys in again, so a test never stalls
+      const stack = cfg.tour ? (sit ? ((b && b.stack >= cfg.boot * 20) ? b.stack : fresh) : (b ? b.stack : 0)) : cfg.test ? (sit ? ((b && b.stack >= cfg.boot) ? b.stack : fresh) : (b ? b.stack : 0)) : (b ? b.stack : 0);
       await Repo.setBot(R.id, t.id, t.name, sit ? 'seated' : 'standing', stack);
     }
     return true;
@@ -5867,6 +6105,7 @@ const Dealer = {
       G = H;
     }
     Dealer.G = G; if (hands) Dealer.hands = hands;
+    HandLog.track(G); if (G.phase === 'result') HandLog.save(t, G);
     Dealer.lastCommitAt = Date.now();
     if (G.phase === 'result') Dealer.resultAt = Date.now() + GAME_CONFIG.resultMs;
     if (G.phase === 'result') {
@@ -5887,7 +6126,7 @@ const Dealer = {
     const R = S.room, cfg = TABLE_BY_ID[R.id], prev = Dealer.G;
     const humans = readyHumans(R);
     const parts = R.members.filter(m => m.seatState === 'seated').slice(0, seatCap(R.id)).map(m => ({ id: m.uid, name: m.name, avatar: m.avatar, chips: m.stack }));
-    if ((cfg.tour ? humans.length >= 1 : humans.length === 1) && Dealer.botSeated()) tableBots(R.id).filter(t => Dealer.botOk(t.id)).forEach(t => { const b = Dealer.botDoc(t.id); parts.push({ id: b.botId, name: b.name, avatar: 'bot', chips: b.stack, bot: true }); });
+    if (humans.length >= 1 && Dealer.botSeated()) tableBots(R.id).filter(t => Dealer.botOk(t.id)).forEach(t => { const b = Dealer.botDoc(t.id); parts.push({ id: b.botId, name: b.name, avatar: 'bot', chips: b.stack, bot: true }); });
     const r = startHand({ tableId: R.id, boot: cfg.boot, blindMax: cfg.blind, chaalMax: cfg.chaal, potMax: cfg.pot, variant: cfg.tour ? Tour.pickVariant(tourSlotOf(R.id)) : cfg.random ? ENGINE.VARIANT_IDS[secureRandInt(ENGINE.VARIANT_IDS.length)] : cfg.variant, participants: parts, prev, now: Date.now(), rnd: secureRandInt });
     if (r.error) { S.dealerInfo.lastError = r.error; scheduleRender(); return; }
     S.dealerInfo.lastError = '';
@@ -6555,8 +6794,8 @@ const Sheets = {
   el: null,
   DRAWERS: new Set(['logSheet', 'historySheet', 'playersSheet', 'chatSheet', 'ranksSheet', 'infoSheet', 'setSheet', 'classicSheet', 'variantSheet', 'walletSheet']),
   // Table pop-ups that sit at the side so the table stays visible; everything else is a centred glossy tile.
-  DOCKED: new Set(['logSheet', 'playersSheet', 'chatSheet']),
-  SIZES: { meSheet: 's', walletSheet: 's', soonSheet: 's', tipSheet: 's', topupSheet: 's', setSheet: 's', privSheet: 's', giftSheet: 'm', tourSheet: 'l', tourListSheet: 'm', tourPaySheet: 's', historySheet: 'l', profileSheet: 'm', privAdminSheet: 'm', playerSheet: 'm', variantSheet: 'm', myProfileSheet: 'l', clubSheet: 'l', infoSheet: 'l', ranksSheet: 'l', bootSheet: 'l' },
+  DOCKED: new Set([]),
+  SIZES: { meSheet: 's', chatSheet: 's', historySheet: 's', logSheet: 's', playersSheet: 's', walletSheet: 's', soonSheet: 's', tipSheet: 's', topupSheet: 's', setSheet: 's', privSheet: 's', giftSheet: 'm', tourSheet: 'l', tourListSheet: 'm', tourPaySheet: 's', historySheet: 'l', profileSheet: 'm', privAdminSheet: 'm', playerSheet: 'm', variantSheet: 'm', myProfileSheet: 'l', clubSheet: 'l', infoSheet: 'l', ranksSheet: 'l', bootSheet: 'l' },
   origin: null,
   // Where the pop-up grows from and shrinks back to: the button that was just pressed.
   keyframe(r, o) {
@@ -6768,11 +7007,13 @@ const Sheets = {
       if (!hands.length) { box.appendChild(h('p', { class: 'hnote', style: 'font-size:14px', text: 'No hands yet. They show here as you watch them.' })); return; }
       const tileText = hd => hd.result ? hd.result.winners.join(' & ') + ' won ' + fmt(hd.result.amount) : 'In progress';
       box.appendChild(h('div', { class: 'hlist' }, hands.map((hd, i) => h('button', { type: 'button', class: 'htile' + (i === pick ? ' on' : ''), 'data-i': i, onclick: () => { clearTimeout(Sheets.replayT); pick = i; draw(); } },
-        h('div', { class: 'hno' }, h('b', { text: 'Hand ' + hd.handNo }), hd.variant ? h('i', { class: 'hvar', text: hd.variant.name }) : null), h('span', { text: tileText(hd) })))));
+        h('div', { class: 'hno' }, h('b', { text: 'Hand ' + hd.handNo }), h('i', { class: 'hvar', text: hd.variant ? hd.variant.name : 'Classic' })), h('span', { text: tileText(hd) })))));
       const hd = hands[pick];
       const det = h('div', { class: 'hdetail' });
-      det.appendChild(h('div', { class: 'hbar' }, h('div', { class: 'hsum' }, h('span', { text: hd.result ? (hd.result.reason === 'fold' ? hd.result.winners.join(' & ') + ' won ' + fmt(hd.result.amount) + ' (everyone packed)' : hd.result.winners.join(' & ') + ' won ' + fmt(hd.result.amount) + (hd.result.rank ? ' with ' + hd.result.rank : '')) : 'In progress' }),
-          hd.variant ? h('span', { class: 'hvar big', id: 'hVariant', text: 'Game: ' + hd.variant.name + (hd.variant.joker ? ' \u2022 Joker ' + hd.variant.joker : '') }) : null),
+      det.appendChild(h('div', { class: 'hbar' }, h('div', { class: 'hsum' },
+          hd.result ? h('div', { class: 'hwin', id: 'hWin' }, h('small', { text: hd.result.winners.length > 1 ? 'SPLIT POT' : 'WINNER' }), h('b', { text: hd.result.winners.join(' & ') }), h('em', { text: '+' + fmt(hd.result.amount) }),
+            h('span', { text: hd.result.reason === 'fold' ? 'Everyone else packed' : hd.result.rank ? 'with ' + hd.result.rank : '' })) : h('div', { class: 'hwin live' }, h('small', { text: 'HAND ' + hd.handNo }), h('b', { text: 'In progress' })),
+          h('span', { class: 'hvar big', id: 'hVariant', text: 'Game: ' + (hd.variant ? hd.variant.name + (hd.variant.joker ? ' \u2022 Joker ' + hd.variant.joker : '') : 'Classic') })),
         h('button', { type: 'button', class: 'btn-secondary btn-small', id: 'replayBtn', text: '\u25B6 Replay', onclick: () => replay(hd) })));
       const shows = hd.result && hd.result.shows || [];
       if (hd.result) det.appendChild(h('div', { class: 'hhands', id: 'hHands' },
@@ -6872,7 +7113,7 @@ const Sheets = {
     const isVar = mode === 'variant', ids = isVar ? LB_VARIANT_IDS : LB_CLASSIC_IDS;
     const head = h('div', { class: 'brow bhead' }, ...['Boot', 'Buy-in', 'Blind cap', 'Chaal cap', 'Pot limit', 'Seats', ''].map(t => h('span', { text: t })));
     const rows = ids.map(id => {
-      const t = TABLE_BY_ID[id], st = tileState(t), full = st.usable && !st.mine && st.n >= MAX_HUMAN_SEATS, off = !st.usable || full;
+      const t = TABLE_BY_ID[id], st = tileState(t), full = st.usable && !st.mine && st.n >= seatCap(id), off = !st.usable || full;
       return h('button', { type: 'button', class: 'brow trow' + (st.mine ? ' mine' : '') + (off ? ' off' : ''), 'data-table': id, disabled: !st.usable,
         onclick: () => { Sheets.close(); tileClick(t); } },
         h('b', { class: 'bboot', text: fmt(t.boot) }),
@@ -7155,9 +7396,17 @@ const Admin = {
   /* the private tables' summaries, newest first (rules: sessions list, admin) */
   watchSessions() {
     if (Admin.sessUnsub) return;
-    Admin.sessUnsub = db.collection('sessions').orderBy('openedAt', 'desc').limit(30).onSnapshot(snap => { Admin.st.sessions = snap.docs.map(d => Object.assign({ id: d.id }, d.data())); if (Admin.st.view === 'private') Admin.paint(); },
+    Admin.sessUnsub = db.collection('sessions').orderBy('openedAt', 'desc').limit(60).onSnapshot(snap => { Admin.st.sessions = snap.docs.map(d => Object.assign({ id: d.id }, d.data())).filter(x => x.tableId !== TEST_ID); if (Admin.st.view === 'private') Admin.paint(); },
       e => { Admin.st.sessions = []; Admin.st.sessErr = friendlyError(e); if (Admin.st.view === 'private') Admin.paint(); });
   },
+  /* the test table's runs, newest first (rules: sessions list, admin) */
+  watchTest() {
+    if (Admin.testUnsub) return;
+    Admin.testUnsub = db.collection('sessions').where('tableId', '==', TEST_ID).limit(60).onSnapshot(snap => {
+      Admin.st.testRuns = snap.docs.map(d => Object.assign({ id: d.id }, d.data())).sort((x, y) => ccMs(y.openedAt) - ccMs(x.openedAt)); Admin.st.testErr = ''; if (Admin.st.nav === 'test') Admin.paint();
+    }, e => { Admin.st.testRuns = []; Admin.st.testErr = friendlyError(e); if (Admin.st.nav === 'test') Admin.paint(); });
+  },
+  unwatchTest() { if (Admin.testUnsub) { Admin.testUnsub(); Admin.testUnsub = null; } Admin.st.testRuns = null; },
   unwatchSessions() { if (Admin.sessUnsub) { Admin.sessUnsub(); Admin.sessUnsub = null; } Admin.st.sessions = null; Admin.st.sessErr = ''; },
   unwatchRake() { if (Admin.rakeUnsub) { Admin.rakeUnsub(); Admin.rakeUnsub = null; } if (Admin.tipUnsub) { Admin.tipUnsub(); Admin.tipUnsub = null; } },
   /* ---- weekly rakeback: review, then approve ---- */
@@ -7335,15 +7584,25 @@ Object.assign(Repo, {
 
   /* ---- the club reset: every player, game, rake and record is deleted (rules: admin deletes) ---- */
   // Every table back to empty: seated players get their table chips back in the wallet, then the old hand, cards, bots and chat go.
+  async refillBots() {
+    let n = 0;
+    for (const t of TABLES) {
+      if (!S.rooms[t.id]) continue;
+      const g = await Repo.gameRef(t.id).get(); if (g.exists && g.data().phase === 'playing') continue;
+      const bs = await Repo.botsCol(t.id).get();
+      for (const d of bs.docs) { const b = d.data(); if (TEST_BOTS.some(x => x.id === b.botId) && b.stack !== BOT_START_CHIPS) { await Repo.setBot(t.id, b.botId, b.name, b.seatState, BOT_START_CHIPS); n++; } }
+    }
+    return n;
+  },
   async clearTables(step) {
-    const tables = TABLES.map(t => t.id); let n = 0;
+    const tables = TABLES.map(t => t.id).concat([TEST_ID]); let n = 0;
     for (const sl of TOUR_SLOTS) for (const id of tourIds(sl)) { if (!(await Repo.roomRef(id).get()).exists) break; tables.push(id); }
     for (const id of tables) {
       const r = Repo.roomRef(id);
       if (!(await r.get()).exists) continue;
       const ms = await r.collection('members').get();
       for (const m of ms.docs) await Repo.adminRemoveMember(m.id, id);
-      for (const sub of ['members', 'bots', 'hands', 'actions', 'tips', 'feed']) {
+      for (const sub of ['members', 'bots', 'hands', 'actions', 'tips', 'feed', 'history']) {
         try {
           const sn = await r.collection(sub).get();
           for (let i = 0; i < sn.docs.length; i += 400) { const b = db.batch(); sn.docs.slice(i, i + 400).forEach(d => b.delete(d.ref)); await b.commit(); }
@@ -7363,12 +7622,13 @@ Object.assign(Repo, {
       if (step) step(label, n);
       return n;
     };
-    const tables = TABLES.map(t => t.id);
+    const tables = TABLES.map(t => t.id).concat([TEST_ID]);
     for (const sl of TOUR_SLOTS) for (const id of tourIds(sl)) { if (!(await Repo.roomRef(id).get()).exists) break; tables.push(id); }
     for (const id of tables) {
       const r = Repo.roomRef(id);
       if (!(await r.get()).exists) continue;
       for (const sub of ['members', 'bots', 'hands', 'actions', 'tips', 'feed'].concat(id === PRIVATE_ID ? ['unlocked'] : [])) await del(r.collection(sub), null);
+      await del(r.collection('history'), null).catch(() => {});
       await Repo.gameRef(id).delete();        // the game is one document that can be read and deleted by name, but not listed
       await r.update({ hostUid: '', dealerAt: 0, seated: 0, updatedAt: FV.serverTimestamp() }).catch(e => console.warn('[TeenPatti] reset room', id, e && e.code));
       if (step) step('Table ' + (TABLE_BY_ID[id] ? tableName(TABLE_BY_ID[id]) : id), 0);
@@ -7409,7 +7669,7 @@ const ADMIN_ICON = { tour: '♜', tables: '♠', private: '♛', players: '☺',
    notifications, rewards, rake, rakeback, a table's limits) open inside the same shell with a back arrow.
    Every number comes from the database; nothing here is made up.
    ========================================================================== */
-const CC_NAV = [['overview', 'Overview', 'grid'], ['tables', 'Tables', 'table'], ['players', 'Players', 'users'], ['requests', 'Requests', 'inbox'], ['settings', 'Settings', 'gear']];
+const CC_NAV = [['overview', 'Overview', 'grid'], ['tables', 'Tables', 'table'], ['players', 'Players', 'users'], ['requests', 'Requests', 'inbox'], ['test', 'Test', 'flask'], ['settings', 'Settings', 'gear']];
 const CC_TOOLS = { tables: 'Table limits', private: 'Private table', tour: 'Tournaments', players: 'Players', notify: 'Notifications', rewards: 'Rewards', rake: 'Rake', vip: 'Weekly rakeback' };
 const CC_ICON = {
   grid: ['M4 4h7v7H4z', 'M13 4h7v7h-7z', 'M4 13h7v7H4z', 'M13 13h7v7h-7z'],
@@ -7418,7 +7678,7 @@ const CC_ICON = {
   inbox: ['M22 12h-6l-2 3h-4l-2-3H2', 'M5.5 5.1L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.7 1.1z'],
   gear: ICON.gear, bell: ICON.bell, check: ['M5 12l5 5L20 7'], x: ['M6 6l12 12', 'M18 6L6 18'], chev: ['M9 18l6-6-6-6'], back: ['M15 18l-6-6 6-6'],
   search: ['M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z', 'M21 21l-4.3-4.3'], eye: ICON.eye, refresh: ['M21 12a9 9 0 1 1-2.6-6.4', 'M21 4v5h-5'],
-  pulse: ['M3 12h4l3-8 4 16 3-8h4'], alert: ['M12 3l10 18H2z', 'M12 10v4', 'M12 17.5v.5'], shield: ['M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z'],
+  flask: ['M9 3h6', 'M10 3v6l-5.2 9a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9V3', 'M7.5 15h9'], pulse: ['M3 12h4l3-8 4 16 3-8h4'], alert: ['M12 3l10 18H2z', 'M12 10v4', 'M12 17.5v.5'], shield: ['M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z'],
   link: ['M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1', 'M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1'], logout: ICON.logout,
   trophy: ICON.trophy, crown: ICON.crown, mail: ICON.mail, gift: ICON.gift, stats: ICON.stats, lock: ICON.lock, play: ['M7 4l13 8-13 8z'], power: ['M12 3v9', 'M6.3 6.3a8 8 0 1 0 11.4 0']
 };
@@ -7447,12 +7707,13 @@ Object.assign(Admin, {
     Admin.timer = setInterval(() => { if (S.route && S.route.name === 'admin') Admin.loadPresence().then(() => Admin.paint()); }, 60000);
   },
   stopLive() {
+    Admin.unwatchTest();
     if (!Admin.live) return;
     Admin.live = false;
     if (Admin.usersUnsub) Admin.usersUnsub(); Admin.usersUnsub = null;
     Admin.unwatchRake(); clearInterval(Admin.timer);
   },
-  nav(n) { const a = Admin.st; a.nav = n; a.view = 'hub'; a.msg = ''; a.sel = ''; a.tab = ''; a.pf = null; a.tf = null; a.menu = false; a.tsheet = ''; Admin.paint(); const m = $('ccMain'); if (m) m.scrollTop = 0; window.scrollTo(0, 0); },
+  nav(n) { const a = Admin.st; a.nav = n; a.testShown = ''; a.view = 'hub'; a.msg = ''; a.sel = ''; a.tab = ''; a.pf = null; a.tf = null; a.menu = false; a.tsheet = ''; Admin.paint(); const m = $('ccMain'); if (m) m.scrollTop = 0; window.scrollTo(0, 0); },
   pending() { return (Admin.st.users || []).filter(u => ccStatus(u) === 'pending').sort((x, y) => ccMs(x.createdAt) - ccMs(y.createdAt)); },
   match(u) {
     const a = Admin.st, q = (a.q || '').trim().toLowerCase(), st = ccStatus(u);
@@ -7524,7 +7785,7 @@ function renderAdmin() {
     const body = a.view === 'tables' ? adminTables(null) : a.view === 'private' ? h('div', {}, adminPrivate(), a.pf ? null : adminSessions()) : a.view === 'tour' ? adminTour()
       : a.view === 'notify' ? adminNotify() : a.view === 'rewards' ? adminRewards() : a.view === 'vip' ? adminVip() : a.view === 'rake' ? adminRake() : adminPlayers();
     page = h('div', { class: 'cctool t-' + a.view }, back, body);
-  } else page = a.nav === 'tables' ? ccTables() : a.nav === 'players' ? ccPlayers() : a.nav === 'requests' ? ccRequests() : a.nav === 'settings' ? ccSettings() : ccOverview();
+  } else page = a.nav === 'tables' ? ccTables() : a.nav === 'players' ? ccPlayers() : a.nav === 'requests' ? ccRequests() : a.nav === 'test' ? ccTest() : a.nav === 'settings' ? ccSettings() : ccOverview();
   return h('div', { class: 'cc', id: 'cc' }, ccHeader(), msg, h('main', { class: 'ccmain', id: 'ccMain' }, page), ccNavBar(), a.tsheet ? ccTableSheet(a.tsheet) : null);
 }
 function ccHeader() {
@@ -7626,7 +7887,7 @@ function ccTableState(t) {
   if (d.status !== 'open') return ['closed', 'Closed'];
   if (hostLive(d)) return ['live', 'Live'];
   if ((d.seated || 0) > 0 && d.hostUid) return ['paused', 'Paused'];      // players seated, but their dealer phone stopped answering
-  return ['wait', 'Waiting'];
+  return (d.seated || 0) > 0 ? ['wait', 'Waiting'] : ['wait', 'Empty'];
 }
 function ccTableCard(t, mini) {
   const d = S.rooms[t.id] || {}, [k, label] = ccTableState(t), on = hostLive(S.rooms[t.id]), seats = on ? (d.seated || 0) : 0;
@@ -7651,8 +7912,60 @@ async function ccLoadTable(id) {
     const [ms, gs, bs] = await Promise.all([Repo.membersCol(id).get(), Repo.gameRef(id).get(), Repo.botsCol(id).get()]);
     if (a.tsheet !== id) return;
     a.tsData = { members: ms.docs.map(d => d.data()), game: gs.exists ? gs.data() : null, bots: bs.docs.map(d => d.data()), at: Date.now() };
+    // nobody is here and nobody is dealing: an unfinished hand left behind is cleared away, so the table is simply empty
+    const D = a.tsData, stale = !D.members.length && !hostLive(S.rooms[id]) && D.game && D.game.phase !== 'idle';
+    if (stale) {
+      try { await Repo.gameRef(id).delete(); D.game = null; for (const b of D.bots) if (b.seatState === 'seated') { await Repo.setBot(id, b.botId, b.name, 'standing', b.stack); b.seatState = 'standing'; } } catch (e) { console.warn('[TeenPatti] clear stale hand', id, e && e.code); }
+    }
+    Repo.pruneHandLogs(id, Date.now() - HandLog.KEEP_MS).catch(() => {});
+    if (!a.tsRange) a.tsRange = '24';
+    ccLoadGames(id);
   } catch (e) { if (a.tsheet === id) a.tsData = { err: friendlyError(e) }; }
   Admin.paint();
+}
+/* Game activity at one table: every finished hand of the last 72 hours, found by time. Tap a game for every move and bet. */
+function ccRange() {
+  const a = Admin.st, now = Date.now();
+  if (a.tsRange === 'custom') { const f = Date.parse(a.tsFrom || ''), t = Date.parse(a.tsTo || ''); return [isNaN(f) ? now - HandLog.KEEP_MS : f, isNaN(t) ? now : t]; }
+  if (a.tsRange === 'all') return [0, now];
+  return [now - Number(a.tsRange || 24) * 3600000, now];
+}
+// `run`: only the games of that test run (a test run keeps its games until it is dissolved or deleted, so there is no 72-hour cut).
+async function ccLoadGames(id, run) {
+  const a = Admin.st, [from, to] = ccRange(), key = a.gKey = id + '|' + (run || '') + '|' + Date.now();
+  a.tsGames = null; a.tsOpen = ''; Admin.paint();
+  try { const L = await Repo.handLogs(id, run ? from : Math.max(from, Date.now() - HandLog.KEEP_MS), to, run ? 500 : 300); if (a.gKey !== key) return; a.tsGames = run ? L.filter(g => g.run === run) : L; }
+  catch (e) { if (a.gKey === key) a.tsGames = { err: friendlyError(e) }; }
+  Admin.paint();
+}
+function ccGames(id, run) {
+  const a = Admin.st, L = a.tsGames;
+  const tm = ms => new Date(ms).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' });
+  const clock = ms => new Date(ms).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', second: '2-digit' });
+  const local = ms => { const d = new Date(ms - new Date().getTimezoneOffset() * 60000); return d.toISOString().slice(0, 16); };
+  const chips = h('div', { class: 'ccfilters', id: 'gRange' }, (run ? [['all', 'All'], ['1', '1 h'], ['6', '6 h'], ['24', '24 h'], ['custom', 'Custom']] : [['1', '1 h'], ['6', '6 h'], ['24', '24 h'], ['72', '72 h'], ['custom', 'Custom']]).map(([v, t]) =>
+    h('button', { type: 'button', class: a.tsRange === v ? 'on' : '', 'data-r': v, onclick: () => { a.tsRange = v; if (v === 'custom') { if (!a.tsFrom) a.tsFrom = local(Date.now() - 6 * 3600000); if (!a.tsTo) a.tsTo = local(Date.now()); } ccLoadGames(id, run); } }, h('span', { text: t }))));
+  const custom = a.tsRange === 'custom' ? h('div', { class: 'ccgrange' },
+    h('label', {}, h('span', { text: 'From' }), h('input', { type: 'datetime-local', id: 'gFrom', value: a.tsFrom || '', min: run ? null : local(Date.now() - HandLog.KEEP_MS), onchange: e => { a.tsFrom = e.target.value; } })),
+    h('label', {}, h('span', { text: 'To' }), h('input', { type: 'datetime-local', id: 'gTo', value: a.tsTo || '', onchange: e => { a.tsTo = e.target.value; } })),
+    h('button', { type: 'button', class: 'ccbtn primary sm', id: 'gFind', onclick: () => ccLoadGames(id, run) }, ccI('search'), h('span', { text: 'Find' }))) : null;
+  const game = g => {
+    const key = g.handId + '_' + g.at, open = a.tsOpen === key, win = (g.winners || []).join(' & ');
+    let prev = 0;
+    return h('div', { class: 'ccgame' + (open ? ' open' : ''), 'data-hand': g.handId },
+      h('button', { type: 'button', class: 'ccgamehead', onclick: () => { a.tsOpen = open ? '' : key; Admin.paint(); } },
+        h('div', {}, h('b', { text: 'Hand ' + g.handNo }), h('em', { class: 'ccpill', text: g.variant || 'Classic' }), h('time', { text: tm(g.at) })),
+        h('div', {}, h('span', { text: win ? win + ' won' : 'No winner' }), h('b', { class: 'ccgamt', text: fmt(g.amount || 0) }), ccI('chev', 'end'))),
+      open ? h('div', { class: 'ccgamebody' },
+        h('div', { class: 'ccgmeta', text: 'Boot ' + fmt(g.boot) + (g.joker ? '  ·  Wild ' + g.joker : '') + '  ·  ' + (g.reason === 'fold' ? 'Everyone else packed' : g.rank ? 'Won with ' + g.rank : 'Show') + (g.rake ? '  ·  Rake ' + fmt(g.rake) : '') }),
+        h('div', { class: 'ccgplayers' }, (g.players || []).map(p => { const net = (p.won || 0) - (p.put || 0);
+          return h('div', { class: 'ccgp' }, h('b', { text: p.name + (p.bot ? ' (bot)' : '') }), h('span', { text: p.cards || 'cards not shown' }), h('i', { text: 'bet ' + fmt(p.put || 0) }), h('em', { class: net >= 0 ? 'up' : 'down', text: (net >= 0 ? '+' : '−') + fmt(Math.abs(net)) })); })),
+        h('ol', { class: 'ccglines' }, (g.lines || []).map(l => { const add = Math.max(0, (l.pot || 0) - prev); prev = l.pot || prev;
+          return h('li', {}, h('time', { text: clock(l.at) }), h('span', { text: l.text }), add ? h('em', { text: '+' + fmt(add) }) : h('em'), h('i', { text: 'pot ' + fmt(l.pot || 0) })); }))) : null);
+  };
+  return ccSec('Game activity', L && L.length ? h('span', { class: 'ccchip', text: L.length + (L.length === 1 ? ' game' : ' games') }) : null, h('div', { class: 'ccgames', id: 'tsGames' },
+    chips, custom,
+    !L ? ccLoading('Looking for games…') : L.err ? h('p', { class: 'ccnote bad', text: L.err }) : L.length ? L.map(game) : ccEmpty('pulse', 'No games in this time', run ? 'Every finished hand of this test is listed here.' : 'Finished hands are kept here for 72 hours.')));
 }
 // The test bots at a table: their chips, and buttons to add more (only between hands, so the dealer does not overwrite it).
 function ccBots(id, D) {
@@ -7674,7 +7987,7 @@ function ccBots(id, D) {
 function ccTableSheet(id) {
   const a = Admin.st, t = TABLE_BY_ID[id], d = S.rooms[id], D = a.tsData, [k, label] = ccTableState(t), on = hostLive(d);
   const close = () => { a.tsheet = ''; a.tsData = null; Admin.paint(); };
-  const G = D && D.game, phase = !G ? 'No hand yet' : G.phase === 'playing' ? 'Hand ' + (G.handNo || '') + ' in play' : G.phase === 'result' ? 'Showing the result' : 'Between hands';
+  const G = D && D.game, phase = D && !D.members.length && !on ? 'Empty' : !G ? 'No hand yet' : G.phase === 'playing' ? 'Hand ' + (G.handNo || '') + ' in play' : G.phase === 'result' ? 'Showing the result' : 'Between hands';
   const host = D && D.members && d && d.hostUid ? (D.members.find(m => m.uid === d.hostUid) || {}).name : '';
   const kv = (l, v, cls) => h('div', { class: 'cckv' + (cls ? ' ' + cls : '') }, h('span', { text: l }), h('b', { text: v }));
   const toggle = async () => {
@@ -7697,8 +8010,7 @@ function ccTableSheet(id) {
           ccSec('Seats and players', null, !D ? ccLoading() : D.err ? h('p', { class: 'ccnote bad', text: D.err }) : D.members.length ? h('div', { class: 'ccseats' }, D.members.map(m => h('div', { class: 'ccseat' },
             h('span', { class: 'ccrav sm' }, avatarNode(m.avatar)), h('b', { text: m.name }), h('em', { class: 'ccpill ' + (m.seatState === 'seated' ? 's-live' : 's-wait'), text: m.seatState === 'seated' ? 'Seated' : 'Watching' }), h('span', { class: 'num', text: fmt(m.stack) }))))
             : ccEmpty('users', 'Nobody at this table', '')),
-          t.tour ? null : ccSec('Bots', null, !D ? ccLoading() : ccBots(id, D)),
-          ccSec('Recent events', null, !D ? ccLoading() : G && G.log && G.log.length ? h('ol', { class: 'cclog' }, G.log.slice(-8).reverse().map(x => h('li', { text: x }))) : h('p', { class: 'ccnote', text: 'No hand has been played since the table was last reset.' })),
+          ccGames(id),
           h('div', { class: 'ccacts' },
             h('button', { type: 'button', class: 'ccbtn ghost', id: 'tsWatch', onclick: () => { location.hash = '#/table/' + id; } }, ccI('eye'), h('span', { text: 'Watch table' })),
             h('button', { type: 'button', class: 'ccbtn ' + (d.status === 'open' ? 'danger' : 'primary'), id: 'tsToggle', disabled: !!S.busy['tstat_' + id], onclick: toggle }, ccI('power'), h('span', { text: d.status === 'open' ? 'Close table' : 'Open table' })),
@@ -7739,6 +8051,119 @@ function ccPlayerPage(u) {
 }
 Admin.listOnly = function () { const el = $('pList'); if (!el) return; el.replaceChildren(playerRows((Admin.st.users || []).filter(Admin.match))); };
 
+
+/* ---- Test: the admin's own table with bots. Create it, play it, read what it recorded, then dissolve it or keep the run. ---- */
+const TestLab = {
+  // The table now open for a test, or null.
+  live() { const d = S.rooms[TEST_ID]; return d && d.status === 'open' && d.sessionId ? d : null; },
+  // Leaving (or standing up at) the test table lands on the console's Test tab, with that run's results open.
+  left(t) { if (t !== TEST_ID || !S.realAdmin) return; const a = Admin.st; a.nav = 'test'; a.view = 'hub'; a.test = null; a.tsheet = ''; AdminView.set('console'); },
+  defaults(boot) { const b = Math.max(1, Math.floor(Number(boot) || 1)); return { boot: b, blind: b * ENGINE_MULT.blind, chaal: b * ENGINE_MULT.chaal, pot: b * ENGINE_MULT.pot, buy: b * 100, botChips: b * 100 }; },
+  async wallet() { const a = Admin.st; try { let p = await Repo.getProfile(S.user.uid); if (!p) p = await Repo.createAdminProfile(S.user); a.testProf = p; } catch (e) { a.testProf = null; } if (a.nav === 'test') Admin.paint(); },
+  // Seats the admin's own player (Club Admin) at the test table and opens it in the player view.
+  async join() {
+    const uid = S.user.uid, d = TestLab.live();
+    if (!d) throw new AppError('Create a test table first.');
+    let p = await Repo.getProfile(uid); if (!p) p = await Repo.createAdminProfile(S.user);
+    if (p.tableId && p.tableId !== TEST_ID) throw new AppError('Club Admin is still seated at ' + tableName(TABLE_BY_ID[p.tableId] || { boot: '?' }) + '. Leave that table first.');
+    if (p.tableId !== TEST_ID) {
+      if ((p.chips || 0) < d.minBuyIn) throw new AppError('Club Admin has ' + fmt(p.chips || 0) + ' chips and this table needs ' + fmt(d.minBuyIn) + '. Add chips to Club Admin on the Players tab, or make the table with a smaller buy-in.');
+      await Repo.joinTable(uid, TEST_ID, d.minBuyIn);
+    }
+    Session.reset(uid, TEST_ID);
+    try { sessionStorage.setItem('tp_adminview', 'player'); sessionStorage.setItem('tp_uid', uid); } catch (e) { /* private mode */ }
+    location.hash = '#/table/' + TEST_ID;
+    onAuthChange(S.user);
+  }
+};
+function ccTestForm() {
+  const a = Admin.st, T = a.test, f = T.f, p = a.testProf;
+  const num = (k, label, hint) => h('label', { class: 'cctf' }, h('span', { text: label }), h('input', { id: 'tx_' + k, type: 'number', min: 1, inputmode: 'numeric', value: String(f[k]),
+    oninput: e => { f[k] = e.target.value; }, onchange: k === 'boot' ? e => { Object.assign(f, TestLab.defaults(e.target.value)); Admin.paint(); } : null }), hint ? h('i', { text: hint }) : null);
+  const create = () => adminBusy('testNew', 'create test table', async () => {
+    const n = k => Number(f[k]);
+    if (!['boot', 'blind', 'chaal', 'pot', 'buy', 'botChips'].every(k => Number.isInteger(n(k)) && n(k) > 0)) throw new AppError('Every number must be a whole number above zero.');
+    const sid = await Repo.createTest({ name: f.name, boot: n('boot'), blind: n('blind'), chaal: n('chaal'), pot: n('pot'), buy: n('buy'), bots: f.bots, botChips: n('botChips'), mode: f.mode });
+    T.f = null; T.sel = sid; a.tsRange = 'all'; a.tsGames = []; a.tsOpen = '';
+    toast('Test table ready. Tap Join and play.');
+  });
+  return ccSec(TestLab.live() ? 'New test table' : 'Create a test table', T.cancel ? h('button', { type: 'button', class: 'ccbtn ghost sm', id: 'txCancel', onclick: () => { T.f = null; Admin.paint(); }, text: 'Cancel' }) : null, h('div', { class: 'cctform', id: 'testForm' },
+    h('label', { class: 'cctf wide' }, h('span', { text: 'Name' }), h('input', { id: 'tx_name', type: 'text', maxlength: 24, value: f.name, oninput: e => { f.name = e.target.value; } })),
+    num('boot', 'Boot', 'Resets the other numbers'), num('blind', 'Max blind'),
+    num('chaal', 'Max chaal'), num('pot', 'Pot limit'),
+    num('buy', 'Your chips', p ? 'Club Admin has ' + fmt(p.chips || 0) : ''), num('botChips', 'Chips per bot'),
+    h('div', { class: 'cctf wide' }, h('span', { text: 'Bots' }), h('div', { class: 'cctseg', id: 'tx_bots' }, TEST_BOTS.map((b, i) => h('button', { type: 'button', class: f.bots === i + 1 ? 'on' : '', 'data-n': i + 1, text: String(i + 1), onclick: () => { f.bots = i + 1; Admin.paint(); } })))),
+    h('div', { class: 'cctf wide' }, h('span', { text: 'Game' }), h('div', { class: 'cctseg', id: 'tx_mode' }, [['classic', 'Classic'], ['variant', 'Random variants']].map(([v, t]) => h('button', { type: 'button', class: f.mode === v ? 'on' : '', 'data-m': v, text: t, onclick: () => { f.mode = v; Admin.paint(); } })))),
+    TestLab.live() ? h('p', { class: 'ccnote wide', text: 'The table open now is closed and its run is kept under Saved test runs.' }) : null,
+    h('button', { type: 'button', class: 'ccbtn primary wide', id: 'txCreate', disabled: !!S.busy.testNew, onclick: create }, S.busy.testNew ? h('span', { class: 'ccspin sm' }) : ccI('flask'), h('span', { text: S.busy.testNew ? 'Creating…' : 'Create test table' }))));
+}
+// One run: what the table was set to, what it recorded, and its games (found by time).
+function ccTestRun(d, live) {
+  const a = Admin.st, open = live, t0 = ccMs(d.openedAt), t1 = !open && d.closedAt ? ccMs(d.closedAt) : Date.now();
+  const ps = Object.keys(d.players || {}).map(id => Object.assign({ id }, d.players[id])).sort((x, y) => (x.bot ? 1 : 0) - (y.bot ? 1 : 0) || (x.firstAt || 0) - (y.firstAt || 0));
+  const signed = n => (n > 0 ? '+' : n < 0 ? '−' : '') + fmt(Math.abs(n));
+  const tile = (id, v, l) => h('div', {}, h('b', { id, text: v }), h('span', { text: l }));
+  const kv = (l, v) => h('div', {}, h('span', { text: l }), h('b', { text: v }));
+  const mine = a.testProf && a.testProf.tableId === TEST_ID;
+  const join = () => adminBusy('testJoin', 'join test table', () => TestLab.join());
+  const dissolve = async () => {
+    const yes = await ccConfirm({ title: live ? 'Dissolve this test table?' : 'Delete this test run?', danger: true, ok: live ? 'Dissolve' : 'Delete',
+      body: 'This wipes, for good:', list: [(d.hands || 0) + ' recorded game' + (d.hands === 1 ? '' : 's') + ' with every move and bet', 'Its stats, rake and player results'].concat(live ? ['The table itself: seats, bots and the hand on it'] : []) });
+    if (!yes) return;
+    return adminBusy('testDel', live ? 'dissolve test table' : 'delete test run', async () => {
+      if (live) await Repo.dissolveTest(d.id); else await Repo.deleteTestRun(d.id);
+      a.test.sel = ''; a.tsGames = null; TestLab.wallet();
+      toast(live ? 'Test table dissolved. Its data is gone.' : 'Test run deleted.');
+    });
+  };
+  return h('div', { class: 'cctrun', id: 'testRun', 'data-run': d.id },
+    h('div', { class: 'cctcfg' }, kv('Boot', fmt(d.boot)), kv('Max blind', fmt(d.maxBlind || d.boot * ENGINE_MULT.blind)), kv('Max chaal', fmt(d.maxChaal || d.boot * ENGINE_MULT.chaal)), kv('Pot limit', fmt(d.potLimit || d.boot * ENGINE_MULT.pot)),
+      kv('Bots', (d.bots || 0) + ' × ' + fmt(d.botChips || 0)), kv('Game', d.mode === 'variant' ? 'Variants' : 'Classic'), kv('Your chips', fmt(d.minBuyIn)), kv('Created', t0 ? new Date(t0).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }) : '–')),
+    h('div', { class: 'cctacts' },
+      live ? h('button', { type: 'button', class: 'ccbtn primary', id: 'txJoin', disabled: !!S.busy.testJoin, onclick: join }, S.busy.testJoin ? h('span', { class: 'ccspin sm' }) : ccI('play'), h('span', { text: S.busy.testJoin ? 'Opening…' : mine ? 'Return to the table' : d.hands ? 'Rejoin and play' : 'Join and play' })) : null,
+      h('button', { type: 'button', class: 'ccbtn danger', id: live ? 'txDissolve' : 'txDelete', disabled: !!S.busy.testDel, onclick: dissolve }, S.busy.testDel ? h('span', { class: 'ccspin sm' }) : ccI('x'), h('span', { text: live ? 'Dissolve' : 'Delete run' }))),
+    h('div', { class: 'cctstats', id: 'txStats' },
+      tile('txHands', String(d.hands || 0), 'Games played'), tile('txRake', fmt(d.rake || 0), 'Rake'),
+      tile('txMax', d.hands ? fmt(d.potMax) : '–', 'Highest pot'), tile('txMin', d.hands ? fmt(d.potMin) : '–', 'Lowest pot'),
+      tile('txPlay', sessDur(d.playMs), 'Time played'), tile('txOpen', t0 ? sessDur(t1 - t0) : '–', open ? 'Open for' : 'Was open')),
+    ps.length ? h('div', { class: 'cctplayers', id: 'txPlayers' },
+      h('div', { class: 'cctprow hd' }, h('span', { text: 'Player' }), h('span', { text: 'Start' }), h('span', { text: 'Now' }), h('span', { text: 'Result' })),
+      ps.map(q => h('div', { class: 'cctprow' }, h('span', {}, h('b', { text: q.name }), h('i', { text: (q.bot ? 'Bot · ' : '') + (q.hands || 0) + (q.hands === 1 ? ' game' : ' games') })),
+        h('span', { text: fmt(q.start || 0) }), h('span', { text: fmt(q.stack || 0) }), h('span', { class: (q.net || 0) > 0 ? 'up' : (q.net || 0) < 0 ? 'down' : '', text: signed(q.net || 0) }))))
+      : h('p', { class: 'ccnote', text: 'No game has been played in this test yet.' }),
+    ccGames(TEST_ID, d.id));
+}
+function ccTest() {
+  const a = Admin.st;
+  if (!a.test) { a.test = { f: null, sel: '', cancel: false }; TestLab.wallet(); }
+  Admin.watchTest();
+  const T = a.test, L = a.testRuns, room = TestLab.live(), liveId = room ? room.sessionId : '';
+  const head = h('div', { class: 'ccpagehead' }, h('h2', { text: 'Test' }), h('span', { class: 'ccchip' + (room ? ' ok' : ''), text: room ? 'Table open' : 'No table' }));
+  if (!S.roomsLoaded[TEST_ID] || !L) return h('div', { class: 'ccpage fixed' }, head, h('div', { class: 'ccscroll' }, ccLoading('Loading the test table…')));
+  const liveRun = L.find(x => x.id === liveId) || null;
+  if (!liveRun && !T.f) { T.f = Object.assign({ name: 'Test Table', bots: 2, mode: 'classic' }, TestLab.defaults(1)); T.cancel = false; }
+  const sel = T.sel === '-' ? '' : L.some(x => x.id === T.sel) ? T.sel : (liveRun && !T.f ? liveRun.id : '');
+  const shown = sel ? sel + ':' + ((L.find(x => x.id === sel) || {}).hands || 0) : '';      // a newly finished hand reloads the list
+  if (sel && a.testShown !== shown) { if (String(a.testShown || '').split(':')[0] !== sel) a.tsRange = 'all'; a.testShown = shown; setTimeout(() => ccLoadGames(TEST_ID, sel), 0); }
+  if (!sel) a.testShown = '';
+  const row = d => {
+    const on = d.id === sel, live = d.id === liveId;
+    return h('div', { class: 'cctitem' + (on ? ' on' : ''), 'data-run': d.id },
+      h('button', { type: 'button', class: 'cctihead', 'aria-expanded': on ? 'true' : 'false', onclick: () => { T.sel = on ? '-' : d.id; Admin.paint(); } },
+        h('div', {}, h('b', { text: (d.name || 'Test Table') + ' · Boot ' + fmt(d.boot) }), h('em', { class: 'ccpill s-' + (live ? 'live' : 'wait'), text: live ? 'Open' : 'Saved' })),
+        h('div', {}, h('span', { text: sessWhen(d.openedAt) + '  ·  ' + (d.hands || 0) + (d.hands === 1 ? ' game' : ' games') + '  ·  ' + (d.bots || 0) + ' bots  ·  rake ' + fmt(d.rake || 0) }), ccI('chev', 'end'))),
+      on ? ccTestRun(d, live) : null);
+  };
+  const saved = L.filter(x => x.id !== liveId);
+  return h('div', { class: 'ccpage fixed', id: 'testPage' }, head,
+    h('div', { class: 'ccscroll' },
+      a.testErr ? h('p', { class: 'ccnote bad', text: a.testErr }) : null,
+      T.f ? ccTestForm() : null,
+      liveRun ? ccSec('Current test table', T.f ? null : h('button', { type: 'button', class: 'ccbtn ghost sm', id: 'txNew', onclick: () => { T.f = Object.assign({ name: 'Test Table', bots: liveRun.bots || 2, mode: liveRun.mode || 'classic' }, TestLab.defaults(liveRun.boot)); T.cancel = true; Admin.paint(); } }, ccI('flask'), h('span', { text: 'New table' })), h('div', { class: 'cctlistx' }, row(liveRun))) : null,
+      ccSec('Saved test runs', saved.length ? h('span', { class: 'ccchip', text: String(saved.length) }) : null, saved.length ? h('div', { class: 'cctlistx', id: 'testSaved' }, saved.map(row))
+        : h('p', { class: 'ccnote', text: 'A test table you do not dissolve is kept here when you create the next one, so you can open it again later.' }))));
+}
+
 /* ---- Settings ---- */
 function ccSettings() {
   const a = Admin.st, code = a.myRef;
@@ -7757,7 +8182,7 @@ function ccSettings() {
   };
   const clearT = async () => {
     const yes = await ccConfirm({ title: 'Clear every table?', danger: true, ok: 'Clear tables',
-      body: 'This ends whatever is on the tables now:', list: ['Old and unfinished hands are deleted', 'Everyone still seated is stood up; the chips in front of them go back to their wallet', 'Bots start again with ' + fmt(BOT_START_CHIPS) + ' chips', 'Wallets, stats, rake and tournaments are not touched'] });
+      body: 'This ends whatever is on the tables now:', list: ['Old and unfinished hands are deleted', 'Everyone still seated is stood up; the chips in front of them go back to their wallet', 'Wallets, stats, rake and tournaments are not touched'] });
     if (!yes) return;
     a.resetLog = []; Admin.paint();
     await adminBusy('cleart', 'clear the tables', async () => {
@@ -7777,7 +8202,7 @@ function ccSettings() {
       code === undefined ? ccLoading() : code ? h('div', { class: 'ccrefcode' }, h('b', { text: code }), h('button', { type: 'button', class: 'ccbtn ghost sm', onclick: () => copy(code) }, ccI('link'), h('span', { text: 'Copy' })))
         : h('button', { type: 'button', class: 'ccbtn primary wide', id: 'makeRef', disabled: !!S.busy.ref, onclick: () => adminBusy('ref', 'create referral code', async () => { a.myRef = await Repo.adminRefCode(true); toast('Your referral code is ' + a.myRef + '.'); }) }, ccI('link'), h('span', { text: 'Create my referral code' })),
       h('p', { class: 'ccnote', text: 'New players need a referral code to sign up: yours, or the code of any approved player (each gets one when you approve them). Every sign-up still waits for your approval.' }))),
-    ccSec('Tools', null, h('div', { class: 'cclist' }, ADMIN_TILES.map(([v, id, title, sub]) => h('button', { type: 'button', class: 'ccrow btn', id: 'set_' + v, onclick: () => v === 'tables' ? Admin.nav('tables') : v === 'players' ? Admin.nav('players') : Admin.go(v) },
+    ccSec('Tools', null, h('div', { class: 'cclist' }, ADMIN_TILES.filter(x => x[0] !== 'tables' && x[0] !== 'players').map(([v, id, title, sub]) => h('button', { type: 'button', class: 'ccrow btn', id: 'set_' + v, onclick: () => v === 'tables' ? Admin.nav('tables') : v === 'players' ? Admin.nav('players') : Admin.go(v) },
       h('span', { class: 'ccmic' }, ccI({ tour: 'trophy', tables: 'table', private: 'crown', players: 'users', notify: 'mail', rewards: 'gift', rake: 'stats', vip: 'shield' }[v])), h('div', {}, h('b', { text: title }), h('span', { text: sub })), ccI('chev', 'end'))))),
     ccSec('Clean up', null, h('div', { class: 'ccdanger', id: 'clearZone' },
       h('div', {}, h('b', { text: 'Clear all table data' }), h('span', { text: 'Removes old hands and empties every seat. Chips at the tables go back to the players\' wallets.' })),
