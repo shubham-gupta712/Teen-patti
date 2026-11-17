@@ -3533,6 +3533,19 @@ body .cc .ccglines i{font-style:normal;font-size:10px;color:var(--mute);white-sp
 .tpgo{flex:none;width:calc(var(--u) * 40);height:calc(var(--u) * 40);min-width:18px;min-height:18px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(180deg,#ffe9a6,#d2a03f);color:#251600;box-shadow:inset 0 1px 0 #fff6d0,0 4px 10px rgba(0,0,0,.35)}
 .tpgo .pico{width:55%;height:55%;stroke-width:3}
 .tpcard.pressed{transform:scale(.96);filter:brightness(1.1)}
+/* ===== 86. No flicker: our panes stay visible while liquidGL photographs the page (keepVisible) and keep their fade ===== */
+.sheetback .sheet[data-lg]{transition:background-color .5s ease,-webkit-backdrop-filter .5s ease,backdrop-filter .5s ease !important}
+.lwrap .lpanel[data-lg]{transition:background-color .5s ease,-webkit-backdrop-filter .5s ease,backdrop-filter .5s ease !important}
+/* ===== 87. Private table form: one clean column ===== */
+#privSheet .pvform{display:flex;flex-direction:column;gap:10px;padding:2px 2px 4px}
+#privSheet .pvhint{margin:0 0 4px;font-size:13.5px;line-height:1.45;color:#e7efe9;text-align:left}
+#privSheet .pvlabel{font:800 10px/1 system-ui;letter-spacing:.2em;text-transform:uppercase;color:#e7bf63;margin:4px 0 -2px 2px}
+#privSheet #privCode{display:block;width:100%;box-sizing:border-box;height:52px;min-height:52px;margin:0;padding:0 14px;border-radius:14px;border:1.5px solid rgba(242,199,92,.75);background:rgba(3,18,11,.6);color:#fff3d6;
+  font:700 22px/1 Georgia,serif;letter-spacing:.24em;text-align:center;box-shadow:inset 0 2px 6px rgba(0,0,0,.35);outline:none}
+#privSheet #privCode::placeholder{font:600 13px system-ui;letter-spacing:.2em;color:rgba(231,214,170,.45);opacity:1}
+#privSheet #privCode:focus,#privSheet #privCode.kpon{border-color:#f6d27a;box-shadow:inset 0 2px 6px rgba(0,0,0,.35),0 0 0 3px rgba(242,199,92,.18)}
+#privSheet #privGo{display:block;width:100%;margin:4px 0 0;min-height:50px;border-radius:14px;font-size:16px}
+#privSheet .msg.err{margin:0}
 /* ===== 79. Console: the Test tab (create a test table, its runs, their stats and games) ===== */
 body .cc .ccnav{grid-template-columns:repeat(6,1fr)}
 body .cc .ccnav button{font-size:10px}
@@ -11543,8 +11556,10 @@ fn fs() -> @location(0) vec4<f32> {
       this.originalShadow = this.el.style.boxShadow;
       this.originalOpacity = this.el.style.opacity;
       this.originalTransition = this.el.style.transition;
-      this.el.style.transition = "none";
-      this.el.style.opacity = 0;
+      if (!this.options.keepVisible) {            // patched: keepVisible leaves the pane on screen while the page is photographed (no flicker)
+        this.el.style.transition = "none";
+        this.el.style.opacity = 0;
+      }
 
       this.el.style.position =
         this.el.style.position === "static"
@@ -15958,14 +15973,16 @@ const Glass = {
     setTimeout(() => {
       if (Sheets.el !== back) return;
       try {
-        Glass.lens = liquidGL({ target: '[data-lg="' + key + '"]', snapshot: 'body', resolution: 1.5, refraction: 0.014, bevelDepth: 0.08, bevelWidth: 0.12,
+        Glass.lens = liquidGL({ keepVisible: true, target: '[data-lg="' + key + '"]', snapshot: 'body', resolution: 1.5, refraction: 0.014, bevelDepth: 0.08, bevelWidth: 0.12,
           frost: 1.5, shadow: true, specular: true, reveal: 'none', tint: 'rgba(6,46,28,0.2)', on: { init() { requestAnimationFrame(() => sh.classList.add('lgon')); } } });
       } catch (e) { console.warn('[TeenPatti] glass', e && e.message); back.classList.remove('lgback'); }
     }, 380);
   },
-  detach() {
+  // `later`: the pop-up is fading out, so the glass stays under it until it has gone (removing it at once made the pop-up flash)
+  detach(later) {
     const L = Glass.lens; Glass.lens = null; if (!L) return;
-    (Array.isArray(L) ? L : [L]).forEach(x => { try { x && x.destroy && x.destroy(); } catch (e) { /* already gone */ } });
+    const kill = () => (Array.isArray(L) ? L : [L]).forEach(x => { try { x && x.destroy && x.destroy(); } catch (e) { /* already gone */ } });
+    if (later) setTimeout(kill, 460); else kill();
   },
   /* the login card (and the sign-up, verify and waiting cards on the same picture): light frosted glass */
   pageEl: null, pageLens: null,
@@ -15981,7 +15998,7 @@ const Glass = {
     setTimeout(() => {
       if (Glass.pageEl !== el || !el.isConnected) return;
       try {
-        Glass.pageLens = liquidGL({ target: '[data-lg="' + key + '"]', snapshot: 'body', resolution: 1.5, refraction: 0.012, bevelDepth: 0.07, bevelWidth: 0.1,
+        Glass.pageLens = liquidGL({ keepVisible: true, target: '[data-lg="' + key + '"]', snapshot: 'body', resolution: 1.5, refraction: 0.012, bevelDepth: 0.07, bevelWidth: 0.1,
           frost: 1.5, shadow: true, specular: true, reveal: 'none', tint: 'rgba(255,248,230,0.15)', on: { init() { requestAnimationFrame(() => el.classList.add('lgon')); } } });
       } catch (e) { console.warn('[TeenPatti] glass', e && e.message); }
     }, 450);
@@ -16018,7 +16035,7 @@ const Sheets = {
   close() {
     const el = Sheets.el; if (!el) return;
     const back = Sheets.RETURNS[el.id] && el.dataset.from === Sheets.RETURNS[el.id];
-    Glass.detach();
+    Glass.detach(true);
     Sheets.el = null; Social.onLog = null; clearTimeout(Sheets.replayT); Keypad.hide();
     el.style.pointerEvents = 'none'; el.classList.add('sheetout');
     el.removeAttribute('id'); el.querySelectorAll('[id]').forEach(n => n.removeAttribute('id'));
@@ -16404,11 +16421,9 @@ const Sheets = {
     go.onclick = run;
     [code].forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') run(); }));
     Sheets.open('privSheet', 'Private table', h('div', { class: 'setlist' },
-      h('p', { class: 'hnote', style: 'text-align:left', text: 'By invitation only. Enter the room code you were given.' }),
-      h('div', { class: 'pfrow' },
-        h('div', { class: 'field' }, h('label', { for: 'privCode', text: 'ROOM CODE' }), code),
-        go),
-      err), 'compact');
+      h('div', { class: 'pvform' },
+        h('p', { class: 'pvhint', text: 'By invitation only. Enter the room code you were given.' }),
+        h('label', { for: 'privCode', class: 'pvlabel', text: 'Room code' }), code, err, go)), 'compact');
     code.focus();
   }
 };
@@ -18989,6 +19004,7 @@ function bestWithWilds(cards, mask) {
   if (nw === 2) return [6, parseCard(fixed[0]).r];
   let best = null;
   for (const r of ENGINE.RANKS) for (const s of ENGINE.SUITS) {
+    if (fixed.includes(r + s)) continue;          // a wild card stands for a card you do not already hold (no "A♦ A♦ 4♦" colour)
     const sc = scoreHand(fixed.concat(r + s));
     if (!best || compareScores(sc, best) > 0) best = sc;
   }
