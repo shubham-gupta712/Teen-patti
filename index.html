@@ -3423,31 +3423,26 @@ body .cc .ccglines i{font-style:normal;font-size:10px;color:var(--mute);white-sp
 /* ===== 80. New-version banner ===== */
 .freshbar{position:fixed;left:10px;right:10px;top:calc(10px + env(safe-area-inset-top));margin:0 auto;width:max-content;z-index:99999;display:flex;align-items:center;gap:12px;max-width:calc(100vw - 20px);padding:10px 10px 10px 16px;border-radius:14px;background:#0f2a1d;border:1px solid #d6ac5c;color:#f6ecd2;font:600 13px/1.3 system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.55)}
 .freshbar span{flex:1;min-width:0}.freshbar button{flex:none;min-height:36px;padding:0 16px;border-radius:10px;border:0;background:linear-gradient(180deg,#f3d58a,#c99a3e);color:#2a1b0c;font:800 13px system-ui,sans-serif;cursor:pointer}
-/* ===== 81. Tournaments list: one tile per tournament, swiped sideways ===== */
-.tzrow{display:flex;flex-direction:column;gap:8px;min-width:0}
-.tztrack{display:flex;gap:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding:0 2px;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 2px 4px;box-sizing:border-box;width:100%}
-.tztrack::-webkit-scrollbar{display:none}
-.tzt{flex:0 0 88%;scroll-snap-align:start;display:flex;flex-direction:column;gap:10px;min-width:0;padding:14px;border-radius:18px;border:1px solid rgba(214,172,92,.45);background:linear-gradient(165deg,rgba(255,255,255,.07),rgba(0,0,0,.18));color:#f6e3b0}
-.tzrow.solo .tzt{flex-basis:100%}
-.tzt.mine{border-color:#f2c75c;box-shadow:0 0 0 1px rgba(242,199,92,.35)}
-.tztop{display:flex;flex-direction:column;gap:2px;min-width:0}
-.tztop i{font:800 10px system-ui;font-style:normal;letter-spacing:1.4px;color:#f2c75c}
-.tztop b{font:800 18px/1.2 Georgia,serif;color:#fff3d6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tztop .tzin{align-self:flex-start;margin-top:3px;padding:2px 8px;border-radius:99px;background:rgba(61,220,151,.14);border:1px solid rgba(61,220,151,.45);color:#9ff0c8;font:800 9.5px system-ui;font-style:normal;letter-spacing:.6px}
-.tztclock{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 6px;border-radius:14px;background:rgba(0,0,0,.22);border:1px solid rgba(214,172,92,.3)}
-.tztclock span{font:800 10px system-ui;letter-spacing:1.4px;color:#cdb98f;text-transform:uppercase}
-.tztclock b{font:800 30px/1.1 ui-monospace,Menlo,Consolas,monospace;color:#f2c75c;font-variant-numeric:tabular-nums;white-space:nowrap}
-.tzt.s-live .tztclock b,.tzt.s-play .tztclock b{color:#7ff0b6}
-.tztboxes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.tztboxes div{display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 4px;border-radius:12px;border:1px solid rgba(214,172,92,.4);background:rgba(255,255,255,.04)}
-.tztboxes b{font:800 18px/1.15 system-ui;color:#fff3d6;font-variant-numeric:tabular-nums}
-.tztboxes span{font:700 9.5px system-ui;letter-spacing:1px;text-transform:uppercase;color:#cdb98f}
-.tztbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.tztbtns.one{grid-template-columns:1fr}
-.sheetback .setlist .tztbtns .btn-primary,.sheetback .setlist .tztbtns .btn-secondary{width:100%;min-width:0;margin:0;min-height:40px;padding:0 4px;font-size:13px;letter-spacing:0;white-space:nowrap}
-.tzdots{display:flex;justify-content:center;gap:6px}
-.tzdots i{width:6px;height:6px;border-radius:50%;background:rgba(214,172,92,.35);transition:width .2s,background .2s}
-.tzdots i.on{width:16px;border-radius:3px;background:#f2c75c}
+/* ===== 81. Tournaments list: one slim bar per tournament, stacked ===== */
+.tzbars{display:flex;flex-direction:column;gap:8px;max-height:min(64vh,540px);overflow-y:auto;min-width:0}
+.tzline{flex:none;display:flex;flex-direction:column;min-width:0;border-radius:14px;border:1px solid rgba(214,172,92,.4);background:linear-gradient(165deg,rgba(255,255,255,.07),rgba(0,0,0,.16));color:#f6e3b0;overflow:hidden}
+.tzline.mine{border-color:#f2c75c}
+.tzbtop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px 8px}
+.tzbname{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tzbname b{font:800 14.5px/1.2 Georgia,serif;color:#fff3d6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tzbname span{font:600 10.5px/1.2 system-ui;color:#cdb98f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tzbname em{font:800 10px/1.2 system-ui;font-style:normal;color:#9ff0c8}
+.tzbclock{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:1px}
+.tzbclock b{font:800 17px/1.1 ui-monospace,Menlo,Consolas,monospace;color:#f2c75c;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tzline.s-live .tzbclock b,.tzline.s-play .tzbclock b{color:#7ff0b6}
+.tzbclock i{font:800 8.5px system-ui;font-style:normal;letter-spacing:1.1px;color:#cdb98f;text-transform:uppercase;white-space:nowrap}
+.tzbbot{display:flex;align-items:center;gap:12px;padding:7px 8px 7px 12px;border-top:1px solid rgba(214,172,92,.22);background:rgba(0,0,0,.18)}
+.tzbstat{display:flex;flex-direction:column;gap:0;min-width:0}
+.tzbstat i{font:800 8.5px system-ui;font-style:normal;letter-spacing:1px;color:#cdb98f;text-transform:uppercase}
+.tzbstat b{font:800 13px/1.2 system-ui;color:#fff3d6;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tzbbtns{margin-left:auto;display:flex;align-items:center;gap:10px}
+.tzblink{padding:6px 2px;border:0;background:none;color:#f2c75c;font:700 12.5px system-ui;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.sheetback .setlist .tzbbtns .btn-primary,.sheetback .setlist .tzbbtns .btn-secondary{width:auto;min-width:0;margin:0;min-height:32px;padding:0 14px;font-size:12.5px;letter-spacing:0;white-space:nowrap;border-radius:10px}
 /* ===== 79. Console: the Test tab (create a test table, its runs, their stats and games) ===== */
 body .cc .ccnav{grid-template-columns:repeat(6,1fr)}
 body .cc .ccnav button{font-size:10px}
@@ -9237,22 +9232,20 @@ Sheets.tournaments = function (refresh) {
       if (!confirm('Cancel your place in ' + T.name + '? Your ' + fmt(me.held || 0) + ' entry chips go back to your wallet.')) return;
       return withBusy('tu_' + s, 'cancel place', async () => { await Repo.tourUnregister(s, uid); toast('Your place was cancelled and the entry chips are back in your wallet.'); });
     } });
-    // one tile: when it starts, the countdown, boot and entry, and the two buttons
-    const box = (v, l) => h('div', {}, h('b', { text: v }), h('span', { text: l }));
-    const details = h('button', { type: 'button', class: 'btn-secondary btn-small', 'data-act': 'details', text: 'Details', onclick: () => Sheets.tourDetail(s) });
-    return h('div', { class: 'tzt s-' + st.cls + (me ? ' mine' : ''), 'data-slot': s },
-      h('div', { class: 'tztop' }, h('i', { text: tzWhen(T.startAt).toUpperCase() }),
-        h('b', { text: T.name }), me ? h('em', { class: 'tzin', text: me.held > 0 ? '✓ REGISTERED' : '✓ PLAYING' }) : null),
-      h('div', { class: 'tztclock' }, h('span', { text: st.label.replace(/\s+·\s+/g, ' · ') }), st.until ? Tour.clock(st.until) : h('b', { text: ph.name === 'ended' ? 'Done' : 'Off' })),
-      h('div', { class: 'tztboxes' }, box(fmt(T.boot), 'Boot'), box(fmt(T.entry), 'Entry')),
-      h('div', { class: 'tztbtns' + (open && !S.isAdmin ? '' : ' one') }, act, open && !S.isAdmin ? details : null));
+    // one bar: name and date on the left, the countdown on the right; boot, entry and the buttons along the bottom
+    const stat = (l, v) => h('span', { class: 'tzbstat' }, h('i', { text: l }), h('b', { text: v }));
+    const details = h('button', { type: 'button', class: 'tzblink', 'data-act': 'details', text: 'Details', onclick: () => Sheets.tourDetail(s) });
+    return h('div', { class: 'tzline s-' + st.cls + (me ? ' mine' : ''), 'data-slot': s },
+      h('div', { class: 'tzbtop' },
+        h('div', { class: 'tzbname' }, h('b', { text: T.name }), h('span', { text: tzWhen(T.startAt) }), me ? h('em', { text: me.held > 0 ? '✓ Registered' : '✓ Playing' }) : null),
+        h('div', { class: 'tzbclock' }, st.until ? Tour.clock(st.until) : h('b', { text: ph.name === 'ended' ? 'Done' : 'Off' }), h('i', { text: st.label.replace(/\s+·\s+/g, ' · ') }))),
+      h('div', { class: 'tzbbot' }, stat('Boot', fmt(T.boot)), stat('Entry', fmt(T.entry)),
+        h('div', { class: 'tzbbtns' }, open && !S.isAdmin ? details : null, act)));
   };
   const body = h('div', { class: 'tzsheet', id: 'tourList' },
     h('div', { class: 'tzlisthead' }, h('span', { text: 'Wallet  ' }), h('b', { id: 'tourWallet', text: fmt(prof ? prof.chips : 0) })),
     !Tour.ready() ? h('p', { class: 'tznote', text: 'Loading tournaments...' })
-      : L.length ? h('div', { class: 'tzrow' + (L.length === 1 ? ' solo' : '') },
-          h('div', { class: 'tztrack', id: 'tourTrack', onscroll: e => { const el = e.currentTarget, w = el.firstChild ? el.firstChild.offsetWidth + 12 : 1, i = Math.round(el.scrollLeft / w); el.parentNode.querySelectorAll('.tzdots i').forEach((d, k) => d.classList.toggle('on', k === i)); } }, L.map(card)),
-          L.length > 1 ? h('div', { class: 'tzdots', 'aria-hidden': 'true' }, L.map((x, k) => h('i', { class: k === 0 ? 'on' : '' }))) : null)
+      : L.length ? h('div', { class: 'tzbars', id: 'tourTrack' }, L.map(card))
       : h('div', { class: 'tzempty' }, h('b', { text: 'No tournaments right now' }), h('span', { text: 'When the club announces one it shows up here, and you can register straight away.' })));
   if (refresh && Sheets.el) { const old = Sheets.el.querySelector('#tourList'); if (old) { old.replaceWith(body); Tour.paintClock(); return; } }
   Sheets.open('tourListSheet', 'Tournaments', h('div', { class: 'setlist' }, body));
