@@ -5126,7 +5126,7 @@ function renderFelt(R, me, msgs) {
   const showIcon = !fresh && !!IMG['vi_' + cfgV.id];      // every table shows its game, Classic included
   if (showIcon) {
     const wildRank = G && G.joker && G.phase !== 'idle' ? G.joker : '';
-    stage.appendChild(h('button', { id: 'variantBadge', type: 'button', class: 'tbvi', style: tbBox(375, 308, 511, 466), 'aria-label': 'Game: ' + cfgV.name + '. Tap for the rules', onclick: () => Sheets.ranks() },
+    stage.appendChild(h('button', { id: 'variantBadge', type: 'button', class: 'tbvi', style: tbBox(358, 296, 528, 492), 'aria-label': 'Game: ' + cfgV.name + '. Tap for the rules', onclick: () => Sheets.ranks() },
       h('img', { class: 'vimg', src: IMG['vi_' + cfgV.id] || '', alt: '', draggable: 'false' }),
       h('span', { class: wildRank ? 'vwild' : 'sr', text: wildRank ? 'WILD ' + wildRank : cfgV.name.toUpperCase() })));
   }
