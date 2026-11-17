@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- build:20261117c -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -3419,6 +3420,34 @@ body .cc .ccglines li{display:grid;grid-template-columns:auto 1fr auto auto;gap:
 body .cc .ccglines time{font-size:10px;color:var(--dim);font-variant-numeric:tabular-nums}
 body .cc .ccglines em{font-style:normal;font-weight:700;color:#e9c877}
 body .cc .ccglines i{font-style:normal;font-size:10px;color:var(--mute);white-space:nowrap}
+/* ===== 80. New-version banner ===== */
+.freshbar{position:fixed;left:10px;right:10px;top:calc(10px + env(safe-area-inset-top));margin:0 auto;width:max-content;z-index:99999;display:flex;align-items:center;gap:12px;max-width:calc(100vw - 20px);padding:10px 10px 10px 16px;border-radius:14px;background:#0f2a1d;border:1px solid #d6ac5c;color:#f6ecd2;font:600 13px/1.3 system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.55)}
+.freshbar span{flex:1;min-width:0}.freshbar button{flex:none;min-height:36px;padding:0 16px;border-radius:10px;border:0;background:linear-gradient(180deg,#f3d58a,#c99a3e);color:#2a1b0c;font:800 13px system-ui,sans-serif;cursor:pointer}
+/* ===== 81. Tournaments list: one tile per tournament, swiped sideways ===== */
+.tzrow{display:flex;flex-direction:column;gap:8px;min-width:0}
+.tztrack{display:flex;gap:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding:0 2px;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 2px 4px;box-sizing:border-box;width:100%}
+.tztrack::-webkit-scrollbar{display:none}
+.tzt{flex:0 0 88%;scroll-snap-align:start;display:flex;flex-direction:column;gap:10px;min-width:0;padding:14px;border-radius:18px;border:1px solid rgba(214,172,92,.45);background:linear-gradient(165deg,rgba(255,255,255,.07),rgba(0,0,0,.18));color:#f6e3b0}
+.tzrow.solo .tzt{flex-basis:100%}
+.tzt.mine{border-color:#f2c75c;box-shadow:0 0 0 1px rgba(242,199,92,.35)}
+.tztop{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tztop i{font:800 10px system-ui;font-style:normal;letter-spacing:1.4px;color:#f2c75c}
+.tztop b{font:800 18px/1.2 Georgia,serif;color:#fff3d6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tztop .tzin{align-self:flex-start;margin-top:3px;padding:2px 8px;border-radius:99px;background:rgba(61,220,151,.14);border:1px solid rgba(61,220,151,.45);color:#9ff0c8;font:800 9.5px system-ui;font-style:normal;letter-spacing:.6px}
+.tztclock{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 6px;border-radius:14px;background:rgba(0,0,0,.22);border:1px solid rgba(214,172,92,.3)}
+.tztclock span{font:800 10px system-ui;letter-spacing:1.4px;color:#cdb98f;text-transform:uppercase}
+.tztclock b{font:800 30px/1.1 ui-monospace,Menlo,Consolas,monospace;color:#f2c75c;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tzt.s-live .tztclock b,.tzt.s-play .tztclock b{color:#7ff0b6}
+.tztboxes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tztboxes div{display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 4px;border-radius:12px;border:1px solid rgba(214,172,92,.4);background:rgba(255,255,255,.04)}
+.tztboxes b{font:800 18px/1.15 system-ui;color:#fff3d6;font-variant-numeric:tabular-nums}
+.tztboxes span{font:700 9.5px system-ui;letter-spacing:1px;text-transform:uppercase;color:#cdb98f}
+.tztbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tztbtns.one{grid-template-columns:1fr}
+.sheetback .setlist .tztbtns .btn-primary,.sheetback .setlist .tztbtns .btn-secondary{width:100%;min-width:0;margin:0;min-height:40px;padding:0 4px;font-size:13px;letter-spacing:0;white-space:nowrap}
+.tzdots{display:flex;justify-content:center;gap:6px}
+.tzdots i{width:6px;height:6px;border-radius:50%;background:rgba(214,172,92,.35);transition:width .2s,background .2s}
+.tzdots i.on{width:16px;border-radius:3px;background:#f2c75c}
 /* ===== 79. Console: the Test tab (create a test table, its runs, their stats and games) ===== */
 body .cc .ccnav{grid-template-columns:repeat(6,1fr)}
 body .cc .ccnav button{font-size:10px}
@@ -3739,6 +3768,30 @@ class AppError extends Error {}
    SECTION 3 - ERRORS AND NOTIFICATIONS
    ========================================================================== */
 let toastTimer = null;
+/* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
+   few bytes of the current file; if its build is newer, a banner offers a reload. */
+const BUILD = '20261117c';
+const Fresh = {
+  at: 0, shown: false,
+  async check(force) {
+    if (!/^https?:/.test(location.protocol) || Fresh.shown || (!force && Date.now() - Fresh.at < 10 * 60000)) return;
+    Fresh.at = Date.now();
+    try {
+      const r = await fetch(location.pathname + '?v=' + Date.now(), { cache: 'no-store', headers: { Range: 'bytes=0-255' } });
+      const head = (await r.text()).slice(0, 600), m = /build:(\w+)/.exec(head);
+      if (m && m[1] !== BUILD) Fresh.show();
+    } catch (e) { /* offline: try again later */ }
+  },
+  show() {
+    Fresh.shown = true;
+    document.body.appendChild(h('div', { class: 'freshbar', id: 'freshBar', role: 'status' },
+      h('span', { text: 'A new version of the club is ready.' }),
+      h('button', { type: 'button', id: 'freshReload', text: 'Reload', onclick: () => { location.reload(); } })));
+  }
+};
+setTimeout(() => Fresh.check(true), 4000);
+setInterval(() => Fresh.check(false), 15 * 60000);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') Fresh.check(false); });
 function toast(msg, kind) {
   const t = $('toast');
   t.textContent = msg;
@@ -6196,7 +6249,7 @@ const Dealer = {
     for (const id of g.order) if (g.players[id] && g.players[id].status !== 'packed' && hs[id] && hs[id].handId === g.handId) hands[id] = hs[id].cards;
     const complete = g.order.every(id => g.players[id].status === 'packed' || hands[id]);
     if (complete) {
-      Dealer.hands = hands; Dealer.G = Object.assign({}, g, { turnEndsAt: g.turnEndsAt > now ? g.turnEndsAt : now });   // a turn that ran out while nobody was hosting counts as missed: the next tick packs that player
+      Dealer.hands = hands; Dealer.G = Object.assign({}, g, { turnEndsAt: g.turnEndsAt > now ? g.turnEndsAt : now + GAME_CONFIG.turnMs });   // a turn that ran out while nobody was dealing is not held against the player: they get a fresh turn
       await Repo.writeGame(t, Dealer.G);
       S.dealerInfo.lastError = ''; S.dealerInfo.note = 'Resumed hand ' + g.handNo + ' after a reload.';
     } else {
@@ -9180,26 +9233,27 @@ Sheets.tournaments = function (refresh) {
     else if (!me) act = h('button', { type: 'button', class: 'btn-primary btn-small', 'data-act': 'register', text: 'Register', onclick: () => Sheets.tourPay(s) });
     else if (atMine) act = h('button', { type: 'button', class: 'btn-primary btn-small', 'data-act': 'return', text: 'My table', onclick: () => Tour.join(s) });
     else if (Tour.running(ph)) act = h('button', { type: 'button', class: 'btn-primary btn-small' + (me.held > 0 ? ' tzglowbtn' : ''), 'data-act': 'join', text: me.held > 0 ? 'Join table' : 'Rejoin', onclick: () => Tour.join(s) });
-    else act = h('button', { type: 'button', class: 'btn-secondary btn-small', 'data-act': 'cancel', text: 'Cancel place', disabled: !!S.busy['tu_' + s], onclick: () => {
+    else act = h('button', { type: 'button', class: 'btn-secondary btn-small', 'data-act': 'cancel', text: 'Cancel', disabled: !!S.busy['tu_' + s], onclick: () => {
       if (!confirm('Cancel your place in ' + T.name + '? Your ' + fmt(me.held || 0) + ' entry chips go back to your wallet.')) return;
       return withBusy('tu_' + s, 'cancel place', async () => { await Repo.tourUnregister(s, uid); toast('Your place was cancelled and the entry chips are back in your wallet.'); });
     } });
-    const pill = t => h('span', { text: t });
-    const games = (T.variants || ['classic']).map(id => (VARIANT_BY_ID[id] || {}).name || id);
-    return h('div', { class: 'tzitem s-' + st.cls + (me ? ' mine' : ''), 'data-slot': s },
-      h('div', { class: 'tzclock ' + st.cls }, h('i', { text: st.label.replace('LIVE  ·  ', 'LIVE · ').replace('BREAK  ·  ', 'BREAK · ') }), st.until ? Tour.clock(st.until) : h('b', { text: ph.name === 'ended' ? 'Done' : 'Off' })),
-      h('div', { class: 'tzitemmid' },
-        h('div', { class: 'tzitemname' }, h('b', { text: T.name }),
-          me ? h('em', { class: 'tzin', text: me.held > 0 ? '✓ IN · ' + fmt(me.held) + ' held' : '✓ PLAYING' }) : null),
-        h('span', { class: 'tzitemsub', text: tzTime(T.startAt) + '  ·  ' + (T.count || 0) + ' registered  ·  ' + (games.length > 2 ? games.length + ' games' : games.join(' + ')) }),
-        h('div', { class: 'tzpills' }, pill('Boot ' + fmt(T.boot)), pill('Entry ' + fmt(T.entry)), pill(T.reentry ? 'Re-entry ' + fmt(tourRe(T)) : 'No re-entry'),
-          pill(T.durationMin + ' min' + (T.breaks ? ' · ' + T.breaks + '×' + T.breakMin + 'm break' : '')))),
-      h('div', { class: 'tzitemact' }, act, open ? h('button', { type: 'button', class: 'tzlink', text: 'Details', onclick: () => Sheets.tourDetail(s) }) : null));
+    // one tile: when it starts, the countdown, boot and entry, and the two buttons
+    const box = (v, l) => h('div', {}, h('b', { text: v }), h('span', { text: l }));
+    const details = h('button', { type: 'button', class: 'btn-secondary btn-small', 'data-act': 'details', text: 'Details', onclick: () => Sheets.tourDetail(s) });
+    return h('div', { class: 'tzt s-' + st.cls + (me ? ' mine' : ''), 'data-slot': s },
+      h('div', { class: 'tztop' }, h('i', { text: tzWhen(T.startAt).toUpperCase() }),
+        h('b', { text: T.name }), me ? h('em', { class: 'tzin', text: me.held > 0 ? '✓ REGISTERED' : '✓ PLAYING' }) : null),
+      h('div', { class: 'tztclock' }, h('span', { text: st.label.replace(/\s+·\s+/g, ' · ') }), st.until ? Tour.clock(st.until) : h('b', { text: ph.name === 'ended' ? 'Done' : 'Off' })),
+      h('div', { class: 'tztboxes' }, box(fmt(T.boot), 'Boot'), box(fmt(T.entry), 'Entry')),
+      h('div', { class: 'tztbtns' + (open && !S.isAdmin ? '' : ' one') }, act, open && !S.isAdmin ? details : null));
   };
   const body = h('div', { class: 'tzsheet', id: 'tourList' },
     h('div', { class: 'tzlisthead' }, h('span', { text: 'Wallet  ' }), h('b', { id: 'tourWallet', text: fmt(prof ? prof.chips : 0) })),
     !Tour.ready() ? h('p', { class: 'tznote', text: 'Loading tournaments...' })
-      : L.length ? h('div', { class: 'tzlist' }, L.map(card)) : h('div', { class: 'tzempty' }, h('b', { text: 'No tournaments right now' }), h('span', { text: 'When the club announces one it shows up here, and you can register straight away.' })));
+      : L.length ? h('div', { class: 'tzrow' + (L.length === 1 ? ' solo' : '') },
+          h('div', { class: 'tztrack', id: 'tourTrack', onscroll: e => { const el = e.currentTarget, w = el.firstChild ? el.firstChild.offsetWidth + 12 : 1, i = Math.round(el.scrollLeft / w); el.parentNode.querySelectorAll('.tzdots i').forEach((d, k) => d.classList.toggle('on', k === i)); } }, L.map(card)),
+          L.length > 1 ? h('div', { class: 'tzdots', 'aria-hidden': 'true' }, L.map((x, k) => h('i', { class: k === 0 ? 'on' : '' }))) : null)
+      : h('div', { class: 'tzempty' }, h('b', { text: 'No tournaments right now' }), h('span', { text: 'When the club announces one it shows up here, and you can register straight away.' })));
   if (refresh && Sheets.el) { const old = Sheets.el.querySelector('#tourList'); if (old) { old.replaceWith(body); Tour.paintClock(); return; } }
   Sheets.open('tourListSheet', 'Tournaments', h('div', { class: 'setlist' }, body));
 };
@@ -10060,9 +10114,11 @@ function settlementPlan(G) {
     const p = G.players[id];
     // Bots are test players with play chips from nowhere: they are topped up and stay seated.
     // Bots keep what they win or lose; out of chips they stand until the admin adds more. Tournament bots are topped up.
-    if (p.bot) plan[id] = TABLE_BY_ID[String(G.handId || '').split('-')[0]] && TABLE_BY_ID[String(G.handId).split('-')[0]].tour
+    const tcfg = TABLE_BY_ID[String(G.handId || '').split('-')[0]];
+    if (p.bot) plan[id] = tcfg && tcfg.tour
       ? { stack: p.chips < G.boot * 20 ? G.boot * ENGINE.BOT_STACK_MULT : p.chips, seatState: 'seated' }
-      : { stack: p.chips, seatState: p.chips < G.boot ? 'standing' : 'seated' };
+      : tcfg && tcfg.test ? { stack: p.chips, seatState: p.chips < G.boot ? 'standing' : 'seated' }
+      : { stack: p.chips, seatState: 'standing' };                 // a bot left over at a public table stands up for good
     else plan[id] = { stack: p.chips, seatState: (p.chips < G.boot || p.standAfter) ? 'standing' : 'seated' };
   }
   return plan;
