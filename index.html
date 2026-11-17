@@ -3460,11 +3460,21 @@ body .cc .ccglines i{font-style:normal;font-size:10px;color:var(--mute);white-sp
 .fstage .gart{top:calc(var(--u) * 50);height:calc(var(--u) * 190)}
 .fstage .glock{width:calc(var(--u) * 96);height:calc(var(--u) * 96);padding:calc(var(--u) * 22)}
 .fstage .gtile.soon .gcta{font-size:max(7.5px,calc(var(--u) * 14));padding:calc(var(--u) * 8) calc(var(--u) * 16)}
-/* ===== 83. Liquid glass pop-ups ===== */
-.sheetback.tile.lgback{background:rgba(6,4,2,.28);-webkit-backdrop-filter:none;backdrop-filter:none}
-.sheetback .sheet.lgon{background:transparent !important;box-shadow:none !important}
-.sheetback .sheet.lgon>*{position:relative;z-index:3}
-.sheetback .sheet[data-lg]{pointer-events:auto !important}   /* liquidGL makes its pane ignore taps; the pop-up's buttons must still work */
+/* ===== 83. Liquid glass pop-ups =====
+   From the moment it opens the pop-up is tinted frosted glass; once the liquid glass is drawn underneath it eases into it.
+   The green tint always stays, so text is readable whatever is behind. */
+.sheetback.tile.lgback{background:rgba(6,4,2,.3);-webkit-backdrop-filter:none;backdrop-filter:none}
+.sheetback .sheet[data-lg]{background:rgba(9,50,31,.88) !important;-webkit-backdrop-filter:blur(14px) saturate(1.2) !important;backdrop-filter:blur(14px) saturate(1.2) !important;
+  transition:background-color .5s ease,-webkit-backdrop-filter .5s ease,backdrop-filter .5s ease;pointer-events:auto !important}
+.sheetback .sheet[data-lg].lgon{background:rgba(9,50,31,.62) !important;-webkit-backdrop-filter:blur(2px) !important;backdrop-filter:blur(2px) !important}
+.sheetback .sheet[data-lg]>*{position:relative;z-index:3}
+/* ===== 84. Login card as light frosted glass (same idea as the pop-ups, in the lounge's cream) ===== */
+.lwrap .lpanel[data-lg]{background:rgba(252,247,236,.84) !important;-webkit-backdrop-filter:blur(14px) saturate(1.15) !important;backdrop-filter:blur(14px) saturate(1.15) !important;
+  border:max(1px,calc(var(--u) * 3)) solid rgba(217,183,104,.9) !important;transition:background-color .5s ease,-webkit-backdrop-filter .5s ease,backdrop-filter .5s ease;pointer-events:auto !important}
+.lwrap .lpanel[data-lg].lgon{background:rgba(252,247,236,.6) !important;-webkit-backdrop-filter:blur(2px) !important;backdrop-filter:blur(2px) !important;box-shadow:0 calc(var(--u) * 20) calc(var(--u) * 50) rgba(60,40,10,.18) !important}
+.lwrap .lpanel[data-lg]>*{position:relative;z-index:3}
+.lwrap:has(.lpanel[data-lg]){transform:none !important;animation:none !important;filter:none !important}
+.lwrap .lpanel[data-lg] .lfield{background:rgba(255,255,255,.72) !important}
 /* ===== 79. Console: the Test tab (create a test table, its runs, their stats and games) ===== */
 body .cc .ccnav{grid-template-columns:repeat(6,1fr)}
 body .cc .ccnav button{font-size:10px}
@@ -13824,6 +13834,7 @@ function render() {
   document.body.classList.toggle('lobland', false);
   document.body.dataset.screen = r.name;
   if (r.name === 'table') Fx.after(); else { Fx.leave(); Auto.stop(); }
+  Glass.page();
 }
 
 function renderLoading() {
@@ -15887,12 +15898,35 @@ const Glass = {
       if (Sheets.el !== back) return;
       try {
         Glass.lens = liquidGL({ target: '[data-lg="' + key + '"]', snapshot: 'body', resolution: 1.5, refraction: 0.014, bevelDepth: 0.08, bevelWidth: 0.12,
-          frost: 1.5, shadow: true, specular: true, reveal: 'fade', tint: 'rgba(6,46,28,0.5)', on: { init() { sh.classList.add('lgon'); } } });
+          frost: 1.5, shadow: true, specular: true, reveal: 'none', tint: 'rgba(6,46,28,0.2)', on: { init() { requestAnimationFrame(() => sh.classList.add('lgon')); } } });
       } catch (e) { console.warn('[TeenPatti] glass', e && e.message); back.classList.remove('lgback'); }
     }, 380);
   },
   detach() {
     const L = Glass.lens; Glass.lens = null; if (!L) return;
+    (Array.isArray(L) ? L : [L]).forEach(x => { try { x && x.destroy && x.destroy(); } catch (e) { /* already gone */ } });
+  },
+  /* the login card (and the sign-up, verify and waiting cards on the same picture): light frosted glass */
+  pageEl: null, pageLens: null,
+  page() {
+    const el = document.querySelector('#screen .lwrap .lpanel');
+    if (el && el === Glass.pageEl) return;
+    Glass.pageDetach();
+    if (!el || typeof window.liquidGL !== 'function' || !Glass.on()) return;
+    const key = 'p' + Date.now().toString(36);
+    Glass.pageEl = el; el.dataset.lg = key;
+    // the glass is drawn on a layer at the end of the page: the card must stack above it, so the opening animation moves from the picture to the card
+    const wrap = el.closest('.lwrap'); if (wrap && wrap.classList.contains('enter')) { wrap.classList.remove('enter'); el.classList.add('enter'); }
+    setTimeout(() => {
+      if (Glass.pageEl !== el || !el.isConnected) return;
+      try {
+        Glass.pageLens = liquidGL({ target: '[data-lg="' + key + '"]', snapshot: 'body', resolution: 1.5, refraction: 0.012, bevelDepth: 0.07, bevelWidth: 0.1,
+          frost: 1.5, shadow: true, specular: true, reveal: 'none', tint: 'rgba(255,248,230,0.15)', on: { init() { requestAnimationFrame(() => el.classList.add('lgon')); } } });
+      } catch (e) { console.warn('[TeenPatti] glass', e && e.message); }
+    }, 450);
+  },
+  pageDetach() {
+    const L = Glass.pageLens; Glass.pageLens = null; Glass.pageEl = null; if (!L) return;
     (Array.isArray(L) ? L : [L]).forEach(x => { try { x && x.destroy && x.destroy(); } catch (e) { /* already gone */ } });
   }
 };
@@ -16226,7 +16260,7 @@ const Sheets = {
   // The six boots of a mode (Classic = Quick Play, or Variant): buy-in, the three caps and how many are seated.
   boots(mode) {
     const isVar = mode === 'variant', ids = isVar ? LB_VARIANT_IDS : LB_CLASSIC_IDS;
-    const head = h('div', { class: 'brow bhead' }, ...['Boot', 'Buy-in', 'Blind cap', 'Chaal cap', 'Pot limit', 'Seats', ''].map(t => h('span', { text: t })));
+    const head = h('div', { class: 'brow bhead' }, ...['Boot', 'Buy-in', 'Blind', 'Chaal', 'Pot', 'Seats', ''].map(t => h('span', { text: t })));
     const rows = ids.map(id => {
       const t = TABLE_BY_ID[id], st = tileState(t), full = st.usable && !st.mine && st.n >= seatCap(id), off = !st.usable || full;
       return h('button', { type: 'button', class: 'brow trow' + (st.mine ? ' mine' : '') + (off ? ' off' : ''), 'data-table': id, disabled: !st.usable,
