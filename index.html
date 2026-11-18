@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build:20261119b -->
+<!-- build:20261119c -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -4037,6 +4037,31 @@ body .cc .cctlist>*{min-width:0}
 .rmfine{margin:0;text-align:center;font:500 11px system-ui;color:#9fb5a7}
 .rmbtns{background:none !important;border:0 !important;box-shadow:none !important;padding:0 !important}
 .rmbtn{flex:0 1 calc(var(--u) * 190) !important;max-width:calc(var(--u) * 190) !important}
+/* ===== 101. Rummy: timers like Teen Patti, your seat, the Show tile ===== */
+.rmtimer{position:absolute;left:-14%;top:-14%;width:128%;height:128%;transform:rotate(-90deg);pointer-events:none;overflow:visible}
+.rmtimer circle{fill:none;stroke-width:5;stroke-linecap:round}
+.rmtimer .rmtk{stroke:rgba(0,0,0,.55)}
+.rmtimer .rmtp{stroke:#2ee59d;transition:stroke-dashoffset .25s linear,stroke .5s;filter:drop-shadow(0 0 3px currentColor)}
+.rmring{display:none}
+.rmsecs{position:absolute;min-width:calc(var(--u) * 52);padding:calc(var(--u) * 4) calc(var(--u) * 8);border-radius:99px;background:rgba(4,18,12,.9);border:max(1px,calc(var(--u) * 2)) solid #2ee59d;color:#2ee59d;font:800 max(9px,calc(var(--u) * 20))/1 system-ui;text-align:center;font-variant-numeric:tabular-nums;z-index:4}
+.rmseat .rmsecs{top:calc(var(--u) * 6);right:calc(var(--u) * -6)}
+.rmmeseat{display:flex;flex-direction:column;align-items:center;gap:calc(var(--u) * 6);z-index:4}
+.rmmering{position:relative;width:calc(var(--u) * 124);height:calc(var(--u) * 124);flex:none}
+.rmmeface{width:100%;height:100%;border-radius:50%;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 50% 35%,#2b7a52,#0b3b24);border:calc(var(--u) * 5) solid #d4ad66;box-shadow:0 calc(var(--u) * 8) calc(var(--u) * 18) rgba(0,0,0,.55);font-size:calc(var(--u) * 62)}
+.rmmeface .avimg{width:100%;height:100%;object-fit:cover}
+.rmmeseat.on .rmmeface{border-color:#ffe9a6;box-shadow:0 0 calc(var(--u) * 26) rgba(255,215,110,.7)}
+.rmmeseat.out .rmmeface{filter:brightness(.65) saturate(.6)}
+.rmmeseat .rmsecs{top:calc(var(--u) * 40);left:calc(var(--u) * 68)}
+.rmmeplate{display:flex;align-items:center;gap:calc(var(--u) * 12);height:calc(var(--u) * 54);padding:0 calc(var(--u) * 8) 0 calc(var(--u) * 22);border-radius:99px;background:linear-gradient(180deg,#14422c,#0a2c1c);border:max(1px,calc(var(--u) * 2.5)) solid #d4ad66;box-shadow:0 calc(var(--u) * 5) calc(var(--u) * 12) rgba(0,0,0,.5)}
+.rmmeplate b{font:800 max(11px,calc(var(--u) * 26))/1 system-ui;color:#fff3d6;max-width:calc(var(--u) * 170);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rmmeplate .rmpts{padding:calc(var(--u) * 8) calc(var(--u) * 14) !important;border-radius:99px;font:800 max(9px,calc(var(--u) * 19))/1 system-ui !important;background:rgba(0,0,0,.4);color:#ffe9b0;border:1px solid rgba(226,189,107,.45)}
+.rmmeplate .rmpts.ok{background:rgba(20,110,60,.95);color:#eafff3;border-color:#7dffc0}
+.rmshowt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u) * 6);border-radius:calc(var(--u) * 12);border:max(1.5px,calc(var(--u) * 3)) dashed rgba(226,189,107,.55);background:rgba(0,0,0,.18);z-index:2}
+.rmshowt b{font:900 max(9px,calc(var(--u) * 22))/1 system-ui;letter-spacing:.14em;color:rgba(255,233,176,.75)}
+.rmshowt span{font:600 max(7px,calc(var(--u) * 15))/1.1 system-ui;color:rgba(255,233,176,.65);text-align:center}
+.rmshowt.can{border-color:#f2c75c;background:rgba(242,199,92,.12);animation:rmpulse 1.4s ease-in-out infinite}
+.rmshowt.can b{color:#ffe08a}
+.rmshowt.rdrop{border-style:solid;border-color:#7dffc0;background:rgba(125,255,192,.18);box-shadow:0 0 calc(var(--u) * 26) rgba(125,255,192,.7)}
 </style>
 </head>
 <body>
@@ -13715,7 +13740,7 @@ class AppError extends Error {}
 let toastTimer = null;
 /* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
    few bytes of the current file; if its build is newer, a banner offers a reload. */
-const BUILD = '20261119b';
+const BUILD = '20261119c';
 const Fresh = {
   at: 0, shown: false,
   async check(force) {
@@ -15588,14 +15613,19 @@ const RM = {
     else groups.push([c]);
     RM.groups = groups.filter(gr => gr.length); RM.sel = RM.sel.filter(x => x !== c); scheduleRender();
   },
+  askShow() {
+    if (!RM.myTurn() || RM.g.phase !== 'discard' || RM.sel.length !== 1) return;
+    const c = RM.sel[0], rest = RM.groups.map(gr => gr.filter(x => x !== c)).filter(gr => gr.length), ok = Rummy.validShow(rest, RM.g.wild);
+    RM.ask('Are you sure you want to show?', 'You put away ' + Rummy.label(c) + ' and show your other 13 cards. ' + (ok ? 'Your groups look valid.' : 'Careful: your groups do not look valid yet. A wrong show costs 80 points.'), 'Yes, show', () => RM.declare());
+  },
   sort() {
     const me = RM.me(); if (!me) return;
     RM.groups = Rummy.arrange(me.hand, RM.g.wild).map(gr => gr.slice()); RM.sel = []; scheduleRender();
   },
   ask(title, text, yesText, fn) {
-    const yes = h('button', { id: 'rmYes', type: 'button', class: 'btn-primary', text: yesText, onclick: () => { Sheets.close(); fn(); } });
-    const no = h('button', { id: 'rmNo', type: 'button', class: 'btn-secondary', text: 'Cancel', onclick: () => Sheets.close() });
-    Sheets.open('rmAsk', title, h('div', { class: 'setlist' }, h('p', { class: 'hnote leavemsg', text }), h('div', { class: 'leaverow' }, no, yes)));
+    const yes = h('button', { id: 'rmYes', type: 'button', class: 'rmrbtn gold', text: yesText, onclick: () => { Sheets.close(); fn(); } });
+    const no = h('button', { id: 'rmNo', type: 'button', class: 'rmrbtn ghost', text: 'Cancel', onclick: () => Sheets.close() });
+    Sheets.open('rmAsk', title, h('div', { class: 'rmresult' }, h('p', { class: 'hnote leavemsg', text }), h('div', { class: 'rmrbtns' }, no, yes)));
   },
   leave() {
     const me = RM.me();
@@ -15719,6 +15749,8 @@ const RMDrag = {
   // what is under the finger
   target(x, y) {
     const list = document.elementsFromPoint(x, y), d = RMDrag.s;
+    const showT = list.find(n => n.dataset && n.dataset.drop === 'show');
+    if (showT) return { kind: 'show', el: showT };
     const pile = list.find(n => n.classList && n.classList.contains('open') && n.classList.contains('rc'));
     if (pile) return { kind: 'pile', el: pile };
     const card = list.find(n => n.classList && n.classList.contains('hand') && n.dataset.c && (!d || n.dataset.c !== d.c));
@@ -15742,6 +15774,10 @@ const RMDrag = {
         return;
       }
       toast(RM.myTurn() ? 'Pick a card first, then throw one.' : 'Wait for your turn to throw a card.');
+    } else if (t && t.kind === 'show') {
+      done();
+      if (RM.myTurn() && RM.g.phase === 'discard') { RM.sel = [d.c]; scheduleRender(); RM.askShow(); return; }
+      toast(RM.myTurn() ? 'Pick a card first, then drag the card to put away here.' : 'Wait for your turn to show.'); return;
     } else if (t && t.kind === 'group') { done(); RM.place(d.c, t.gi, t.idx); return; }
     else if (t && t.kind === 'new') { done(); RM.place(d.c, -1); return; }
     // back to where it was
@@ -15765,7 +15801,22 @@ function rmMini(c, wild) {
   return h('span', { class: 'rmini' + (su === 'h' || su === 'd' ? ' red' : '') + (pj || Rummy.isJoker(c, wild) ? ' j' : '') }, pj ? '★' : rmRankName(Rummy.rankOf(c)) + RM_SUITS[su]);
 }
 const rmPos = (x, y) => 'left:' + (x / RT_W * 100).toFixed(3) + '%;top:' + (y / RT_H * 100).toFixed(3) + '%';
-const rmRing = (start, ends) => { const ms = Math.max(1, ends - start), done = Math.min(ms, Date.now() - start); return h('i', { class: 'rmring', style: 'animation-duration:' + ms + 'ms;animation-delay:-' + done + 'ms' }); };
+const rmRing = (start, ends) => {
+  const R = 34, C = 2 * Math.PI * R;
+  return h('svg', { class: 'rmtimer', viewBox: '0 0 76 76', 'data-s': start, 'data-e': ends, 'aria-hidden': 'true' },
+    h('circle', { cx: 38, cy: 38, r: R, class: 'rmtk' }), h('circle', { cx: 38, cy: 38, r: R, class: 'rmtp', style: 'stroke-dasharray:' + C.toFixed(1) + ';stroke-dashoffset:0' }));
+};
+// keeps every Rummy timer moving (four times a second)
+function rmTick() {
+  if (!S.route || S.route.name !== 'rummy') return;
+  document.querySelectorAll('#rummyStage .rmtimer').forEach(svg => {
+    const s0 = +svg.dataset.s, e0 = +svg.dataset.e, f = Math.max(0, Math.min(1, (e0 - Date.now()) / Math.max(1, e0 - s0))), col = timerColor(f);
+    const arc = svg.querySelector('.rmtp'); arc.style.strokeDashoffset = String((2 * Math.PI * 34 * (1 - f)).toFixed(1)); arc.style.stroke = col;
+    const sec = svg.parentNode && svg.parentNode.parentNode && svg.parentNode.parentNode.querySelector('.rmsecs');
+    if (sec) { sec.textContent = Math.max(0, Math.ceil((e0 - Date.now()) / 1000)) + 's'; sec.style.color = col; sec.style.borderColor = col; }
+  });
+}
+setInterval(rmTick, 250);
 
 function renderRummy() {
   const B = fbox(RT_W, RT_H), g = RM.g, parts = [];
@@ -15785,6 +15836,7 @@ function renderRummy() {
     const st = p.uid === g.winner ? 'Declared' : p.status === 'drop' ? 'Dropped' : p.status === 'out' ? 'Wrong show' : p.hand.length + ' cards';
     parts.push(h('div', { class: 'rmseat' + (on ? ' on' : '') + (p.status !== 'in' ? ' out' : '') + (p.uid === g.winner ? ' won' : ''), style: rmPos(x, y), id: 'rmSeat_' + p.uid },
       h('div', { class: 'rmav' }, avatarNode(p.av), on ? rmRing(RM.turnStart, RM.endsAt) : null),
+      on ? h('span', { class: 'rmsecs' }) : null,
       h('b', { class: 'rmname', text: p.name }),
       h('span', { class: 'rmst', text: st })));
   }
@@ -15799,6 +15851,9 @@ function renderRummy() {
   parts.push(h('i', { class: 'rmcount', style: B(272, 822, 392, 852), text: g.closed.length + ' left' }));
   parts.push(top0 ? rmCard(top0, g.wild, 'open' + (openOk ? ' can' : ''), B(495, 650, 615, 818), () => RM.draw('open')) : h('div', { class: 'rc empty open', style: B(495, 650, 615, 818) }));
   parts.push(h('i', { class: 'rmcount', style: B(455, 822, 655, 852), text: 'open pile' }));
+  const canShowNow = myTurn && g.phase === 'discard';
+  parts.push(h('div', { class: 'rmshowt' + (canShowNow ? ' can' : ''), id: 'rmShowTile', 'data-drop': 'show', style: B(648, 662, 752, 806) }, h('b', { text: 'SHOW' }), h('span', { text: canShowNow ? 'drop a card' : '' })));
+  parts.push(h('i', { class: 'rmcount', style: B(620, 822, 780, 852), text: 'show' }));
 
   // what is going on
   const cur = Rummy.cur(g);
@@ -15843,19 +15898,23 @@ function renderRummy() {
     if (canEdit) btns.push(B2('rmSort', 'Sort', () => RM.sort(), 'ghost'));
     if (canEdit && RM.sel.length >= 2) btns.push(B2('rmGroup', 'Group', () => RM.group(), 'ghost'));
     if (myTurn && g.phase === 'draw') btns.push(B2('rmDrop', 'Drop', () => RM.drop(), 'warn'));
-    if (myTurn && g.phase === 'discard' && RM.sel.length === 1) { btns.push(B2('rmDiscard', 'Throw', () => RM.discard())); btns.push(B2('rmShow', 'Show', () => RM.ask('Show your cards?', 'The selected card is put away and your groups are checked. If they are not valid you lose 80 points.', 'Show', () => RM.declare()), 'gold')); }
+    if (myTurn && g.phase === 'discard' && RM.sel.length === 1) { btns.push(B2('rmDiscard', 'Throw', () => RM.discard())); btns.push(B2('rmShow', 'Show', () => RM.askShow(), 'gold')); }
     if (final && me.status === 'in' && g.winner !== RM.ME) btns.push(B2('rmSubmit', 'Submit', () => RM.submit(), 'gold'));
     parts.push(h('div', { class: 'rmbtns' + (btns.length ? '' : ' empty'), style: B(L.left0 + 20, L.btnY, L.left0 + L.AV - 20, L.btnY + 70) }, btns));
-    // your name plate: points as your cards are grouped now
-    parts.push(h('div', { class: 'rmme' + (myTurn ? ' on' : ''), style: B(L.left0 + 30, 1450, L.left0 + L.AV - 30, 1528) },
-      h('span', { class: 'rmmeav' }, avatarNode(me.av), myTurn || (final && me.status === 'in' && g.winner !== RM.ME) ? rmRing(RM.turnStart, RM.endsAt) : null),
-      h('b', { text: me.name }),
-      h('span', { class: 'rmpts' + (sc.valid ? ' ok' : ''), text: sc.valid ? 'Ready to show' : 'Points: ' + sc.points })));
+    // your seat: the picture in a gold ring with the timer around it, and a plate with your name and points (like Teen Patti)
+    const ticking = myTurn || (final && me.status === 'in' && g.winner !== RM.ME);
+    parts.push(rmMeSeat(me, ticking, sc.valid ? 'Ready to show' : sc.points + ' pts', sc.valid ? 'ok' : '', B));
   } else {
-    parts.push(h('div', { class: 'rmme out', style: B(70, 1440, 817, 1540) }, h('span', { class: 'rmmeav' }, avatarNode(me.av)), h('b', { text: me.name }), h('span', { class: 'rmpts', text: (me.status === 'drop' ? 'Dropped' : 'Wrong show') + ' · ' + me.points + ' points' })));
+    parts.push(rmMeSeat(me, false, (me.status === 'drop' ? 'Dropped' : 'Wrong show') + ' · ' + me.points, 'out', B));
   }
   if (g.over && RM.result && !Sheets.el) parts.push(h('button', { type: 'button', class: 'rmbtn gold', id: 'rmSeeResult', style: B(293, 1350, 593, 1420), text: 'See result', onclick: () => RM.showResult() }));
   return fitStage('p_rmtable', RT_W, RT_H, 'rummyStage', parts, 'prummy', top);
+}
+function rmMeSeat(me, ticking, pts, cls, B) {
+  return h('div', { class: 'rmmeseat ' + (ticking ? 'on ' : '') + cls, style: B(243, 1420, 643, 1640) },
+    h('div', { class: 'rmmering' }, h('div', { class: 'rmmeface' }, avatarNode(me.av)), ticking ? rmRing(RM.turnStart, RM.endsAt) : null),
+    ticking ? h('span', { class: 'rmsecs' }) : null,
+    h('div', { class: 'rmmeplate' }, h('b', { text: me.name === 'You' ? 'You' : me.name }), h('span', { class: 'rmpts ' + cls, text: pts })));
 }
 // choose the number of players and the point value, then deal
 function rmSetup(B) {
