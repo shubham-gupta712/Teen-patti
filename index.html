@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build:20261118j -->
+<!-- build:20261118k -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -3950,6 +3950,16 @@ body .cc .cctlist>*{min-width:0}
 .phome .htiles.four .htcta.soon{font-size:9px !important;padding:0 10px !important}
 .phome .htile2.board .htart:not(.htemoji),.phome .htile2.slots .htart:not(.htemoji){filter:saturate(1.05) !important;
   -webkit-mask-image:radial-gradient(ellipse 78% 88% at 34% 58%,#000 52%,transparent 100%);mask-image:radial-gradient(ellipse 78% 88% at 34% 58%,#000 52%,transparent 100%)}
+/* ===== 98. Inner screens: a polished back button and chip balance (emerald with a gold rim), readable on light walls ===== */
+.stop .pback2,.stop .hchips{background:radial-gradient(120% 140% at 30% 15%,#2a6e4c 0%,#0f3d29 45%,#06201a 100%) !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+  border:1.5px solid #e6bb5c !important;box-shadow:inset 0 1px 0 rgba(255,236,180,.35),inset 0 -2px 6px rgba(0,0,0,.35),0 0 0 3px rgba(0,0,0,.18),0 8px 18px rgba(0,0,0,.4) !important}
+.stop .pback2{width:42px !important;height:42px !important;padding:11px !important;color:#ffd977 !important}
+.stop .pback2 svg,.stop .pback2 .pico{filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
+.stop .hchips{height:42px;padding:0 5px 0 8px !important;gap:8px !important;border-radius:99px !important}
+.stop .hchips .pchip{width:26px;height:26px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
+.stop .hchips b{font:800 16px/1 system-ui !important;color:#fff1c4 !important;letter-spacing:.02em;text-shadow:0 1px 2px rgba(0,0,0,.6) !important}
+.stop .hchips .pplus{width:30px !important;height:30px !important;border-radius:50% !important;display:grid !important;place-items:center;font-size:18px !important;line-height:1 !important}
+.stop .pback2:active,.stop .hchips:active{transform:translateY(1px);filter:brightness(.95)}
 </style>
 </head>
 <body>
@@ -13628,7 +13638,7 @@ class AppError extends Error {}
 let toastTimer = null;
 /* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
    few bytes of the current file; if its build is newer, a banner offers a reload. */
-const BUILD = '20261118j';
+const BUILD = '20261118k';
 const Fresh = {
   at: 0, shown: false,
   async check(force) {
