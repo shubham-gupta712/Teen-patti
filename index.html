@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build:20261118g -->
+<!-- build:20261118h -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -3827,6 +3827,75 @@ body .cc .ccnav{position:relative;left:auto;right:auto;bottom:auto;flex:none;mar
 .rc.hand.wild:after{width:calc(var(--u) * 22);height:calc(var(--u) * 22);font-size:calc(var(--u) * 14);line-height:calc(var(--u) * 22);left:calc(var(--u) * 7);right:auto;top:calc(var(--u) * 74)}
 .rc.hand.done{box-shadow:0 0 0 max(1px,calc(var(--u) * 3)) rgba(125,255,192,.75),0 calc(var(--u) * 8) calc(var(--u) * 14) rgba(0,0,0,.45)}
 .rc.hand.done.sel{box-shadow:0 0 0 calc(var(--u) * 5) #f2c75c,0 calc(var(--u) * 10) calc(var(--u) * 18) rgba(0,0,0,.55)}
+/* ===== 94. Console: a neater, more compact layout (smaller controls, metric cards in a row style, list-like tools) ===== */
+.cc .cchead{padding:calc(8px + env(safe-area-inset-top)) 12px 8px !important;gap:6px !important}
+.cc .ccmark{width:30px;height:30px;font-size:15px}
+.cc .ccbrand b{font-size:15px}.cc .ccbrand i{font-size:9.5px}
+.cc .cchead .ccicon,.cc .ccavatar{width:34px !important;height:34px !important;border-radius:10px}
+.cc .ccavatar{border-radius:50% !important;font-size:13px}
+.cc .cchead .cci{width:18px;height:18px}
+body .cc .ccmain{padding:10px 12px 0 !important}
+body .cc .ccpage{gap:10px}
+.cc .ccpagehead h2,.cc .cctoolbar h2{font-size:18px !important}
+.cc .ccsec{gap:8px}
+/* segmented rows: smaller and lighter */
+.cc .ccgamehead{gap:6px !important;margin-bottom:2px}
+.cc .cccats{padding:3px !important;border-radius:12px !important}
+.cc .ccgamehead .cccats button,.cc .cccats button{min-height:34px !important;font-size:13px !important;border-radius:9px !important}
+.cc .ccgrow{padding:3px !important;border-radius:11px !important}
+.cc .ccgamehead .ccgrow button,.cc .ccgrow button{min-height:30px !important;font-size:12.5px !important;border-radius:8px !important;padding:0 10px !important}
+.cc .ccsecs{display:flex !important;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.cc .ccsecs::-webkit-scrollbar{display:none}
+.cc .ccgamehead .ccsecs button,.cc .ccsecs button{flex:none;min-height:30px !important;height:30px;padding:0 11px;border-radius:99px !important;font-size:12px !important;gap:5px}
+.cc .ccsecs button .cci{width:14px;height:14px}
+.cc .cccatrow button{height:30px !important;padding:0 12px !important;font-size:12px !important}
+/* metric cards: icon beside the number */
+.cc .ccmetrics{gap:8px !important}
+.cc .ccmetric{display:grid !important;grid-template-columns:30px 1fr;grid-template-rows:auto auto auto;column-gap:10px;row-gap:0;align-items:center;padding:10px 12px !important;border-radius:14px !important}
+.cc .ccmetric .ccmic{grid-row:1/4;width:30px !important;height:30px !important;margin:0 !important;border-radius:9px}
+.cc .ccmetric .ccmic .cci{width:16px;height:16px}
+.cc .ccmetric b{font-size:18px !important;line-height:1.1}
+.cc .ccmetric span{font-size:11.5px !important}
+.cc .ccmetric i{font-size:10.5px !important}
+/* tools and "new" tiles: tidy rows */
+.cc .cctoolgrid{grid-template-columns:1fr !important;gap:8px !important}
+.cc .cctoolt{display:grid !important;grid-template-columns:36px 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center;min-height:0 !important;padding:11px 12px !important;border-radius:14px !important}
+.cc .cctoolt .ccmic{grid-row:1/3;width:36px !important;height:36px !important}
+.cc .cctoolt b{font-size:14px !important}.cc .cctoolt span:last-child{font-size:11.5px !important}
+.cc .ccnewtile{display:grid;grid-template-columns:36px 1fr 28px;column-gap:12px;align-items:center;width:100%;padding:11px 12px;border-radius:14px;border:1px dashed color-mix(in srgb,var(--acc) 55%,transparent);background:linear-gradient(160deg,color-mix(in srgb,var(--acc) 12%,transparent),rgba(255,255,255,.03));color:var(--tx);text-align:left;cursor:pointer}
+.cc .ccnewtile .ccmic{width:36px;height:36px;background:linear-gradient(150deg,color-mix(in srgb,var(--acc) 32%,transparent),color-mix(in srgb,var(--acc2) 18%,transparent)) !important;color:#fff !important;border-color:color-mix(in srgb,var(--acc) 50%,transparent) !important}
+.cc .ccnewtile>div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.cc .ccnewtile b{font:700 14px system-ui}.cc .ccnewtile span{font:500 11.5px/1.35 system-ui;color:var(--mute)}
+.cc .ccnewtile .ccplus{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#0a0d22;font:800 18px/1 system-ui}
+/* Home: the games, one line each */
+.cc .ccglist{display:flex;flex-direction:column;gap:6px}
+.cc .ccgcat{padding:4px 2px 0;font:800 10px system-ui;letter-spacing:.14em;color:var(--dim)}
+.cc .ccgline{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.025));color:var(--tx);text-align:left;cursor:pointer}
+.cc .ccgline .ccgsym{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.06);font-style:normal;font-size:15px}
+.cc .ccgline .ccgsym.red{color:#ff8e9d}
+.cc .ccgline>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.cc .ccgline b{font:700 13.5px system-ui}.cc .ccgline span{font:500 11px system-ui;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cc .ccgline.live{border-color:rgba(110,231,183,.35)}
+/* forms, buttons and pickers */
+.cc .ccbtn{min-height:38px !important;font-size:13.5px !important;border-radius:11px !important}
+.cc .ccbtn.sm{min-height:30px !important;font-size:12px !important}
+.cc input,.cc select,.cc textarea{font-size:14px !important}
+.cc .cctf input,.cc .cctform input{height:38px !important;min-height:0 !important;padding:0 10px !important}
+.cc .cctseg button,.cc .cctform button:not(.ccbtn){min-height:34px !important;height:34px;font-size:13px !important}
+.cc .ccrmpick button{min-width:44px !important;height:34px !important;font-size:13.5px !important;border-radius:10px !important}
+.cc .ccrmform{padding:12px !important;gap:6px !important}
+.cc .ccrsoon{padding:18px 14px !important}
+.cc .ccrsicon{width:44px !important;height:44px !important;font-size:20px !important}
+.cc .ccrsoon b{font-size:15px !important}.cc .ccrsoon span,.cc .ccrsoon li{font-size:12px !important}
+.cc .ccalert{padding:10px 12px !important}
+/* the bottom bar: slimmer */
+body .cc .ccnav{margin:4px 10px calc(6px + env(safe-area-inset-bottom)) !important;padding:4px !important;border-radius:20px !important}
+.cc .ccnav button{min-height:46px !important;padding:4px 0 3px !important;border-radius:15px !important;font-size:10px !important;gap:2px !important}
+.cc .ccnav .cci{width:20px !important;height:20px !important}
+.cc .ccnav .ccnavic{height:22px !important}
+.cc .ccsecs{display:grid !important;grid-template-columns:repeat(5,1fr);gap:4px !important;overflow:visible;padding:3px !important;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+.cc .ccgamehead .ccsecs button,.cc .ccsecs button{flex-direction:column;height:auto;min-height:44px !important;padding:5px 2px !important;border-radius:9px !important;font-size:10px !important;gap:3px;border:0;background:none;white-space:nowrap;letter-spacing:0}
+.cc .ccsecs button .cci{width:16px;height:16px}
 </style>
 </head>
 <body>
@@ -13505,7 +13574,7 @@ class AppError extends Error {}
 let toastTimer = null;
 /* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
    few bytes of the current file; if its build is newer, a banner offers a reload. */
-const BUILD = '20261118g';
+const BUILD = '20261118h';
 const Fresh = {
   at: 0, shown: false,
   async check(force) {
@@ -17900,8 +17969,8 @@ Object.assign(Admin, {
     if (a.usersErr) out.push({ k: 'bad', t: 'Players could not load', d: a.usersErr });
     if (a.rulesAt && Date.now() - a.rulesAt < 10 * 60000) out.push({ k: 'bad', t: 'A change was refused', d: 'The database rules refused an action. Publish the latest rules if this keeps happening.' });
     const missing = pub.filter(t => S.roomsLoaded[t.id] && !S.rooms[t.id]).length;
-    if (missing) out.push({ k: 'warn', t: missing + (missing === 1 ? ' table is' : ' tables are') + ' not set up', d: 'Open Tables and set them up.', go: 'tables' });
-    TABLES.forEach(t => { const d = S.rooms[t.id]; if (d && (d.seated || 0) > 0 && d.hostUid && !hostLive(d, 60000)) out.push({ k: 'warn', t: tableName(t) + ': dealer offline', d: 'Players are seated but nobody is dealing. A player there takes over within seconds, or reassign it.', table: t.id }); });
+    if (missing) out.push({ k: 'warn', t: 'Teen Patti: ' + missing + (missing === 1 ? ' table is' : ' tables are') + ' not set up', d: 'Open Games, Teen Patti, Tables and set them up.', go: 'tables' });
+    TABLES.forEach(t => { const d = S.rooms[t.id]; if (d && (d.seated || 0) > 0 && d.hostUid && !hostLive(d, 60000)) out.push({ k: 'warn', t: 'Teen Patti ' + tableName(t) + ': dealer offline', d: 'Players are seated but nobody is dealing. A player there takes over within seconds, or reassign it.', table: t.id }); });
     const held = us.filter(u => Admin.stateOf(u) === 'held').length;
     if (held) out.push({ k: 'warn', t: held + (held === 1 ? ' seat is' : ' seats are') + ' held', d: 'Players left the app without leaving their table.', go: 'players', f: 'all' });
     const old = Admin.pending().filter(u => Date.now() - ccMs(u.createdAt) > 864e5).length;
@@ -17957,13 +18026,13 @@ function renderAdmin() {
       h('h2', { text: CC_TOOLS[a.view] || '' }));
     const body = a.view === 'tables' ? adminTables(null) : a.view === 'private' ? h('div', {}, adminPrivate(), a.pf ? null : adminSessions()) : a.view === 'tour' ? adminTour()
       : a.view === 'notify' ? adminNotify() : a.view === 'rewards' ? adminRewards() : a.view === 'vip' ? adminVip() : a.view === 'rake' ? adminRake() : adminPlayers();
-    page = h('div', { class: 'cctool t-' + a.view }, back, body);
+    page = a.nav === 'games' && (a.view === 'tour' || a.view === 'private') ? h('div', { class: 'cctool t-' + a.view }, ccGameHead(), body) : h('div', { class: 'cctool t-' + a.view }, back, body);
   } else {
     // Overview, Tables and Test belong to one game: a Teen Patti / Rummy switch sits at the top of them
     if (a.nav === 'games') page = ccGamesPage();
     else page = a.nav === 'players' ? ccPlayers() : a.nav === 'requests' ? ccRequests() : a.nav === 'tools' ? ccTools() : a.nav === 'settings' ? ccSettings() : ccOverview();
   }
-  return h('div', { class: 'cc nav-' + (tool ? (a.view === 'tables' ? 'games' : 'tools') : a.nav) + ' cat-' + (a.cat || 'cards'), id: 'cc' }, ccHeader(), msg, h('main', { class: 'ccmain', id: 'ccMain' }, page), ccNavBar(), a.tsheet ? ccTableSheet(a.tsheet) : null);
+  return h('div', { class: 'cc nav-' + (tool ? (a.nav === 'games' || a.view === 'tables' ? 'games' : 'tools') : a.nav) + ' cat-' + (a.cat || 'cards'), id: 'cc' }, ccHeader(), msg, h('main', { class: 'ccmain', id: 'ccMain' }, page), ccNavBar(), a.tsheet ? ccTableSheet(a.tsheet) : null);
 }
 function ccHeader() {
   const a = Admin.st, nPend = Admin.pending().length, nAlert = Admin.alerts().filter(x => x.k !== 'info').length, bell = nPend + nAlert;
@@ -17984,7 +18053,7 @@ function ccHeader() {
 function ccNavBar() {
   const a = Admin.st, tool = a.view && a.view !== 'hub', nPend = Admin.pending().length;
   return h('nav', { class: 'ccnav', 'aria-label': 'Console sections' }, CC_NAV.map(([k, label, ic]) => {
-    const on = !tool && a.nav === k;
+    const on = (!tool || a.nav === 'games') && a.nav === k;
     return h('button', { type: 'button', id: 'nav_' + k, class: on ? 'on' : '', 'aria-current': on ? 'page' : null, onclick: () => Admin.nav(k) },
       h('span', { class: 'ccnavic' }, ccI(ic), k === 'requests' && nPend ? h('em', { class: 'ccbadge', text: String(nPend) }) : null), h('span', { text: label }));
   }));
@@ -18001,7 +18070,7 @@ const CC_CATS = {
 const CC_SPORTS = ['cricket', 'football', 'basketball'];
 function ccGameTabs() {
   const a = Admin.st, cat = a.cat || 'cards', game = a.game || 'teenpatti';
-  const setG = (c, g) => { if (a.cat === c && a.game === g) return; a.cat = c; a.game = g; a.tsheet = ''; Admin.paint(); const m = $('ccMain'); if (m) m.scrollTop = 0; };
+  const setG = (c, g) => { if (a.cat === c && a.game === g) return; a.cat = c; a.game = g; a.tsheet = ''; if (a.view && a.view !== 'hub') { Admin.go('hub'); a.sec = 'overview'; } Admin.paint(); const m = $('ccMain'); if (m) m.scrollTop = 0; };
   return h('div', { class: 'cccat', id: 'ccGameTabs' },
     h('div', { class: 'cccats', role: 'tablist' }, Object.keys(CC_CATS).map(k => h('button', { type: 'button', role: 'tab', id: 'cat_' + k, class: 'c-' + k + (k === cat ? ' on' : ''), 'aria-selected': k === cat ? 'true' : 'false',
       onclick: () => { if (k !== cat) setG(k, CC_CATS[k][2][0][0]); } }, h('i', { text: CC_CATS[k][1] }), h('span', { text: CC_CATS[k][0] })))),
@@ -18009,21 +18078,32 @@ function ccGameTabs() {
       h('i', { class: g === 'rummy' ? 'red' : '', text: sym }), h('span', { text: label }), g === 'rummy' ? h('em', { text: 'SOON' }) : null))));
 }
 // GAMES: Cards or Sports, then the game, then its sections. Everything about one game lives here.
-const CC_SECS = [['overview', 'Overview', 'grid'], ['tables', 'Tables', 'table'], ['test', 'Test', 'flask']];
+const CC_SECS = [['overview', 'Overview', 'grid'], ['tables', 'Tables', 'table'], ['tour', 'Tournaments', 'trophy'], ['private', 'Private', 'crown'], ['test', 'Test', 'flask']];
+function ccGameHead() {
+  const a = Admin.st, game = a.game || 'teenpatti', sec = a.sec || 'overview';
+  const pick = k => {
+    if (a.sec === k && !(a.view && a.view !== 'hub')) return;
+    a.sec = k; a.tsheet = ''; a.testShown = '';
+    // Teen Patti's tournaments and private table are full tools of their own; shown here under the game
+    if (game === 'teenpatti' && (k === 'tour' || k === 'private')) Admin.go(k); else { if (a.view && a.view !== 'hub') Admin.go('hub'); Admin.watchRake(); Admin.paint(); }
+    const m = $('ccMain'); if (m) m.scrollTop = 0;
+  };
+  const tabs = CC_SPORTS.includes(game) ? null : h('div', { class: 'ccsecs', role: 'tablist', id: 'ccSecTabs' }, CC_SECS.map(([k, label, ic]) =>
+    h('button', { type: 'button', role: 'tab', id: 'sec_' + k, class: 's-' + k + (k === sec ? ' on' : ''), 'aria-selected': k === sec ? 'true' : 'false', onclick: () => pick(k) }, ccI(ic), h('span', { text: label }))));
+  return h('div', { class: 'ccgamehead' }, ccGameTabs(), tabs);
+}
 function ccGamesPage() {
   const a = Admin.st, game = a.game || 'teenpatti', sec = a.sec || 'overview';
   let page;
   if (CC_SPORTS.includes(game)) page = ccSportSoon(game);
   else if (game === 'rummy') page = sec === 'test' ? ccRmTest() : ccRummySoon();
-  else page = sec === 'tables' ? ccTables() : sec === 'test' ? ccTest() : ccTpOverview();
-  const tabs = CC_SPORTS.includes(game) ? null : h('div', { class: 'ccsecs', role: 'tablist', id: 'ccSecTabs' }, CC_SECS.map(([k, label, ic]) =>
-    h('button', { type: 'button', role: 'tab', id: 'sec_' + k, class: 's-' + k + (k === sec ? ' on' : ''), 'aria-selected': k === sec ? 'true' : 'false',
-      onclick: () => { if (a.sec === k) return; a.sec = k; a.tsheet = ''; a.testShown = ''; Admin.paint(); const m = $('ccMain'); if (m) m.scrollTop = 0; } }, ccI(ic), h('span', { text: label }))));
-  page.insertBefore(h('div', { class: 'ccgamehead' }, ccGameTabs(), tabs), page.firstChild);
+  else { if (sec === 'tour' || sec === 'private') a.sec = 'overview'; page = a.sec === 'tables' ? ccTables() : a.sec === 'test' ? ccTest() : ccTpOverview(); }
+  page.insertBefore(ccGameHead(), page.firstChild);
   return page;
 }
 // Teen Patti at a glance: its tables, who is playing, what they have earned.
 function ccTpOverview() {
+  Admin.watchRake();
   const a = Admin.st, pub = TABLES.filter(t => !t.private), rk = a.rake || {};
   const live = pub.filter(t => hostLive(S.rooms[t.id])), setup = pub.filter(t => S.rooms[t.id]).length;
   const seated = TABLES.reduce((n, t) => n + (hostLive(S.rooms[t.id]) ? (S.rooms[t.id].seated || 0) : 0), 0);
@@ -18059,9 +18139,8 @@ function ccTools() {
   const ic = { tour: 'trophy', private: 'crown', notify: 'mail', rewards: 'gift', rake: 'stats', vip: 'shield' };
   const tile = v => { const [, , title, sub] = ADMIN_TILES.find(x => x[0] === v); return h('button', { type: 'button', class: 'cctoolt k-' + v, id: 'tool_' + v, onclick: () => Admin.go(v) }, h('span', { class: 'ccmic' }, ccI(ic[v])), h('b', { text: title }), h('span', { text: sub })); };
   const grid = (title, vs) => h('div', { class: 'ccpage fixed', id: 'toolsPage' }, h('div', { class: 'ccpagehead' }, h('h2', { text: title })), h('div', { class: 'ccscroll' }, h('div', { class: 'cctoolgrid' }, vs.map(tile))));
-  return ccCatPage('tools', [['all', 'All'], ['events', 'Events'], ['players', 'Players'], ['money', 'Money']], {
-    all: () => grid('Tools', ['tour', 'private', 'notify', 'rewards', 'rake', 'vip']),
-    events: () => grid('Events and tables', ['tour', 'private']),
+  return ccCatPage('tools', [['all', 'All'], ['players', 'Players'], ['money', 'Money']], {
+    all: () => grid('Tools', ['notify', 'rewards', 'rake', 'vip']),
     players: () => grid('Messages and rewards', ['notify', 'rewards']),
     money: () => grid('Rake and rakeback', ['rake', 'vip'])
   });
@@ -18075,7 +18154,8 @@ function ccRmTest() {
   return h('div', { class: 'ccpage fixed', id: 'rmTestPage' },
     h('div', { class: 'ccpagehead' }, h('h2', { text: 'Rummy test table' }), h('span', { class: 'ccchip', text: 'You vs bots' })),
     h('div', { class: 'ccscroll' },
-      ccSec('New test table', null, h('div', { class: 'ccrmform' },
+      !Admin.st.rmForm ? ccNewTile('rmNew', 'flask', 'New Rummy test table', 'Players and chips per point. You play against the bots.', () => { Admin.st.rmForm = true; Admin.paint(); }) :
+      ccSec('New test table', h('button', { type: 'button', class: 'ccbtn ghost sm', id: 'rmCancel', onclick: () => { Admin.st.rmForm = false; Admin.paint(); } }, h('span', { text: 'Cancel' })), h('div', { class: 'ccrmform' },
         h('span', { class: 'ccrml', text: 'PLAYERS, WITH YOU' }), pick('rmPlayers', [2, 3, 4, 5, 6], RM.players, v => { RM.players = v; }),
         h('span', { class: 'ccrml', text: 'CHIPS PER POINT' }), pick('rmPoint', Rummy.CFG.tables, RM.perPoint, v => { RM.perPoint = v; }),
         h('p', { class: 'ccnote', text: 'Minimum to sit at this table: ' + fmt(Rummy.minBuyIn(RM.perPoint)) + ' chips. The test table uses no chips; rake is 5%.' }),
@@ -18090,8 +18170,8 @@ function ccRmTest() {
 }
 // Rummy is being built: its overview, tables and test table arrive here.
 function ccRummySoon() {
-  const a = Admin.st, what = a.sec === 'tables' ? 'Rummy tables' : 'Rummy overview';
-  const items = a.sec === 'tables' ? ['Each Rummy table, live or empty', 'Players at each table and their points', 'Game activity by time, like Teen Patti']
+  const a = Admin.st, what = a.sec === 'tables' ? 'Rummy tables' : a.sec === 'tour' ? 'Rummy tournaments' : a.sec === 'private' ? 'Rummy private table' : 'Rummy overview';
+  const items = a.sec === 'tour' ? ['Schedule a Rummy tournament', 'Entries, tables and standings'] : a.sec === 'private' ? ['An invite-only Rummy table with a code and password', 'Its sessions and results'] : a.sec === 'tables' ? ['Each Rummy table, live or empty', 'Players at each table and their points', 'Game activity by time, like Teen Patti']
     : ['Active Rummy tables and players', 'Rake from Rummy games', 'Alerts for stuck tables'];
   return h('div', { class: 'ccpage fixed' },
     h('div', { class: 'ccpagehead' }, h('h2', { text: what }), h('span', { class: 'ccchip', text: 'Coming soon' })),
@@ -18109,21 +18189,38 @@ function ccCatPage(key, cats, make) {
       onclick: () => { st[key] = k; Admin.paint(); const m = $('ccMain'); if (m) m.scrollTop = 0; } }, h('span', { text: label }), n ? h('em', { text: String(n) }) : null))), page.firstChild);
   return page;
 }
+/* A compact tile that opens a form or a set of options. */
+function ccNewTile(id, ic, title, sub, fn) {
+  return h('button', { type: 'button', class: 'ccnewtile', id, onclick: fn }, h('span', { class: 'ccmic' }, ccI(ic)), h('div', {}, h('b', { text: title }), h('span', { text: sub })), h('span', { class: 'ccplus', text: '+' }));
+}
 /* ---- Overview ---- */
 function ccOverview() {
+  Admin.watchRake();
   const a = Admin.st, us = a.users, pub = TABLES.filter(t => !t.private), allT = pub;
   const active = allT.filter(t => hostLive(S.rooms[t.id])).length, setup = allT.filter(t => S.rooms[t.id]).length;
   const online = us ? us.filter(u => Admin.stateOf(u) === 'playing').length : null, pend = Admin.pending(), alerts = Admin.alerts();
   const metric = (id, ic, v, l, sub, cls, fn) => h('button', { type: 'button', class: 'ccmetric ' + (cls || ''), id, onclick: fn }, h('span', { class: 'ccmic' }, ccI(ic)), h('b', { text: v }), h('span', { text: l }), h('i', { text: sub }));
   const out = [];
   out.push(h('div', { class: 'ccmetrics', id: 'ccMetrics' },
-    metric('mTables', 'table', active + '/' + setup, 'Active tables', setup ? (setup - active) + ' quiet' : 'None set up', active ? 'ok' : '', () => Admin.nav('tables')),
     metric('mOnline', 'pulse', online === null ? '…' : String(online), 'Players online', us ? us.filter(u => ccStatus(u) === 'approved').length + ' approved' : '', online ? 'ok' : '', () => { a.filter = 'online'; Admin.nav('players'); a.filter = 'online'; Admin.paint(); }),
-    metric('mRequests', 'inbox', String(pend.length), 'Pending requests', pend.length ? 'oldest ' + ccAgo(ccMs(pend[0].createdAt)) : 'All clear', pend.length ? 'cyan' : '', () => Admin.nav('requests')),
+    metric('mRequests', 'inbox', String(pend.length), 'Requests', pend.length ? 'oldest ' + ccAgo(ccMs(pend[0].createdAt)) : 'All clear', pend.length ? 'cyan' : '', () => Admin.nav('requests')),
+    metric('mRake', 'stats', fmt(Object.values(a.rake || {}).reduce((n, r) => n + (r.total || 0), 0)), 'Rake, all games', 'since the start', '', () => Admin.go('rake')),
     metric('mAlerts', 'alert', String(alerts.filter(x => x.k !== 'info').length), 'System alerts', alerts.length ? alerts[0].t : 'All systems normal', alerts.some(x => x.k === 'bad') ? 'bad' : alerts.some(x => x.k === 'warn') ? 'warn' : '', () => { const el = $('ccHealth'); if (el) el.scrollIntoView({ behavior: 'smooth' }); })));
   out.push(h('div', { class: 'ccscroll' }, ccHealth()));
+  // every game, one line each, the same way
+  const tp = (() => { const pub = TABLES.filter(t => !t.private), live = pub.filter(t => hostLive(S.rooms[t.id])).length, seated = TABLES.reduce((n, t) => n + (hostLive(S.rooms[t.id]) ? (S.rooms[t.id].seated || 0) : 0), 0); return live + ' live tables  \u00b7  ' + seated + ' playing'; })();
+  const gameRow = (cat, g, sym, name, line, live) => h('button', { type: 'button', class: 'ccgline' + (live ? ' live' : ''), id: 'home_' + g, onclick: () => { Object.assign(a, { cat, game: g, sec: 'overview' }); Admin.nav('games'); } },
+    h('i', { class: 'ccgsym' + (g === 'rummy' ? ' red' : ''), text: sym }), h('div', {}, h('b', { text: name }), h('span', { text: line })), h('em', { class: 'ccpill s-' + (live ? 'live' : 'wait'), text: live ? 'Live' : 'Soon' }), ccI('chev', 'end'));
+  const games = ccSec('Games', null, h('div', { class: 'ccglist' },
+    h('div', { class: 'ccgcat' }, h('span', { text: 'CARDS' })),
+    gameRow('cards', 'teenpatti', '\u2660', 'Teen Patti', tp, true),
+    gameRow('cards', 'rummy', '\u2666', 'Rummy', 'Test table ready  \u00b7  opens to players soon', false),
+    h('div', { class: 'ccgcat' }, h('span', { text: 'SPORTS' })),
+    gameRow('sports', 'cricket', '\u{1F3CF}', 'Cricket', 'Being built', false),
+    gameRow('sports', 'football', '\u26BD', 'Football', 'Being built', false),
+    gameRow('sports', 'basketball', '\u{1F3C0}', 'Basketball', 'Being built', false)));
   return ccCatPage('home', [['summary', 'Summary'], ['health', 'Health'], ['activity', 'Activity']], {
-    summary: () => h('div', { class: 'ccpage fixed' }, out[0], h('div', { class: 'ccscroll' }, alerts.length ? ccSec('Needs attention', null, h('div', { class: 'ccalerts' }, alerts.map(x => h(x.go ? 'button' : 'div', { type: x.go ? 'button' : null, class: 'ccalert k-' + x.k, onclick: x.go ? () => Admin.nav(x.go) : null },
+    summary: () => h('div', { class: 'ccpage fixed' }, out[0], h('div', { class: 'ccscroll' }, games, alerts.length ? ccSec('Needs attention', null, h('div', { class: 'ccalerts' }, alerts.map(x => h(x.go ? 'button' : 'div', { type: x.go ? 'button' : null, class: 'ccalert k-' + x.k, onclick: x.go ? () => Admin.nav(x.go) : null },
       ccI(x.k === 'info' ? 'shield' : 'alert'), h('div', {}, h('b', { text: x.t }), h('span', { text: x.d })))))) : ccEmpty('check', 'All clear', 'Nothing needs your attention.'))),
     health: () => h('div', { class: 'ccpage fixed' }, h('div', { class: 'ccscroll' }, ccHealth())),
     activity: () => h('div', { class: 'ccpage fixed' }, h('div', { class: 'ccscroll' }, ccActivity()))
@@ -18316,7 +18413,7 @@ function ccTableSheet(id) {
           h('div', { class: 'ccacts' },
             h('button', { type: 'button', class: 'ccbtn ghost', id: 'tsWatch', onclick: () => { location.hash = '#/table/' + id; } }, ccI('eye'), h('span', { text: 'Watch table' })),
             h('button', { type: 'button', class: 'ccbtn ' + (d.status === 'open' ? 'danger' : 'primary'), id: 'tsToggle', disabled: !!S.busy['tstat_' + id], onclick: toggle }, ccI('power'), h('span', { text: d.status === 'open' ? 'Close table' : 'Open table' })),
-            t.private ? h('button', { type: 'button', class: 'ccbtn ghost', id: 'tsPrivate', onclick: () => { a.tsheet = ''; Admin.go('private'); } }, ccI('crown'), h('span', { text: 'Private table tools' }))
+            t.private ? h('button', { type: 'button', class: 'ccbtn ghost', id: 'tsPrivate', onclick: () => { a.tsheet = ''; Object.assign(a, { nav: 'games', cat: 'cards', game: 'teenpatti', sec: 'private' }); Admin.go('private'); } }, ccI('crown'), h('span', { text: 'Private table tools' }))
               : h('button', { type: 'button', class: 'ccbtn ghost', id: 'tsEdit', onclick: () => { a.tsheet = ''; Admin.go('tables'); Admin.st.tab = id; Admin.paint(); } }, ccI('gear'), h('span', { text: 'Edit limits' })),
             h('button', { type: 'button', class: 'ccbtn ghost', id: 'tsHost', disabled: !d.hostUid || on || !!S.busy['thost_' + id], title: !d.hostUid ? 'There is no dealer to reassign' : on ? 'The dealer is online' : '', onclick: reassign }, ccI('refresh'), h('span', { text: 'Reassign dealer' }))),
           h('button', { type: 'button', class: 'cclinkbtn center', id: 'tsRefresh', onclick: () => { a.tsData = null; Admin.paint(); ccLoadTable(id); } }, ccI('refresh'), h('span', { text: D && D.at ? 'Refreshed ' + ccAgo(D.at) + ' · refresh' : 'Refresh' })))));
@@ -18443,7 +18540,7 @@ function ccTest() {
   const head = h('div', { class: 'ccpagehead' }, h('h2', { text: 'Test' }), h('span', { class: 'ccchip' + (room ? ' ok' : ''), text: room ? 'Table open' : 'No table' }));
   if (!S.roomsLoaded[TEST_ID] || !L) return h('div', { class: 'ccpage fixed' }, head, h('div', { class: 'ccscroll' }, ccLoading('Loading the test table…')));
   const liveRun = L.find(x => x.id === liveId) || null;
-  if (!liveRun && !T.f) { T.f = Object.assign({ name: 'Test Table', bots: 2, mode: 'classic' }, TestLab.defaults(1)); T.cancel = false; }
+  const openForm = () => { T.f = Object.assign({ name: 'Test Table', bots: 2, mode: 'classic' }, TestLab.defaults(1)); T.cancel = false;  Admin.paint(); };
   const sel = T.sel === '-' ? '' : L.some(x => x.id === T.sel) ? T.sel : (liveRun && !T.f ? liveRun.id : '');
   const shown = sel ? sel + ':' + ((L.find(x => x.id === sel) || {}).hands || 0) : '';      // a newly finished hand reloads the list
   if (sel && a.testShown !== shown) { if (String(a.testShown || '').split(':')[0] !== sel) a.tsRange = 'all'; a.testShown = shown; setTimeout(() => ccLoadGames(TEST_ID, sel), 0); }
@@ -18460,7 +18557,7 @@ function ccTest() {
   return h('div', { class: 'ccpage fixed', id: 'testPage' }, head,
     h('div', { class: 'ccscroll' },
       a.testErr ? h('p', { class: 'ccnote bad', text: a.testErr }) : null,
-      T.f ? ccTestForm() : null,
+      T.f ? ccTestForm() : liveRun ? null : ccNewTile('txOpen', 'flask', 'New Teen Patti test table', 'Boot, limits, bots and chips. You play against the bots.', openForm),
       liveRun ? ccSec('Current test table', T.f ? null : h('button', { type: 'button', class: 'ccbtn ghost sm', id: 'txNew', onclick: () => { T.f = Object.assign({ name: 'Test Table', bots: liveRun.bots || 2, mode: liveRun.mode || 'classic' }, TestLab.defaults(liveRun.boot)); T.cancel = true; Admin.paint(); } }, ccI('flask'), h('span', { text: 'New table' })), h('div', { class: 'cctlistx' }, row(liveRun))) : null,
       ccSec('Saved test runs', saved.length ? h('span', { class: 'ccchip', text: String(saved.length) }) : null, saved.length ? h('div', { class: 'cctlistx', id: 'testSaved' }, saved.map(row))
         : h('p', { class: 'ccnote', text: 'A test table you do not dissolve is kept here when you create the next one, so you can open it again later.' }))));
