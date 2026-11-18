@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build:20261119i -->
+<!-- build:20261119j -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -4150,6 +4150,8 @@ body .cc .cctlist>*{min-width:0}
   filter:drop-shadow(0 calc(var(--u) * 2.5) 0 #0b5a34) drop-shadow(0 calc(var(--u) * 5) 0 rgba(0,40,20,.55)) drop-shadow(0 calc(var(--u) * 8) calc(var(--u) * 10) rgba(0,0,0,.55))}
 .flipmsg .fl.in{animation:flipIn .6s cubic-bezier(.2,.9,.25,1.25) both}
 .flipmsg .fl.out{animation:flipOut .45s cubic-bezier(.5,0,.9,.4) both}
+@keyframes flFade{from{opacity:0}to{opacity:1}}
+.flipmsg .fl.fade{animation:flFade .22s ease-out both}
 @keyframes flipIn{0%{transform:translateY(55%) rotateX(-95deg) scale(.92);opacity:0}60%{opacity:1}100%{transform:none;opacity:1}}
 @keyframes flipOut{0%{transform:none;opacity:1}100%{transform:translateY(-60%) rotateX(95deg) scale(.92);opacity:0}}
 .flipmsg.inline{position:relative;width:100%;height:30px;margin:0 0 4px}
@@ -13902,7 +13904,7 @@ class AppError extends Error {}
 let toastTimer = null;
 /* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
    few bytes of the current file; if its build is newer, a banner offers a reload. */
-const BUILD = '20261119i';
+const BUILD = '20261119j';
 const Fresh = {
   at: 0, shown: false,
   async check(force) {
@@ -15354,7 +15356,7 @@ function renderFelt(R, me, msgs) {
   else talk.appendChild(h('p', { id: 'idleNote', class: 'tbidle', text: !online ? 'Connecting to the table…' : 'Boot ' + rupee(cfg.boot) + (readyHumans(R).length === 0 ? '' : ' · The next hand is about to be dealt.') }));
   stage.appendChild(talk);
   // the last move, under the stake: each new move flips up into its place
-  stage.appendChild(Flip.node('tp', live && !result ? tpFlow(G, S.user && S.user.uid) : [], 'tbflip', tbBox(110, 852, 776, 940), 'moveNote'));
+  stage.appendChild(Flip.node('tp', live && !result ? tpFlow(G, S.user && S.user.uid) : [], 'tbflip', tbBox(110, 852, 776, 940), 'moveNote', true));
 
   /* players, and empty seats: if you are standing, each one is a Sit down button (the game keeps no seat numbers, so any seat is the same seat) */
   const els = [];
@@ -16872,10 +16874,11 @@ function ccRmPrivate() {
 /* ---- the line that tells you what is going on: short fixed phrases, each held 5 seconds, then flipped up to the next ---- */
 const Flip = {
   st: {},
-  node(key, lines, cls, style, id) {
+  node(key, lines, cls, style, id, still) {
     lines = (lines || []).filter(Boolean);
     let s0 = Flip.st[key];
     if (!s0) s0 = Flip.st[key] = { el: h('div', { class: 'flipmsg' }), sig: null, i: 0, at: 0, lines: [] };
+    s0.still = !!still;
     s0.el.className = 'flipmsg ' + (cls || ''); if (style) s0.el.setAttribute('style', style); else s0.el.removeAttribute('style');
     if (id) s0.el.id = id; else s0.el.removeAttribute('id');
     s0.el.setAttribute('role', 'status'); s0.el.setAttribute('aria-live', 'polite');
@@ -16885,7 +16888,11 @@ const Flip = {
   },
   show(s0, anim) {
     s0.el.querySelectorAll('.fl.out').forEach(x => x.remove());
-    const old = s0.el.querySelector('.fl'), txt = s0.lines[s0.i] || '';
+    const txt = s0.lines[s0.i] || '';
+    // a fast table: the words simply change, with a short fade, never two at once
+    if (s0.still) { s0.el.querySelectorAll('.fl').forEach(x => x.remove()); if (txt) { const nu = h('span', { class: 'fl' + (anim ? ' fade' : ''), text: txt }); nu.addEventListener('animationend', () => nu.classList.remove('fade')); s0.el.appendChild(nu); } return; }
+    [...s0.el.querySelectorAll('.fl')].slice(1).forEach(x => x.remove());
+    const old = s0.el.querySelector('.fl');
     if (old && old.textContent === txt) return;
     const nu = h('span', { class: 'fl' + (anim && old ? ' in' : ''), text: txt });
     nu.addEventListener('animationend', () => nu.classList.remove('in'));
