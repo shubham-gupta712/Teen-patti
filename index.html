@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build:20261119d -->
+<!-- build:20261119f -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -4127,6 +4127,73 @@ body .cc .cctlist>*{min-width:0}
 .rmtinfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .rmtinfo b{font:800 14px system-ui}.rmtinfo i{font:500 11px system-ui;font-style:normal;color:#cdb98f}
 .rmtst{flex:none;padding:5px 10px;border-radius:99px;border:1px solid rgba(226,189,107,.6);font:800 10.5px system-ui;font-style:normal;letter-spacing:.1em;color:#ffe08a}
+.rmidle{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u) * 10);text-align:center;border-radius:calc(var(--u) * 30);background:rgba(4,20,13,.55);border:max(1px,calc(var(--u) * 2)) solid rgba(226,189,107,.4);padding:calc(var(--u) * 20)}
+.rmidlei{font-style:normal;font-size:calc(var(--u) * 54);color:#ff8e9d;animation:rmpulse 1.6s ease-in-out infinite}
+.rmidle b{font:800 max(11px,calc(var(--u) * 28))/1.25 system-ui;color:#fff3d6}
+.rmidle span{font:600 max(9px,calc(var(--u) * 20))/1.3 system-ui;color:#cdb98f}
+.rmquick{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.rmquick button{height:38px;border-radius:10px;border:1px solid rgba(226,189,107,.55);background:rgba(0,0,0,.25);color:#ffe9b0;font:800 13px system-ui;cursor:pointer}
+.rmbuy{display:flex;flex-direction:column;gap:4px}
+.rmbuy span{font:700 11px system-ui;letter-spacing:.08em;color:#cdb98f;text-transform:uppercase}
+.rmbuy input{height:44px;border-radius:12px;border:1px solid rgba(226,189,107,.6);background:rgba(0,0,0,.3);color:#fff3d6;font:800 18px system-ui;padding:0 12px}
+.rmtrow.mine{border-color:#7dffc0}
+.rmtst.on{background:rgba(52,211,153,.18);border-color:rgba(110,231,183,.6);color:#86efac}
+
+.flipmsg{position:absolute;display:flex;align-items:center;justify-content:center;perspective:700px;pointer-events:none;z-index:4}
+.flipmsg .fl{position:absolute;left:0;right:0;top:50%;margin-top:-.62em;text-align:center;white-space:nowrap;overflow:visible;
+  font:900 calc(var(--u) * 42)/1.24 'Trebuchet MS','Segoe UI',system-ui,sans-serif;letter-spacing:.015em;
+  background:linear-gradient(180deg,#ffffff 0%,#fff3cf 38%,#ffd36b 70%,#f0a93a 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:calc(var(--u) * 1.4) rgba(98,52,4,.55);
+  filter:drop-shadow(0 calc(var(--u) * 2.5) 0 #7a4308) drop-shadow(0 calc(var(--u) * 5) 0 rgba(60,28,0,.55)) drop-shadow(0 calc(var(--u) * 8) calc(var(--u) * 10) rgba(0,0,0,.55));
+  transform-origin:50% 50%;backface-visibility:hidden;will-change:transform,opacity}
+.flipmsg.you .fl{background-image:linear-gradient(180deg,#ffffff 0%,#eafff3 40%,#8ef3bf 72%,#2fbf7a 100%);-webkit-text-stroke-color:rgba(4,64,36,.6);
+  filter:drop-shadow(0 calc(var(--u) * 2.5) 0 #0b5a34) drop-shadow(0 calc(var(--u) * 5) 0 rgba(0,40,20,.55)) drop-shadow(0 calc(var(--u) * 8) calc(var(--u) * 10) rgba(0,0,0,.55))}
+.flipmsg .fl.in{animation:flipIn .6s cubic-bezier(.2,.9,.25,1.25) both}
+.flipmsg .fl.out{animation:flipOut .45s cubic-bezier(.5,0,.9,.4) both}
+@keyframes flipIn{0%{transform:translateY(55%) rotateX(-95deg) scale(.92);opacity:0}60%{opacity:1}100%{transform:none;opacity:1}}
+@keyframes flipOut{0%{transform:none;opacity:1}100%{transform:translateY(-60%) rotateX(95deg) scale(.92);opacity:0}}
+.flipmsg.inline{position:relative;width:100%;height:30px;margin:0 0 4px}
+.flipmsg.inline .fl{font-size:19px;-webkit-text-stroke-width:.6px;filter:drop-shadow(0 1.2px 0 #7a4308) drop-shadow(0 2.4px 0 rgba(60,28,0,.5)) drop-shadow(0 4px 6px rgba(0,0,0,.55))}
+.flipmsg.inline.you .fl{filter:drop-shadow(0 1.2px 0 #0b5a34) drop-shadow(0 2.4px 0 rgba(0,40,20,.5)) drop-shadow(0 4px 6px rgba(0,0,0,.55))}
+.tbnote.tbflip{width:78%;height:calc(var(--u) * 46);display:block;text-shadow:none;overflow:visible}
+.tbflip .fl{font-size:max(13px,calc(var(--u) * 30));-webkit-text-stroke-width:calc(var(--u) * .8);
+  filter:drop-shadow(0 calc(var(--u) * 1.6) 0 #7a4308) drop-shadow(0 calc(var(--u) * 3.2) calc(var(--u) * 1.5) rgba(40,18,0,.6)) drop-shadow(0 calc(var(--u) * 5) calc(var(--u) * 7) rgba(0,0,0,.5))}
+@media (prefers-reduced-motion:reduce){.flipmsg .fl.in,.flipmsg .fl.out{animation-duration:.01s}}
+.rmstand{position:absolute;display:flex;align-items:center;justify-content:center;border-radius:999px;border:max(1px,calc(var(--u) * 2.5)) solid rgba(226,189,107,.75);
+  background:linear-gradient(180deg,rgba(20,58,40,.92),rgba(6,30,19,.95));color:#ffe9b0;font:800 max(10px,calc(var(--u) * 23))/1 system-ui;letter-spacing:.03em;white-space:nowrap;
+  box-shadow:0 calc(var(--u) * 6) calc(var(--u) * 14) rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.15);cursor:pointer;z-index:5}
+.fstage .rmstand{font-weight:800;font-family:system-ui,sans-serif}
+.rmstand.sit{background:linear-gradient(180deg,#ffe08a,#d39a2e);color:#3a2104;border-color:#fff0bf}
+.rmstand:active{transform:translateY(1px) scale(.97)}
+.rmempty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:10px 8px 16px}
+.rmemptyart{width:min(240px,72%);height:auto;overflow:visible}
+.rmempty b{font:800 17px/1.25 Georgia,'Times New Roman',serif;color:#ffe9b0;letter-spacing:.01em}
+.rmempty span{font:500 13px/1.45 system-ui;color:#cdbf9f;max-width:290px}
+.rmfloat{animation:rmfloat 3.6s ease-in-out infinite}.rmfloat.d2{animation-delay:-1.6s}
+@keyframes rmfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.rmspark{transform-box:fill-box;transform-origin:center;animation:rmspark 2.4s ease-in-out infinite}
+@keyframes rmspark{0%,100%{opacity:.25;transform:scale(.6)}50%{opacity:1;transform:scale(1.15)}}
+.rmtourend{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u) * 14);padding:calc(var(--u) * 30);border-radius:calc(var(--u) * 30);background:rgba(4,20,13,.78);border:max(1px,calc(var(--u) * 2)) solid rgba(226,189,107,.55);text-align:center}
+.rmtourend>i{font:800 max(9px,calc(var(--u) * 20))/1 system-ui;letter-spacing:.18em;color:#e2bd6b;font-style:normal}
+.rmtourend>b{font:800 max(13px,calc(var(--u) * 36))/1.2 Georgia,serif;color:#fff3d6}
+.rmtelist{display:flex;flex-direction:column;gap:calc(var(--u) * 8);width:100%}
+.rmtelist>div{display:grid;grid-template-columns:calc(var(--u) * 50) 1fr auto;align-items:center;padding:calc(var(--u) * 10) calc(var(--u) * 16);border-radius:calc(var(--u) * 14);background:rgba(255,255,255,.05);font:700 max(10px,calc(var(--u) * 24))/1.2 system-ui;color:#eef4ec}
+.rmtelist>div.me{background:rgba(52,211,153,.14);outline:1px solid rgba(110,231,183,.5)}
+.rmtelist em{font-style:normal;color:#e2bd6b}.rmtelist strong{color:#ffe9b0}
+.rmtourend .rmrbtn{width:100%}
+.cctiles2.one{grid-template-columns:1fr}
+.ccrmtlist{display:flex;flex-direction:column;gap:10px}
+.ccrmtour{border-radius:14px;border:1px solid rgba(226,189,107,.28);background:rgba(255,255,255,.04);overflow:hidden}
+.ccrmthead{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:12px 14px;background:none;border:0;color:inherit;text-align:left;cursor:pointer}
+.ccrmthead b{display:block;font:800 15px/1.2 system-ui;color:#fff3d6}.ccrmthead span{display:block;font:500 12px/1.3 system-ui;color:#b9ad92;margin-top:2px}
+.ccrmthead em{font:800 10px/1 system-ui;letter-spacing:.1em;padding:5px 8px;border-radius:999px;font-style:normal;background:rgba(255,255,255,.08);color:#cdbf9f}
+.ccrmthead em.p-play,.ccrmthead em.p-lobby{background:rgba(52,211,153,.18);color:#86efac}.ccrmthead em.p-upcoming{background:rgba(226,189,107,.18);color:#ffe09a}
+.ccrmtstats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:0 14px 12px}
+.ccrmtstats div{display:flex;flex-direction:column;align-items:center;padding:7px 4px;border-radius:10px;background:rgba(0,0,0,.2)}
+.ccrmtstats b{font:800 14px/1.1 system-ui;color:#ffe9b0}.ccrmtstats span{font:600 10px/1.2 system-ui;color:#a99f88;margin-top:2px}
+.ccrmtmore{display:flex;flex-direction:column;gap:10px;padding:0 14px 14px}
+.ccrmcur.on{border-color:rgba(110,231,183,.45)}
+#rmPrivForm .ccrmcurh{margin-bottom:6px}
 </style>
 </head>
 <body>
@@ -13530,6 +13597,17 @@ const Rummy = (() => {
     g.over = true;
     return settle(g, perPoint);
   }
+  // A player who stands up or goes silent during a deal: dropped now (20 before their first pick, 40 after), wherever the turn is.
+  function forceDrop(g, uid) {
+    const p = g.players.find(x => x.uid === uid); if (!p || p.status !== 'in' || g.over) return false;
+    if (g.phase === 'final') { const b = arrange(p.hand, g.wild); p.points = score(b, g.wild).points; p.groups = b; return true; }
+    const wasTurn = cur(g) === p;
+    if (wasTurn && g.phase === 'discard') { const c = p.hand.pop(); g.open.push(c); }   // the card just picked goes back on the pile
+    p.status = 'drop'; p.points = p.turns === 0 && !p.drew ? CFG.firstDrop : CFG.middleDrop;
+    g.log.push({ uid, t: 'drop', pts: p.points });
+    checkLast(g); if (!g.over && wasTurn) nextTurn(g);
+    return true;
+  }
   // A player who misses their turn three times in a row is dropped (middle drop). Call when their timer runs out.
   function timeout(g) {
     const p = cur(g); if (!p || g.over) return;
@@ -13553,7 +13631,7 @@ const Rummy = (() => {
   // The fewest chips needed to sit at a table: twice a full 80-point loss (160 points).
   const minBuyIn = perPoint => Math.ceil(CFG.seatPoints * perPoint);
 
-  return { CFG, RANKS, SUITS, deck, shuffle, rankOf, suitOf, isPrinted, isJoker, wildRankOf, value, label,
+  return { forceDrop, CFG, RANKS, SUITS, deck, shuffle, rankOf, suitOf, isPrinted, isJoker, wildRankOf, value, label,
     isPure, isSeq, isSet, kind, score, validShow, best, arrange, order, bestDiscard, deal, act, submit, finish, timeout, settle, alive, cur, minBuyIn, sameCards };
 })();
 </script>
@@ -13805,7 +13883,7 @@ class AppError extends Error {}
 let toastTimer = null;
 /* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
    few bytes of the current file; if its build is newer, a banner offers a reload. */
-const BUILD = '20261119d';
+const BUILD = '20261119f';
 const Fresh = {
   at: 0, shown: false,
   async check(force) {
@@ -14160,7 +14238,7 @@ const Repo = {
       const u = us.data();
       const ms = await tx.get(mref);
       if (ms.exists && u.tableId === tableId) return 'resumed';               // retry after success: nothing to deduct
-      if (u.tableId) throw new AppError('You already have a seat at ' + tableName(TABLE_BY_ID[u.tableId] || { boot: '?' }) + '. Leave that table first.');
+      if (u.tableId) throw new AppError('You already have a seat at ' + (rmIsTable(u.tableId) ? rmTableName(u.tableId) : tableName(TABLE_BY_ID[u.tableId] || { boot: '?' })) + '. Leave that table first.');
       if (ms.exists) throw new AppError('A stale seat record exists at this table. Contact the admin.');
       if (u.chips < buyIn) throw new AppError('You only have ' + fmt(u.chips) + ' chips.');
       tx.set(mref, { uid, name: u.name, avatar: u.avatar || DEFAULT_AVATAR, seatState: 'standing', buyIn, stack: buyIn, joinedAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp(), seenAt: FV.serverTimestamp() });
@@ -14576,7 +14654,7 @@ let authSeq = 0;
    SECTION 17 - SESSION (auth state to screens)
    ========================================================================== */
 function closeScreenScopes() {
-  Dealer.stop();
+  Dealer.stop(); RmNet.close();
   Scopes.close(scopeRooms); scopeRooms = null;
   Scopes.close(scopeRoom); scopeRoom = null;
   S.pending = null;
@@ -14649,6 +14727,7 @@ function desiredRoute() {
   if (S.isAdmin) {
     const h0 = parseHash();
     if (h0.name === 'table' && TABLE_BY_ID[h0.id]) return { name: 'table', tableId: h0.id };
+    if (AdminView.player() && S.profile && rmIsTable(S.profile.tableId) && !S.forceLobby) return { name: 'rummy', tableId: S.profile.tableId };
     if (h0.name === 'rummy') return { name: 'rummy' };
     return AdminView.player() ? { name: playerPage() } : { name: 'admin' };
   }
@@ -14658,6 +14737,7 @@ function desiredRoute() {
   if (S.profile.banned === true) return { name: 'banned' };
   if (S.profile.status !== 'approved') return { name: S.profile.status === 'rejected' ? 'rejected' : 'pending' };
   if (S.profile.tableId && TABLE_BY_ID[S.profile.tableId] && !S.forceLobby) return { name: 'table', tableId: S.profile.tableId };
+  if (S.profile.tableId && rmIsTable(S.profile.tableId) && !S.forceLobby) return { name: 'rummy', tableId: S.profile.tableId };
   return { name: playerPage() };
 }
 
@@ -14670,11 +14750,11 @@ const AdminView = {
 // Home, Card games and the Teen Patti lobby: chosen by the address (#/home, #/games, #/lobby).
 const LOBBY_PAGES = ['home', 'games', 'lobby', 'rmlobby'];
 // Rummy's lobby: open to the admin now; to every player once its live tables are switched on
-const RUMMY_LIVE = false;
+const RUMMY_LIVE = true;
 const RUMMY_OPEN = () => RUMMY_LIVE || !!(S.isAdmin || S.realAdmin);
 function playerPage() { const n = parseHash().name; return LOBBY_PAGES.includes(n) ? n : n === 'table' ? 'lobby' : 'home'; }   // leaving a table lands in the Teen Patti lobby
 function go() {
-  Tour.sync();
+  Tour.sync(); RmTour.sync();
   const want = desiredRoute(), prevName = S.route && S.route.name;
   const changed = routeKey(want) !== routeKey(S.route);
   S.route = want;
@@ -14683,6 +14763,7 @@ function go() {
     closeScreenScopes();
     if (LOBBY_PAGES.includes(want.name) || want.name === 'admin') openRoomsScope();
     else if (want.name === 'table') openRoomScope(want.tableId);
+    else if (want.name === 'rummy' && want.tableId) RmNet.open(want.tableId);
   }
   if (location.hash !== hashFor(want)) history.replaceState(null, '', hashFor(want));
   scheduleRender(changed);
@@ -14692,8 +14773,9 @@ function go() {
    documents, read one by one. No collection query decides which tables exist. */
 const ensuring = {};                       // public tables this session has already tried to create
 function openRoomsScope() {
-  S.rooms = {}; S.roomsLoaded = {};
+  S.rooms = {}; S.roomsLoaded = {}; S.rmRooms = {};
   scopeRooms = Scopes.open('rooms');
+  RM_TABLES.map(t => t.id).concat([RM_PRIV]).forEach(id => scopeRooms.listen(RmRepo.ref(id), s => { S.rmRooms[id] = s.exists ? s.data() : null; scheduleRender(); if (S.route && S.route.name === 'admin' && Admin.st.game === 'rummy') Admin.paint(); }, () => { S.rmRooms[id] = null; }));
   // Tournament tables are only watched by the admin, and quietly: until the rules know them a refusal must not show an error.
   const watch = (sc, id, cb) => TABLE_BY_ID[id].tour ? sc.listen(Repo.roomRef(id), s => { const d = s.exists ? s.data() : null; applyRoomCfg(id, d); cb(d); }, () => cb(null)) : Repo.watchRoom(sc, id, cb);
   for (const t of TABLES) {
@@ -15136,10 +15218,18 @@ function renderMoves(G, uid, live) {
   const btns = defs.map(([id, type, cls, text, cost, ik, fn, ok], i) => h('button', { id: live ? id : null, class: 'tbm ' + cls + (live ? '' : ' idle') + (S.act && S.act.type === type ? ' busy' : '') + (showAutos && !(type === 'see' && seeStay) ? ' hideb' : '') + (type === 'see' && live && lm.status === 'seen' ? ' gone' : ''), type: 'button', disabled: !ok || busy || !live, onclick: fn },
       ic(ik), h('span', { class: 'ml' }, h('span', { class: 'lb', text: text }), cost > 0 ? h('span', { class: 'am', text: rupee(cost) }) : null)));
   return h('div', { class: 'tbmoves' + (showAutos ? ' autos' : ''), id: live ? 'moves' : null },
-    h('p', { id: live ? 'moveNote' : null, class: 'tbnote', text: live ? (busy ? 'Sending…' : sideNote(G, uid, lm)) : '' }),
+    Flip.node('tp', live ? (busy ? ['Sending…'] : tpFlow(G, uid, lm)) : [], 'tbnote tbflip', '', live ? 'moveNote' : null),
     h('div', { class: 'tbmrow' }, btns, showAutos ? autoPackPill() : null, showAutos ? autoPill(lm) : null));
 }
 
+/* The flipping line under your cards: fixed phrases for each moment. */
+function tpFlow(G, uid, lm) {
+  const sd = G.side;
+  if (sd && sd.state === 'ask') return [sideNote(G, uid, lm)];
+  if (lm.myTurn) return ['Your turn', lm.status === 'seen' ? 'Chaal, double, show or pack' : 'Play blind, or see your cards'];
+  if (lm.inHand) { const t = typeof turnOf === 'function' ? turnOf(G) : '', p = t && G.players && G.players[t]; return ['Wait for your turn'].concat(p && p.name ? [p.name + ' is playing'] : []); }
+  return [];
+}
 /* Sideshow wording for the note under your cards. */
 function sideNote(G, uid, lm) {
   const sd = G.side;
@@ -15526,7 +15616,27 @@ const RM = {
   g: null, groups: [], sel: [], players: 3, perPoint: 1, turnMs: 30000, finalMs: 30000,
   endsAt: 0, turnStart: 0, timers: [], result: null, note: '',
   ME: 'me',
-  me() { return RM.g && RM.g.players.find(p => p.uid === RM.ME); },
+  me() { const g = RM.g; if (!g) return undefined; return g.players.find(p => p.uid === RM.ME) || (!RM.net ? RM.stub() : undefined); },
+  standing: false,
+  // you, standing: a seat with no cards
+  stub() { const nm = (S.profile && S.profile.name) || 'You', av = (S.profile && S.profile.avatar) || DEFAULT_AVATAR;
+    if (!RM._stub || RM._stub.name !== nm) RM._stub = { uid: RM.ME, name: nm, av, status: 'wait', hand: [], points: null, turns: 0, drew: false };
+    return RM._stub; },
+  standUp() {
+    const g = RM.g, me = g && g.players.find(p => p.uid === RM.ME), inDeal = !!me && me.status === 'in' && !g.over && g.phase !== 'final';
+    const pts = inDeal ? (me.turns === 0 && !me.drew ? Rummy.CFG.firstDrop : Rummy.CFG.middleDrop) : 0;
+    RM.ask('Stand up?', (inDeal ? 'You drop out of this deal (' + pts + ' points). ' : '') + 'You keep your seat and watch the bots play. Tap Sit down to play again from the next deal.', 'Stand up', () => {
+      RM.standing = true;
+      const g2 = RM.g, me2 = g2 && g2.players.find(p => p.uid === RM.ME);
+      if (me2 && me2.status === 'in' && !g2.over && g2.phase !== 'final') { Rummy.forceDrop(g2, RM.ME); RM.note = 'You stood up'; RM.after(); }
+      else scheduleRender();
+    });
+  },
+  sitDown() {
+    RM.standing = false; RM._stub = null;
+    if (!RM.g) { RM.start(true); return; }
+    toast('You are back in from the next deal.'); scheduleRender();
+  },
   clear() { RM.timers.forEach(clearTimeout); RM.timers = []; },
   later(fn, ms) { RM.timers.push(setTimeout(() => { if (RM.g) fn(); }, ms)); },
   stop() { RM.clear(); clearTimeout(RM.nextT); RM.nextT = null; RM.g = null; RM.result = null; RM.groups = []; RM.sel = []; RM.note = ''; },
@@ -15538,9 +15648,10 @@ const RM = {
     RM.players = RM.sess.players; RM.perPoint = RM.sess.perPoint;
     RM.sess.deal++; rmSave();
     const meName = (S.profile && S.profile.name) || 'You';
-    const seats = [{ uid: RM.ME, name: meName }].concat(RM_BOTS.slice(0, RM.players - 1).map((b, i) => ({ uid: 'bot' + i, name: b[0] })));
+    const seats = (RM.standing ? [] : [{ uid: RM.ME, name: meName }]).concat(RM_BOTS.slice(0, RM.players - 1).map((b, i) => ({ uid: 'bot' + i, name: b[0] })));
+    if (seats.length < 2) { RM.g = null; scheduleRender(); return; }
     const g = Rummy.deal(seats);
-    g.players.forEach((p, i) => { p.av = i ? RM_BOTS[i - 1][1] : (S.profile && S.profile.avatar) || DEFAULT_AVATAR; });
+    g.players.forEach(p => { p.av = p.uid === RM.ME ? (S.profile && S.profile.avatar) || DEFAULT_AVATAR : RM_BOTS[Number(p.uid.slice(3))][1]; });
     g.turn = Math.floor(Math.random() * seats.length);
     RM.g = g; RM.groups = RM.bySuit(RM.me().hand);
     Sfx.init && Sfx.init();
@@ -15567,16 +15678,16 @@ const RM = {
     const g = RM.g; if (!g) return;
     if (g.over) return RM.end();
     if (g.phase === 'final') return RM.armFinal();
-    const p = Rummy.cur(g), me = RM.me(), watching = !me || me.status !== 'in';
+    const p = Rummy.cur(g), me = RM.me(), watching = (!me || me.status !== 'in') && !RM.standing;
     RM.turnStart = Date.now(); RM.endsAt = RM.turnStart + RM.turnMs;
-    if (p.uid === RM.ME) RM.later(() => { Rummy.timeout(g); RM.note = 'Time ran out: your turn was skipped.'; RM.after(); }, RM.turnMs);
+    if (p.uid === RM.ME) RM.later(() => { Rummy.timeout(g); RM.note = 'Time ran out \u00b7 turn skipped'; RM.after(); }, RM.turnMs);
     else RM.later(() => RM.botDraw(p), watching ? 350 : 900 + Math.random() * 1100);
   },
   after() { RM.sync(); RM.arm(); scheduleRender(); },
   botDraw(p) {
     const g = RM.g;
     // a hopeless first hand is dropped now and then
-    if (p.turns === 0 && !p.drew && Rummy.best(p.hand, g.wild).points >= 70 && Math.random() < 0.4) { Rummy.act(g, p.uid, { type: 'drop' }); RM.note = p.name + ' dropped.'; return RM.after(); }
+    if (p.turns === 0 && !p.drew && Rummy.best(p.hand, g.wild).points >= 70 && Math.random() < 0.4) { Rummy.act(g, p.uid, { type: 'drop' }); RM.note = p.name + ' dropped'; return RM.after(); }
     const top = g.open[g.open.length - 1];
     let from = 'closed';
     if (top && (!Rummy.isJoker(top, g.wild) || g.firstOpen)) {
@@ -15605,6 +15716,7 @@ const RM = {
   },
   submit() {
     const g = RM.g; if (!g || g.phase !== 'final') return;
+    if (RM.net) { RmNet.act({ type: 'submit', groups: rmG2s(RM.groups) }); toast('Your cards are in.'); return; }
     Rummy.submit(g, RM.ME, RM.groups); RM.end();
   },
   end() {
@@ -15622,6 +15734,7 @@ const RM = {
   myTurn() { const g = RM.g, me = RM.me(); return !!(g && me && me.status === 'in' && !g.over && g.phase !== 'final' && Rummy.cur(g) === me); },
   draw(from) {
     if (!RM.myTurn() || RM.g.phase !== 'draw') return;
+    if (RM.net) { if (from === 'open' && RM.g.open.length && Rummy.isJoker(RM.g.open[0], RM.g.wild) && !RM.g.firstOpen) return toast('A joker thrown away cannot be picked up.'); RmNet.act({ type: 'draw', from }); return; }
     const src = document.querySelector(from === 'open' ? '#rummyStage .rc.open' : '#rummyStage .rc.deck');
     const r = Rummy.act(RM.g, RM.ME, { type: 'draw', from });
     if (!r.ok) return toast(r.error);
@@ -15629,8 +15742,13 @@ const RM = {
     RM.note = ''; RM.sync(); scheduleRender();
     rmAfterPaint(() => rmFly(src, document.querySelector('#rummyStage .rc.hand[data-c="' + got + '"]')));
   },
+  throwCard(c) {
+    if (RM.net) { RM.sel = []; RmNet.act({ type: 'discard', card: c }); scheduleRender(); return; }
+    const r2 = Rummy.act(RM.g, RM.ME, { type: 'discard', card: c }); if (!r2.ok) { toast(r2.error); scheduleRender(); return; } RM.sel = []; RM.after();
+  },
   discard() {
     if (!RM.myTurn() || RM.g.phase !== 'discard' || RM.sel.length !== 1) return;
+    if (RM.net) return RM.throwCard(RM.sel[0]);
     const card = RM.sel[0], src = document.querySelector('#rummyStage .rc.hand[data-c="' + card + '"]');
     const r = Rummy.act(RM.g, RM.ME, { type: 'discard', card });
     if (!r.ok) return toast(r.error);
@@ -15640,10 +15758,11 @@ const RM = {
   declare() {
     if (!RM.myTurn() || RM.g.phase !== 'discard' || RM.sel.length !== 1) return;
     const card = RM.sel[0], groups = RM.groups.map(gr => gr.filter(c => c !== card)).filter(gr => gr.length);
+    if (RM.net) { RM.sel = []; RmNet.act({ type: 'declare', card, groups: rmG2s(groups) }); return; }
     const r = Rummy.act(RM.g, RM.ME, { type: 'declare', card, groups });
     if (!r.ok) return toast(r.error);
     RM.sel = [];
-    RM.note = r.valid ? 'You declared!' : 'Wrong show: your groups are not valid. 80 points.';
+    RM.note = r.valid ? 'You declared!' : 'Wrong show \u00b7 80 points';
     if (!r.valid) toast('Wrong show: 80 points');
     RM.after();
   },
@@ -15652,7 +15771,8 @@ const RM = {
     const me = RM.me(), pts = me.turns === 0 && !me.drew ? Rummy.CFG.firstDrop : Rummy.CFG.middleDrop;
     RM.ask('Drop this game?', 'You lose ' + pts + ' points (' + fmt(Math.round(pts * RM.perPoint)) + ' chips) and sit out until the next deal.', 'Drop', () => {
       if (!RM.myTurn()) return;
-      Rummy.act(RM.g, RM.ME, { type: 'drop' }); RM.note = 'You dropped: ' + pts + ' points.'; RM.after();
+      if (RM.net) { RmNet.act({ type: 'drop' }); return; }
+      Rummy.act(RM.g, RM.ME, { type: 'drop' }); RM.note = 'You dropped \u00b7 ' + pts + ' points'; RM.after();
     });
   },
   tap(c) {
@@ -15696,6 +15816,10 @@ const RM = {
   },
   leave() {
     const me = RM.me();
+    if (RM.net) {
+      if (RmNet.live() && me && me.status === 'in') return RM.ask('Leave the table?', 'The deal is still on. Leaving now counts as a drop. Your other chips go back to your wallet.', 'Leave', () => RmNet.leave());
+      return RM.ask('Leave the table?', 'Your chips at the table go back to your wallet.', 'Leave', () => RmNet.leave());
+    }
     if (RM.g && me && me.status === 'in' && !RM.result) return RM.ask('Stand up?', 'The deal is still on. Standing up now counts as a drop.', 'Stand up', () => RM.exit());
     RM.exit();
   },
@@ -15726,7 +15850,13 @@ const RM = {
         cardsOf(p));
     };
     const foot = [];
-    if (live && RM.result) {
+    if (live && RM.result && RM.net) {
+      const ms = Math.max(1, RM.nextAt - Date.now());
+      foot.push(h('div', { class: 'rmnextrow' }, h('span', { text: 'The next deal starts by itself' }), h('div', { class: 'rmnext' }, h('i', { style: 'animation-duration:' + ms + 'ms' }))),
+        h('div', { class: 'rmrbtns' },
+          h('button', { id: 'rmOut', type: 'button', class: 'rmrbtn ghost', onclick: () => { Sheets.close(); RmNet.leave(); } }, h('span', { text: 'Leave table' })),
+          h('button', { id: 'rmAgain', type: 'button', class: 'rmrbtn gold', onclick: () => Sheets.close() }, h('span', { text: 'Keep playing' }))));
+    } else if (live && RM.result) {
       const ms = Math.max(1, RM.nextAt - Date.now());
       const lab = h('span', { id: 'rmNextLab', text: 'Next deal in ' + Math.ceil(ms / 1000) + 's' });
       const tick = setInterval(() => { const l = document.getElementById('rmNextLab'); if (!l || !RM.result) return clearInterval(tick); l.textContent = 'Next deal in ' + Math.max(0, Math.ceil((RM.nextAt - Date.now()) / 1000)) + 's'; }, 500);
@@ -15747,7 +15877,7 @@ const RM = {
         h('div', {}, h('b', { text: fmt(rec.rake) }), h('span', { text: 'Rake 5%' })),
         h('div', {}, h('b', { text: rmRankName(rec.wild) }), h('span', { text: 'Wild joker' })),
         h('div', {}, h('b', { text: String(rec.perPoint) }), h('span', { text: 'Per point' }))),
-      foot, h('p', { class: 'rmfine', text: 'Test table: no chips change hands.' })));
+      foot, RM.net ? null : h('p', { class: 'rmfine', text: 'Test table: no chips change hands.' })));
   },
   rules() {
     // a few real cards, a word or two, and the numbers that matter
@@ -15788,6 +15918,358 @@ const rmRankName = r => r === 'T' ? '10' : r;
 function rmSave() { try { localStorage.setItem('tp_rmtest', JSON.stringify({ sess: RM.sess, history: RM.history.slice(0, 300) })); } catch (e) { /* storage full or private mode */ } }
 function rmPrune() { RM.history = RM.history.filter(r => r && r.players && Date.now() - r.at <= 864e5); }
 try { const o = JSON.parse(localStorage.getItem('tp_rmtest') || 'null'); if (o) { RM.sess = o.sess || null; RM.history = Array.isArray(o.history) ? o.history : []; rmPrune(); } } catch (e) { /* nothing saved */ }
+/* ==========================================================================
+   RUMMY ONLINE - the five Points tables (rm_05 ... rm_10) with real players and chips.
+   Same idea as Teen Patti: one player's phone deals (the host); everyone else sends their moves to it.
+   /rummy/{t}: the table   members/{uid}: seats and chips   game/state: what everyone sees
+   hands/{uid}: your cards (only you and the host)   deck/state: deck and pile (host only)   actions: moves
+   ========================================================================== */
+const RM_TURN_MS = 30000, RM_FINAL_MS = 30000, RM_NEXT_MS = 10000, RM_SILENT_MS = 75000;
+const rmTs = () => FV.serverTimestamp();
+const rmG2s = groups => groups.map(g => g.join(','));                         // groups travel as "7h0,8h0,9h0"
+const rmS2g = list => (list || []).map(x => String(x).split(',').filter(Boolean));
+const rmNeed = pp => Math.ceil(80 * pp);                                       // the most a player can lose in one deal
+const RmRepo = {
+  ref: t => db.collection('rummy').doc(t),
+  mem: t => RmRepo.ref(t).collection('members'),
+  game: t => RmRepo.ref(t).collection('game').doc('state'),
+  hand: (t, u) => RmRepo.ref(t).collection('hands').doc(u),
+  deck: t => RmRepo.ref(t).collection('deck').doc('state'),
+  acts: t => RmRepo.ref(t).collection('actions'),
+  // a missing table is created exactly as the rules describe it (open, empty, nobody hosting)
+  async ensure(t) {
+    const T = RM_TABLE_BY_ID[t], snap = await RmRepo.ref(t).get();
+    if (snap.exists) return snap.data();
+    if (rmTourSlotOf(t)) {
+      const TT = RmTour.T(rmTourSlotOf(t)); if (!TT) throw new AppError('This tournament is no longer on.');
+      const d0 = { tableId: t, name: 'Table ' + tableNoOf(t), perPoint: TT.perPoint, minBuyIn: TT.entry, maxBuyIn: TT.entry, permanent: true, status: 'open', adminUid: ADMIN_UID, dealerAt: 0, seated: 0, createdAt: rmTs(), updatedAt: rmTs() };
+      await RmRepo.ref(t).set(d0); return d0;
+    }
+    if (!T) throw new AppError('This table is closed right now.');
+    const min = Rummy.minBuyIn(T.perPoint);
+    const d = { tableId: t, name: 'Rummy ' + T.perPoint + ' per point', perPoint: T.perPoint, minBuyIn: min, maxBuyIn: min * 10, permanent: true, status: 'open',
+      adminUid: ADMIN_UID, dealerAt: 0, seated: 0, createdAt: rmTs(), updatedAt: rmTs() };
+    await RmRepo.ref(t).set(d); return d;
+  },
+  async join(uid, t, buyIn) {
+    const doc = await RmRepo.ensure(t);
+    if (doc.status !== 'open') throw new AppError('This table is closed right now.');
+    if (!Number.isInteger(buyIn) || buyIn < doc.minBuyIn || buyIn > doc.maxBuyIn) throw new AppError('Bring between ' + fmt(doc.minBuyIn) + ' and ' + fmt(doc.maxBuyIn) + ' chips.');
+    const seats = await RmRepo.mem(t).get();
+    if (seats.size >= 6 && !seats.docs.some(d => d.id === uid)) throw new AppError('This table is full. Try another one.');
+    const uref = Repo.userRef(uid), mref = RmRepo.mem(t).doc(uid);
+    return db.runTransaction(async tx => {
+      const us = await tx.get(uref), ms = await tx.get(mref);
+      if (!us.exists) throw new AppError('Your profile is missing. Sign out and back in.');
+      const u = us.data();
+      if (ms.exists && u.tableId === t) return 'resumed';
+      if (u.tableId) throw new AppError('You already have a seat at another table. Leave it first.');
+      if (u.chips < buyIn) throw new AppError('You only have ' + fmt(u.chips) + ' chips.');
+      tx.set(mref, { uid, name: u.name, avatar: u.avatar || DEFAULT_AVATAR, seatState: 'standing', buyIn, stack: buyIn, joinedAt: rmTs(), updatedAt: rmTs(), seenAt: rmTs() });
+      tx.update(uref, { chips: u.chips - buyIn, tableId: t, updatedAt: rmTs() });
+      return 'joined';
+    });
+  },
+  leave(uid, t) {
+    const uref = Repo.userRef(uid), mref = RmRepo.mem(t).doc(uid);
+    return db.runTransaction(async tx => {
+      const us = await tx.get(uref), ms = await tx.get(mref);
+      if (!us.exists || us.data().tableId !== t) throw new AppError('You are not at this table.');
+      if (!ms.exists) { tx.update(uref, { tableId: '', updatedAt: rmTs() }); return; }
+      tx.delete(mref);
+      tx.update(uref, { chips: us.data().chips + ms.data().stack, tableId: '', updatedAt: rmTs() });
+    });
+  },
+  // the host takes a silent player off the table, their chips back to their wallet
+  hostRemove(t, uid, stack) {
+    const b = db.batch();
+    b.delete(RmRepo.mem(t).doc(uid));
+    b.update(Repo.userRef(uid), { chips: FV.increment(stack), tableId: '', updatedAt: rmTs() });
+    return b.commit();
+  },
+  topUp(uid, t, amount) {
+    const uref = Repo.userRef(uid), mref = RmRepo.mem(t).doc(uid);
+    return db.runTransaction(async tx => {
+      const us = await tx.get(uref), ms = await tx.get(mref);
+      if (!us.exists || !ms.exists) throw new AppError('You are not at this table.');
+      if (us.data().chips < amount) throw new AppError('You only have ' + fmt(us.data().chips) + ' chips in your wallet.');
+      tx.update(mref, { stack: ms.data().stack + amount, updatedAt: rmTs() });
+      tx.update(uref, { chips: us.data().chips - amount, updatedAt: rmTs() });
+    });
+  },
+  presence: (t, uid) => RmRepo.mem(t).doc(uid).update({ seenAt: rmTs() }),
+  hostBeat: (t, uid, seated) => RmRepo.ref(t).update({ hostUid: uid, dealerAt: Date.now(), seated, updatedAt: rmTs() }),
+  hostRelease: t => RmRepo.ref(t).update({ hostUid: '', dealerAt: 0, updatedAt: rmTs() }),
+  send(t, uid, a) {
+    const d = { uid, type: a.type, dealNo: a.dealNo || 0, createdAt: rmTs() };
+    if (a.from) d.from = a.from; if (a.card) d.card = a.card; if (a.groups) d.groups = a.groups;
+    return RmRepo.acts(t).add(d);
+  }
+};
+
+/* ---- your connection to one Rummy table ---- */
+const RmNet = {
+  t: '', sc: null, doc: null, members: [], game: null, hand: null, loaded: {}, shownResult: '', leaving: false,
+  uid: () => S.user && S.user.uid,
+  open(t) {
+    if (RmNet.t === t && RmNet.sc) return;
+    RmNet.close();
+    Object.assign(RmNet, { t, doc: null, members: [], game: null, hand: null, loaded: {}, shownResult: '', leaving: false });
+    RM.stop(); RM.net = true; RM.groups = []; RM.sel = [];
+    const sc = RmNet.sc = Scopes.open('rummy:' + t), uid = RmNet.uid();
+    sc.listen(RmRepo.ref(t), s => { RmNet.doc = s.exists ? s.data() : null; RmNet.loaded.doc = true; scheduleRender(); }, () => {});
+    sc.listen(RmRepo.mem(t), q => {
+      RmNet.members = q.docs.map(d => d.data()).sort((a, b) => tsMs(a.joinedAt) - tsMs(b.joinedAt)); RmNet.loaded.members = true;
+      const first = !RmNet.sent; if (first && RmNet.me()) { RmNet.sent = true; RmNet.beat(); }
+      scheduleRender();
+    }, () => {});
+    sc.listen(RmRepo.game(t), s => { RmNet.game = s.exists ? s.data() : null; RmNet.loaded.game = true; RmNet.onGame(); scheduleRender(); }, () => {});
+    sc.listen(RmRepo.hand(t, uid), s => { RmNet.hand = s.exists ? s.data() : null; RmNet.syncHand(); scheduleRender(); }, () => {});
+    sc.every(() => RmNet.beat(), 20000);
+    sc.every(() => RmHost.check(), 2000);
+    sc.every(() => scheduleRender(), 5000);
+    RmNet.sent = false;
+  },
+  close() {
+    RmHost.stop();
+    if (RmNet.sc) Scopes.close(RmNet.sc);
+    RmNet.sc = null; RmNet.t = ''; RM.net = false; RM.g = null; RM.groups = []; RM.sel = [];
+  },
+  me() { const u = RmNet.uid(); return RmNet.members.find(m => m.uid === u) || null; },
+  beat() { const m = RmNet.me(); if (m && document.visibilityState === 'visible') RmRepo.presence(RmNet.t, m.uid).catch(() => {}); },
+  live() { const g = RmNet.game; return !!g && (g.phase === 'playing' || g.phase === 'final'); },
+  myCards() { const h0 = RmNet.hand, g = RmNet.game; return h0 && g && h0.dealId === g.dealId ? h0.cards.slice() : []; },
+  syncHand() {
+    const cards = RmNet.myCards();
+    if (!cards.length) { RM.groups = []; RM.sel = []; return; }
+    if (!RM.groups.length || RmNet.handDeal !== RmNet.game.dealId) { RmNet.handDeal = RmNet.game.dealId; RM.groups = RM.bySuit(cards); RM.sel = []; return; }
+    const hand = cards.slice();
+    let groups = RM.groups.map(gr => gr.filter(c => { const i = hand.indexOf(c); if (i < 0) return false; hand.splice(i, 1); return true; })).filter(gr => gr.length);
+    if (hand.length) groups.push(hand);
+    RM.groups = groups; RM.sel = RM.sel.filter(c => cards.includes(c));
+  },
+  // a move: the host plays it at once; everyone else sends it to the host
+  act(a) {
+    const g = RmNet.game, uid = RmNet.uid(); a.dealNo = g ? g.dealNo || 0 : 0;
+    if (RmHost.on) return RmHost.run(uid, a);
+    return RmRepo.send(RmNet.t, uid, a).catch(e => toast(friendlyError(e)));
+  },
+  // the table as the Rummy screen draws it (the same shape as a practice game)
+  view() {
+    const g = RmNet.game, uid = RmNet.uid(); if (!g || !g.order || !(g.phase === 'playing' || g.phase === 'final' || g.phase === 'result')) return null;
+    const players = g.order.map(id => { const p = g.players[id] || {};
+      return { uid: id, name: p.name || '', av: p.avatar || DEFAULT_AVATAR, status: p.status || 'in', points: p.points == null ? null : p.points, drew: !!p.drew, turns: p.turns || 0,
+        hand: id === uid ? RmNet.myCards() : new Array(p.count || 0).fill(null), groups: p.groups ? rmS2g(p.groups) : null, chips: p.chips || 0 }; });
+    if (!g.order.includes(uid)) { const m = RmNet.me(); players.push({ uid, name: (m && m.name) || 'You', av: (m && m.avatar) || DEFAULT_AVATAR, status: 'wait', hand: [], points: null }); }
+    return { players, turn: Math.max(0, g.order.indexOf(g.turn)), phase: g.phase === 'playing' ? g.step || 'draw' : 'final', over: g.phase === 'result', winner: g.winner || null,
+      open: g.openTop ? [g.openTop] : [], closed: new Array(g.closedCount || 0).fill(0), cut: g.cut, wild: g.wild, firstOpen: !!g.firstOpen, how: (g.result && g.result.how) || '', log: [] };
+  },
+  // a finished deal: show its result once
+  onGame() {
+    const g = RmNet.game; if (!g) return;
+    RmNet.syncHand();
+    if (g.phase === 'result' && g.dealId && RmNet.shownResult !== g.dealId && g.result) {
+      RmNet.shownResult = g.dealId;
+      const uid = RmNet.uid(), m = RmNet.me(), rec = RmNet.record();
+      RM.result = true; RM.nextAt = g.turnEndsAt || Date.now() + RM_NEXT_MS; RM.lastRec = rec;
+      if (rmTourSlotOf(RmNet.t)) RmTour.afterDeal(RmNet.t, g);
+      if (g.order.includes(uid)) setTimeout(() => { if (S.route && S.route.name === 'rummy' && RmNet.game && RmNet.game.dealId === rec.dealId) RM.showResult(); }, 700);
+      void m;
+    }
+    if (g.phase !== 'result') { RM.result = null; if (Sheets.el && Sheets.el.id === 'rmResult' && RmNet.live()) Sheets.closeNow(); }
+  },
+  record() {
+    const g = RmNet.game, r = g.result || {}, mem = {}; RmNet.members.forEach(m => { mem[m.uid] = m; });
+    return { at: Date.now(), dealId: g.dealId, sid: '', deal: g.dealNo || 1, wild: g.wild, perPoint: g.perPoint, pot: r.amount || 0, rake: r.rake || 0, how: r.how || '', winner: g.winner,
+      players: g.order.map(id => { const p = g.players[id] || {}, l = (r.lines || []).find(x => x.uid === id) || { chips: 0 }, mm = mem[id];
+        return { uid: id, name: p.name, av: p.avatar, status: p.status, points: id === g.winner ? 0 : (p.points || 0), chips: l.chips, tot: mm ? mm.stack - mm.buyIn : 0, groups: rmS2g(p.groups) }; }) };
+  },
+  // standing up: out of the deal first (a drop), then off the table with your chips
+  async leave() {
+    const t = RmNet.t, uid = RmNet.uid(); if (!t || RmNet.leaving) return;
+    RmNet.leaving = true;
+    try {
+      const g = RmNet.game, mine = g && g.players && g.players[uid];
+      if (RmNet.live() && mine && mine.status === 'in') {
+        toast('Dropping your cards...');
+        await RmNet.act({ type: 'stand' });
+        const end = Date.now() + 15000;
+        while (Date.now() < end) {
+          await new Promise(r => setTimeout(r, 400));
+          const g2 = RmNet.game, p2 = g2 && g2.players && g2.players[uid], m = RmNet.me();
+          if (!RmNet.live() || (p2 && p2.status !== 'in' && m && p2.chips === m.stack)) break;
+        }
+      }
+      if (RmHost.on) { RmHost.stop(); await RmRepo.hostRelease(t).catch(() => {}); }
+      const ts = rmTourSlotOf(t), mm = RmNet.me();
+      if (ts && mm && RmTour.me(ts)) await RmTour.line(ts, { table: t, final: mm.stack }).catch(() => {});
+      await RmRepo.leave(uid, t);
+      toast('You left the table. Your chips are back in your wallet.');
+      RmNet.close(); S.forceLobby = true; location.hash = '#/rmlobby'; if (S.profile) S.profile.tableId = '';
+    } catch (e) { toast(friendlyError(e)); }
+    finally { RmNet.leaving = false; }
+  }
+};
+
+/* ---- the host: one phone runs the table ---- */
+const RmHost = {
+  on: false, t: '', G: null, queue: [], running: false, seen: new Set(), timer: null, unsub: null, beatAt: 0, turnKey: '', turnEnds: 0, finalEnds: 0, nextAt: 0, dealNo: 0, dealId: '', start0: {},
+  async check() {
+    const N = RmNet, uid = N.uid(), d = N.doc;
+    if (!N.t || !N.loaded.doc || !N.loaded.members || !d || !N.me() || N.leaving) return;
+    if (RmHost.on) { if (d.hostUid && d.hostUid !== uid) RmHost.stop(); return; }
+    if (document.visibilityState !== 'visible' || d.status !== 'open') return;
+    if (d.hostUid && d.hostUid !== uid && Date.now() - Number(d.dealerAt || 0) < 15000) return;
+    if (RmHost.trying) return; RmHost.trying = true;
+    try { await RmRepo.hostBeat(N.t, uid, N.members.filter(m => m.seatState === 'seated').length); await RmHost.start(N.t); }
+    catch (e) { if (!e || e.code !== 'permission-denied') console.warn('[Rummy] could not take the table', e && e.code); }
+    finally { RmHost.trying = false; }
+  },
+  async start(t) {
+    RmHost.on = true; RmHost.t = t; RmHost.beatAt = Date.now(); RmHost.queue = []; RmHost.seen = new Set(); RmHost.G = null;
+    // pick up a deal that is already being played (the last host went quiet)
+    const g = RmNet.game;
+    if (g && (g.phase === 'playing' || g.phase === 'final')) {
+      try {
+        const deck = (await RmRepo.deck(t).get()).data(), hands = {};
+        for (const id of g.order) { const s = await RmRepo.hand(t, id).get(); hands[id] = s.exists && s.data().dealId === g.dealId ? s.data().cards : []; }
+        if (deck && deck.dealId === g.dealId) RmHost.G = RmHost.restore(g, deck, hands);
+      } catch (e) { console.warn('[Rummy] could not pick up the deal', e && e.code); }
+    } else if (g && g.phase === 'result') RmHost.nextAt = g.turnEndsAt || Date.now();
+    RmHost.dealNo = g ? g.dealNo || 0 : 0;
+    RmHost.unsub = RmRepo.acts(t).orderBy('createdAt').onSnapshot(q => { q.docs.forEach(d => { if (!RmHost.seen.has(d.id)) { RmHost.seen.add(d.id); RmHost.queue.push(d); } }); RmHost.pump(); }, () => {});
+    RmHost.timer = setInterval(() => RmHost.tick(), 500);
+  },
+  stop() {
+    if (!RmHost.on) return;
+    RmHost.on = false; clearInterval(RmHost.timer); RmHost.timer = null;
+    if (RmHost.unsub) { try { RmHost.unsub(); } catch (e) { /* gone */ } RmHost.unsub = null; }
+    RmHost.G = null; RmHost.queue = [];
+  },
+  restore(g, deck, hands) {
+    const G = { players: g.order.map(id => { const p = g.players[id] || {};
+        return { uid: id, name: p.name, av: p.avatar, hand: hands[id] || [], status: p.status || 'in', drew: !!p.drew, misses: p.misses || 0, turns: p.turns || 0, points: p.points == null ? null : p.points, groups: p.groups ? rmS2g(p.groups) : undefined }; }),
+      closed: deck.closed.slice(), open: deck.open.slice(), cut: g.cut, wild: g.wild, turn: Math.max(0, g.order.indexOf(g.turn)), phase: g.phase === 'final' ? 'final' : g.step || 'draw',
+      firstOpen: !!g.firstOpen, winner: g.winner || null, over: false, log: [], how: '' };
+    RmHost.dealId = g.dealId; RmHost.start0 = {}; g.order.forEach(id => { RmHost.start0[id] = (g.players[id] || {}).start || 0; });
+    RmHost.turnEnds = g.turnEndsAt || Date.now() + RM_TURN_MS; RmHost.finalEnds = g.finalEndsAt || Date.now() + RM_FINAL_MS; RmHost.turnKey = g.turn + ':' + G.phase;
+    return G;
+  },
+  async pump() {
+    if (RmHost.running) return; RmHost.running = true;
+    try { while (RmHost.on && RmHost.queue.length) { const d = RmHost.queue.shift(), a = d.data(); try { await RmHost.run(a.uid, a, true); } catch (e) { console.warn('[Rummy] move failed', e); } d.ref.delete().catch(() => {}); } }
+    finally { RmHost.running = false; }
+  },
+  pp() { return (RmNet.doc && RmNet.doc.perPoint) || (RM_TABLE_BY_ID[RmHost.t] || {}).perPoint || 1; },
+  // one move from a player (or from this phone's own player)
+  async run(uid, a, remote) {
+    const G = RmHost.G;
+    if (a.type === 'sit') return;
+    if (!G) return;
+    if (a.dealNo && a.dealNo !== RmHost.dealNo) return;                       // a move from an earlier deal
+    const p = G.players.find(x => x.uid === uid); if (!p) return;
+    let r = { ok: true };
+    if (a.type === 'stand') { if (!Rummy.forceDrop(G, uid)) return; }
+    else if (a.type === 'drop') r = Rummy.act(G, uid, { type: 'drop' });
+    else if (a.type === 'draw') r = Rummy.act(G, uid, { type: 'draw', from: a.from === 'open' ? 'open' : 'closed' });
+    else if (a.type === 'discard') r = Rummy.act(G, uid, { type: 'discard', card: a.card });
+    else if (a.type === 'declare') r = Rummy.act(G, uid, { type: 'declare', card: a.card, groups: rmS2g(a.groups) });
+    else if (a.type === 'submit') { if (G.phase !== 'final') return; r = Rummy.submit(G, uid, rmS2g(a.groups)); }
+    else return;
+    if (!r.ok) { if (!remote) toast(r.error); return; }
+    if (a.type === 'declare' && r.valid) RmHost.finalEnds = Date.now() + RM_FINAL_MS;
+    await RmHost.commit();
+  },
+  async tick() {
+    const N = RmNet, now = Date.now();
+    if (!RmHost.on || RmHost.busy) return;
+    if (N.doc && N.doc.hostUid && N.doc.hostUid !== N.uid()) return RmHost.stop();
+    RmHost.busy = true;
+    try {
+      if (now - RmHost.beatAt > 5000) { RmHost.beatAt = now; await RmRepo.hostBeat(RmHost.t, N.uid(), N.members.filter(m => m.seatState === 'seated').length); }
+      const G = RmHost.G;
+      if (G && !G.over) {
+        // players who left the app: dropped
+        const silent = G.players.find(p => p.status === 'in' && p.uid !== N.uid() && RmHost.silent(p.uid));
+        if (silent) { Rummy.forceDrop(G, silent.uid); await RmHost.commit(); return; }
+        if (G.phase === 'final') {
+          const waiting = G.players.filter(p => p.status === 'in' && p.uid !== G.winner && p.points == null);
+          if (!waiting.length || now > RmHost.finalEnds) { Rummy.finish(G, RmHost.pp()); G.over = true; await RmHost.commit(); }
+        } else if (now > RmHost.turnEnds) { Rummy.timeout(G); await RmHost.commit(); }
+        return;
+      }
+      // between deals: take silent players off, seat the others, and deal when two can play
+      if (now < RmHost.nextAt) return;
+      const ts = rmTourSlotOf(RmHost.t);
+      if (ts && RmTour.phase(RmTour.T(ts)).name !== 'play') { const g0 = N.game; if (g0 && g0.phase !== 'idle') await RmRepo.game(RmHost.t).set({ phase: 'idle', dealNo: RmHost.dealNo, perPoint: RmHost.pp(), updatedAt: rmTs() }); return; }
+      const gone = N.members.find(m => m.uid !== N.uid() && RmHost.silent(m.uid));
+      if (gone) { await RmRepo.hostRemove(RmHost.t, gone.uid, gone.stack).catch(() => {}); return; }
+      await RmHost.deal();
+    } catch (e) { console.warn('[Rummy] host tick', e && e.code, e && e.message); }
+    finally { RmHost.busy = false; }
+  },
+  silent(uid) { const m = RmNet.members.find(x => x.uid === uid); return !!m && Date.now() - (tsMs(m.seenAt) || tsMs(m.joinedAt)) > RM_SILENT_MS; },
+  async deal() {
+    const N = RmNet, t = RmHost.t, pp = RmHost.pp(), need = rmNeed(pp);
+    const can = N.members.filter(m => m.stack >= need).slice(0, 6), cannot = N.members.filter(m => !can.includes(m));
+    const b = db.batch();
+    cannot.forEach(m => { if (m.seatState !== 'standing') b.update(RmRepo.mem(t).doc(m.uid), { seatState: 'standing', updatedAt: rmTs() }); });
+    if (can.length < 2) {
+      can.forEach(m => { if (m.seatState !== 'seated') b.update(RmRepo.mem(t).doc(m.uid), { seatState: 'seated', updatedAt: rmTs() }); });
+      const g = N.game;
+      if (!g || g.phase !== 'idle') b.set(RmRepo.game(t), { phase: 'idle', dealNo: RmHost.dealNo, perPoint: pp, updatedAt: rmTs() });
+      else if (!can.some(m => m.seatState !== 'seated') && !cannot.some(m => m.seatState !== 'standing')) return;
+      await b.commit(); return;
+    }
+    const G = Rummy.deal(can.map(m => ({ uid: m.uid, name: m.name })));
+    G.players.forEach(p => { const m = can.find(x => x.uid === p.uid); p.av = m.avatar; });
+    G.turn = Math.floor(Math.random() * G.players.length);
+    RmHost.dealNo += 1; RmHost.dealId = t + '_' + RmHost.dealNo + '_' + Date.now().toString(36);
+    RmHost.start0 = {}; can.forEach(m => { RmHost.start0[m.uid] = m.stack; });
+    RmHost.G = G; RmHost.turnKey = ''; RmHost.dealtAt = Date.now();
+    can.forEach(m => { if (m.seatState !== 'seated') b.update(RmRepo.mem(t).doc(m.uid), { seatState: 'seated', updatedAt: rmTs() }); });
+    await RmHost.commit(b);
+  },
+  // everything the table shows, the deck and every hand, in one write; at the end of a deal also the chips and the rake
+  async commit(b) {
+    const G = RmHost.G, t = RmHost.t, N = RmNet, pp = RmHost.pp(); if (!G) return;
+    b = b || db.batch();
+    const cur = Rummy.cur(G), key = cur.uid + ':' + G.phase + ':' + (G.players.reduce((n, p) => n + p.turns, 0));
+    if (key !== RmHost.turnKey) { RmHost.turnKey = key; RmHost.turnEnds = Date.now() + RM_TURN_MS; }
+    const live = new Set(N.members.map(m => m.uid)), players = {};
+    let result = null;
+    if (G.over && !G.settled) {
+      G.settled = true;
+      const res = Rummy.settle(G, pp);
+      G.players.forEach(p => { const l = res.lines.find(x => x.uid === p.uid); p.chips = RmHost.start0[p.uid] + l.chips; });
+      result = { amount: res.pot, rake: res.rake, how: G.how || '', winner: G.winner, lines: res.lines.map(l => ({ uid: l.uid, chips: l.chips, points: l.points })) };
+      G.result = result;
+      RmHost.nextAt = Date.now() + RM_NEXT_MS;
+    }
+    G.players.forEach(p => {
+      if (p.chips == null) p.chips = RmHost.start0[p.uid];
+      // a player out of the deal pays at once, so they may leave
+      if (!G.over && (p.status === 'drop' || p.status === 'out') && !p.paid) { p.paid = true; p.chips = RmHost.start0[p.uid] - Math.round((p.points || 0) * pp + 1e-9); }
+      const e = { name: p.name || '', avatar: p.av || DEFAULT_AVATAR, status: p.status, count: p.hand.length, chips: p.chips, start: RmHost.start0[p.uid] || 0, drew: !!p.drew, turns: p.turns || 0, misses: p.misses || 0, points: p.points == null ? null : p.points };
+      if (G.over || G.phase === 'final') { if (p.groups) e.groups = rmG2s(p.groups); }
+      if (G.over && !p.groups) e.groups = rmG2s(RM.bySuit(p.hand));
+      players[p.uid] = e;
+    });
+    const state = { phase: G.over ? 'result' : G.phase === 'final' ? 'final' : 'playing', dealNo: RmHost.dealNo, dealId: RmHost.dealId, perPoint: pp, order: G.players.map(p => p.uid),
+      turn: cur.uid, step: G.over || G.phase === 'final' ? '' : G.phase, turnEndsAt: G.over ? RmHost.nextAt : RmHost.turnEnds, finalEndsAt: RmHost.finalEnds || 0,
+      players, cut: G.cut, wild: G.wild, openTop: G.open[G.open.length - 1] || '', openCount: G.open.length, closedCount: G.closed.length, firstOpen: !!G.firstOpen,
+      winner: G.winner || '', result: G.result || null, log: (G.log || []).slice(-20).map(x => (x.uid || '') + ':' + (x.t || '') + (x.card ? ':' + x.card : '')), dealtAt: RmHost.dealtAt || Date.now(), updatedAt: rmTs() };
+    b.set(RmRepo.game(t), state);
+    b.set(RmRepo.deck(t), { dealId: RmHost.dealId, closed: G.closed.slice(), open: G.open.slice(), updatedAt: rmTs() });
+    G.players.forEach(p => b.set(RmRepo.hand(t, p.uid), { id: p.uid, dealId: RmHost.dealId, cards: p.hand.slice(), updatedAt: rmTs() }));
+    // chips: whoever is out pays now; at the end everyone is settled; the rake goes to the house's ledger
+    G.players.forEach(p => { const m = N.members.find(x => x.uid === p.uid); if (m && live.has(p.uid) && m.stack !== p.chips && (G.over || p.status === 'drop' || p.status === 'out')) b.update(RmRepo.mem(t).doc(p.uid), { stack: p.chips, updatedAt: rmTs() }); });
+    if (result && result.rake > 0) b.set(db.collection('rake').doc(t), { tableId: t, total: FV.increment(result.rake), hands: FV.increment(1), lastHandId: RmHost.dealId, updatedAt: rmTs() }, { merge: true });
+    await b.commit();
+    if (G.over) RmHost.G = null;
+  }
+};
+
 // Where your cards go: one row when they fit with clear gaps between groups, otherwise two rows of smaller cards.
 function rmRows(cards) {
   const visU = Math.min(RT_W, (window.innerWidth || 360) * RT_H / Math.max(1, window.innerHeight || 715));
@@ -15871,7 +16353,7 @@ const RMDrag = {
       if (RM.myTurn() && RM.g.phase === 'discard') {
         const r = t.el.getBoundingClientRect();
         const an = ghost.animate([{ transform: ghost.style.transform }, { transform: 'translate(' + (r.left + r.width / 2 - (d.r.left + d.r.width / 2)) + 'px,' + (r.top + r.height / 2 - (d.r.top + d.r.height / 2)) + 'px) scale(' + (r.width / d.r.width).toFixed(3) + ')' }], { duration: 220, easing: 'ease-in', fill: 'forwards' });
-        an.onfinish = () => { ghost.remove(); const r2 = Rummy.act(RM.g, RM.ME, { type: 'discard', card: d.c }); if (!r2.ok) { toast(r2.error); scheduleRender(); return; } RM.sel = []; RM.after(); };
+        an.onfinish = () => { ghost.remove(); d.el.classList.remove('lifted'); RM.throwCard(d.c); };
         return;
       }
       toast(RM.myTurn() ? 'Pick a card first, then throw one.' : 'Wait for your turn to throw a card.');
@@ -15919,14 +16401,511 @@ function rmTick() {
 }
 setInterval(rmTick, 250);
 
+/* ==========================================================================
+   RUMMY PRIVATE TABLE AND TOURNAMENTS
+   rm_priv: one invite-only table the admin opens (name, chips per point, buy-in, room code).
+   /rmtours/{ra|rb|rc}: up to three Rummy tournaments at a time. Register (the entry is held), join a table from
+   5 minutes before the start (the held entry becomes your chips), play Points Rummy until the end, leave with what you hold.
+   Tables rmt_ra_1 ... rmt_ra_30: one for every six players, balanced as they join.
+   ========================================================================== */
+const RM_PRIV = 'rm_priv', RM_TSLOTS = ['ra', 'rb', 'rc'], RM_TPER = 30, RM_TOUR_LOBBY_MS = 5 * 60000, RM_TOUR_SHOW_MS = 6 * 3600e3;
+const rmTourTables = s => Array.from({ length: RM_TPER }, (_, i) => 'rmt_' + s + '_' + (i + 1));
+const rmTourSlotOf = id => { const m = /^rmt_(r[abc])_(\d+)$/.exec(id || ''); return m ? m[1] : ''; };
+const rmIsTable = id => !!id && (!!RM_TABLE_BY_ID[id] || id === RM_PRIV || !!rmTourSlotOf(id));
+function rmTableName(id) {
+  if (RM_TABLE_BY_ID[id]) return RM_TABLE_BY_ID[id].name;
+  if (id === RM_PRIV) { const d = (S.rmRooms || {})[RM_PRIV] || (RmNet.t === id ? RmNet.doc : null); return (d && d.name) || 'the Rummy private table'; }
+  const s = rmTourSlotOf(id), T = s ? RmTour.T(s) : null;
+  return (T ? T.name : 'a Rummy tournament') + ' (table ' + tableNoOf(id) + ')';
+}
+// a hash of the room code: the database compares it with the admin's; nobody can read the code back
+async function rmPrivKey(code) {
+  if (!(window.crypto && crypto.subtle)) throw new AppError('This browser cannot check the room code. Use a recent Chrome over https.');
+  const bytes = new TextEncoder().encode('rm|' + RM_PRIV + '|' + cleanCode(code));
+  return [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+const rmNewCode = () => { const A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s = 'RM'; for (let i = 0; i < 4; i++) s += A[secureRandInt(A.length)]; return s; };
+
+const RmTour = {
+  sc: null, slots: {}, refunding: {}, noted: {}, repAt: 0, repBusy: false,
+  ref: s => db.collection('rmtours').doc(s),
+  pref: s => db.collection('rmtours').doc(s).collection('players'),
+  sync() {
+    const want = !!(S.user && S.authReady && (S.isAdmin || (S.profile && S.profile.banned !== true)));
+    if (want && !RmTour.sc) RmTour.open(); else if (!want && RmTour.sc) RmTour.close();
+  },
+  open() {
+    const sc = RmTour.sc = Scopes.open('rmtour');
+    RM_TSLOTS.forEach(s => {
+      RmTour.slots[s] = { doc: undefined, players: [] };
+      sc.listen(RmTour.ref(s), sn => { RmTour.slots[s].doc = sn.exists ? sn.data() : null; RmTour.redraw(); }, () => { RmTour.slots[s].doc = null; RmTour.redraw(); });
+      sc.listen(RmTour.pref(s), q => { RmTour.slots[s].players = q.docs.map(d => d.data()).sort((a, b) => (a.seatNo || 0) - (b.seatNo || 0)); RmTour.redraw(); }, () => { RmTour.slots[s].players = []; });
+    });
+    sc.every(RmTour.tick, 1000);
+  },
+  close() { if (RmTour.sc) Scopes.close(RmTour.sc); RmTour.sc = null; RmTour.slots = {}; },
+  ready() { return RM_TSLOTS.every(s => RmTour.slots[s] && RmTour.slots[s].doc !== undefined); },
+  T(s) { return (RmTour.slots[s] && RmTour.slots[s].doc) || null; },
+  P(s) { return (RmTour.slots[s] && RmTour.slots[s].players) || []; },
+  me(s) { return S.user ? RmTour.P(s).find(x => x.uid === S.user.uid) || null : null; },
+  redraw() {
+    if (S.route && S.route.name === 'admin') { if (Admin.st.game === 'rummy' && (Admin.st.sec === 'tour') && !Admin.st.rmtf) Admin.paint(); }
+    else scheduleRender();
+    if (Sheets.el && Sheets.el.querySelector('#rmTourList')) rmTourSheet(true);
+  },
+  sched(T) { const start = T.startAt; return { lobbyAt: start - RM_TOUR_LOBBY_MS, start, end: start + T.durationMin * 60000 }; },
+  phase(T, now) {
+    if (!T) return { name: 'none' };
+    if (T.status !== 'published') return { name: T.status === 'cancelled' ? 'cancelled' : 'none', c: RmTour.sched(T) };
+    now = now || Date.now(); const c = RmTour.sched(T);
+    return now < c.lobbyAt ? { name: 'upcoming', until: c.lobbyAt, c } : now < c.start ? { name: 'lobby', until: c.start, c }
+      : now < c.end ? { name: 'play', until: c.end, c } : { name: 'ended', c };
+  },
+  running: ph => ph.name === 'lobby' || ph.name === 'play',
+  // what players see: open ones, and finished ones for a few hours
+  list() {
+    const now = Date.now();
+    return RM_TSLOTS.map(s => ({ s, T: RmTour.T(s) })).filter(({ s, T }) => {
+      if (!T) return false;
+      const ph = RmTour.phase(T, now);
+      if (ph.name === 'upcoming' || RmTour.running(ph)) return true;
+      if (ph.name === 'ended') return now < ph.c.end + RM_TOUR_SHOW_MS;
+      if (ph.name === 'cancelled') return !!RmTour.me(s) && now < ph.c.end + RM_TOUR_SHOW_MS;
+      return false;
+    }).sort((a, b) => a.T.startAt - b.T.startAt);
+  },
+  standings(s) {
+    return RmTour.P(s).map(x => { const bal = (x.final || 0) + (x.out || 0);
+      return { uid: x.uid, name: x.name, avatar: x.avatar, bal, brought: x.brought || 0, net: bal - (x.brought || 0), played: !!x.table, deals: x.deals || 0, wins: x.wins || 0, best: x.best || 0 }; })
+      .sort((a, b) => (b.played ? 1 : 0) - (a.played ? 1 : 0) || b.bal - a.bal || b.wins - a.wins);
+  },
+  // which table a player joins: fill a table to four, then open the next one the registrations call for
+  tableFor(s) {
+    const P = RmTour.P(s), at = {}, ids = rmTourTables(s);
+    P.forEach(x => { if (x.table && rmTourSlotOf(x.table) === s && (x.final || 0) > 0) at[x.table] = (at[x.table] || 0) + 1; });
+    const used = ids.slice(0, Math.max(1, Math.min(RM_TPER, Math.ceil(P.length / 6)))), n = id => at[id] || 0;
+    const busy = used.filter(id => n(id) > 0 && n(id) < 6).sort((a, b) => n(a) - n(b));
+    if (busy.length && n(busy[0]) < 4) return busy[0];
+    const empty = used.find(id => n(id) === 0); if (empty) return empty;
+    return busy[0] || ids.find(id => n(id) < 6) || ids[0];
+  },
+
+  /* ---- a player's moves ---- */
+  async register(s) {
+    const uid = S.user.uid, tref = RmTour.ref(s), pref = RmTour.pref(s).doc(uid), uref = Repo.userRef(uid);
+    await db.runTransaction(async tx => {
+      const ts = await tx.get(tref), us = await tx.get(uref), ps = await tx.get(pref);
+      if (!ts.exists) throw new AppError('This tournament is no longer on.');
+      const T = ts.data(), u = us.data();
+      if (ps.exists) return;
+      if (T.status !== 'published' || Date.now() >= RmTour.sched(T).end) throw new AppError('Registration for this tournament is closed.');
+      if (T.count >= T.maxPlayers) throw new AppError('This tournament is full.');
+      if (u.chips < T.entry) throw new AppError('The entry is ' + fmt(T.entry) + ' chips and your wallet has ' + fmt(u.chips) + '.');
+      tx.set(pref, { uid, name: u.name, avatar: u.avatar || DEFAULT_AVATAR, seatNo: T.seq + 1, regAt: rmTs(), held: T.entry, brought: T.entry });
+      tx.update(tref, { count: T.count + 1, seq: T.seq + 1 });
+      tx.update(uref, { chips: u.chips - T.entry, tourSlot: s, updatedAt: rmTs() });
+    });
+  },
+  async unregister(s) {
+    const uid = S.user.uid, tref = RmTour.ref(s), pref = RmTour.pref(s).doc(uid), uref = Repo.userRef(uid);
+    await db.runTransaction(async tx => {
+      const ts = await tx.get(tref), us = await tx.get(uref), ps = await tx.get(pref);
+      if (!ps.exists) return; const T = ts.data(), P = ps.data();
+      if (Date.now() >= RmTour.sched(T).lobbyAt) throw new AppError('The tables are open now: join instead.');
+      tx.delete(pref);
+      tx.update(tref, { count: Math.max(0, T.count - 1) });
+      tx.update(uref, { chips: us.data().chips + (P.held || 0), tourSlot: s, updatedAt: rmTs() });
+    });
+  },
+  async refund(s) {
+    const uid = S.user.uid, pref = RmTour.pref(s).doc(uid), uref = Repo.userRef(uid);
+    return db.runTransaction(async tx => {
+      const us = await tx.get(uref), ps = await tx.get(pref);
+      if (!ps.exists || !(ps.data().held > 0)) return 0; const n = ps.data().held;
+      tx.update(pref, { held: 0, updatedAt: rmTs() });
+      tx.update(uref, { chips: us.data().chips + n, tourSlot: s, updatedAt: rmTs() });
+      return n;
+    });
+  },
+  // take a registered player to a table: the held entry becomes their chips there
+  async join(s) {
+    const T = RmTour.T(s), me = RmTour.me(s), prof = S.profile, uid = S.user && S.user.uid;
+    if (!T || !prof || RmTour.joining) return;
+    if (prof.tableId) {
+      if (rmTourSlotOf(prof.tableId) === s) { S.forceLobby = false; Sheets.closeNow(); go(); return; }
+      return toast('Leave ' + (rmIsTable(prof.tableId) ? rmTableName(prof.tableId) : tableName(TABLE_BY_ID[prof.tableId] || { boot: '?' })) + ' first, then join the tournament.', 'err');
+    }
+    if (!RmTour.running(RmTour.phase(T))) return toast('The tables open 5 minutes before the start.');
+    if (!me) return toast('Register first.');
+    if (!(me.held > 0)) return toast('You have already played your entry in this tournament.');
+    RmTour.joining = true;
+    try {
+      const t = RmTour.tableFor(s), d = await RmRepo.ensure(t);
+      if (d.status !== 'open') throw new AppError('That table is being set up. Try again in a moment.');
+      const mref = RmRepo.mem(t).doc(uid), pref = RmTour.pref(s).doc(uid), uref = Repo.userRef(uid);
+      await db.runTransaction(async tx => {
+        const us = await tx.get(uref), ps = await tx.get(pref), ms = await tx.get(mref);
+        const u = us.data(), P = ps.exists ? ps.data() : null;
+        if (u.tableId) throw new AppError('You already have a seat at another table.');
+        if (!P || !(P.held > 0)) throw new AppError('Your entry was already used.');
+        if (ms.exists) throw new AppError('Your old seat at that table is still being cleared. Try again in a minute.');
+        tx.set(mref, { uid, name: u.name, avatar: u.avatar || DEFAULT_AVATAR, seatState: 'standing', buyIn: P.held, stack: P.held, joinedAt: rmTs(), updatedAt: rmTs(), seenAt: rmTs() });
+        tx.update(pref, { held: 0, table: t, final: P.held, updatedAt: rmTs() });
+        tx.update(uref, { tableId: t, updatedAt: rmTs() });
+      });
+      S.profile.tableId = t; S.forceLobby = false; Sheets.closeNow(); go();
+    } catch (e) { toast(friendlyError(e), 'err'); }
+    finally { RmTour.joining = false; }
+  },
+  // my line in the standings: what I hold now; once I have left, what I took away
+  line(s, o) { return RmTour.pref(s).doc(S.user.uid).update(Object.assign(o, { updatedAt: rmTs() })); },
+  // after a deal I played: one more deal (and maybe a win) and my new chips
+  afterDeal(t, g) {
+    const s = rmTourSlotOf(t), me = RmTour.me(s), uid = S.user && S.user.uid, p = g && g.players && g.players[uid];
+    if (!s || !me || !p || me.lastDeal === g.dealId) return;
+    const l = ((g.result && g.result.lines) || []).find(x => x.uid === uid) || { chips: 0 };
+    RmTour.line(s, { table: t, final: p.chips, deals: (me.deals || 0) + 1, wins: (me.wins || 0) + (g.winner === uid ? 1 : 0), best: Math.max(me.best || 0, l.chips > 0 ? l.chips : 0), lastDeal: g.dealId })
+      .catch(e => console.warn('[Rummy] tournament line', e && e.code));
+  },
+  // once a second: clocks, refunds of entries never used, my line after leaving, and leaving a finished tournament
+  tick() {
+    const uid = S.user && S.user.uid, prof = S.profile, now = Date.now();
+    if (!uid || S.isAdmin || !prof) return;
+    for (const s of RM_TSLOTS) {
+      const me = RmTour.me(s), T = RmTour.T(s); if (!me || !T) continue;
+      const ph = RmTour.phase(T, now);
+      if (me.held > 0 && (ph.name === 'cancelled' || ph.name === 'ended') && !RmTour.refunding[s]) {
+        RmTour.refunding[s] = 1;
+        RmTour.refund(s).then(n => { if (n) toast(fmt(n) + ' entry chips from ' + T.name + ' are back in your wallet.'); }, () => setTimeout(() => { RmTour.refunding[s] = 0; }, 15000));
+      }
+      if ((me.final || 0) > 0 && me.table && prof.tableId !== me.table && !RmTour.repBusy && now - RmTour.repAt > 4000) {
+        RmTour.repBusy = true; RmTour.repAt = now;
+        RmTour.line(s, { table: me.table, final: 0, out: (me.out || 0) + me.final }).catch(() => {}).then(() => { RmTour.repBusy = false; });
+      }
+    }
+    // three minutes after the end, anyone still at a tournament table goes back to the lobby with their chips
+    const at = S.route && S.route.name === 'rummy' ? rmTourSlotOf(S.route.tableId) : '';
+    if (at && RmNet.t === S.route.tableId && !RmNet.live() && !RmNet.leaving && RmNet.me()) {
+      const ph = RmTour.phase(RmTour.T(at), now);
+      if (((ph.name === 'ended' && now > ph.c.end + 180000) || ph.name === 'cancelled') && !RmTour.noted['left' + at]) { RmTour.noted['left' + at] = 1; toast('The tournament is over. Your chips are going back to your wallet.'); RmNet.leave(); }
+    }
+  },
+
+  /* ---- the admin ---- */
+  // a slot is free when it has nothing on and no entry is still held in it
+  freeSlot() {
+    const now = Date.now();
+    return RM_TSLOTS.find(s => { const T = RmTour.T(s); if (T && T.status === 'published' && now < RmTour.sched(T).end) return false; return !RmTour.P(s).some(x => x.held > 0); }) || '';
+  },
+  async publish(o) {
+    const s = RmTour.freeSlot(); if (!s) throw new AppError('Three Rummy tournaments are already on (or still giving entries back). Wait for one to finish.');
+    const ids = rmTourTables(s), docs = await Promise.all(ids.map(id => RmRepo.ref(id).get()));
+    const have = ids.filter((id, i) => docs[i].exists);
+    // the slot's tables from last time: closed and cleared while the old tournament is still in place
+    for (const id of have) {
+      const d = docs[ids.indexOf(id)].data();
+      await RmRepo.game(id).delete().catch(() => {});
+      if (d.status !== 'closed') await RmRepo.ref(id).update({ status: 'closed', updatedAt: rmTs() });
+    }
+    for (const x of RmTour.P(s)) await RmTour.pref(s).doc(x.uid).delete();
+    await RmTour.ref(s).set({ name: o.name, startAt: o.startAt, durationMin: o.durationMin, perPoint: o.perPoint, entry: o.entry, maxPlayers: o.maxPlayers,
+      status: 'published', count: 0, seq: 0, createdAt: rmTs(), updatedAt: rmTs() });
+    for (const id of have) await RmRepo.ref(id).update({ perPoint: o.perPoint, minBuyIn: o.entry, maxBuyIn: o.entry, name: 'Table ' + tableNoOf(id), status: 'open', hostUid: '', dealerAt: 0, seated: 0, updatedAt: rmTs() });
+    return s;
+  },
+  cancel(s) { return RmTour.ref(s).update({ status: 'cancelled', updatedAt: rmTs() }); }
+};
+
+/* ---- pictures for "nothing here yet" ---- */
+function rmEmpty(kind, title, text) {
+  const ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', '0 0 220 150'); svg.setAttribute('class', 'rmemptyart'); svg.setAttribute('aria-hidden', 'true');
+  const gid = 'rmeg' + kind;
+  const common = '<defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff1c2"/><stop offset=".55" stop-color="#f1c35c"/><stop offset="1" stop-color="#b57a1d"/></linearGradient>'
+    + '<radialGradient id="' + gid + 'g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="rgba(255,214,120,.35)"/><stop offset="1" stop-color="rgba(255,214,120,0)"/></radialGradient></defs>'
+    + '<circle cx="110" cy="72" r="70" fill="url(#' + gid + 'g)"/><ellipse cx="110" cy="138" rx="66" ry="7" fill="rgba(0,0,0,.28)"/>';
+  const spark = (x, y, r, d) => '<path class="rmspark" style="animation-delay:' + d + 's" d="M' + x + ' ' + (y - r) + 'Q' + x + ' ' + y + ' ' + (x + r) + ' ' + y + 'Q' + x + ' ' + y + ' ' + x + ' ' + (y + r) + 'Q' + x + ' ' + y + ' ' + (x - r) + ' ' + y + 'Q' + x + ' ' + y + ' ' + x + ' ' + (y - r) + 'Z" fill="#ffe3a0"/>';
+  const art = kind === 'tour'
+    ? '<g class="rmfloat"><rect x="44" y="34" width="96" height="94" rx="14" fill="#0d3a25" stroke="url(#' + gid + ')" stroke-width="3"/>'
+      + '<path d="M44 52a14 14 0 0 1 14-14h68a14 14 0 0 1 14 14v8H44z" fill="url(#' + gid + ')"/>'
+      + '<rect x="64" y="26" width="7" height="18" rx="3.5" fill="#f6dc95"/><rect x="113" y="26" width="7" height="18" rx="3.5" fill="#f6dc95"/>'
+      + [0, 1, 2, 3].map(r => [0, 1, 2, 3].map(c => '<rect x="' + (56 + c * 19) + '" y="' + (70 + r * 13) + '" width="12" height="7" rx="2" fill="rgba(241,195,92,' + (r * 4 + c === 9 ? '.0' : '.22') + ')"/>').join('')).join('')
+      + '<rect x="112" y="108" width="12" height="7" rx="2" fill="none" stroke="#f1c35c" stroke-width="1.6" stroke-dasharray="2 2"/></g>'
+      + '<g class="rmfloat d2"><path d="M146 62h38v10a19 19 0 0 1-38 0z" fill="url(#' + gid + ')" stroke="#8a5a12" stroke-width="1.5"/>'
+      + '<path d="M146 66h-8a8 8 0 0 0 9 12M184 66h8a8 8 0 0 1-9 12" fill="none" stroke="#f1c35c" stroke-width="3"/>'
+      + '<rect x="161" y="90" width="8" height="12" fill="#c8902e"/><rect x="152" y="101" width="26" height="8" rx="3" fill="url(#' + gid + ')"/>'
+      + '<text x="165" y="80" text-anchor="middle" font-size="14" font-weight="900" fill="#7a4a0c">?</text></g>'
+      + spark(36, 30, 6, 0) + spark(196, 40, 5, .6) + spark(186, 120, 4, 1.2) + spark(30, 112, 4, 1.8)
+    : '<g class="rmfloat"><rect x="62" y="30" width="96" height="104" rx="16" fill="#0d3a25" stroke="url(#' + gid + ')" stroke-width="3"/>'
+      + '<rect x="74" y="42" width="72" height="80" rx="10" fill="none" stroke="rgba(241,195,92,.35)" stroke-width="2"/>'
+      + '<text x="96" y="74" text-anchor="middle" font-size="20" fill="rgba(255,142,157,.55)">♦</text><text x="124" y="74" text-anchor="middle" font-size="20" fill="rgba(241,195,92,.45)">♠</text>'
+      + '<text x="96" y="104" text-anchor="middle" font-size="20" fill="rgba(241,195,92,.45)">♣</text><text x="124" y="104" text-anchor="middle" font-size="20" fill="rgba(255,142,157,.55)">♥</text></g>'
+      + '<g class="rmfloat d2"><path d="M150 84v-12a16 16 0 0 1 32 0v12" fill="none" stroke="url(#' + gid + ')" stroke-width="6" stroke-linecap="round"/>'
+      + '<rect x="142" y="82" width="48" height="40" rx="9" fill="url(#' + gid + ')" stroke="#8a5a12" stroke-width="1.5"/>'
+      + '<circle cx="166" cy="98" r="5" fill="#6b3f0a"/><rect x="164" y="100" width="4" height="12" rx="2" fill="#6b3f0a"/></g>'
+      + spark(40, 40, 6, 0) + spark(196, 36, 5, .7) + spark(46, 118, 4, 1.4);
+  svg.innerHTML = common + art;
+  return h('div', { class: 'rmempty', id: 'rmEmpty_' + kind }, svg, h('b', { text: title }), h('span', { text: text }));
+}
+
+/* ---- the players' Rummy tournaments list ---- */
+function rmTourSheet(refresh) {
+  if (refresh && !(Sheets.el && Sheets.el.querySelector('#rmTourList'))) return;
+  const L = RmTour.list(), prof = S.profile, busy = k => !!S.busy[k];
+  const card = ({ s, T }) => {
+    const ph = RmTour.phase(T), me = RmTour.me(s), atMine = prof && prof.tableId && rmTourSlotOf(prof.tableId) === s, open = ph.name === 'upcoming' || RmTour.running(ph);
+    const st = ph.name === 'upcoming' ? { l: 'STARTS IN', u: T.startAt, c: 'up' } : ph.name === 'lobby' ? { l: 'STARTING IN', u: T.startAt, c: 'soon' } : ph.name === 'play' ? { l: 'LIVE · ENDS IN', u: ph.c.end, c: 'live' }
+      : ph.name === 'ended' ? { l: 'FINISHED', c: 'done' } : { l: 'CANCELLED', c: 'off' };
+    let act = null;
+    const B1 = (id, t, fn, cls) => h('button', { type: 'button', class: cls || 'btn-primary btn-small', 'data-act': id, text: t, onclick: fn });
+    if (S.isAdmin || !open) act = B1('standings', ph.name === 'ended' ? 'Final standings' : 'Standings', () => rmTourDetail(s), 'btn-secondary btn-small');
+    else if (!me) act = B1('register', 'Register', () => {
+      if (!confirm('Register for ' + T.name + '? The entry of ' + fmt(T.entry) + ' chips is taken from your wallet now and becomes your chips at the table.')) return;
+      withBusy('rtr_' + s, 'register', async () => { await RmTour.register(s); toast('You are in. Come back when the tables open, 5 minutes before the start.'); });
+    });
+    else if (atMine) act = B1('return', 'My table', () => RmTour.join(s));
+    else if (RmTour.running(ph)) act = me.held > 0 ? B1('join', 'Join table', () => RmTour.join(s), 'btn-primary btn-small tzglowbtn') : B1('standings', 'Standings', () => rmTourDetail(s), 'btn-secondary btn-small');
+    else act = h('button', { type: 'button', class: 'btn-secondary btn-small', 'data-act': 'cancel', text: 'Cancel', disabled: busy('rtu_' + s), onclick: () => {
+      if (!confirm('Cancel your place in ' + T.name + '? Your ' + fmt(me.held || 0) + ' entry chips go back to your wallet.')) return;
+      withBusy('rtu_' + s, 'cancel place', async () => { await RmTour.unregister(s); toast('Your place was cancelled and the entry chips are back in your wallet.'); });
+    } });
+    const stat = (l, v) => h('span', { class: 'tzbstat' }, h('i', { text: l }), h('b', { text: v }));
+    return h('div', { class: 'tzline s-' + st.c + (me ? ' mine' : ''), 'data-slot': s },
+      h('div', { class: 'tzbtop' },
+        h('div', { class: 'tzbname' }, h('b', { text: T.name }), h('span', { text: tzWhen(T.startAt) + '  ·  ' + T.durationMin + ' min  ·  ' + T.count + '/' + T.maxPlayers + ' players' }), me ? h('em', { text: me.held > 0 ? '✓ Registered' : '✓ Playing' }) : null),
+        h('div', { class: 'tzbclock' }, st.u ? Tour.clock(st.u) : h('b', { text: ph.name === 'ended' ? 'Done' : 'Off' }), h('i', { text: st.l }))),
+      h('div', { class: 'tzbbot' }, stat('Per point', String(T.perPoint)), stat('Entry', fmt(T.entry)),
+        h('div', { class: 'tzbbtns' }, open && !S.isAdmin && act && act.dataset.act !== 'standings' ? h('button', { type: 'button', class: 'tzblink', text: 'Details', onclick: () => rmTourDetail(s) }) : null, act)));
+  };
+  const body = h('div', { class: 'tzsheet', id: 'rmTourList' },
+    h('div', { class: 'tzlisthead' }, h('span', { text: 'Wallet  ' }), h('b', { text: fmt(prof ? prof.chips : 0) })),
+    !RmTour.ready() ? h('p', { class: 'tznote', text: 'Loading tournaments...' })
+      : L.length ? h('div', { class: 'tzbars' }, L.map(card))
+      : rmEmpty('tour', 'Nothing lined up yet', 'No Rummy tournaments are scheduled right now. When the club announces one it shows up here, and you can register straight away.'));
+  if (refresh && Sheets.el) { const old = Sheets.el.querySelector('#rmTourList'); if (old) { old.replaceWith(body); return; } }
+  Sheets.open('rmTourSheet', 'Rummy tournaments', h('div', { class: 'setlist' }, body));
+}
+// one tournament: how it works and the standings
+function rmTourDetail(s) {
+  const T = RmTour.T(s); if (!T) return;
+  const ph = RmTour.phase(T), rows = RmTour.standings(s), uid = S.user && S.user.uid, f = (v, l) => h('div', {}, h('b', { text: v }), h('span', { text: l }));
+  Sheets.open('rmTourDetail', T.name, h('div', { class: 'tzsheet' },
+    h('div', { class: 'tzfacts' }, f(String(T.perPoint), 'Chips per point'), f(fmt(T.entry), 'Entry chips'), f(T.durationMin + ' min', 'Length'), f(T.count + '/' + T.maxPlayers, 'Players')),
+    h('p', { class: 'tznote', text: tzWhen(T.startAt) + '. Tables open 5 minutes before the start, six players at most each. Everyone starts with the entry as chips and plays Points Rummy until the time is up (the deal in play is finished). The most chips wins. What you hold is yours to keep. No re-entry.' }),
+    !rows.length ? h('p', { class: 'tznote', text: 'Nobody has registered yet.' }) : h('div', { class: 'tzboard' },
+      h('div', { class: 'tzrow hd' }, h('span', { text: '#' }), h('span', { text: 'Player' }), h('span', { text: 'Chips' }), h('span', { text: 'Result' })),
+      rows.map((r, i) => h('div', { class: 'tzrow' + (r.uid === uid ? ' me' : '') + (r.played ? '' : ' out') },
+        h('span', { class: 'tzrank' + (r.played ? ' r' + (i + 1) : ''), text: r.played ? String(i + 1) : '-' }),
+        h('span', { class: 'tzwho' }, h('b', { text: r.name + (r.uid === uid ? ' (you)' : '') }), h('i', { text: r.played ? r.deals + (r.deals === 1 ? ' deal' : ' deals') + '  ·  ' + r.wins + ' won' : 'has not joined' })),
+        h('span', { text: r.played ? fmt(r.bal) : '-' }),
+        h('span', { class: r.net > 0 ? 'up' : r.net < 0 ? 'down' : '', text: !r.played ? '' : (r.net > 0 ? '+' : r.net < 0 ? '−' : '') + fmt(Math.abs(r.net)) })))),
+    ph.name === 'cancelled' ? h('p', { class: 'tznote', text: 'The admin cancelled this tournament. Entries that were not used go back to the wallets.' }) : null));
+}
+
+/* ---- the players' private table: the room code, then the buy-in ---- */
+function rmPrivSheet() {
+  const d = (S.rmRooms || {})[RM_PRIV], prof = S.profile;
+  if (prof && prof.tableId === RM_PRIV) { S.forceLobby = false; go(); return; }
+  if (!d || d.status !== 'open') return Sheets.open('rmPrivSheet', 'Rummy private table', h('div', { class: 'setlist' },
+    rmEmpty('priv', 'No private table right now', 'The club opens the Rummy private table for invited players. When it is open you get a room code from the admin and enter it here.')));
+  const code = h('input', { id: 'rmPrivCode', type: 'text', maxlength: 12, placeholder: 'ROOM CODE', autocapitalize: 'characters', autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Room code' });
+  if (typeof Keypad !== 'undefined') Keypad.attach(code, 'alnum');
+  const err = h('div', { id: 'rmPrivErr', class: 'msg err', role: 'alert', hidden: true });
+  const btn = h('button', { id: 'rmPrivGo', type: 'button', class: 'btn-primary', text: 'Enter table' });
+  btn.onclick = async () => {
+    if (btn.disabled) return;
+    if (cleanCode(code.value).length < 4) { err.textContent = 'Enter the room code you were given.'; err.hidden = false; return; }
+    btn.disabled = true; err.hidden = true;
+    try {
+      const key = await rmPrivKey(code.value);
+      await RmRepo.ref(RM_PRIV).collection('unlocked').doc(S.user.uid).set({ key, at: rmTs() });
+      Sheets.close(); setTimeout(() => rmJoinSheet(RM_PRIV), 250);
+    } catch (e) { err.textContent = friendlyError(e); err.hidden = false; btn.disabled = false; }
+  };
+  Sheets.open('rmPrivSheet', d.name || 'Rummy private table', h('div', { class: 'setlist' },
+    h('div', { class: 'pvform' },
+      h('p', { class: 'pvhint', text: 'By invitation only  ·  ' + d.perPoint + (d.perPoint === 1 ? ' chip' : ' chips') + ' per point  ·  buy-in ' + fmt(d.minBuyIn) + '–' + fmt(d.maxBuyIn) + '. Enter the room code you were given.' }),
+      h('label', { for: 'rmPrivCode', class: 'pvlabel', text: 'Room code' }), code, err, btn)), 'compact');
+}
+
+/* ---- the console: Rummy tournaments ---- */
+function ccRmTour() {
+  const a = Admin.st;
+  if (a.rmtf) return h('div', { class: 'ccpage fixed', id: 'rmTourAdmin' }, h('div', { class: 'ccscroll' }, ccRmTourForm()));
+  const now = Date.now(), list = RM_TSLOTS.map(s => ({ s, T: RmTour.T(s) })).filter(x => x.T).sort((x, y) => y.T.startAt - x.T.startAt);
+  const on = list.filter(x => { const ph = RmTour.phase(x.T, now); return ph.name === 'upcoming' || RmTour.running(ph); });
+  const startNew = () => { const d = new Date(Date.now() + 60 * 60000); d.setMinutes(0, 0, 0);
+    a.rmtf = { name: 'Rummy Cup', date: d.toISOString().slice(0, 10), time: String(d.getHours()).padStart(2, '0') + ':00', duration: 60, pp: 1, entry: 800, max: 48, err: '' }; Admin.paint(); };
+  const row = ({ s, T }) => {
+    const ph = RmTour.phase(T, now), open = a.rmTourOpen === s;
+    const lab = ph.name === 'upcoming' ? 'Starts ' + tzWhen(T.startAt) : ph.name === 'lobby' ? 'Tables open  ·  starts ' + tzTime(T.startAt) : ph.name === 'play' ? 'Live  ·  ends ' + tzTime(ph.c.end) : ph.name === 'ended' ? 'Finished ' + tzWhen(ph.c.end) : 'Cancelled';
+    const P = RmTour.P(s), playing = P.filter(x => x.table && (x.final || 0) > 0).length;
+    return h('div', { class: 'ccrmtour' + (open ? ' open' : ''), 'data-slot': s },
+      h('button', { type: 'button', class: 'ccrmthead', onclick: () => { a.rmTourOpen = open ? '' : s; Admin.paint(); } },
+        h('div', {}, h('b', { text: T.name }), h('span', { text: lab })),
+        h('em', { class: 'p-' + ph.name, text: ph.name === 'play' ? 'LIVE' : ph.name === 'lobby' ? 'OPENING' : ph.name.toUpperCase() })),
+      h('div', { class: 'ccrmtstats' }, [['Per point', String(T.perPoint)], ['Entry', fmt(T.entry)], ['Registered', T.count + '/' + T.maxPlayers], ['At tables', String(playing)]].map(([l, v]) => h('div', {}, h('b', { text: v }), h('span', { text: l })))),
+      open ? h('div', { class: 'ccrmtmore' },
+        P.length ? h('div', { class: 'tzboard' }, RmTour.standings(s).map((r, i) => h('div', { class: 'tzrow' + (r.played ? '' : ' out') },
+          h('span', { class: 'tzrank', text: r.played ? String(i + 1) : '-' }), h('span', { class: 'tzwho' }, h('b', { text: r.name }), h('i', { text: r.played ? r.deals + ' deals  ·  ' + r.wins + ' won' : 'registered' })),
+          h('span', { text: r.played ? fmt(r.bal) : '-' }), h('span', { class: r.net > 0 ? 'up' : r.net < 0 ? 'down' : '', text: r.played ? (r.net >= 0 ? '+' : '−') + fmt(Math.abs(r.net)) : '' }))))
+          : h('p', { class: 'ccnote', text: 'Nobody has registered yet.' }),
+        (ph.name === 'upcoming' || RmTour.running(ph)) ? h('button', { type: 'button', class: 'ccbtn ghost sm', id: 'rmTourCancel_' + s, onclick: async () => {
+          if (!(await ccConfirm({ title: 'Cancel ' + T.name + '?', ok: 'Cancel it', body: 'Players who have not joined get their entry back. Anyone at a table keeps playing the deal in hand, then leaves with their chips.' }))) return;
+          adminBusy('rtc_' + s, 'cancel tournament', async () => { await RmTour.cancel(s); Admin.say('Tournament cancelled.'); }); } }, h('span', { text: 'Cancel tournament' })) : null) : null);
+  };
+  return h('div', { class: 'ccpage fixed', id: 'rmTourAdmin' }, h('div', { class: 'ccscroll' },
+    h('div', { class: 'cctiles2 one' }, ccNewTile('rmTourNew', 'trophy', 'New Rummy tournament', 'Name, start time, chips per point, entry and length', startNew)),
+    ccSec('Rummy tournaments', h('span', { class: 'ccchip', text: on.length + ' of 3 slots in use' }),
+      !RmTour.ready() ? h('p', { class: 'ccnote', text: 'Loading...' }) : list.length ? h('div', { class: 'ccrmtlist' }, list.map(row))
+        : rmEmpty('tour', 'Nothing scheduled', 'Publish a Rummy tournament and players can register for it from the Rummy lobby straight away.'))));
+}
+function ccRmTourForm() {
+  const a = Admin.st, f = a.rmtf;
+  const inp = (id, k, type, extra) => h('input', Object.assign({ id, type, value: String(f[k]), 'aria-label': k, oninput: e => { f[k] = e.target.value; } }, extra || {}));
+  const chips = (id, k, opts, lab, after) => h('div', { class: 'cmaud', id }, opts.map(v => h('button', { type: 'button', class: 'achip' + (Number(f[k]) === v ? ' on' : ''), 'data-v': v, text: lab ? lab(v) : String(v),
+    onclick: () => { f[k] = v; if (after) after(v); Admin.paint(); } })));
+  const pp = Number(f.pp) || 1, minEntry = Math.ceil(160 * pp);
+  const save = () => {
+    const startAt = new Date(f.date + 'T' + f.time).getTime(), entry = parseInt(f.entry, 10), name = String(f.name || '').trim();
+    const err = !name ? 'Give the tournament a name.' : !(startAt > Date.now() + 60000) ? 'Pick a start time in the future.' : !(entry >= minEntry) ? 'The entry must be at least ' + fmt(minEntry) + ' chips (two full losses).' : '';
+    if (err) { f.err = err; Admin.paint(); return; }
+    if (!confirm('Publish "' + name + '" for ' + tzWhen(startAt) + '? Players can register straight away.')) return;
+    f.err = '';
+    return adminBusy('rmTourSave', 'publish Rummy tournament', async () => {
+      try { await RmTour.publish({ name: name.slice(0, 40), startAt, durationMin: Number(f.duration), perPoint: pp, entry, maxPlayers: Number(f.max) }); }
+      catch (e) { if (e && e.code === 'permission-denied') throw new AppError('The database refused this. Publish the latest Firestore rules first (they add Rummy tournaments), then try again.'); throw e; }
+      a.rmtf = null; Admin.say('Tournament published. Players can register from the Rummy lobby.');
+    });
+  };
+  return h('div', { class: 'cmcard t-tour', id: 'rmTourForm' },
+    h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'NAME' }), inp('rtfName', 'name', 'text', { maxlength: 40 })),
+    h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'DATE AND START TIME' }), h('div', { class: 'apfields even' }, inp('rtfDate', 'date', 'date'), inp('rtfTime', 'time', 'time'))),
+    h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'LENGTH' }), chips('rtfDur', 'duration', [30, 45, 60, 90, 120], v => v + ' min')),
+    h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'CHIPS PER POINT' }), chips('rtfPP', 'pp', [0.5, 1, 2, 5, 10], null, v => { f.entry = Math.ceil(800 * v); }),
+      h('div', { class: 'field', style: 'margin-top:10px' }, h('label', { for: 'rtfEntry', text: 'ENTRY CHIPS (AT LEAST ' + fmt(minEntry) + ')' }), inp('rtfEntry', 'entry', 'number', { min: minEntry, inputmode: 'numeric' })),
+      h('p', { class: 'tznote', text: 'Everyone starts with the entry as chips. One deal can cost at most ' + fmt(Math.round(80 * pp)) + '.' })),
+    h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'MOST PLAYERS' }), chips('rtfMax', 'max', [12, 24, 48, 90, 180]),
+      h('p', { class: 'tznote', text: 'Six to a table; a new table opens as players join. Players pay the entry when they register.' })),
+    h('div', { id: 'rtfErr', class: 'msg err', role: 'alert', hidden: !f.err, text: f.err }),
+    h('div', { class: 'pvrow', style: 'margin-top:12px' },
+      h('button', { type: 'button', class: 'btn-secondary btn-small', id: 'rtfCancel', text: 'Back', onclick: () => { a.rmtf = null; Admin.paint(); } }),
+      h('button', { type: 'button', class: 'btn-primary btn-small', id: 'rtfSave', text: 'Publish tournament', disabled: !!S.busy.rmTourSave, onclick: save })));
+}
+
+/* ---- the console: the Rummy private table ---- */
+function ccRmPrivate() {
+  const a = Admin.st, d = (S.rmRooms || {})[RM_PRIV], open = !!d && d.status === 'open', live = open && hostLive(d, 20000);
+  if (open && a.rmPrivCode === undefined) { a.rmPrivCode = null; RmRepo.ref(RM_PRIV).collection('secret').doc('key').get().then(s => { a.rmPrivCode = s.exists ? s.data().code || '' : ''; Admin.paint(); }, () => { a.rmPrivCode = ''; }); }
+  const f = a.rmpf || (a.rmpf = { name: (d && d.name) || 'Rummy Private', pp: (d && d.perPoint) || 1, min: (d && d.minBuyIn) || 160, max: (d && d.maxBuyIn) || 1600, code: rmNewCode(), err: '' });
+  const setCode = async code => { const key = await rmPrivKey(code); await RmRepo.ref(RM_PRIV).collection('secret').doc('key').set({ key, code: cleanCode(code), updatedAt: rmTs() }); a.rmPrivCode = cleanCode(code); };
+  const share = code => { const text = 'Join my Rummy private table at Teen Patti Club. Room code: ' + code;
+    if (navigator.share) return navigator.share({ title: 'Rummy private table', text }).catch(() => {});
+    if (navigator.clipboard) navigator.clipboard.writeText(code).then(() => toast('Room code copied.'), () => toast(code)); };
+  if (open) return h('div', { class: 'ccpage fixed', id: 'rmPrivAdmin' }, h('div', { class: 'ccscroll' },
+    h('div', { class: 'ccrmcur on' },
+      h('div', { class: 'ccrmcurh' }, h('i', { class: 'ccgsym red', text: '♦' }), h('div', {}, h('b', { text: d.name }), h('span', { text: (live ? 'Live  ·  ' + (d.seated || 0) + ' seated' : 'Open  ·  nobody playing') + '  ·  ' + d.perPoint + ' per point  ·  buy-in ' + fmt(d.minBuyIn) + '–' + fmt(d.maxBuyIn) }))),
+      h('div', { class: 'refbox', id: 'rmPrivCodeBox' }, h('span', { text: 'ROOM CODE' }), h('b', { text: a.rmPrivCode || (a.rmPrivCode === null ? '...' : 'not set') }),
+        a.rmPrivCode ? h('button', { type: 'button', class: 'pvcopy', text: 'Share', onclick: () => share(a.rmPrivCode) }) : null,
+        h('i', { text: 'Players enter this code in the Rummy lobby (Private). A new code stops new players using the old one; anyone seated stays.' })),
+      h('div', { class: 'pvrow' },
+        h('button', { type: 'button', class: 'ccbtn ghost sm', id: 'rmPrivNewCode', onclick: () => adminBusy('rmpc', 'new room code', async () => { await setCode(rmNewCode()); Admin.say('New room code set.'); }) }, h('span', { text: 'New code' })),
+        h('button', { type: 'button', class: 'ccbtn ghost sm', id: 'rmPrivClose', onclick: async () => {
+          if (!(await ccConfirm({ title: 'Close the private table?', ok: 'Close', body: 'Nobody new can join. Players already there finish the deal in hand and can leave with their chips.' }))) return;
+          adminBusy('rmpx', 'close private table', async () => { await RmRepo.ref(RM_PRIV).update({ status: 'closed', updatedAt: rmTs() }); a.rmpf = null; Admin.say('The private table is closed.'); }); } }, h('span', { text: 'Close table' }))))));
+  const chips = (id, k, opts, after) => h('div', { class: 'cmaud', id }, opts.map(v => h('button', { type: 'button', class: 'achip' + (Number(f[k]) === v ? ' on' : ''), text: String(v), onclick: () => { f[k] = v; if (after) after(v); Admin.paint(); } })));
+  const inp = (id, k, type, extra) => h('input', Object.assign({ id, type, value: String(f[k]), oninput: e => { f[k] = e.target.value; } }, extra || {}));
+  const pp = Number(f.pp) || 1, minMin = Math.ceil(80 * pp);
+  const create = () => {
+    const name = String(f.name || '').trim().slice(0, 24), min = parseInt(f.min, 10), max = parseInt(f.max, 10), code = cleanCode(f.code);
+    const err = !name ? 'Give the table a name.' : !(min >= minMin) ? 'The smallest buy-in must be at least ' + fmt(minMin) + ' chips.' : !(max >= min) ? 'The largest buy-in must be at least the smallest.' : code.length < 4 ? 'The room code needs at least 4 letters or numbers.' : '';
+    if (err) { f.err = err; Admin.paint(); return; }
+    f.err = '';
+    return adminBusy('rmpo', 'open private table', async () => {
+      const ref = RmRepo.ref(RM_PRIV), snap = await ref.get();
+      await setCode(code);
+      const cfg = { name, perPoint: pp, minBuyIn: min, maxBuyIn: max, status: 'open', updatedAt: rmTs() };
+      if (!snap.exists) await ref.set(Object.assign({ tableId: RM_PRIV, permanent: true, adminUid: ADMIN_UID, dealerAt: 0, seated: 0, createdAt: rmTs() }, cfg));
+      else { await RmRepo.game(RM_PRIV).delete().catch(() => {}); await ref.update(cfg); }
+      a.rmpf = null; Admin.say('The private table is open. Share the room code with your players.');
+    });
+  };
+  return h('div', { class: 'ccpage fixed', id: 'rmPrivAdmin' }, h('div', { class: 'ccscroll' },
+    h('div', { class: 'cmcard t-tour', id: 'rmPrivForm' },
+      h('div', { class: 'ccrmcurh' }, h('i', { class: 'ccgsym red', text: '♦' }), h('div', {}, h('b', { text: 'Rummy private table' }), h('span', { text: d ? 'Closed  ·  set it up and open it again' : 'Invite only  ·  not opened yet' }))),
+      h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'TABLE NAME' }), inp('rpfName', 'name', 'text', { maxlength: 24 })),
+      h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'CHIPS PER POINT' }), chips('rpfPP', 'pp', [0.5, 1, 2, 5, 10], v => { f.min = Math.ceil(160 * v); f.max = f.min * 10; })),
+      h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'BUY-IN (SMALLEST AT LEAST ' + fmt(minMin) + ')' }), h('div', { class: 'apfields even' }, inp('rpfMin', 'min', 'number', { inputmode: 'numeric' }), inp('rpfMax', 'max', 'number', { inputmode: 'numeric' }))),
+      h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'ROOM CODE' }), h('div', { class: 'apfields even' }, inp('rpfCode', 'code', 'text', { maxlength: 12, autocapitalize: 'characters' }),
+        h('button', { type: 'button', class: 'btn-secondary btn-small', text: 'New code', onclick: () => { f.code = rmNewCode(); Admin.paint(); } }))),
+      h('div', { id: 'rpfErr', class: 'msg err', role: 'alert', hidden: !f.err, text: f.err }),
+      h('button', { type: 'button', class: 'btn-primary', id: 'rpfOpen', style: 'margin-top:10px;width:100%', text: 'Open the private table', disabled: !!S.busy.rmpo, onclick: create }))));
+}
+
+/* ---- the line that tells you what is going on: short fixed phrases, each held 5 seconds, then flipped up to the next ---- */
+const Flip = {
+  st: {},
+  node(key, lines, cls, style, id) {
+    lines = (lines || []).filter(Boolean);
+    let s0 = Flip.st[key];
+    if (!s0) s0 = Flip.st[key] = { el: h('div', { class: 'flipmsg' }), sig: null, i: 0, at: 0, lines: [] };
+    s0.el.className = 'flipmsg ' + (cls || ''); if (style) s0.el.setAttribute('style', style); else s0.el.removeAttribute('style');
+    if (id) s0.el.id = id; else s0.el.removeAttribute('id');
+    s0.el.setAttribute('role', 'status'); s0.el.setAttribute('aria-live', 'polite');
+    const sig = lines.join('|');
+    if (sig !== s0.sig) { const first = s0.sig === null; s0.sig = sig; s0.lines = lines; s0.i = 0; s0.at = Date.now(); Flip.show(s0, !first); }
+    return s0.el;
+  },
+  show(s0, anim) {
+    s0.el.querySelectorAll('.fl.out').forEach(x => x.remove());
+    const old = s0.el.querySelector('.fl'), txt = s0.lines[s0.i] || '';
+    if (old && old.textContent === txt) return;
+    const nu = h('span', { class: 'fl' + (anim && old ? ' in' : ''), text: txt });
+    nu.addEventListener('animationend', () => nu.classList.remove('in'));
+    if (old) { if (anim) { old.classList.add('out'); old.addEventListener('animationend', () => old.remove()); setTimeout(() => old.remove(), 700); } else old.remove(); }
+    if (txt) s0.el.appendChild(nu);
+  },
+  tick() {
+    const now = Date.now();
+    Object.values(Flip.st).forEach(s0 => { if (s0.lines.length > 1 && now - s0.at >= 5000 && s0.el.isConnected) { s0.i = (s0.i + 1) % s0.lines.length; s0.at = now; Flip.show(s0, true); } });
+  }
+};
+setInterval(() => Flip.tick(), 250);
+// Rummy: what to say at each moment
+function rmFlow(g, me, myTurn, final, cur) {
+  const nm = uid => (g.players.find(p => p.uid === uid) || {}).name || 'Someone', note = RM.note ? [RM.note] : [];
+  if (g.over) return [g.winner === RM.ME ? 'You won the deal!' : nm(g.winner) + ' won the deal'];
+  if (final) return me.status === 'in' && g.winner !== RM.ME ? [nm(g.winner) + ' declared', 'Arrange your groups', 'Then tap Submit'] : ['Waiting for the others', 'They are putting down cards'];
+  if (myTurn) return g.phase === 'draw' ? note.concat(['Your turn', 'Pick from the deck or open pile']) : ['Throw a card', 'Or drop it on SHOW to declare'];
+  if (me.status === 'wait') return RM.standing && !RM.net ? ['You are watching', 'Tap Sit down to play'] : ['You join the next deal', cur.name + ' is playing'];
+  if (me.status !== 'in') return [me.status === 'drop' ? 'You dropped this deal' : 'You are out of this deal', cur.name + ' is playing'];
+  return note.concat([cur.name + ' is playing']);
+}
+
 function renderRummy() {
-  const B = fbox(RT_W, RT_H), g = RM.g, parts = [];
+  const tid = S.route && S.route.tableId;
+  if (tid) {           // a live table: what the host says, seen from your seat
+    RM.net = true; RM.ME = S.user ? S.user.uid : 'me'; RM.perPoint = (RmNet.doc && RmNet.doc.perPoint) || (RM_TABLE_BY_ID[tid] || {}).perPoint || 1; RM.standing = false;
+    RM.g = RmNet.view();
+    const gm = RmNet.game;
+    if (gm && gm.phase === 'final') { RM.endsAt = gm.finalEndsAt || 0; RM.turnStart = RM.endsAt - RM_FINAL_MS; }
+    else if (gm) { RM.endsAt = gm.turnEndsAt || 0; RM.turnStart = RM.endsAt - RM_TURN_MS; }
+    if (!RM.g) return rmNetIdle(tid);
+  } else if (RM.net) { RM.net = false; RM.ME = 'me'; RM.g = null; }
+  const B = fbox(RT_W, RT_H), g0 = RM.g, parts = [];
+  // standing at the test table: you watch from your seat while the bots play
+  const g = g0 && !g0.players.some(p => p.uid === RM.ME) && RM.me() ? Object.assign({}, g0, { players: g0.players.concat([RM.me()]) }) : g0;
   const top = h('div', { class: 'stop rmtop' },
     h('button', { type: 'button', class: 'pback2', id: 'rmBack', 'aria-label': 'Leave the table', onclick: () => RM.leave() }, pI('back')),
-    h('div', { class: 'rmtitle' }, h('b', { text: 'Points Rummy' }), h('span', { text: (RM.sess && RM.g ? 'Deal ' + RM.sess.deal + ' · ' : 'Test table · ') + RM.perPoint + ' chip' + (RM.perPoint === 1 ? '' : 's') + ' per point' })),
+    h('div', { class: 'rmtitle' }, h('b', { text: RM.net ? rmTitleOf(tid) : 'Points Rummy' }), h('span', {}, RM.net ? 'Deal ' + ((RmNet.game && RmNet.game.dealNo) || 1) + ' · ' : RM.sess && RM.g ? 'Deal ' + RM.sess.deal + ' · ' : 'Test table · ', rmSubOf(tid))),
     h('button', { type: 'button', class: 'rmhelp', id: 'rmHelp', 'aria-label': 'How to play', onclick: () => RM.rules(), text: '?' }));
-  if (!g && RM.autoResume) { RM.autoResume = false; setTimeout(() => { if (!RM.g && S.route && S.route.name === 'rummy') RM.start(!!RM.sess); }, 0); }
-  if (!g && RM.autoStart) { RM.autoStart = false; setTimeout(() => { if (!RM.g && S.route && S.route.name === 'rummy') RM.start(); }, 0); }
+  if (!g && !RM.net && RM.autoResume) { RM.autoResume = false; setTimeout(() => { if (!RM.g && S.route && S.route.name === 'rummy') RM.start(!!RM.sess); }, 0); }
+  if (!g && !RM.net && RM.autoStart) { RM.autoStart = false; setTimeout(() => { if (!RM.g && S.route && S.route.name === 'rummy') RM.start(); }, 0); }
+  if (!g && RM.standing && RM.sess) {
+    parts.push(h('div', { class: 'rmidle', style: B(150, 600, 737, 840) }, h('i', { class: 'rmidlei', text: '\u2666' }), h('b', { text: 'You are standing' }), h('span', { text: 'One bot cannot play alone. Sit down to play the next deal.' })));
+    parts.push(rmStandBtn(B));
+    return fitStage('p_rmtable', RT_W, RT_H, 'rummyStage', parts, 'prummy', top);
+  }
   if (!g) { parts.push(rmSetup(B)); return fitStage('p_rmtable', RT_W, RT_H, 'rummyStage', parts, 'prummy', top); }
   const me = RM.me(), myIx = g.players.indexOf(me), n = g.players.length, inPlay = me.status === 'in' && !g.over;
   const myTurn = RM.myTurn(), final = g.phase === 'final';
@@ -15957,19 +16936,23 @@ function renderRummy() {
   parts.push(h('div', { class: 'rmshowt' + (canShowNow ? ' can' : ''), id: 'rmShowTile', 'data-drop': 'show', style: B(648, 662, 752, 806) }, h('b', { text: 'SHOW' }), h('span', { text: canShowNow ? 'drop a card' : '' })));
   parts.push(h('i', { class: 'rmcount', style: B(620, 822, 780, 852), text: 'show' }));
 
-  // what is going on
+  // what is going on: short lines that flip up every five seconds
   const cur = Rummy.cur(g);
+  const twoRows0 = !!RM.me() && RM.me().hand.length && rmRows(RM.groups).rows.length > 1;
+  parts.push(Flip.node('rm', rmFlow(g, me, myTurn, final, cur), 'rmflip' + (myTurn || (final && me.status === 'in' && g.winner !== RM.ME) ? ' you' : ''), twoRows0 ? B(110, 862, 777, 940) : B(90, 895, 797, 990), 'rmMsg'));
+  if (!RM.net) parts.push(rmStandBtn(B));
   let msg = RM.note;
   if (g.over) msg = g.winner === RM.ME ? 'You won!' : (g.players.find(p => p.uid === g.winner) || {}).name + ' won.';
   else if (final) msg = me.status === 'in' && g.winner !== RM.ME ? (g.players.find(p => p.uid === g.winner) || {}).name + ' declared. Arrange your groups and tap Submit.' : 'Waiting for the others to put down their cards.';
   else if (myTurn) msg = g.phase === 'draw' ? (RM.note ? RM.note + ' ' : '') + 'Your turn: pick a card from the deck or the open pile.' : 'Select a card to throw, or put it away and tap Show.';
+  else if (me.status === 'wait') msg = 'You join at the next deal. ' + cur.name + ' is playing.';
   else if (me.status !== 'in') msg = (RM.note || 'You are out of this game.') + ' ' + cur.name + ' is playing.';
   else if (!msg) msg = cur.name + ' is playing.';
   const twoRows = !!RM.me() && rmRows(RM.groups).rows.length > 1;
-  parts.push(h('div', { class: 'rmmsg' + (myTurn || final ? ' you' : ''), style: twoRows ? B(130, 866, 757, 936) : B(110, 900, 777, 990), id: 'rmMsg', text: msg }));
+  void msg; void twoRows;
 
   // your cards, in your groups
-  if (me.status === 'in' || final || g.over) {
+  if ((me.status === 'in' || final || g.over) && me.status !== 'wait' && me.hand.length) {
     const cards = RM.groups, L = rmRows(cards), two = L.rows.length > 1;
     const sc = Rummy.score(cards, g.wild), canEdit = inPlay || (final && me.status === 'in');
     const CW = L.CW, CH = L.CH;
@@ -16007,16 +16990,96 @@ function renderRummy() {
     const ticking = myTurn || (final && me.status === 'in' && g.winner !== RM.ME);
     parts.push(rmMeSeat(me, ticking, sc.valid ? 'Ready to show' : sc.points + ' pts', sc.valid ? 'ok' : '', B));
   } else {
-    parts.push(rmMeSeat(me, false, (me.status === 'drop' ? 'Dropped' : 'Wrong show') + ' · ' + me.points, 'out', B));
+    parts.push(rmMeSeat(me, false, me.status === 'wait' ? 'Next deal' : (me.status === 'drop' ? 'Dropped' : me.status === 'in' ? 'In the deal' : 'Wrong show') + ' · ' + me.points, me.status === 'wait' ? '' : 'out', B));
   }
   if (g.over && RM.result && !Sheets.el) parts.push(h('button', { type: 'button', class: 'rmbtn gold', id: 'rmSeeResult', style: B(293, 1350, 593, 1420), text: 'See result', onclick: () => RM.showResult() }));
   return fitStage('p_rmtable', RT_W, RT_H, 'rummyStage', parts, 'prummy', top);
+}
+// the test table's Stand up / Sit down
+function rmStandBtn(B) {
+  return h('button', { type: 'button', class: 'rmstand' + (RM.standing ? ' sit' : ''), id: 'rmStand', style: B(632, 1546, 852, 1612), onclick: () => RM.standing ? RM.sitDown() : RM.standUp() },
+    h('span', { text: RM.standing ? 'Sit down' : 'Stand up' }));
+}
+// a live table's name and what goes under it
+function rmTitleOf(t) { if (t === RM_PRIV) return (RmNet.doc && RmNet.doc.name) || 'Private table'; const s = rmTourSlotOf(t), T = s && RmTour.T(s); return T ? T.name : 'Points Rummy'; }
+function rmSubOf(t) {
+  const pp = RM.perPoint, base = pp + (pp === 1 ? ' chip' : ' chips') + ' per point', s = rmTourSlotOf(t), T = s && RmTour.T(s);
+  if (!T) return h('span', { text: (t === RM_PRIV ? 'Private \u00b7 ' : '') + base });
+  const ph = RmTour.phase(T);
+  return ph.name === 'lobby' ? h('span', {}, 'Starts in ', Tour.clock(ph.until)) : ph.name === 'play' ? h('span', {}, 'Ends in ', Tour.clock(ph.until), ' \u00b7 ' + base) : h('span', { text: ph.name === 'ended' ? 'Finished' : ph.name === 'cancelled' ? 'Cancelled' : base });
 }
 function rmMeSeat(me, ticking, pts, cls, B) {
   return h('div', { class: 'rmmeseat ' + (ticking ? 'on ' : '') + cls, style: B(243, 1420, 643, 1640) },
     h('div', { class: 'rmmering' }, h('div', { class: 'rmmeface' }, avatarNode(me.av)), ticking ? rmRing(RM.turnStart, RM.endsAt) : null),
     ticking ? h('span', { class: 'rmsecs' }) : null,
     h('div', { class: 'rmmeplate' }, h('b', { text: me.name === 'You' ? 'You' : me.name }), h('span', { class: 'rmpts ' + cls, text: pts })));
+}
+// a live table with no deal on: who is here, what is needed, your chips
+function rmNetIdle(tid) {
+  const B = fbox(RT_W, RT_H), parts = [], N = RmNet, uid = S.user && S.user.uid, me = N.me(), pp = RM.perPoint, need = rmNeed(pp);
+  const top = h('div', { class: 'stop rmtop' },
+    h('button', { type: 'button', class: 'pback2', id: 'rmBack', 'aria-label': 'Leave the table', onclick: () => RM.leave() }, pI('back')),
+    h('div', { class: 'rmtitle' }, h('b', { text: rmTitleOf(tid) }), rmSubOf(tid)),
+    h('button', { type: 'button', class: 'rmhelp', id: 'rmHelp', 'aria-label': 'How to play', onclick: () => RM.rules(), text: '?' }));
+  if (!N.loaded.members) { parts.push(h('div', { class: 'rmmsg', style: B(110, 860, 777, 950), text: 'Joining the table...' })); return fitStage('p_rmtable', RT_W, RT_H, 'rummyStage', parts, 'prummy', top); }
+  const others = N.members.filter(m => m.uid !== uid), spots = RM_LAYOUT[Math.max(1, Math.min(5, others.length))] || RM_LAYOUT[1];
+  others.slice(0, 5).forEach((m, i) => { const [x, y] = RM_SPOTS[spots[i]];
+    parts.push(h('div', { class: 'rmseat', style: rmPos(x, y) }, h('div', { class: 'rmav' }, avatarNode(m.avatar)), h('b', { class: 'rmname', text: m.name }), h('span', { class: 'rmst', text: fmt(m.stack) + ' chips' }))); });
+  const ready = N.members.filter(m => m.stack >= need).length;
+  const ts = rmTourSlotOf(tid), TT = ts && RmTour.T(ts), tph = TT ? RmTour.phase(TT) : null;
+  if (tph && (tph.name === 'ended' || tph.name === 'cancelled')) {
+    const rows = RmTour.standings(ts).filter(r => r.played).slice(0, 6);
+    parts.push(h('div', { class: 'rmtourend', id: 'rmTourEnd', style: B(110, 460, 777, 1060) },
+      h('i', { text: tph.name === 'ended' ? 'FINAL STANDINGS' : 'TOURNAMENT CANCELLED' }), h('b', { text: TT.name }),
+      h('div', { class: 'rmtelist' }, rows.map((r, i) => h('div', { class: r.uid === uid ? 'me' : '' }, h('em', { text: String(i + 1) }), h('span', { text: r.name }), h('strong', { text: fmt(r.bal) })))),
+      me ? h('button', { type: 'button', class: 'rmrbtn gold', id: 'rmTourCollect', text: 'Collect ' + fmt(me.stack) + ' chips and leave', onclick: () => RmNet.leave() }) : null));
+    return fitStage('p_rmtable', RT_W, RT_H, 'rummyStage', parts, 'prummy', top);
+  }
+  const msg = tph && tph.name === 'lobby' ? 'The tournament starts soon. Cards are dealt at the start.' : ready >= 2 ? 'Dealing the cards...' : N.members.length < 2 ? 'Waiting for another player to join.' : 'Waiting for 2 players with at least ' + fmt(need) + ' chips.';
+  parts.push(h('div', { class: 'rmidle', style: B(150, 600, 737, 840) }, h('i', { class: 'rmidlei', text: '\u2666' }), h('b', { text: msg }),
+    tph && tph.name === 'lobby' ? h('span', {}, 'Starts in ', Tour.clock(tph.until)) : h('span', { text: TT ? 'Tournament  \u00b7  the most chips at the end wins' : '2 to 6 players  \u00b7  one deal at a time  \u00b7  5% rake' })));
+  if (me) {
+    const low = me.stack < need;
+    if (low && !ts) parts.push(h('button', { type: 'button', class: 'rmbtn gold', id: 'rmTopUp', style: B(268, 900, 618, 970), text: 'Add chips', onclick: () => rmTopUpSheet(tid) }));
+    parts.push(h('div', { class: 'rmmeseat', style: B(243, 1420, 643, 1640) },
+      h('div', { class: 'rmmering' }, h('div', { class: 'rmmeface' }, avatarNode(me.avatar))),
+      h('div', { class: 'rmmeplate' }, h('b', { text: me.name }), h('span', { class: 'rmpts' + (low ? '' : ' ok'), text: fmt(me.stack) + ' chips' }))));
+    if (low) parts.push(h('div', { class: 'rmmsg', style: B(110, 1000, 777, 1080), text: ts ? 'You are out of chips for this tournament. Leave to take what is left back to your wallet.' : 'You need at least ' + fmt(need) + ' chips at this table to be dealt in.' }));
+  }
+  return fitStage('p_rmtable', RT_W, RT_H, 'rummyStage', parts, 'prummy', top);
+}
+// how many chips to take to a table
+function rmJoinSheet(t) {
+  const d = (S.rmRooms || {})[t] || {}, T = RM_TABLE_BY_ID[t] || { perPoint: d.perPoint || 1, name: d.name || 'Private table' }, min = d.minBuyIn || Rummy.minBuyIn(T.perPoint), max = d.maxBuyIn || min * 10, wallet = (S.profile && S.profile.chips) || 0;
+  if (S.profile && S.profile.tableId === t) { S.forceLobby = false; Sheets.closeNow(); go(); return; }
+  if (S.profile && S.profile.tableId) return toast('You already have a seat at another table. Leave it first.');
+  if (wallet < min) return toast('You need ' + fmt(min) + ' chips for this table. You have ' + fmt(wallet) + '.');
+  let amt = Math.min(max, wallet, min * 2);
+  const inp = h('input', { id: 'rmBuyIn', type: 'number', inputmode: 'numeric', min, max, value: amt, oninput: e => { amt = parseInt(e.target.value, 10) || 0; } });
+  const quick = [min, min * 2, min * 5, max].filter((v, i, ar) => v <= Math.min(max, wallet) && ar.indexOf(v) === i);
+  const go1 = h('button', { type: 'button', id: 'rmJoinGo', class: 'rmrbtn gold', text: 'Take a seat', onclick: async () => {
+    if (!Number.isInteger(amt) || amt < min || amt > Math.min(max, wallet)) return toast('Bring between ' + fmt(min) + ' and ' + fmt(Math.min(max, wallet)) + ' chips.');
+    go1.disabled = true;
+    try { await RmRepo.join(S.user.uid, t, amt); S.forceLobby = false; if (S.profile) { S.profile.tableId = t; S.profile.chips = wallet - amt; } Sheets.closeNow(); go(); }
+    catch (e) { toast(t === RM_PRIV && e && e.code === 'permission-denied' ? 'That room code is not right, or the table just closed. Ask the admin for the code.' : friendlyError(e)); go1.disabled = false; } } });
+  Sheets.open('rmJoinSheet', (t === RM_PRIV ? T.name + ' \u00b7 ' : 'Rummy \u00b7 ') + T.perPoint + ' per point', h('div', { class: 'rmresult' },
+    h('p', { class: 'hnote', text: 'Bring ' + fmt(min) + ' to ' + fmt(max) + ' chips. The most you can lose in one deal is ' + fmt(rmNeed(T.perPoint)) + '. Wallet: ' + fmt(wallet) + '.' }),
+    h('div', { class: 'rmquick' }, quick.map(v => h('button', { type: 'button', text: fmt(v), onclick: () => { amt = v; inp.value = v; } }))),
+    h('label', { class: 'rmbuy' }, h('span', { text: 'Chips to bring' }), inp),
+    h('div', { class: 'rmrbtns' }, h('button', { type: 'button', class: 'rmrbtn ghost', text: 'Cancel', onclick: () => Sheets.close() }), go1)));
+}
+function rmTopUpSheet(t) {
+  const d = RmNet.doc || {}, me = RmNet.me(), wallet = (S.profile && S.profile.chips) || 0; if (!me) return;
+  const room = Math.max(0, (d.maxBuyIn || 0) - me.stack), def = Math.min(room, wallet, Math.max(0, rmNeed(RM.perPoint) * 2 - me.stack));
+  let amt = def;
+  const inp = h('input', { type: 'number', inputmode: 'numeric', value: def, oninput: e => { amt = parseInt(e.target.value, 10) || 0; } });
+  Sheets.open('rmTopSheet', 'Add chips', h('div', { class: 'rmresult' },
+    h('p', { class: 'hnote', text: 'At the table: ' + fmt(me.stack) + '. Wallet: ' + fmt(wallet) + '. You can add up to ' + fmt(Math.min(room, wallet)) + '.' }),
+    h('label', { class: 'rmbuy' }, h('span', { text: 'Chips to add' }), inp),
+    h('div', { class: 'rmrbtns' }, h('button', { type: 'button', class: 'rmrbtn ghost', text: 'Cancel', onclick: () => Sheets.close() }),
+      h('button', { type: 'button', class: 'rmrbtn gold', text: 'Add', onclick: async () => {
+        if (!Number.isInteger(amt) || amt < 1 || amt > Math.min(room, wallet)) return toast('Add between 1 and ' + fmt(Math.min(room, wallet)) + ' chips.');
+        try { await RmRepo.topUp(S.user.uid, t, amt); Sheets.close(); toast(fmt(amt) + ' chips added.'); } catch (e) { toast(friendlyError(e)); } } }))));
 }
 // choose the number of players and the point value, then deal
 function rmSetup(B) {
@@ -16079,20 +17142,27 @@ function renderRmLobby() {
     h('em', { class: 'tptag ' + (tagCls || '') }, h('i'), h('span', { text: tag })),
     h('span', { class: 'tpbot' }, h('span', { class: 'tptxt' }, h('b', { text: title }), h('span', { class: 'tpsub', text: sub })), h('span', { class: 'tpgo', 'aria-hidden': 'true' }, pI('chev')))));
   parts.push(h('b', { class: 'tptitle', style: B(317, 405, 617, 462), text: 'RUMMY' }));
-  parts.push(card('rmPoints', [152, 618, 457, 868], 'layers', 'Points', '0.5 – 10 per point', 'PLAY', 'on', () => rmTablesSheet()));
+  const nP = RM_TABLES.reduce((n, t) => { const d = (S.rmRooms || {})[t.id]; return n + (d && hostLive(d, 20000) ? d.seated || 0 : 0); }, 0), mineRm = S.profile && RM_TABLE_BY_ID[S.profile.tableId];
+  parts.push(card('rmPoints', [152, 618, 457, 868], 'layers', 'Points', '0.5 – 10 per point', mineRm ? 'RETURN' : nP ? nP + ' PLAYING' : 'PLAY', 'on', () => mineRm ? rmJoinSheet(S.profile.tableId) : rmTablesSheet()));
   parts.push(card('rmHow', [477, 618, 782, 868], 'book', 'How to play', 'In pictures', 'GUIDE', '', () => RM.rules()));
-  parts.push(card('rmTour', [152, 918, 457, 1168], 'trophy', 'Tournament', 'Rummy events', 'SOON', 'off', () => Sheets.soon('Rummy tournaments', 'Rummy tournaments open once the Rummy tables are live.')));
-  parts.push(card('rmPrivate', [477, 918, 782, 1168], 'key', 'Private', 'Code and password', 'CLOSED', 'off', () => Sheets.soon('Rummy private table', 'The Rummy private table opens once the Rummy tables are live.')));
+  const TL = RmTour.list(), tOpen = TL.filter(x => { const ph = RmTour.phase(x.T); return ph.name === 'upcoming' || RmTour.running(ph); }), tLive = tOpen.filter(x => RmTour.running(RmTour.phase(x.T)));
+  const tMine = tOpen.find(x => RmTour.me(x.s) && (RmTour.me(x.s).held > 0 || (S.profile && rmTourSlotOf(S.profile.tableId) === x.s)) && RmTour.running(RmTour.phase(x.T)));
+  const tNext = tLive[0] || tOpen[0];
+  parts.push(card('rmTour', [152, 918, 457, 1168], 'trophy', 'Tournament', tNext ? tNext.T.name : 'Nothing lined up', tMine ? 'JOIN NOW' : tLive.some(x => RmTour.phase(x.T).name === 'play') ? 'LIVE NOW' : tLive.length ? 'TABLES OPEN' : tOpen.length ? tOpen.length + ' UPCOMING' : 'NONE YET', tOpen.length ? 'on' : 'off', () => rmTourSheet()));
+  const pv = (S.rmRooms || {})[RM_PRIV], pvOpen = !!pv && pv.status === 'open', pvMine = S.profile && S.profile.tableId === RM_PRIV;
+  parts.push(card('rmPrivate', [477, 918, 782, 1168], 'key', 'Private', pvOpen ? pv.name : 'Room code', pvMine ? 'RETURN' : pvOpen ? 'OPEN' : 'CLOSED', pvOpen ? 'on' : 'off', () => rmPrivSheet()));
   return fitStage('p_rmlobby', TPL_W, TPL_H, 'rmLobStage', parts, 'ptplobby', screenTop('Back to card games', () => goTo('games')));
 }
 // the five Points tables
 function rmTablesSheet() {
   Sheets.open('rmTablesSheet', 'Points Rummy', h('div', { class: 'setlist rmtl' },
     h('p', { class: 'hnote', text: '2 to 6 players  ·  one deal at a time  ·  5% rake' }),
-    RM_TABLES.map(t => h('button', { type: 'button', class: 'rmtrow', id: 'rmt_' + t.id, onclick: () => toast(RUMMY_LIVE ? 'Joining...' : 'The live Rummy tables are being switched on. Try the test table in the console.') },
+    RM_TABLES.map(t => { const d = (S.rmRooms || {})[t.id], n = d && hostLive(d, 20000) ? d.seated || 0 : 0, mine = S.profile && S.profile.tableId === t.id;
+      return h('button', { type: 'button', class: 'rmtrow' + (mine ? ' mine' : ''), id: 'rmt_' + t.id, onclick: () => rmJoinSheet(t.id) },
       h('span', { class: 'rmtpp' }, h('b', { text: String(t.perPoint) }), h('i', { text: 'per point' })),
       h('span', { class: 'rmtinfo' }, h('b', { text: 'Min ' + fmt(Rummy.minBuyIn(t.perPoint)) + ' chips' }), h('i', { text: 'Most you lose in a deal: ' + fmt(Math.round(80 * t.perPoint)) })),
-      h('em', { class: 'rmtst', text: RUMMY_LIVE ? 'JOIN' : 'SOON' })))));
+      h('em', { class: 'rmtst' + (n ? ' on' : ''), text: mine ? 'RETURN' : n ? n + ' PLAYING' : 'JOIN' })); })));
+  RM_TABLES.forEach(t => { if (S.rmRooms && S.rmRooms[t.id] === null) RmRepo.ensure(t.id).catch(() => {}); });
 }
 
 /* ---- Invite friends: your referral code ---- */
@@ -18531,7 +19601,7 @@ const ccLoading = t => h('div', { class: 'ccempty' }, h('div', { class: 'ccspin'
 const GAME_CATS = [
   { id: 'cards', name: 'Cards', sym: '♠', games: [
     { id: 'teenpatti', name: 'Teen Patti', sym: '♠', status: 'live' },
-    { id: 'rummy', name: 'Rummy', sym: '♦', status: 'test', red: true },
+    { id: 'rummy', name: 'Rummy', sym: '♦', status: 'live', red: true },
     { id: 'andarbahar', name: 'Andar Bahar', sym: '♥', status: 'soon', red: true },
     { id: 'blackjack', name: 'Blackjack', sym: '♣', status: 'soon' }] },
   { id: 'sports', name: 'Sports', sym: '⚽', games: [
@@ -18549,7 +19619,7 @@ const CC_STATUS = { live: 'Live', test: 'Testing', soon: 'Soon' };
 // one line saying where a game stands
 function ccGameLine(id) {
   if (id === 'teenpatti') { const pub = TABLES.filter(t => !t.private), live = pub.filter(t => hostLive(S.rooms[t.id])).length, seated = TABLES.reduce((n, t) => n + (hostLive(S.rooms[t.id]) ? (S.rooms[t.id].seated || 0) : 0), 0); return live + ' live tables  ·  ' + seated + ' playing'; }
-  if (id === 'rummy') return 'Test table ready  ·  opens to players soon';
+  if (id === 'rummy') { const R0 = S.rmRooms || {}, live = RM_TABLES.filter(t => hostLive(R0[t.id], 20000)).length, n = RM_TABLES.reduce((k, t) => k + (hostLive(R0[t.id], 20000) ? R0[t.id].seated || 0 : 0), 0); return live + ' live tables  \u00b7  ' + n + ' playing'; }
   return 'Being built';
 }
 // open a game's page
@@ -18599,7 +19669,7 @@ function ccGamesPage() {
   const game = a.game, sec = a.sec || 'overview', g = GAME_BY_ID[game];
   let page;
   if (g.status === 'soon') page = ccGameSoon(game);
-  else if (game === 'rummy') page = sec === 'test' ? ccRmTest() : sec === 'tour' ? ccRmTour() : sec === 'private' ? ccRmPrivate() : ccRummySoon();
+  else if (game === 'rummy') page = sec === 'test' ? ccRmTest() : sec === 'tour' ? ccRmTour() : sec === 'private' ? ccRmPrivate() : ccRmTables();
   else { if (sec === 'tour' || sec === 'private') a.sec = 'overview'; page = a.sec === 'tables' ? ccTables() : a.sec === 'test' ? ccTest() : ccTpOverview(); }
   page.insertBefore(ccGameHead(), page.firstChild);
   return page;
@@ -18622,18 +19692,26 @@ function ccTpOverview() {
         metric('tpHands', 'cards', fmt(hands), 'Hands played', 'with rake taken', () => Admin.go('rake')))));
 
 }
-// Rummy's tournaments and private table: the same layout as Teen Patti's; they open with the live Rummy tables.
-function ccRmTour() {
-  const later = () => toast('Rummy tournaments can be created once the Rummy tables are live.');
-  return h('div', { class: 'ccpage fixed' }, h('div', { class: 'ccscroll' },
-    h('div', { class: 'cctiles2' }, ccNewTile('rmTourNew', 'trophy', 'New Rummy tournament', 'Name, start time, chips per point, entry and rounds', later), ccNewTile('rmTourTest', 'flask', 'Test tournament', 'A short Rummy tournament with bots', later)),
-    ccSec('Rummy tournaments', h('span', { class: 'ccchip', text: '0 of 5 slots' }), h('p', { class: 'ccnote', text: 'Nothing scheduled. Rummy tournaments appear here, with their entries, tables and standings.' }))));
-}
-function ccRmPrivate() {
-  return h('div', { class: 'ccpage fixed' }, h('div', { class: 'ccscroll' },
-    h('div', { class: 'ccrmcur' }, h('div', { class: 'ccrmcurh' }, h('i', { class: 'ccgsym red', text: '♦' }), h('div', {}, h('b', { text: 'Rummy private table' }), h('span', { text: 'Invite only  ·  not created' }))),
-      h('button', { type: 'button', class: 'ccbtn primary', id: 'rmPrivNew', onclick: () => toast('The Rummy private table can be created once the Rummy tables are live.') }, h('span', { text: 'Create the private table' }))),
-    ccSec('Table summaries', null, h('p', { class: 'ccnote', text: 'None yet. Each Rummy private table you create is recorded here.' }))));
+// Rummy's tables, live: who is playing, who deals, whether they are open (Overview and Tables)
+function ccRmTables() {
+  const R0 = S.rmRooms || {}, rk = Admin.st.rake || {};
+  Admin.watchRake();
+  const live = RM_TABLES.filter(t => hostLive(R0[t.id], 20000)), n = live.reduce((k, t) => k + (R0[t.id].seated || 0), 0);
+  const rake = RM_TABLES.reduce((k, t) => k + ((rk[t.id] || {}).total || 0), 0), hands = RM_TABLES.reduce((k, t) => k + ((rk[t.id] || {}).hands || 0), 0);
+  const metric = (id, ic, v, l, sub) => h('div', { class: 'ccmetric', id }, h('span', { class: 'ccmic' }, ccI(ic)), h('b', { text: v }), h('span', { text: l }), h('i', { text: sub }));
+  const toggle = async (t, d) => {
+    const close = d.status === 'open';
+    if (!(await ccConfirm({ title: (close ? 'Close ' : 'Open ') + RM_TABLE_BY_ID[t].name + '?', ok: close ? 'Close' : 'Open', body: close ? 'Nobody can join while it is closed. A deal being played finishes first.' : 'Players can join again.' }))) return;
+    adminBusy('rmt_' + t, 'change the table', () => RmRepo.ref(t).update({ status: close ? 'closed' : 'open', updatedAt: rmTs() }));
+  };
+  return h('div', { class: 'ccpage fixed', id: 'rmTablesPage' }, h('div', { class: 'ccscroll' },
+    h('div', { class: 'ccmetrics' }, metric('rmLive', 'table', live.length + '/' + RM_TABLES.length, 'Live tables', 'a dealer is running'), metric('rmSeated', 'users', String(n), 'Seated now', 'at Rummy tables'),
+      metric('rmRake', 'stats', fmt(rake), 'Rake earned', 'all Rummy tables'), metric('rmDeals', 'cards', fmt(hands), 'Deals', 'with rake taken')),
+    ccSec('Tables', null, h('div', { class: 'ccrmlist' }, RM_TABLES.map(t => { const d = R0[t.id], on = hostLive(d, 20000);
+      return h('div', { class: 'ccrmrow' },
+        h('div', {}, h('b', { text: t.perPoint + (t.perPoint === 1 ? ' chip' : ' chips') + ' per point' }), h('span', { text: !d ? 'Not set up yet (made when a player opens it)' : (d.status !== 'open' ? 'Closed' : on ? 'Live' : 'Empty') + '  ·  buy-in ' + fmt(d.minBuyIn) + '–' + fmt(d.maxBuyIn) + '  ·  rake ' + fmt((rk[t.id] || {}).total || 0) })),
+        h('em', { class: on ? 'up' : '', text: (on ? d.seated || 0 : 0) + ' seated' }),
+        d ? h('button', { type: 'button', class: 'ccbtn ghost sm', onclick: () => toggle(t.id, d), text: d.status === 'open' ? 'Close' : 'Open' }) : null); })))));
 }
 // A game that is still being built.
 function ccGameSoon(id) {
@@ -19338,13 +20416,13 @@ function adminPrivForm() {
 // the Rummy tables (their ids match the database rules) and which game a table belongs to
 const RM_TABLES = [0.5, 1, 2, 5, 10].map(v => ({ id: 'rm_' + (v === 0.5 ? '05' : v), perPoint: v, name: 'Rummy · ' + v + (v === 1 ? ' chip' : ' chips') + ' per point' }));
 const RM_TABLE_BY_ID = {}; RM_TABLES.forEach(t => { RM_TABLE_BY_ID[t.id] = t; });
-const rakeGameOf = id => RM_TABLE_BY_ID[id] ? 'rummy' : /^ab_/.test(id) ? 'andarbahar' : /^bj_/.test(id) ? 'blackjack' : 'teenpatti';
+const rakeGameOf = id => rmIsTable(id) ? 'rummy' : /^ab_/.test(id) ? 'andarbahar' : /^bj_/.test(id) ? 'blackjack' : 'teenpatti';
 function adminRake() {
   const a = Admin.st, R = a.rake, T = a.tips || {}, pub = TABLES.filter(t => !t.private).concat(TABLES.filter(t => t.private));
   if (!R) return h('div', { class: 'card' }, h('p', { class: 'muted', text: 'Loading the rake ledger...' }));
   const sum = (o, k) => Object.values(o).reduce((x, d) => x + (d[k] || 0), 0);
   const ms = v => (v && v.toMillis ? new Date(v.toMillis()).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : '-');
-  const names = t => (TABLE_BY_ID[t] ? tableName(TABLE_BY_ID[t]) : RM_TABLE_BY_ID[t] ? RM_TABLE_BY_ID[t].name : t);
+  const names = t => (TABLE_BY_ID[t] ? tableName(TABLE_BY_ID[t]) : rmIsTable(t) ? rmTableName(t) : t);
   const val = id => ((R[id] || {}).total || 0) + ((T[id] || {}).total || 0);
   const ids = Object.keys(R).concat(Object.keys(T)).concat(pub.map(t => t.id)).concat(RM_TABLES.map(t => t.id)).filter((id, i, ar) => ar.indexOf(id) === i).sort((x, y) => val(y) - val(x));
   const busyIds = ids.filter(id => val(id) > 0 || (R[id] || {}).hands || (T[id] || {}).count), quiet = ids.filter(id => !busyIds.includes(id));
