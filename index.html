@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build:20261119g -->
+<!-- build:20261119i -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -1108,7 +1108,7 @@ body[data-screen="auth"] .wrap{width:100%;max-width:none;padding:0}
 .tbseat.win .tbring{border-color:#2ee59d;box-shadow:0 0 calc(var(--u) * 24) calc(var(--u) * 6) rgba(46,229,157,.65)}
 .tbseat.out .tbring,.tbseat.out .tbplate{filter:brightness(.62) saturate(.7)}
 .tbtimer{position:absolute;left:-15%;top:-15%;width:130%;height:130%;transform:rotate(-90deg);pointer-events:none;overflow:visible}
-.tbtimer circle{fill:none;stroke-width:4;stroke-linecap:round}
+.tbtimer circle{fill:none;stroke-width:5.5;stroke-linecap:round}
 .tbtimer .tbtrack{stroke:rgba(0,0,0,.5)}
 .tbtimer .tbprog{transition:stroke-dashoffset .5s linear,stroke .5s}
 .tbring .tbdealer{position:absolute;z-index:3;right:-2%;top:-14%;width:calc(var(--u) * 36);height:calc(var(--u) * 36);border-radius:50%;display:grid;place-items:center;font:800 max(9px,calc(var(--u) * 21)) Georgia,serif;color:#2a1d00;background:linear-gradient(180deg,#ffe9a6,#c99a2e);box-shadow:0 2px 4px rgba(0,0,0,.6)}
@@ -4039,11 +4039,11 @@ body .cc .cctlist>*{min-width:0}
 .rmbtn{flex:0 1 calc(var(--u) * 190) !important;max-width:calc(var(--u) * 190) !important}
 /* ===== 101. Rummy: timers like Teen Patti, your seat, the Show tile ===== */
 .rmtimer{position:absolute;left:-14%;top:-14%;width:128%;height:128%;transform:rotate(-90deg);pointer-events:none;overflow:visible}
-.rmtimer circle{fill:none;stroke-width:5;stroke-linecap:round}
+.rmtimer circle{fill:none;stroke-width:6.5;stroke-linecap:round}
 .rmtimer .rmtk{stroke:rgba(0,0,0,.55)}
-.rmtimer .rmtp{stroke:#2ee59d;transition:stroke-dashoffset .25s linear,stroke .5s;filter:drop-shadow(0 0 3px currentColor)}
+.rmtimer .rmtp{stroke:#b56cff;transition:stroke-dashoffset .25s linear,stroke .5s;filter:drop-shadow(0 0 3px currentColor)}
 .rmring{display:none}
-.rmsecs{position:absolute;min-width:calc(var(--u) * 52);padding:calc(var(--u) * 4) calc(var(--u) * 8);border-radius:99px;background:rgba(4,18,12,.9);border:max(1px,calc(var(--u) * 2)) solid #2ee59d;color:#2ee59d;font:800 max(9px,calc(var(--u) * 20))/1 system-ui;text-align:center;font-variant-numeric:tabular-nums;z-index:4}
+.rmsecs{position:absolute;min-width:calc(var(--u) * 52);padding:calc(var(--u) * 4) calc(var(--u) * 8);border-radius:99px;background:rgba(4,18,12,.9);border:max(1px,calc(var(--u) * 2)) solid #b56cff;color:#b56cff;font:800 max(9px,calc(var(--u) * 20))/1 system-ui;text-align:center;font-variant-numeric:tabular-nums;z-index:4}
 .rmseat .rmsecs{top:calc(var(--u) * 6);right:calc(var(--u) * -6)}
 .rmmeseat{display:flex;flex-direction:column;align-items:center;gap:calc(var(--u) * 6);z-index:4}
 .rmmering{position:relative;width:calc(var(--u) * 124);height:calc(var(--u) * 124);flex:none}
@@ -4140,7 +4140,7 @@ body .cc .cctlist>*{min-width:0}
 .rmtst.on{background:rgba(52,211,153,.18);border-color:rgba(110,231,183,.6);color:#86efac}
 
 .flipmsg{position:absolute;display:flex;align-items:center;justify-content:center;perspective:700px;pointer-events:none;z-index:4}
-.flipmsg .fl{position:absolute;left:0;right:0;top:50%;margin-top:-.62em;text-align:center;white-space:nowrap;overflow:visible;
+.flipmsg .fl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;white-space:nowrap;overflow:visible;
   font:900 calc(var(--u) * 42)/1.24 'Trebuchet MS','Segoe UI',system-ui,sans-serif;letter-spacing:.015em;
   background:linear-gradient(180deg,#ffffff 0%,#fff3cf 38%,#ffd36b 70%,#f0a93a 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
   -webkit-text-stroke:calc(var(--u) * 1.4) rgba(98,52,4,.55);
@@ -4155,8 +4155,7 @@ body .cc .cctlist>*{min-width:0}
 .flipmsg.inline{position:relative;width:100%;height:30px;margin:0 0 4px}
 .flipmsg.inline .fl{font-size:19px;-webkit-text-stroke-width:.6px;filter:drop-shadow(0 1.2px 0 #7a4308) drop-shadow(0 2.4px 0 rgba(60,28,0,.5)) drop-shadow(0 4px 6px rgba(0,0,0,.55))}
 .flipmsg.inline.you .fl{filter:drop-shadow(0 1.2px 0 #0b5a34) drop-shadow(0 2.4px 0 rgba(0,40,20,.5)) drop-shadow(0 4px 6px rgba(0,0,0,.55))}
-.tbnote.tbflip{width:78%;height:calc(var(--u) * 46);display:block;text-shadow:none;overflow:visible}
-.tbflip .fl{font-size:max(13px,calc(var(--u) * 30));-webkit-text-stroke-width:calc(var(--u) * .8);
+.tbflip .fl{white-space:normal;line-height:1.12;font-size:max(13px,calc(var(--u) * 30));-webkit-text-stroke-width:calc(var(--u) * .8);
   filter:drop-shadow(0 calc(var(--u) * 1.6) 0 #7a4308) drop-shadow(0 calc(var(--u) * 3.2) calc(var(--u) * 1.5) rgba(40,18,0,.6)) drop-shadow(0 calc(var(--u) * 5) calc(var(--u) * 7) rgba(0,0,0,.5))}
 @media (prefers-reduced-motion:reduce){.flipmsg .fl.in,.flipmsg .fl.out{animation-duration:.01s}}
 .rmstand{position:absolute;display:flex;align-items:center;justify-content:center;border-radius:999px;border:max(1px,calc(var(--u) * 2.5)) solid rgba(226,189,107,.75);
@@ -4208,6 +4207,12 @@ body .cc .cctlist>*{min-width:0}
 .cctesthow{display:grid;grid-template-columns:auto 1fr;gap:10px 12px;align-items:center;padding:12px 14px;border-radius:14px;border:1px dashed rgba(94,234,212,.45);background:rgba(94,234,212,.06);margin-bottom:12px}
 .cctesthow b{display:block;font:800 14px/1.25 system-ui;color:#eafffb}.cctesthow span{display:block;font:500 12px/1.4 system-ui;color:#a9c3c0;margin-top:2px}
 .cctesthow .ccbtn{grid-column:1 / -1;justify-self:start}
+
+.rc.mid b{font-size:calc(var(--u) * 30);left:calc(var(--u) * 6);top:calc(var(--u) * 4)}
+.rc.mid i{top:calc(var(--u) * 35);left:calc(var(--u) * 7);font-size:calc(var(--u) * 25)}
+.rc.mid u{font-size:calc(var(--u) * 46);right:calc(var(--u) * 5);bottom:calc(var(--u) * 3)}
+.rc.cutup.mid b{font-size:calc(var(--u) * 28)}.rc.cutup.mid i{top:calc(var(--u) * 33);font-size:calc(var(--u) * 23)}.rc.cutup.mid u{font-size:calc(var(--u) * 42)}
+.rmshowt.mid b{font-size:calc(var(--u) * 20)}.rmshowt.mid span{font-size:calc(var(--u) * 14)}
 </style>
 </head>
 <body>
@@ -13897,7 +13902,7 @@ class AppError extends Error {}
 let toastTimer = null;
 /* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
    few bytes of the current file; if its build is newer, a banner offers a reload. */
-const BUILD = '20261119g';
+const BUILD = '20261119i';
 const Fresh = {
   at: 0, shown: false,
   async check(force) {
@@ -15000,7 +15005,7 @@ const turnOf = G => sidePending(G) ? G.side.to : G.turn;
 const turnSpan = G => sidePending(G) ? ENGINE.SIDE_MS : GAME_CONFIG.turnMs;
 function fmtSecs(ms) { return Math.max(0, Math.ceil(ms / 1000)) + 's'; }
 const TIMER_R = 33, TIMER_C = 2 * Math.PI * TIMER_R;
-const timerColor = f => f > .5 ? '#2ee59d' : f > .25 ? '#ffb02e' : '#ff3b5c';   // green, then amber, then red
+const timerColor = f => f > .5 ? '#b56cff' : f > .25 ? '#ffb02e' : '#ff3b5c';   // purple, then amber, then red
 // The turn timer lives on the player's picture: a ring that drains and glows harder as time runs out.
 function updateTimer() {
   const G = S.room && S.room.game;
@@ -15233,17 +15238,16 @@ function renderMoves(G, uid, live) {
   const btns = defs.map(([id, type, cls, text, cost, ik, fn, ok], i) => h('button', { id: live ? id : null, class: 'tbm ' + cls + (live ? '' : ' idle') + (S.act && S.act.type === type ? ' busy' : '') + (showAutos && !(type === 'see' && seeStay) ? ' hideb' : '') + (type === 'see' && live && lm.status === 'seen' ? ' gone' : ''), type: 'button', disabled: !ok || busy || !live, onclick: fn },
       ic(ik), h('span', { class: 'ml' }, h('span', { class: 'lb', text: text }), cost > 0 ? h('span', { class: 'am', text: rupee(cost) }) : null)));
   return h('div', { class: 'tbmoves' + (showAutos ? ' autos' : ''), id: live ? 'moves' : null },
-    Flip.node('tp', live ? (busy ? ['Sending…'] : tpFlow(G, uid, lm)) : [], 'tbnote tbflip', '', live ? 'moveNote' : null),
+    h('p', { class: 'tbnote' }),
     h('div', { class: 'tbmrow' }, btns, showAutos ? autoPackPill() : null, showAutos ? autoPill(lm) : null));
 }
 
 /* The flipping line under your cards: fixed phrases for each moment. */
-function tpFlow(G, uid, lm) {
+function tpFlow(G, uid) {
   const sd = G.side;
-  if (sd && sd.state === 'ask') return [sideNote(G, uid, lm)];
-  if (lm.myTurn) return ['Your turn', lm.status === 'seen' ? 'Chaal, double, show or pack' : 'Play blind, or see your cards'];
-  if (lm.inHand) { const t = typeof turnOf === 'function' ? turnOf(G) : '', p = t && G.players && G.players[t]; return ['Wait for your turn'].concat(p && p.name ? [p.name + ' is playing'] : []); }
-  return [];
+  if (sd && sd.state === 'ask' && sd.to === uid) return [G.players[sd.from].name + ' asks you for a sideshow'];
+  const last = (G.log || []).slice(-1)[0];
+  return last ? [String(last).replace(/\.\s+/g, ' \u00b7 ').replace(/\.$/, '')] : [];
 }
 /* Sideshow wording for the note under your cards. */
 function sideNote(G, uid, lm) {
@@ -15349,6 +15353,8 @@ function renderFelt(R, me, msgs) {
   else if (live) talk.appendChild(h('div', { class: 'tbstake' }, 'Boot ' + rupee(cfg.boot) + ' · Stake ', h('b', { id: 'stakeAmt', text: fmt(G.stake) })));
   else talk.appendChild(h('p', { id: 'idleNote', class: 'tbidle', text: !online ? 'Connecting to the table…' : 'Boot ' + rupee(cfg.boot) + (readyHumans(R).length === 0 ? '' : ' · The next hand is about to be dealt.') }));
   stage.appendChild(talk);
+  // the last move, under the stake: each new move flips up into its place
+  stage.appendChild(Flip.node('tp', live && !result ? tpFlow(G, S.user && S.user.uid) : [], 'tbflip', tbBox(110, 852, 776, 940), 'moveNote'));
 
   /* players, and empty seats: if you are standing, each one is a Sit down button (the game keeps no seat numbers, so any seat is the same seat) */
   const els = [];
@@ -16893,18 +16899,30 @@ const Flip = {
 };
 setInterval(() => Flip.tick(), 250);
 // Rummy: what to say at each moment
-function rmFlow(g, me, myTurn, final, cur) {
-  const nm = uid => (g.players.find(p => p.uid === uid) || {}).name || 'Someone', note = RM.note ? [RM.note] : [];
+function rmCardName(c) { return !c ? 'a card' : Rummy.isPrinted(c) ? 'a joker' : Rummy.rankOf(c) + RM_SUITS[Rummy.suitOf(c)]; }
+// the last move at the table, in words
+function rmLastMove(g) {
+  let e = null, n = 0;
+  if (RM.net) { const L = (RmNet.game && RmNet.game.log) || []; n = L.length; const x = L[n - 1]; if (x) { const [uid, t, card] = String(x).split(':'); e = { uid, t, card, from: card ? 'open' : 'closed' }; } }
+  else { const L = (RM.g && RM.g.log) || []; n = L.length; e = L[n - 1] || null; }
+  // a note (time ran out, a wrong show) stays until the next move
+  if (RM.note !== RM._noteTxt) { RM._noteTxt = RM.note; RM._noteN = n; }
+  if (RM.note && RM._noteN === n) return RM.note;
+  if (!e) return '';
+  const p = g.players.find(q => q.uid === e.uid), me = !!p && p.uid === RM.ME, nm = !p ? 'Someone' : me ? 'You' : p.name;
+  return e.t === 'draw' ? nm + (e.from === 'open' ? ' picked ' + rmCardName(e.card) : ' picked from the deck')
+    : e.t === 'discard' ? nm + ' threw ' + rmCardName(e.card)
+    : e.t === 'drop' ? nm + ' dropped' + (e.pts ? ' · ' + e.pts + ' points' : '')
+    : e.t === 'declare' ? nm + (e.ok === false ? ' made a wrong show' : ' declared') : '';
+}
+function rmFlow(g, me, myTurn, final) {
+  const nm = uid => (g.players.find(p => p.uid === uid) || {}).name || 'Someone';
   if (g.over) return [g.winner === RM.ME ? 'You won the deal!' : nm(g.winner) + ' won the deal'];
-  if (final) return me.status === 'in' && g.winner !== RM.ME ? [nm(g.winner) + ' declared', 'Arrange your groups', 'Then tap Submit'] : ['Waiting for the others', 'They are putting down cards'];
-  if (myTurn) return g.phase === 'draw' ? note.concat(['Your turn', 'Pick from the deck or open pile']) : ['Throw a card', 'Or drop it on SHOW to declare'];
-  if (me.status === 'wait') return RM.standing && !RM.net ? ['You are watching', 'Tap Sit down to play'] : ['You join the next deal', cur.name + ' is playing'];
-  if (me.status !== 'in') return [me.status === 'drop' ? 'You dropped this deal' : 'You are out of this deal', cur.name + ' is playing'];
-  return note.concat([cur.name + ' is playing']);
+  if (final) return me.status === 'in' && g.winner !== RM.ME ? [nm(g.winner) + ' declared', 'Arrange your groups', 'Then tap Submit'] : ['Waiting for the others'];
+  const last = rmLastMove(g);
+  return last ? [last] : [];
 }
 
-
-/* ---- the admin's test games: open any table in player view, pick bots, play a private copy ---- */
 const adminTesting = () => !!(S.realAdmin && !S.isAdmin);     // the admin in player view: every table is a test with bots
 function adminTestSheet(o) {
   let n = Math.min(o.max, o.def || 2);
@@ -16978,16 +16996,18 @@ function renderRummy() {
   // the middle: the wild joker, the closed deck and the open pile
   const top0 = g.open[g.open.length - 1], canDraw = myTurn && g.phase === 'draw';
   const openOk = canDraw && top0 && (!Rummy.isJoker(top0, g.wild) || g.firstOpen);
-  parts.push(h('div', { class: 'rmwild', style: B(283, 545, 604, 600) }, h('span', { text: 'WILD JOKER' }), rmMini(g.cut, g.wild), h('span', { text: 'all ' + rmRankName(g.wild) + 's' })));
-  parts.push(rmCard(g.cut, g.wild, 'cutup', B(150, 676, 246, 810)));
-  parts.push(h('i', { class: 'rmcount wildl', style: B(130, 822, 266, 852), text: 'wild joker' }));
-  parts.push(rmCard(null, g.wild, 'deck' + (canDraw ? ' can' : ''), B(272, 650, 392, 818), () => RM.draw('closed')));
-  parts.push(h('i', { class: 'rmcount', style: B(272, 822, 392, 852), text: g.closed.length + ' left' }));
-  parts.push(top0 ? rmCard(top0, g.wild, 'open' + (openOk ? ' can' : ''), B(495, 650, 615, 818), () => RM.draw('open')) : h('div', { class: 'rc empty open', style: B(495, 650, 615, 818) }));
-  parts.push(h('i', { class: 'rmcount', style: B(455, 822, 655, 852), text: 'open pile' }));
+  // four smaller tiles in one row, clear of the players at the sides: wild joker, deck, open pile, show
+  const MY = 668, MH = 124, MW = 88, mx = [210, 337, 464, 591], lab = (k, t, cls) => h('i', { class: 'rmcount' + (cls ? ' ' + cls : ''), style: B(mx[k] - 22, MY + MH + 8, mx[k] + MW + 22, MY + MH + 36), text: t });
+  const mb = k => B(mx[k], MY, mx[k] + MW, MY + MH);
+  parts.push(rmCard(g.cut, g.wild, 'cutup mid', mb(0)));
+  parts.push(lab(0, 'joker', 'wildl'));
+  parts.push(rmCard(null, g.wild, 'deck mid' + (canDraw ? ' can' : ''), mb(1), () => RM.draw('closed')));
+  parts.push(lab(1, g.closed.length + ' left'));
+  parts.push(top0 ? rmCard(top0, g.wild, 'open mid' + (openOk ? ' can' : ''), mb(2), () => RM.draw('open')) : h('div', { class: 'rc empty open mid', style: mb(2) }));
+  parts.push(lab(2, 'open'));
   const canShowNow = myTurn && g.phase === 'discard';
-  parts.push(h('div', { class: 'rmshowt' + (canShowNow ? ' can' : ''), id: 'rmShowTile', 'data-drop': 'show', style: B(648, 662, 752, 806) }, h('b', { text: 'SHOW' }), h('span', { text: canShowNow ? 'drop a card' : '' })));
-  parts.push(h('i', { class: 'rmcount', style: B(620, 822, 780, 852), text: 'show' }));
+  parts.push(h('div', { class: 'rmshowt mid' + (canShowNow ? ' can' : ''), id: 'rmShowTile', 'data-drop': 'show', style: mb(3) }, h('b', { text: 'SHOW' }), h('span', { text: canShowNow ? 'drop a card' : '' })));
+  parts.push(lab(3, 'show'));
 
   // what is going on: short lines that flip up every five seconds
   const cur = Rummy.cur(g);
