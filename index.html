@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build:20261118f -->
+<!-- build:20261118g -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -3817,6 +3817,16 @@ body .cc .ccnav{position:relative;left:auto;right:auto;bottom:auto;flex:none;mar
 .cc .ccgamehead .cccats button{min-height:40px}
 .cc .ccgamehead .ccgrow button{min-height:36px}
 .cc .ccgamehead .ccsecs button{min-height:38px}
+/* ===== 93. Rummy: the wild joker face up by the deck; a smaller hand in clear groups, finished groups lifted ===== */
+.rc.cutup{border:max(2px,calc(var(--u) * 5)) solid #e2b04a;box-shadow:0 0 0 calc(var(--u) * 2) rgba(60,30,0,.6),0 0 calc(var(--u) * 22) rgba(255,205,100,.65),0 calc(var(--u) * 6) calc(var(--u) * 12) rgba(0,0,0,.45)}
+.rc.cutup b{font-size:calc(var(--u) * 34)}.rc.cutup i{top:calc(var(--u) * 40);font-size:calc(var(--u) * 28)}.rc.cutup u{font-size:calc(var(--u) * 52)}
+.rmcount.wildl{color:#ffd36b}
+.rc.hand b{font-size:calc(var(--u) * 34);left:calc(var(--u) * 6)}
+.rc.hand i{left:calc(var(--u) * 7);top:calc(var(--u) * 40);font-size:calc(var(--u) * 28)}
+.rc.hand u{font-size:calc(var(--u) * 52)}
+.rc.hand.wild:after{width:calc(var(--u) * 22);height:calc(var(--u) * 22);font-size:calc(var(--u) * 14);line-height:calc(var(--u) * 22);left:calc(var(--u) * 7);right:auto;top:calc(var(--u) * 74)}
+.rc.hand.done{box-shadow:0 0 0 max(1px,calc(var(--u) * 3)) rgba(125,255,192,.75),0 calc(var(--u) * 8) calc(var(--u) * 14) rgba(0,0,0,.45)}
+.rc.hand.done.sel{box-shadow:0 0 0 calc(var(--u) * 5) #f2c75c,0 calc(var(--u) * 10) calc(var(--u) * 18) rgba(0,0,0,.55)}
 </style>
 </head>
 <body>
@@ -13054,12 +13064,39 @@ const Rummy = (() => {
     return { groups, points: Math.min(CFG.maxPoints, pts), valid: !!pick.walk && !out.loose.length && validShow(groups, wild) };
     };
   }
+  // The cards of one group in reading order: a run from low to high with each joker in the gap it fills,
+  // a set by suit with its jokers last, anything else by suit and rank.
+  function order(g, wild) {
+    const ord = c => RANKS.indexOf(rankOf(c)), so = c => 'shcd'.indexOf(suitOf(c));
+    const bySuit = a => a.slice().sort((x, y) => (isPrinted(x) - isPrinted(y)) || (so(x) - so(y)) || (ord(x) - ord(y)));
+    const k = kind(g, wild);
+    if (k === 'set') return bySuit(g.filter(c => !isJoker(c, wild))).concat(g.filter(c => isJoker(c, wild)));
+    if (k !== 'pure' && k !== 'seq') return bySuit(g);
+    const size = g.length;
+    // which cards stand as themselves: all of them in a pure run, else the plain cards (plus own-suit wild cards if needed)
+    let nat = k === 'pure' ? g.slice() : g.filter(c => !isJoker(c, wild));
+    if (k === 'seq' && !runFits(nat, size)) {
+      const own = g.filter(c => isJoker(c, wild) && !isPrinted(c) && suitOf(c) === suitOf(nat[0]));
+      for (let m = 1; m < (1 << own.length); m++) { const ex = own.filter((_, i) => m & (1 << i)); if (runFits(nat.concat(ex), size)) { nat = nat.concat(ex); break; } }
+    }
+    const rest = g.slice(); nat.forEach(c => rest.splice(rest.indexOf(c), 1));
+    for (const hi of [false, true]) {
+      const v = c => { const r = ord(c) + 1; return hi && r === 1 ? 14 : r; };
+      const vals = nat.map(v);
+      if (new Set(vals).size !== vals.length || Math.max(...vals) - Math.min(...vals) + 1 > size) continue;
+      let start = Math.min(...vals); if (start + size - 1 > 14) start = 15 - size;
+      const out = [], jok = rest.slice();
+      for (let p = start; p < start + size; p++) { const c = nat.find(x => v(x) === p); out.push(c || jok.shift()); }
+      return out;
+    }
+    return bySuit(g);
+  }
   // For the Sort button: the grouping that can show if there is one, otherwise as many cards in groups as possible
   // (pure runs first); the cards left over are put in suit order.
   function arrange(hand, wild) {
     const solve = solver(hand, wild), all = (1 << hand.length) - 1, r = solve(all);
     let groups, loose;
-    if (r.valid) return r.groups;
+    if (r.valid) return r.groups.map(x => order(x, wild));
     const kinds = r.groups.map(g => kind(g, wild));
     if (kinds.filter(k => k === 'pure').length && kinds.filter(k => k === 'pure' || k === 'seq').length >= 2) { groups = r.groups.filter((g, i) => kinds[i]); loose = [].concat(...r.groups.filter((g, i) => !kinds[i])); }
     else { const w = solveFree(all); groups = w.groups; loose = w.loose; }
@@ -13068,7 +13105,7 @@ const Rummy = (() => {
     const pj = loose.filter(isPrinted);
     const rank = g => ({ pure: 0, seq: 1, set: 2 })[kind(g, wild)];
     groups.sort((a, b) => rank(a) - rank(b));
-    return groups.concat(bySuit, pj.length ? [pj] : []);
+    return groups.map(x => order(x, wild)).concat(bySuit, pj.length ? [pj] : []);
   }
   // The grouping with the fewest points for 13 cards.
   function best(hand, wild) { return solver(hand, wild)((1 << hand.length) - 1); }
@@ -13217,7 +13254,7 @@ const Rummy = (() => {
   const minBuyIn = perPoint => Math.ceil(CFG.seatPoints * perPoint);
 
   return { CFG, RANKS, SUITS, deck, shuffle, rankOf, suitOf, isPrinted, isJoker, wildRankOf, value, label,
-    isPure, isSeq, isSet, kind, score, validShow, best, arrange, bestDiscard, deal, act, submit, finish, timeout, settle, alive, cur, minBuyIn, sameCards };
+    isPure, isSeq, isSet, kind, score, validShow, best, arrange, order, bestDiscard, deal, act, submit, finish, timeout, settle, alive, cur, minBuyIn, sameCards };
 })();
 </script>
 <script>
@@ -13468,7 +13505,7 @@ class AppError extends Error {}
 let toastTimer = null;
 /* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
    few bytes of the current file; if its build is newer, a banner offers a reload. */
-const BUILD = '20261118f';
+const BUILD = '20261118g';
 const Fresh = {
   at: 0, shown: false,
   async check(force) {
@@ -15306,12 +15343,12 @@ const RM = {
     if (RM.sel.length < 2) return;
     const sel = RM.sel.slice();
     RM.groups = RM.groups.map(gr => gr.filter(c => !sel.includes(c))).filter(gr => gr.length);
-    RM.groups.push(sel); RM.sel = []; scheduleRender();
+    RM.groups.push(Rummy.order(sel, RM.g.wild)); RM.sel = []; scheduleRender();
   },
   moveTo(ix) {
     if (!RM.sel.length) return;
     const sel = RM.sel.slice(), target = RM.groups[ix];
-    RM.groups = RM.groups.map(gr => gr === target ? gr.filter(c => !sel.includes(c)).concat(sel) : gr.filter(c => !sel.includes(c))).filter(gr => gr.length);
+    RM.groups = RM.groups.map(gr => gr === target ? Rummy.order(gr.filter(c => !sel.includes(c)).concat(sel), RM.g.wild) : gr.filter(c => !sel.includes(c))).filter(gr => gr.length);
     RM.sel = []; scheduleRender();
   },
   sort() {
@@ -15409,7 +15446,8 @@ function renderRummy() {
   const top0 = g.open[g.open.length - 1], canDraw = myTurn && g.phase === 'draw';
   const openOk = canDraw && top0 && (!Rummy.isJoker(top0, g.wild) || g.firstOpen);
   parts.push(h('div', { class: 'rmwild', style: B(283, 545, 604, 600) }, h('span', { text: 'WILD JOKER' }), rmMini(g.cut, g.wild), h('span', { text: 'all ' + rmRankName(g.wild) + 's' })));
-  parts.push(rmCard(g.cut, g.wild, 'cut', B(232, 680, 340, 832)));
+  parts.push(rmCard(g.cut, g.wild, 'cutup', B(150, 676, 246, 810)));
+  parts.push(h('i', { class: 'rmcount wildl', style: B(130, 822, 266, 852), text: 'wild joker' }));
   parts.push(rmCard(null, g.wild, 'deck' + (canDraw ? ' can' : ''), B(272, 650, 392, 818), () => RM.draw('closed')));
   parts.push(h('i', { class: 'rmcount', style: B(272, 822, 392, 852), text: g.closed.length + ' left' }));
   parts.push(top0 ? rmCard(top0, g.wild, 'open' + (openOk ? ' can' : ''), B(495, 650, 615, 818), () => RM.draw('open')) : h('div', { class: 'rc empty', style: B(495, 650, 615, 818) }));
@@ -15428,25 +15466,29 @@ function renderRummy() {
   // your cards, in your groups
   if (me.status === 'in' || final || g.over) {
     const cards = RM.groups, nC = cards.reduce((a, gr) => a + gr.length, 0), k = cards.length;
-    // the cards overlap so only their corners show; a gap between groups
-    const CW = 106, CH = 150, GAP = 20, AV = 856;
-    const step = Math.min(78, (AV - CW - GAP * (k - 1)) / Math.max(1, nC - 1));
-    const width = step * (nC - 1) + CW + GAP * (k - 1);
-    let x = (RT_W - width) / 2;
+    // Each group sits apart (3-3-3-4 reads at a glance); finished groups are lifted a little, set aside.
+    // The phone may trim the sides of the picture, so the hand fits the part that is on screen.
+    const visU = Math.min(RT_W, (window.innerWidth || 360) * RT_H / Math.max(1, window.innerHeight || 715));
+    const CW = 92, CH = 130, GAP = 22, AV = visU - 34, left0 = (RT_W - visU) / 2 + 17;
+    let step = (AV - k * CW - GAP * (k - 1)) / Math.max(1, nC - k), apart = step >= 38 && nC > k;
+    if (!apart) step = (AV - CW - GAP * (k - 1)) / Math.max(1, nC - 1);
+    step = Math.min(60, step);
+    const width = apart ? step * (nC - k) + k * CW + GAP * (k - 1) : step * (nC - 1) + CW + GAP * (k - 1);
+    let x = left0 + (AV - width) / 2;
     const sc = Rummy.score(cards, g.wild), canEdit = inPlay || (final && me.status === 'in');
     cards.forEach((gr, gi) => {
-      const x0 = x, kd = Rummy.kind(gr, g.wild);
-      gr.forEach(c => {
-        const sel = RM.sel.includes(c), y0 = 1080 - (sel ? 34 : 0);
-        parts.push(rmCard(c, g.wild, 'hand' + (sel ? ' sel' : ''), B(x, y0, x + CW, y0 + CH), canEdit ? () => RM.tap(c) : null));
-        x += step;
+      const x0 = x, kd = Rummy.kind(gr, g.wild), done = !!kd;
+      gr.forEach((c, ci) => {
+        const sel = RM.sel.includes(c), y0 = 1092 - (done ? 18 : 0) - (sel ? 30 : 0);
+        parts.push(rmCard(c, g.wild, 'hand' + (sel ? ' sel' : '') + (done ? ' done' : ''), B(x, y0, x + CW, y0 + CH), canEdit ? () => RM.tap(c) : null));
+        if (ci < gr.length - 1) x += step;
       });
-      const xe = gi === k - 1 ? x - step + CW : x + GAP * .6;
-      const mid = (x0 + xe) / 2, pts = gr.reduce((a, c) => a + Rummy.value(c, g.wild), 0);
-      const lw = Math.max(96, xe - x0 - 4), canMove = canEdit && RM.sel.length && !(RM.sel.every(c => gr.includes(c)));
-      parts.push(h('button', { type: 'button', class: 'rmglab' + (kd ? ' ok' : ' bad') + (canMove ? ' move' : ''), style: B(mid - lw / 2, 1246, mid + lw / 2, 1290), 'data-g': gi,
-        onclick: canMove ? () => RM.moveTo(gi) : null, text: canMove ? (lw < 130 ? '+' : lw < 230 ? '+ Here' : '+ Move here') : kd ? (lw < 150 ? '✓' : lw < 260 ? RM_SHORT[kd] + ' ✓' : RM_KIND[kd] + ' ✓') : lw < 150 ? String(pts) : pts + ' pts' }));
-      x += GAP;
+      const xe = x + CW;                                       // the right edge of this group's last card
+      x = apart ? xe + GAP : x + step + GAP;
+      const lx1 = apart ? xe : Math.min(xe, x - 4), mid = (x0 + lx1) / 2, pts = gr.reduce((a, c) => a + Rummy.value(c, g.wild), 0);
+      const lw = Math.max(70, lx1 - x0 - 2), canMove = canEdit && RM.sel.length && !(RM.sel.every(c => gr.includes(c)));
+      parts.push(h('button', { type: 'button', class: 'rmglab' + (kd ? ' ok' : ' bad') + (canMove ? ' move' : ''), style: B(mid - lw / 2, 1234, mid + lw / 2, 1274), 'data-g': gi,
+        onclick: canMove ? () => RM.moveTo(gi) : null, text: canMove ? (lw < 130 ? '+' : lw < 230 ? '+ Here' : '+ Move here') : kd ? (lw < 150 ? '\u2713' : lw < 260 ? RM_SHORT[kd] + ' \u2713' : RM_KIND[kd] + ' \u2713') : lw < 150 ? String(pts) : pts + ' pts' }));
     });
     // the buttons
     const btns = [];
