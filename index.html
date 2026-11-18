@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build:20261119f -->
+<!-- build:20261119g -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -4194,6 +4194,20 @@ body .cc .cctlist>*{min-width:0}
 .ccrmtmore{display:flex;flex-direction:column;gap:10px;padding:0 14px 14px}
 .ccrmcur.on{border-color:rgba(110,231,183,.45)}
 #rmPrivForm .ccrmcurh{margin-bottom:6px}
+
+.attest{gap:10px}
+.atname{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(226,189,107,.3)}
+.atname>i{font-style:normal;font-size:26px;color:#ffe09a;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(0,0,0,.25)}
+.atname b{display:block;font:800 16px/1.2 Georgia,serif;color:#fff3d6}.atname span{display:block;font:600 12px/1.35 system-ui;color:#cdbf9f;margin-top:2px}
+.atlab{font:800 11px/1 system-ui;letter-spacing:.12em;color:#cdb98f}
+.attseg{display:grid;grid-template-columns:repeat(auto-fit,minmax(36px,1fr));gap:6px}
+.attseg button{height:42px;border-radius:12px;border:1px solid rgba(226,189,107,.5);background:rgba(0,0,0,.25);color:#ffe9b0;font:800 16px system-ui;cursor:pointer}
+.attseg button.on{background:linear-gradient(180deg,#ffe08a,#d39a2e);color:#2a1a02;border-color:#fff0bf}
+.attest .btn-primary,.attest .btn-secondary{width:100%}
+.tzadm{display:inline-flex;gap:6px}
+.cctesthow{display:grid;grid-template-columns:auto 1fr;gap:10px 12px;align-items:center;padding:12px 14px;border-radius:14px;border:1px dashed rgba(94,234,212,.45);background:rgba(94,234,212,.06);margin-bottom:12px}
+.cctesthow b{display:block;font:800 14px/1.25 system-ui;color:#eafffb}.cctesthow span{display:block;font:500 12px/1.4 system-ui;color:#a9c3c0;margin-top:2px}
+.cctesthow .ccbtn{grid-column:1 / -1;justify-self:start}
 </style>
 </head>
 <body>
@@ -13883,7 +13897,7 @@ class AppError extends Error {}
 let toastTimer = null;
 /* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
    few bytes of the current file; if its build is newer, a banner offers a reload. */
-const BUILD = '20261119f';
+const BUILD = '20261119g';
 const Fresh = {
   at: 0, shown: false,
   async check(force) {
@@ -14738,6 +14752,7 @@ function desiredRoute() {
   if (S.profile.status !== 'approved') return { name: S.profile.status === 'rejected' ? 'rejected' : 'pending' };
   if (S.profile.tableId && TABLE_BY_ID[S.profile.tableId] && !S.forceLobby) return { name: 'table', tableId: S.profile.tableId };
   if (S.profile.tableId && rmIsTable(S.profile.tableId) && !S.forceLobby) return { name: 'rummy', tableId: S.profile.tableId };
+  if (S.realAdmin && parseHash().name === 'rummy') return { name: 'rummy' };      // the admin's Rummy test game
   return { name: playerPage() };
 }
 
@@ -15412,6 +15427,7 @@ const tileLimitsText = t => t.min ? fmt(t.min) + ' - ' + fmt(t.max) : '';
 
 function tileClick(t) {
   if (S.isAdmin) { location.hash = '#/table/' + t.id; return; }      // the admin watches
+  if (adminTesting()) { const c = TABLE_BY_ID[t.id] || t; tpAdminTest(c, c.title || tableName(c), c.random ? 'variant' : 'classic', () => { location.hash = '#/table/' + t.id; }); return; }      // the admin tests it with bots
   const st = tileState(t);
   if (!st.usable) { toast(t.private ? 'The private table is not open right now.' : 'That table is not available right now.', 'err'); return; }
   if (st.mine) { S.forceLobby = false; go(); return; }
@@ -15433,6 +15449,7 @@ const nlBox = (x0, y0, x1, y1) => 'left:' + (x0 / NL_W * 100).toFixed(3) + '%;to
 // Tapping Private Table always offers the room code / password form. The database decides whether they are right.
 function privateTap() {
   if (S.isAdmin) { location.hash = '#/table/' + PRIVATE_ID; return; }
+  if (adminTesting()) { tpAdminTest(PRIVATE_CFG, PRIVATE_CFG.title || 'Private Table', 'classic', () => { location.hash = '#/table/' + PRIVATE_ID; }); return; }
   const st = tileState(PRIVATE_CFG);
   if (st.mine) { S.forceLobby = false; go(); return; }
   openPrivateEntry();
@@ -15820,11 +15837,13 @@ const RM = {
       if (RmNet.live() && me && me.status === 'in') return RM.ask('Leave the table?', 'The deal is still on. Leaving now counts as a drop. Your other chips go back to your wallet.', 'Leave', () => RmNet.leave());
       return RM.ask('Leave the table?', 'Your chips at the table go back to your wallet.', 'Leave', () => RmNet.leave());
     }
-    if (RM.g && me && me.status === 'in' && !RM.result) return RM.ask('Stand up?', 'The deal is still on. Standing up now counts as a drop.', 'Stand up', () => RM.exit());
+    if (RM.g && me && me.status === 'in' && !RM.result) return RM.ask('Leave the table?', 'The deal is still on. Leaving now counts as a drop.', 'Leave', () => RM.exit());
     RM.exit();
   },
   // back to the console's Test page (Cards, Rummy)
-  exit() { RM.stop(); rmSave(); Object.assign(Admin.st, { nav: 'games', sec: 'test', cat: 'cards', game: 'rummy', view: 'hub', gopen: true }); location.hash = '#/admin'; },
+  exit() { RM.stop(); rmSave(); RM.standing = false; RM._stub = null;
+    if (AdminView.player()) { S.forceLobby = true; location.hash = '#/rmlobby'; return; }
+    Object.assign(Admin.st, { nav: 'games', sec: 'test', cat: 'cards', game: 'rummy', view: 'hub', gopen: true }); location.hash = '#/admin'; },
   history: [], autoStart: false,
   /* ---- the result ---- */
   // one finished deal, kept as a record (for the result and the console's activity)
@@ -15862,7 +15881,7 @@ const RM = {
       const tick = setInterval(() => { const l = document.getElementById('rmNextLab'); if (!l || !RM.result) return clearInterval(tick); l.textContent = 'Next deal in ' + Math.max(0, Math.ceil((RM.nextAt - Date.now()) / 1000)) + 's'; }, 500);
       foot.push(h('div', { class: 'rmnextrow' }, lab, h('div', { class: 'rmnext' }, h('i', { style: 'animation-duration:' + ms + 'ms' }))),
         h('div', { class: 'rmrbtns' },
-          h('button', { id: 'rmOut', type: 'button', class: 'rmrbtn ghost', onclick: () => { Sheets.close(); RM.exit(); } }, h('span', { text: 'Stand up' })),
+          h('button', { id: 'rmOut', type: 'button', class: 'rmrbtn ghost', onclick: () => { Sheets.close(); RM.exit(); } }, h('span', { text: 'Leave table' })),
           h('button', { id: 'rmAgain', type: 'button', class: 'rmrbtn gold', onclick: () => { Sheets.close(); RM.start(true); } }, h('span', { text: 'Deal now' }))));
     } else foot.push(h('p', { class: 'rmfine', text: new Date(rec.at).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) }));
     Sheets.open('rmResult', 'Deal ' + rec.deal + ' result', h('div', { class: 'rmresult' },
@@ -16658,7 +16677,8 @@ function rmTourSheet(refresh) {
       : ph.name === 'ended' ? { l: 'FINISHED', c: 'done' } : { l: 'CANCELLED', c: 'off' };
     let act = null;
     const B1 = (id, t, fn, cls) => h('button', { type: 'button', class: cls || 'btn-primary btn-small', 'data-act': id, text: t, onclick: fn });
-    if (S.isAdmin || !open) act = B1('standings', ph.name === 'ended' ? 'Final standings' : 'Standings', () => rmTourDetail(s), 'btn-secondary btn-small');
+    if (adminTesting()) act = h('span', { class: 'tzadm' }, B1('standings', 'Standings', () => rmTourDetail(s), 'btn-secondary btn-small'), B1('test', 'Test', () => rmAdminTest(T.perPoint, T.name)));
+    else if (S.isAdmin || !open) act = B1('standings', ph.name === 'ended' ? 'Final standings' : 'Standings', () => rmTourDetail(s), 'btn-secondary btn-small');
     else if (!me) act = B1('register', 'Register', () => {
       if (!confirm('Register for ' + T.name + '? The entry of ' + fmt(T.entry) + ' chips is taken from your wallet now and becomes your chips at the table.')) return;
       withBusy('rtr_' + s, 'register', async () => { await RmTour.register(s); toast('You are in. Come back when the tables open, 5 minutes before the start.'); });
@@ -16705,6 +16725,7 @@ function rmTourDetail(s) {
 /* ---- the players' private table: the room code, then the buy-in ---- */
 function rmPrivSheet() {
   const d = (S.rmRooms || {})[RM_PRIV], prof = S.profile;
+  if (adminTesting()) return rmAdminTest((d && d.perPoint) || 1, (d && d.name) || 'Rummy private table');
   if (prof && prof.tableId === RM_PRIV) { S.forceLobby = false; go(); return; }
   if (!d || d.status !== 'open') return Sheets.open('rmPrivSheet', 'Rummy private table', h('div', { class: 'setlist' },
     rmEmpty('priv', 'No private table right now', 'The club opens the Rummy private table for invited players. When it is open you get a room code from the admin and enter it here.')));
@@ -16882,6 +16903,38 @@ function rmFlow(g, me, myTurn, final, cur) {
   return note.concat([cur.name + ' is playing']);
 }
 
+
+/* ---- the admin's test games: open any table in player view, pick bots, play a private copy ---- */
+const adminTesting = () => !!(S.realAdmin && !S.isAdmin);     // the admin in player view: every table is a test with bots
+function adminTestSheet(o) {
+  let n = Math.min(o.max, o.def || 2);
+  const seg = h('div', { class: 'attseg', id: 'atBots', role: 'radiogroup', 'aria-label': 'Bots' }, Array.from({ length: o.max }, (_, i) => i + 1).map(v =>
+    h('button', { type: 'button', class: v === n ? 'on' : '', 'data-n': v, text: String(v), onclick: () => { n = v; seg.querySelectorAll('button').forEach(b => b.classList.toggle('on', Number(b.dataset.n) === v)); } })));
+  const play = h('button', { type: 'button', class: 'btn-primary', id: 'atPlay', text: 'Play test game', onclick: async () => {
+    if (play.disabled) return; play.disabled = true; play.textContent = 'Setting up...';
+    try { await o.play(n); } catch (e) { toast(friendlyError(e), 'err'); play.disabled = false; play.textContent = 'Play test game'; } } });
+  Sheets.open('adminTestSheet', 'Test game', h('div', { class: 'setlist attest' },
+    h('div', { class: 'atname' }, h('i', { text: o.sym || '\u2660' }), h('div', {}, h('b', { text: o.title }), h('span', { text: o.sub }))),
+    h('p', { class: 'hnote', text: 'You play a private copy of this table against bots. Real players never see it and nothing changes at the real table.' }),
+    h('span', { class: 'atlab', text: 'HOW MANY BOTS?' }), seg, play,
+    o.watch ? h('button', { type: 'button', class: 'btn-secondary', id: 'atWatch', text: 'Just watch the real table', onclick: () => { Sheets.closeNow(); o.watch(); } }) : null));
+}
+// Teen Patti: the test table (test_1) set to this table's numbers, then Club Admin sits down
+function tpAdminTest(cfg, name, mode, watch) {
+  const boot = cfg.boot || 1, blind = cfg.blind || boot * ENGINE_MULT.blind, chaal = cfg.chaal || boot * ENGINE_MULT.chaal, pot = cfg.pot || boot * ENGINE_MULT.pot, buy = cfg.min || boot * 100;
+  adminTestSheet({ title: name, sub: 'Boot ' + fmt(boot) + '  \u00b7  your chips ' + fmt(buy) + (mode === 'variant' ? '  \u00b7  random variants' : ''), max: TEST_BOTS.length, def: 3, watch,
+    play: async n => {
+      const sid = await Repo.createTest({ name: ('Test \u00b7 ' + name).slice(0, 24), boot, blind, chaal, pot, buy, bots: n, botChips: buy, mode });
+      Sheets.closeNow();
+      await TestLab.join({ minBuyIn: buy, sessionId: sid });
+    } });
+}
+// Rummy: a practice game on this phone at this table's chips per point
+function rmAdminTest(pp, name) {
+  adminTestSheet({ title: name, sym: '\u2666', sub: 'A practice game on this phone  \u00b7  no real chips', max: 5, def: 2,
+    play: async n => { Sheets.closeNow(); RM.stop(); RM.sess = null; RM.standing = false; RM._stub = null; RM.players = n + 1; RM.perPoint = pp; RM.autoStart = true; location.hash = '#/rummy'; } });
+}
+
 function renderRummy() {
   const tid = S.route && S.route.tableId;
   if (tid) {           // a live table: what the host says, seen from your seat
@@ -17050,6 +17103,7 @@ function rmNetIdle(tid) {
 }
 // how many chips to take to a table
 function rmJoinSheet(t) {
+  if (adminTesting()) { const d0 = (S.rmRooms || {})[t] || {}, T0 = RM_TABLE_BY_ID[t]; return rmAdminTest((T0 && T0.perPoint) || d0.perPoint || 1, T0 ? T0.name : d0.name || 'Rummy table'); }
   const d = (S.rmRooms || {})[t] || {}, T = RM_TABLE_BY_ID[t] || { perPoint: d.perPoint || 1, name: d.name || 'Private table' }, min = d.minBuyIn || Rummy.minBuyIn(T.perPoint), max = d.maxBuyIn || min * 10, wallet = (S.profile && S.profile.chips) || 0;
   if (S.profile && S.profile.tableId === t) { S.forceLobby = false; Sheets.closeNow(); go(); return; }
   if (S.profile && S.profile.tableId) return toast('You already have a seat at another table. Leave it first.');
@@ -19639,7 +19693,7 @@ function ccGameList() {
       : h('div', { class: 'ccgline empty' }, h('i', { class: 'ccgsym', text: c.sym }), h('div', {}, h('b', { text: 'No games yet' }), h('span', { text: 'Games added to ' + c.name + ' show up here.' })))].flat()));
 }
 // GAMES: the list; tapping a game opens its page with its own sections
-const CC_SECS = [['overview', 'Overview', 'grid'], ['tables', 'Tables', 'table'], ['tour', 'Tournaments', 'trophy'], ['private', 'Private', 'crown'], ['test', 'Test', 'flask']];
+const CC_SECS = [['overview', 'Overview', 'grid'], ['tables', 'Tables', 'table'], ['tour', 'Tournaments', 'trophy'], ['private', 'Private', 'crown'], ['test', 'Test log', 'flask']];
 function ccGameHead() {
   const a = Admin.st, game = a.game || 'teenpatti', sec = a.sec || 'overview', g = GAME_BY_ID[game] || GAME_BY_ID.teenpatti;
   const pick = k => {
@@ -19735,32 +19789,32 @@ function ccTools() {
 function ccRmTest() {
   const a = Admin.st, S0 = RM.sess;
   rmPrune();
-  const head = h('div', { class: 'ccpagehead' }, h('h2', { text: 'Rummy test table' }), h('span', { class: 'ccchip' + (S0 ? ' ok' : ''), text: S0 ? 'Table open' : 'No table' }));
+  const head = h('div', { class: 'ccpagehead' }, h('h2', { text: 'Test log' }), h('span', { class: 'ccchip' + (S0 ? ' ok' : ''), text: S0 ? 'A test is open' : RM.history.length + ' deals' }));
   const pick = (id, vals, cur, fn) => h('div', { class: 'ccrmpick', id }, vals.map(v => h('button', { type: 'button', class: v === cur ? 'on' : '', text: String(v), onclick: () => { fn(v); Admin.paint(); } })));
-  if (!S0) return h('div', { class: 'ccpage fixed', id: 'rmTestPage' }, head, h('div', { class: 'ccscroll' },
-    !a.rmForm ? ccNewTile('rmNew', 'flask', 'New Rummy test table', 'Players and chips per point. You play against the bots.', () => { a.rmForm = true; Admin.paint(); }) :
-    ccSec('New test table', h('button', { type: 'button', class: 'ccbtn ghost sm', id: 'rmCancel', onclick: () => { a.rmForm = false; Admin.paint(); } }, h('span', { text: 'Cancel' })), h('div', { class: 'ccrmform' },
-      h('span', { class: 'ccrml', text: 'PLAYERS, WITH YOU' }), pick('rmPlayers', [2, 3, 4, 5, 6], RM.players, v => { RM.players = v; }),
-      h('span', { class: 'ccrml', text: 'CHIPS PER POINT' }), pick('rmPoint', Rummy.CFG.tables, RM.perPoint, v => { RM.perPoint = v; }),
-      h('p', { class: 'ccnote', text: 'Minimum to sit at a real table at this rate: ' + fmt(Rummy.minBuyIn(RM.perPoint)) + ' chips. The test table uses no chips; rake is 5%.' }),
-      h('button', { type: 'button', class: 'ccbtn primary wide', id: 'rmOpen', onclick: () => { a.rmForm = false; RM.stop(); RM.sess = null; RM.autoStart = true; location.hash = '#/rummy'; } }, ccI('play'), h('span', { text: 'Create and open the table' }))))));
-  const H = RM.history.filter(r => r.sid === S0.id), range = a.rmRange || 'day', sortNew = a.rmSort !== 'old';
+  void pick;
+  const H = RM.history.slice(), range = a.rmRange || 'day', sortNew = a.rmSort !== 'old';
   const lim = { hour: 36e5, six: 216e5, day: 864e5 }[range], list = H.filter(r => Date.now() - r.at <= lim).sort((x, y) => sortNew ? y.at - x.at : x.at - y.at);
   const net = list.reduce((n, r) => n + (r.players.find(p => p.uid === RM.ME) || { chips: 0 }).chips, 0), rake = list.reduce((n, r) => n + r.rake, 0), wins = list.filter(r => r.winner === RM.ME).length;
   const stat = (v, l, cls) => h('div', { class: 'ccrmstat ' + (cls || '') }, h('b', { text: v }), h('span', { text: l }));
   const dissolve = async () => {
-    const yes = await ccConfirm({ title: 'Dissolve the Rummy test table?', danger: true, ok: 'Dissolve', body: 'The table closes and its ' + H.length + (H.length === 1 ? ' deal is' : ' deals are') + ' deleted.' });
+    const n0 = S0 ? RM.history.filter(r => r.sid === S0.id).length : 0;
+    const yes = await ccConfirm({ title: 'End the open Rummy test game?', danger: true, ok: 'End it', body: 'The game closes and its ' + n0 + (n0 === 1 ? ' deal is' : ' deals are') + ' deleted.' });
     if (!yes) return;
-    RM.stop(); RM.history = RM.history.filter(r => r.sid !== S0.id); RM.sess = null; rmSave(); toast('The Rummy test table was dissolved.'); Admin.paint();
+    RM.stop(); RM.history = RM.history.filter(r => r.sid !== S0.id); RM.sess = null; rmSave(); toast('The Rummy test game was ended.'); Admin.paint();
+  };
+  const wipe = async () => {
+    if (!(await ccConfirm({ title: 'Delete every Rummy test record?', danger: true, ok: 'Delete all', body: 'All ' + RM.history.length + ' recorded test deals are deleted, for good.' }))) return;
+    RM.stop(); RM.history = []; RM.sess = null; rmSave(); toast('All Rummy test records were deleted.'); Admin.paint();
   };
   const chip = (k, t, cur, set) => h('button', { type: 'button', class: k === cur ? 'on' : '', id: 'rmf_' + k, text: t, onclick: () => { set(k); Admin.paint(); } });
   return h('div', { class: 'ccpage fixed', id: 'rmTestPage' }, head, h('div', { class: 'ccscroll' },
-    ccSec('Current test table', null, h('div', { class: 'ccrmcur' },
+    ccTestHow('Rummy'),
+    !S0 ? null : ccSec('Open test game', null, h('div', { class: 'ccrmcur' },
       h('div', { class: 'ccrmcurh' }, h('i', { class: 'ccgsym red', text: '♦' }),
-        h('div', {}, h('b', { text: 'Rummy test table' }), h('span', { text: S0.players + ' players  ·  ' + S0.perPoint + ' per point  ·  deal ' + S0.deal + '  ·  opened ' + ccAgo(S0.openedAt) }))),
+        h('div', {}, h('b', { text: 'Rummy test game' }), h('span', { text: S0.players + ' players  ·  ' + S0.perPoint + ' per point  ·  deal ' + S0.deal + '  ·  opened ' + ccAgo(S0.openedAt) }))),
       h('div', { class: 'ccrmcurb' },
-        h('button', { type: 'button', class: 'ccbtn danger', id: 'rmDissolve', onclick: dissolve }, h('span', { text: 'Dissolve' })),
-        h('button', { type: 'button', class: 'ccbtn primary', id: 'rmRejoin', onclick: () => { RM.autoResume = true; location.hash = '#/rummy'; } }, ccI('play'), h('span', { text: 'Rejoin' }))))),
+        h('button', { type: 'button', class: 'ccbtn danger', id: 'rmDissolve', onclick: dissolve }, h('span', { text: 'End it' })),
+        h('button', { type: 'button', class: 'ccbtn primary', id: 'rmRejoin', onclick: () => { RM.autoResume = true; try { sessionStorage.setItem('tp_adminview', 'player'); } catch (e) { /* private mode */ } location.hash = '#/rummy'; onAuthChange(S.user); } }, ccI('play'), h('span', { text: 'Rejoin' }))))),
     ccSec('Activity', h('span', { class: 'ccchip', text: list.length + (list.length === 1 ? ' deal' : ' deals') }), h('div', {},
       h('div', { class: 'ccrmfilt' },
         h('div', { class: 'ccrmseg' }, chip('hour', '1 hour', range, v => { a.rmRange = v; }), chip('six', '6 hours', range, v => { a.rmRange = v; }), chip('day', '24 hours', range, v => { a.rmRange = v; })),
@@ -19771,7 +19825,8 @@ function ccRmTest() {
           return h('button', { type: 'button', class: 'ccrmrow' + (r.winner === RM.ME ? ' won' : ''), onclick: () => RM.showResult(r) },
             h('div', {}, h('b', { text: 'Deal ' + r.deal + '  ·  ' + (r.winner === RM.ME ? 'You won' : w.name + ' won') }), h('span', { text: ccAgo(r.at) + '  ·  ' + r.players.length + ' players  ·  rake ' + fmt(r.rake) })),
             h('em', { class: me.chips > 0 ? 'up' : me.chips < 0 ? 'down' : '', text: (me.chips > 0 ? '+' : '') + fmt(me.chips) }), ccI('chev', 'end')); })))
-      : h('p', { class: 'ccnote', text: H.length ? 'No deals in this time.' : 'Deals played at this table show up here for 24 hours.' })))));
+      : h('p', { class: 'ccnote', text: H.length ? 'No deals in this time.' : 'Test deals show up here for 24 hours.' }))),
+    RM.history.length ? h('button', { type: 'button', class: 'ccbtn danger wide', id: 'rmDeleteAll', onclick: wipe }, ccI('x'), h('span', { text: 'Delete all test records' })) : null));
 }
 // Rummy is being built: its overview, tables and test table arrive here.
 function ccRummySoon() {
@@ -19793,6 +19848,12 @@ function ccCatPage(key, cats, make) {
     h('button', { type: 'button', role: 'tab', id: key + '_' + k, class: k === on ? 'on' : '', 'aria-selected': k === on ? 'true' : 'false',
       onclick: () => { st[key] = k; Admin.paint(); const m = $('ccMain'); if (m) m.scrollTop = 0; } }, h('span', { text: label }), n ? h('em', { text: String(n) }) : null))), page.firstChild);
   return page;
+}
+/* How test games work now: from player view, any table. */
+function ccTestHow(game) {
+  return h('div', { class: 'cctesthow' }, h('span', { class: 'ccmic' }, ccI('flask')),
+    h('div', {}, h('b', { text: 'Test games are played from player view' }), h('span', { text: 'Open any ' + game + ' table there (public, private or tournament), pick how many bots, and play a private copy. Each game is recorded here.' })),
+    h('button', { type: 'button', class: 'ccbtn ghost sm', id: 'ccToPlayer', onclick: () => AdminView.set('player') }, h('span', { text: 'Player view' })));
 }
 /* A compact tile that opens a form or a set of options. */
 function ccNewTile(id, ic, title, sub, fn) {
@@ -20050,12 +20111,22 @@ const TestLab = {
   // The table now open for a test, or null.
   live() { const d = S.rooms[TEST_ID]; return d && d.status === 'open' && d.sessionId ? d : null; },
   // Leaving (or standing up at) the test table lands on the console's Test tab, with that run's results open.
-  left(t) { if (t !== TEST_ID || !S.realAdmin) return; const a = Admin.st; a.nav = 'games'; a.sec = 'test'; a.cat = 'cards'; a.game = 'teenpatti'; a.gopen = true; a.view = 'hub'; a.test = null; a.tsheet = ''; AdminView.set('console'); },
+  // Leaving the test table: it is cleared and closed (its record stays in the console's Test log), and you are back in the lobby.
+  left(t) {
+    if (t !== TEST_ID || !S.realAdmin) return;
+    const d = S.rooms[TEST_ID], sid = d && d.sessionId;
+    (async () => {
+      try { await Repo.emptyTest(); await Repo.roomRef(TEST_ID).update({ status: 'closed', hostUid: '', dealerAt: 0, seated: 0, updatedAt: FV.serverTimestamp() });
+        if (sid) await Repo.sessionRef(sid).update({ status: 'closed', closedAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() }); }
+      catch (e) { console.warn('[TeenPatti] closing the test table', e && e.code); }
+    })();
+    S.forceLobby = true; location.hash = '#/lobby';
+  },
   defaults(boot) { const b = Math.max(1, Math.floor(Number(boot) || 1)); return { boot: b, blind: b * ENGINE_MULT.blind, chaal: b * ENGINE_MULT.chaal, pot: b * ENGINE_MULT.pot, buy: b * 100, botChips: b * 100 }; },
   async wallet() { const a = Admin.st; try { let p = await Repo.getProfile(S.user.uid); if (!p) p = await Repo.createAdminProfile(S.user); a.testProf = p; } catch (e) { a.testProf = null; } if (a.nav === 'test') Admin.paint(); },
   // Seats the admin's own player (Club Admin) at the test table and opens it in the player view.
-  async join() {
-    const uid = S.user.uid, d = TestLab.live();
+  async join(d0) {
+    const uid = S.user.uid, d = d0 || TestLab.live();
     if (!d) throw new AppError('Create a test table first.');
     let p = await Repo.getProfile(uid); if (!p) p = await Repo.createAdminProfile(S.user);
     if (p.tableId && p.tableId !== TEST_ID) throw new AppError('Club Admin is still seated at ' + tableName(TABLE_BY_ID[p.tableId] || { boot: '?' }) + '. Leave that table first.');
@@ -20131,7 +20202,7 @@ function ccTest() {
   if (!a.test) { a.test = { f: null, sel: '', cancel: false }; TestLab.wallet(); }
   Admin.watchTest();
   const T = a.test, L = a.testRuns, room = TestLab.live(), liveId = room ? room.sessionId : '';
-  const head = h('div', { class: 'ccpagehead' }, h('h2', { text: 'Test' }), h('span', { class: 'ccchip' + (room ? ' ok' : ''), text: room ? 'Table open' : 'No table' }));
+  const head = h('div', { class: 'ccpagehead' }, h('h2', { text: 'Test log' }), h('span', { class: 'ccchip' + (room ? ' ok' : ''), text: room ? 'A test is open' : (L ? L.length : 0) + ' recorded' }));
   if (!S.roomsLoaded[TEST_ID] || !L) return h('div', { class: 'ccpage fixed' }, head, h('div', { class: 'ccscroll' }, ccLoading('Loading the test table…')));
   const liveRun = L.find(x => x.id === liveId) || null;
   const openForm = () => { T.f = Object.assign({ name: 'Test Table', bots: 2, mode: 'classic' }, TestLab.defaults(1)); T.cancel = false;  Admin.paint(); };
@@ -20151,10 +20222,14 @@ function ccTest() {
   return h('div', { class: 'ccpage fixed', id: 'testPage' }, head,
     h('div', { class: 'ccscroll' },
       a.testErr ? h('p', { class: 'ccnote bad', text: a.testErr }) : null,
-      T.f ? ccTestForm() : liveRun ? null : ccNewTile('txOpen', 'flask', 'New Teen Patti test table', 'Boot, limits, bots and chips. You play against the bots.', openForm),
-      liveRun ? ccSec('Current test table', T.f ? null : h('button', { type: 'button', class: 'ccbtn ghost sm', id: 'txNew', onclick: () => { T.f = Object.assign({ name: 'Test Table', bots: liveRun.bots || 2, mode: liveRun.mode || 'classic' }, TestLab.defaults(liveRun.boot)); T.cancel = true; Admin.paint(); } }, ccI('flask'), h('span', { text: 'New table' })), h('div', { class: 'cctlistx' }, row(liveRun))) : null,
-      ccSec('Saved test runs', saved.length ? h('span', { class: 'ccchip', text: String(saved.length) }) : null, saved.length ? h('div', { class: 'cctlistx', id: 'testSaved' }, saved.map(row))
-        : h('p', { class: 'ccnote', text: 'A test table you do not dissolve is kept here when you create the next one, so you can open it again later.' }))));
+      ccTestHow('Teen Patti'),
+      liveRun ? ccSec('Open test game', T.f ? null : h('button', { type: 'button', class: 'ccbtn ghost sm', id: 'txNew', onclick: () => { T.f = Object.assign({ name: 'Test Table', bots: liveRun.bots || 2, mode: liveRun.mode || 'classic' }, TestLab.defaults(liveRun.boot)); T.cancel = true; Admin.paint(); } }, ccI('flask'), h('span', { text: 'New table' })), h('div', { class: 'cctlistx' }, row(liveRun))) : null,
+      ccSec('Test games', saved.length ? h('span', { class: 'ccchip', text: String(saved.length) }) : null, saved.length ? h('div', { class: 'cctlistx', id: 'testSaved' }, saved.map(row))
+        : h('p', { class: 'ccnote', text: 'Every test game you play from player view is recorded here: its hands, results and rake.' })),
+      L.length ? h('button', { type: 'button', class: 'ccbtn danger wide', id: 'txDeleteAll', disabled: !!S.busy.testAll, onclick: async () => {
+        if (!(await ccConfirm({ title: 'Delete every Teen Patti test record?', danger: true, ok: 'Delete all', body: 'This wipes, for good:', list: [L.length + (L.length === 1 ? ' test run' : ' test runs') + ' with every recorded hand', 'Their stats, rake and results'] }))) return;
+        adminBusy('testAll', 'delete test records', async () => { if (liveRun) await Repo.dissolveTest(liveRun.id); for (const x of L) if (x.id !== (liveRun && liveRun.id)) await Repo.deleteTestRun(x.id); T.sel = ''; a.tsGames = null; toast('All Teen Patti test records were deleted.'); });
+      } }, ccI('x'), h('span', { text: 'Delete all test records' })) : null));
 }
 
 /* ---- Settings ---- */
@@ -21183,6 +21258,8 @@ Sheets.tournaments = function (refresh) {
     const atMine = prof && prof.tableId && tourSlotOf(prof.tableId) === s, open = ph.name === 'upcoming' || Tour.running(ph);
     let act = null;
     if (S.isAdmin) act = h('button', { type: 'button', class: 'btn-secondary btn-small', 'data-act': 'standings', text: 'Standings', onclick: () => Sheets.tourDetail(s) });
+    else if (adminTesting()) act = h('span', { class: 'tzadm' }, h('button', { type: 'button', class: 'btn-secondary btn-small', 'data-act': 'standings', text: 'Standings', onclick: () => Sheets.tourDetail(s) }),
+      h('button', { type: 'button', class: 'btn-primary btn-small', 'data-act': 'test', text: 'Test', onclick: () => tpAdminTest({ boot: T.boot, blind: T.maxBlind, chaal: T.maxChaal, pot: T.potLimit, min: T.entry }, T.name, 'variant') }));
     else if (!open) act = h('button', { type: 'button', class: 'btn-secondary btn-small', 'data-act': 'standings', text: ph.name === 'ended' ? 'Final standings' : 'Details', onclick: () => Sheets.tourDetail(s) });
     else if (!me) act = h('button', { type: 'button', class: 'btn-primary btn-small', 'data-act': 'register', text: 'Register', onclick: () => Sheets.tourPay(s) });
     else if (atMine) act = h('button', { type: 'button', class: 'btn-primary btn-small', 'data-act': 'return', text: 'My table', onclick: () => Tour.join(s) });
@@ -21390,7 +21467,7 @@ function adminTour() {
   out.push(h('div', { class: 'cctiles2' },
     free ? ccNewTile('tourNew', 'trophy', 'New tournament', 'Name, start time, boot, entry, rounds and prizes', () => Admin.tourForm(null))
       : h('div', { class: 'ccnote', text: 'Five tournaments are open. Finish or cancel one to create another.' }),
-    free ? ccNewTile('tourTestBtn', 'flask', 'Test tournament', '10 min of play  \u00b7  3 bots per table  \u00b7  boot 1  \u00b7  entry 500', () => Admin.tourTest()) : null));
+    null));
   const active = TOUR_SLOTS.map(s => ({ s, T: Tour.T(s) })).filter(x => x.T).sort((x, y) => x.T.startAt - y.T.startAt);
   out.push(h('div', { class: 'cmhist', id: 'tourActive' }, h('div', { class: 'cmlabel', text: 'TOURNAMENTS  ·  ' + active.length + ' OF 5 SLOTS USED' }),
     active.length ? active.map(({ s, T }) => {
