@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build:20261119a -->
+<!-- build:20261119b -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -3970,6 +3970,73 @@ body .cc .cctlist>*{min-width:0}
 .phome .htile2:has(.htfull) .httx b{text-shadow:none !important;filter:drop-shadow(0 2px 4px rgba(0,0,0,.9)) drop-shadow(0 0 10px rgba(0,0,0,.55))}
 .phome .htile2:has(.htfull) .htline{text-shadow:0 1px 6px rgba(0,0,0,.9);color:#f3efe3}
 .phome .htile2:has(.htfull):before,.phome .htile2:has(.htfull) .htsheen{z-index:1}
+/* ===== 100. Rummy: two-row hand, slim labels, an action bar, drag and fly, and the result ===== */
+.rc.hand{touch-action:none}
+.rc.hand.sm b{font-size:calc(var(--u) * 30)}.rc.hand.sm i{top:calc(var(--u) * 36);font-size:calc(var(--u) * 25)}.rc.hand.sm u{font-size:calc(var(--u) * 46)}
+.rc.hand.lifted{opacity:.25;filter:grayscale(.4)}
+.rcghost{box-shadow:0 18px 30px rgba(0,0,0,.55),0 0 0 3px #f2c75c !important;transition:none;border-radius:10px}
+.rcfly{transition:none}
+.rc.rdrop{box-shadow:0 0 0 calc(var(--u) * 6) #7dffc0,0 0 calc(var(--u) * 30) rgba(125,255,192,.8) !important}
+.rmglab.rdrop{background:linear-gradient(180deg,#f6d77a,#c9972e) !important;color:#2a1a02 !important}
+.rmhandzone{z-index:0}
+/* group labels: slim pills */
+.rmglab{font:800 max(8px,calc(var(--u) * 17))/1 system-ui !important;letter-spacing:.04em;border-width:max(1px,calc(var(--u) * 2)) !important;box-shadow:0 calc(var(--u) * 3) calc(var(--u) * 8) rgba(0,0,0,.35)}
+.rmglab.ok{background:linear-gradient(180deg,rgba(28,140,82,.95),rgba(14,92,54,.95)) !important;border-color:rgba(125,255,192,.8) !important}
+.rmglab.bad{background:rgba(6,24,16,.82) !important;border-color:rgba(226,189,107,.45) !important;color:#ffe9b0 !important}
+.rmglab.move{background:linear-gradient(180deg,#f6d77a,#c9972e) !important;border-color:#fff1c2 !important;color:#2a1a02 !important}
+/* the action bar */
+.rmbtns{gap:calc(var(--u) * 14) !important;padding:calc(var(--u) * 8);border-radius:99px;background:rgba(4,20,13,.55);border:max(1px,calc(var(--u) * 2)) solid rgba(226,189,107,.35);box-shadow:inset 0 1px 0 rgba(255,236,180,.1)}
+.rmbtns.empty{display:none}
+.rmbtn{height:calc(var(--u) * 54) !important;font:800 max(10px,calc(var(--u) * 22))/1 system-ui !important;letter-spacing:.08em !important;text-transform:uppercase;border-width:max(1px,calc(var(--u) * 2)) !important;box-shadow:0 calc(var(--u) * 4) 0 rgba(0,0,0,.35) !important}
+.rmbtn.ghost{background:linear-gradient(180deg,#1b5a3d,#0c3624) !important;border-color:rgba(226,189,107,.7) !important}
+.rmbtn.gold{box-shadow:0 calc(var(--u) * 4) 0 #7a5a12 !important}
+.rmbtn.warn{box-shadow:0 calc(var(--u) * 4) 0 #3a0c08 !important}
+#rmSeeResult{height:calc(var(--u) * 64) !important}
+/* your plate */
+.rmme{padding:0 calc(var(--u) * 18) 0 calc(var(--u) * 8) !important;background:linear-gradient(90deg,rgba(6,30,19,.9),rgba(10,46,30,.85)) !important}
+.rmmeav{width:calc(var(--u) * 62) !important;height:calc(var(--u) * 62) !important}
+.rmme b{font-size:max(10px,calc(var(--u) * 24)) !important}
+.rmpts{font-size:max(9px,calc(var(--u) * 20)) !important;padding:calc(var(--u) * 7) calc(var(--u) * 16) !important;border:1px solid rgba(226,189,107,.4)}
+/* result */
+#rmResult .sheet{max-height:92vh;overflow:auto}
+.rmresult{display:flex;flex-direction:column;gap:10px;padding-top:4px}
+.rmwin{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;background:radial-gradient(120% 140% at 0% 0%,rgba(255,215,110,.28),rgba(120,84,10,.18) 50%,rgba(0,0,0,.15));border:1px solid rgba(255,224,138,.7);box-shadow:0 0 22px rgba(255,205,100,.18)}
+.rmwinav{position:relative;flex:none;width:50px;height:50px;border-radius:50%;display:grid;place-items:center;background:#0b3b24;border:2px solid #ffe08a;font-size:26px;overflow:visible}
+.rmwinav .avimg{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.rmcrown{position:absolute;top:-14px;left:50%;transform:translateX(-50%) rotate(-8deg);font-style:normal;font-size:18px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}
+.rmwinn{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.rmwinn em{font:800 9.5px system-ui;font-style:normal;letter-spacing:.18em;color:#f2c75c}
+.rmwinn b{font:800 17px Georgia,serif;color:#fff3d6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rmwinn span{font:600 11px system-ui;color:#cdb98f}
+.rmwin strong{font:900 24px system-ui;color:#86efac;text-shadow:0 0 12px rgba(134,239,172,.35)}
+.rmwincards{padding:0 2px}
+.rmrc{display:flex;flex-wrap:wrap;gap:4px}
+.rmrc .rmresg{gap:1px;padding:2px;border-radius:6px;background:rgba(255,120,90,.16)}
+.rmrc .rmresg.ok{background:rgba(125,255,192,.18)}
+.rmrc .rmini{min-width:18px;height:22px;font-size:10px;padding:0 2px}
+.rmrlist{display:flex;flex-direction:column;gap:6px}
+.rmr{padding:8px 10px;border-radius:12px;background:rgba(0,0,0,.22);border:1px solid rgba(226,189,107,.18);display:flex;flex-direction:column;gap:6px}
+.rmr.mine{border-color:rgba(125,255,192,.45)}
+.rmrh{display:flex;align-items:center;gap:8px}
+.rmrn{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.rmrn b{font:700 13px system-ui;color:#fff3d6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rmrn i{font:500 10.5px system-ui;font-style:normal;color:#cdb98f}
+.rmr .rmreschips{font:800 15px system-ui;color:#e8e2d0}.rmr .rmreschips.down{color:#ff9f8a}
+.rmstats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.rmstats div{display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 2px;border-radius:10px;background:rgba(0,0,0,.25);border:1px solid rgba(226,189,107,.2)}
+.rmstats b{font:800 14px system-ui;color:#ffe9b0}.rmstats span{font:600 9.5px system-ui;letter-spacing:.06em;color:#cdb98f;text-transform:uppercase}
+.rmnextrow{display:flex;flex-direction:column;gap:5px;align-items:center}
+.rmnextrow span{font:700 12px system-ui;color:#eef4ec}
+.rmnext{width:100%;height:4px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden}
+.rmnext i{display:block;height:100%;background:linear-gradient(90deg,#f6d77a,#c9972e);animation:rmnext linear forwards;transform-origin:left}
+@keyframes rmnext{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.rmrbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rmrbtn{height:44px;border-radius:12px;font:800 14px system-ui;letter-spacing:.04em;cursor:pointer;border:1px solid}
+.rmrbtn.ghost{background:rgba(0,0,0,.25);color:#ffe9b0;border-color:rgba(226,189,107,.6)}
+.rmrbtn.gold{background:linear-gradient(180deg,#f6d77a,#c9972e);color:#2a1a02;border-color:#fff1c2;box-shadow:0 4px 0 #7a5a12}
+.rmfine{margin:0;text-align:center;font:500 11px system-ui;color:#9fb5a7}
+.rmbtns{background:none !important;border:0 !important;box-shadow:none !important;padding:0 !important}
+.rmbtn{flex:0 1 calc(var(--u) * 190) !important;max-width:calc(var(--u) * 190) !important}
 </style>
 </head>
 <body>
@@ -13648,7 +13715,7 @@ class AppError extends Error {}
 let toastTimer = null;
 /* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
    few bytes of the current file; if its build is newer, a banner offers a reload. */
-const BUILD = '20261119a';
+const BUILD = '20261119b';
 const Fresh = {
   at: 0, shown: false,
   async check(force) {
@@ -15368,9 +15435,13 @@ const RM = {
   me() { return RM.g && RM.g.players.find(p => p.uid === RM.ME); },
   clear() { RM.timers.forEach(clearTimeout); RM.timers = []; },
   later(fn, ms) { RM.timers.push(setTimeout(() => { if (RM.g) fn(); }, ms)); },
-  stop() { RM.clear(); RM.g = null; RM.result = null; RM.groups = []; RM.sel = []; RM.note = ''; },
-  start() {
+  stop() { RM.clear(); clearTimeout(RM.nextT); RM.nextT = null; RM.g = null; RM.result = null; RM.groups = []; RM.sel = []; RM.note = ''; },
+  sess: null, nextT: null, nextAt: 0, NEXT_MS: 10000,
+  // keep: the next deal of the same session (same seats, running totals); otherwise a new session
+  start(keep) {
     RM.stop();
+    if (!keep || !RM.sess) RM.sess = { deal: 0, tot: {} };
+    RM.sess.deal++;
     const meName = (S.profile && S.profile.name) || 'You';
     const seats = [{ uid: RM.ME, name: meName }].concat(RM_BOTS.slice(0, RM.players - 1).map((b, i) => ({ uid: 'bot' + i, name: b[0] })));
     const g = Rummy.deal(seats);
@@ -15426,7 +15497,9 @@ const RM = {
     const g = RM.g, bd = Rummy.bestDiscard(p.hand, g.wild);
     if (bd.valid) { Rummy.act(g, p.uid, { type: 'declare', card: bd.card, groups: bd.groups }); RM.note = p.name + ' declared!'; }
     else Rummy.act(g, p.uid, { type: 'discard', card: bd.card });
+    const seat = document.querySelector('#rmSeat_' + p.uid + ' .rmav');
     RM.after();
+    if (!bd.valid) rmAfterPaint(() => rmFly(seat, document.querySelector('#rummyStage .rc.open'), true));
   },
   // someone showed: you have a short time to arrange and put down your cards
   armFinal() {
@@ -15447,21 +15520,30 @@ const RM = {
     RM.history.unshift({ at: Date.now(), players: g.players.length, perPoint: RM.perPoint, won: g.winner === RM.ME, mine: mine ? mine.chips : 0,
       pot: RM.result.pot, rake: RM.result.rake, winner: (g.players.find(p => p.uid === g.winner) || {}).name || '', how: g.how || '' });
     RM.history = RM.history.slice(0, 50);
-    scheduleRender(); setTimeout(() => RM.showResult(), 450);
+    if (RM.sess) RM.result.lines.forEach(l => { RM.sess.tot[l.uid] = (RM.sess.tot[l.uid] || 0) + l.chips; });
+    // the next deal starts by itself, like Teen Patti, unless you stand up
+    RM.nextAt = Date.now() + RM.NEXT_MS; clearTimeout(RM.nextT);
+    RM.nextT = setTimeout(() => { if (S.route && S.route.name === 'rummy' && RM.result) { if (Sheets.el && Sheets.el.id === 'rmResult') Sheets.closeNow(); RM.start(true); } }, RM.NEXT_MS);
+    scheduleRender(); setTimeout(() => RM.showResult(), 700);
   },
   /* ---- your moves ---- */
   myTurn() { const g = RM.g, me = RM.me(); return !!(g && me && me.status === 'in' && !g.over && g.phase !== 'final' && Rummy.cur(g) === me); },
   draw(from) {
     if (!RM.myTurn() || RM.g.phase !== 'draw') return;
+    const src = document.querySelector(from === 'open' ? '#rummyStage .rc.open' : '#rummyStage .rc.deck');
     const r = Rummy.act(RM.g, RM.ME, { type: 'draw', from });
     if (!r.ok) return toast(r.error);
+    const got = RM.me().hand[RM.me().hand.length - 1];
     RM.note = ''; RM.sync(); scheduleRender();
+    rmAfterPaint(() => rmFly(src, document.querySelector('#rummyStage .rc.hand[data-c="' + got + '"]')));
   },
   discard() {
     if (!RM.myTurn() || RM.g.phase !== 'discard' || RM.sel.length !== 1) return;
-    const r = Rummy.act(RM.g, RM.ME, { type: 'discard', card: RM.sel[0] });
+    const card = RM.sel[0], src = document.querySelector('#rummyStage .rc.hand[data-c="' + card + '"]');
+    const r = Rummy.act(RM.g, RM.ME, { type: 'discard', card });
     if (!r.ok) return toast(r.error);
     RM.sel = []; RM.after();
+    rmAfterPaint(() => rmFly(src, document.querySelector('#rummyStage .rc.open')));
   },
   declare() {
     if (!RM.myTurn() || RM.g.phase !== 'discard' || RM.sel.length !== 1) return;
@@ -15498,6 +15580,14 @@ const RM = {
     RM.groups = RM.groups.map(gr => gr === target ? Rummy.order(gr.filter(c => !sel.includes(c)).concat(sel), RM.g.wild) : gr.filter(c => !sel.includes(c))).filter(gr => gr.length);
     RM.sel = []; scheduleRender();
   },
+  place(c, gi, idx) {
+    let groups = RM.groups.map(gr => gr.slice());
+    const from = groups.findIndex(gr => gr.includes(c)); if (from < 0) return;
+    const fi = groups[from].indexOf(c); groups[from].splice(fi, 1);
+    if (gi >= 0 && groups[gi]) { const t = groups[gi]; if (from === gi && fi < idx) idx--; t.splice(Math.max(0, Math.min(idx, t.length)), 0, c); }
+    else groups.push([c]);
+    RM.groups = groups.filter(gr => gr.length); RM.sel = RM.sel.filter(x => x !== c); scheduleRender();
+  },
   sort() {
     const me = RM.me(); if (!me) return;
     RM.groups = Rummy.arrange(me.hand, RM.g.wild).map(gr => gr.slice()); RM.sel = []; scheduleRender();
@@ -15509,35 +15599,50 @@ const RM = {
   },
   leave() {
     const me = RM.me();
-    if (RM.g && me && me.status === 'in' && !RM.result) return RM.ask('Leave the table?', 'The game is still on. Leaving counts as a drop.', 'Leave', () => RM.exit());
+    if (RM.g && me && me.status === 'in' && !RM.result) return RM.ask('Stand up?', 'The deal is still on. Standing up now counts as a drop.', 'Stand up', () => RM.exit());
     RM.exit();
   },
   // back to the console's Test page (Cards, Rummy)
-  exit() { RM.stop(); Object.assign(Admin.st, { nav: 'games', sec: 'test', cat: 'cards', game: 'rummy', view: 'hub', gopen: true }); location.hash = '#/admin'; },
+  exit() { RM.stop(); RM.sess = null; Object.assign(Admin.st, { nav: 'games', sec: 'test', cat: 'cards', game: 'rummy', view: 'hub', gopen: true }); location.hash = '#/admin'; },
   history: [], autoStart: false,
   /* ---- the result ---- */
   showResult() {
     const g = RM.g, res = RM.result; if (!g || !res) return;
-    const order = g.players.slice().sort((a, b) => (b.uid === g.winner) - (a.uid === g.winner) || (b.uid === RM.ME) - (a.uid === RM.ME));
-    const rows = order.map(p => {
-      const line = res.lines.find(l => l.uid === p.uid), win = p.uid === g.winner;
-      const tag = win ? 'Winner' : p.status === 'drop' ? 'Dropped' : p.status === 'out' ? 'Wrong show' : p.points + ' points';
-      const groups = p.groups || RM.bySuit(p.hand);
-      return h('div', { class: 'rmres' + (win ? ' win' : '') + (p.uid === RM.ME ? ' mine' : '') },
-        h('div', { class: 'rmresh' },
-          h('span', { class: 'rmresav' }, avatarNode(p.av)),
-          h('b', { text: p.uid === RM.ME ? p.name + ' (you)' : p.name }),
-          h('i', { class: 'rmrestag', text: tag }),
-          h('span', { class: 'rmreschips' + (line.chips > 0 ? ' up' : line.chips < 0 ? ' down' : ''), text: (line.chips > 0 ? '+' : '') + fmt(line.chips) })),
-        h('div', { class: 'rmresc' }, groups.map(gr => h('span', { class: 'rmresg' + (Rummy.kind(gr, g.wild) ? ' ok' : '') }, gr.map(c => rmMini(c, g.wild))))));
-    });
-    const again = h('button', { id: 'rmAgain', type: 'button', class: 'btn-primary', text: 'Play again', onclick: () => { Sheets.close(); RM.start(); } });
-    const out = h('button', { id: 'rmOut', type: 'button', class: 'btn-secondary', text: 'Leave', onclick: () => { Sheets.close(); RM.exit(); } });
-    Sheets.open('rmResult', 'Result', h('div', { class: 'setlist rmreslist' },
-      h('p', { class: 'hnote', text: 'Wild joker: ' + rmRankName(g.wild) + ' · ' + RM.perPoint + (RM.perPoint === 1 ? ' chip' : ' chips') + ' per point · test table, no chips change hands' }),
-      rows,
-      h('p', { class: 'rmpot', text: 'Won ' + fmt(res.pot) + ' · rake 5% ' + fmt(res.rake) + ' · winner gets ' + fmt(res.pot - res.rake) }),
-      h('div', { class: 'leaverow' }, out, again)));
+    const tot = (RM.sess && RM.sess.tot) || {}, win = g.players.find(p => p.uid === g.winner) || g.players[0];
+    const wl = res.lines.find(l => l.uid === win.uid) || { chips: 0 };
+    const nm = p => p.uid === RM.ME ? (p.name === 'You' ? 'You' : p.name + ' (you)') : p.name;
+    const sgn = n => (n > 0 ? '+' : n < 0 ? '−' : '') + fmt(Math.abs(n));
+    const order = g.players.filter(p => p.uid !== win.uid).sort((a, b) => (b.uid === RM.ME) - (a.uid === RM.ME));
+    const cardsOf = p => h('div', { class: 'rmrc' }, (p.groups || RM.bySuit(p.hand)).map(gr => h('span', { class: 'rmresg' + (Rummy.kind(gr, g.wild) ? ' ok' : '') }, gr.map(c => rmMini(c, g.wild)))));
+    const row = p => {
+      const line = res.lines.find(l => l.uid === p.uid) || { chips: 0 };
+      const tag = p.status === 'drop' ? 'Dropped' : p.status === 'out' ? 'Wrong show' : p.points + ' pts';
+      return h('div', { class: 'rmr' + (p.uid === RM.ME ? ' mine' : '') },
+        h('div', { class: 'rmrh' }, h('span', { class: 'rmresav' }, avatarNode(p.av)),
+          h('div', { class: 'rmrn' }, h('b', { text: nm(p) }), h('i', { text: tag + '  ·  total ' + sgn(tot[p.uid] || 0) })),
+          h('span', { class: 'rmreschips' + (line.chips < 0 ? ' down' : ''), text: sgn(line.chips) })),
+        cardsOf(p));
+    };
+    const ms = Math.max(1, RM.nextAt - Date.now());
+    const lab = h('span', { id: 'rmNextLab', text: 'Next deal in ' + Math.ceil(ms / 1000) + 's' });
+    const tick = setInterval(() => { const l = document.getElementById('rmNextLab'); if (!l || !RM.result) return clearInterval(tick); l.textContent = 'Next deal in ' + Math.max(0, Math.ceil((RM.nextAt - Date.now()) / 1000)) + 's'; }, 500);
+    const stand = h('button', { id: 'rmOut', type: 'button', class: 'rmrbtn ghost', onclick: () => { Sheets.close(); RM.exit(); } }, h('span', { text: 'Stand up' }));
+    const now = h('button', { id: 'rmAgain', type: 'button', class: 'rmrbtn gold', onclick: () => { Sheets.close(); RM.start(true); } }, h('span', { text: 'Deal now' }));
+    Sheets.open('rmResult', 'Deal ' + (RM.sess ? RM.sess.deal : 1) + ' result', h('div', { class: 'rmresult' },
+      h('div', { class: 'rmwin' },
+        h('span', { class: 'rmwinav' }, avatarNode(win.av), h('i', { class: 'rmcrown', text: '\u{1F451}' })),
+        h('div', { class: 'rmwinn' }, h('em', { text: g.how === 'last' ? 'LAST PLAYER IN' : 'WINNER' }), h('b', { text: nm(win) }), h('span', { text: 'Total ' + sgn(tot[win.uid] || 0) })),
+        h('strong', { text: sgn(wl.chips) })),
+      h('div', { class: 'rmwincards' }, cardsOf(win)),
+      h('div', { class: 'rmrlist' }, order.map(row)),
+      h('div', { class: 'rmstats' },
+        h('div', {}, h('b', { text: fmt(res.pot) }), h('span', { text: 'Pot' })),
+        h('div', {}, h('b', { text: fmt(res.rake) }), h('span', { text: 'Rake 5%' })),
+        h('div', {}, h('b', { text: rmRankName(g.wild) }), h('span', { text: 'Wild joker' })),
+        h('div', {}, h('b', { text: String(RM.perPoint) }), h('span', { text: 'Per point' }))),
+      h('div', { class: 'rmnextrow' }, lab, h('div', { class: 'rmnext' }, h('i', { style: 'animation-duration:' + ms + 'ms' }))),
+      h('div', { class: 'rmrbtns' }, stand, now),
+      h('p', { class: 'rmfine', text: 'Test table: no chips change hands.' })));
   },
   rules() {
     const li = t => h('li', { text: t });
@@ -15548,10 +15653,105 @@ const RM = {
       li('Jokers: the printed jokers and every card of the wild joker’s rank can stand in for any card.'),
       li('Points: A, K, Q, J and 10 count 10, other cards their number, jokers 0. The most you can lose is 80.'),
       li('Drop before you pick a card: 20 points on your first turn, 40 later. A wrong show costs 80.'),
-      li('Tap cards to select them. Group makes a new group; tap a group’s label to move cards into it. Sort groups your cards for the fewest points.'))));
+      li('Drag a card to move it into a group, between two cards or off on its own; drag it onto the open pile to throw it. Or tap cards to select them and use Group, + Here and Throw.'),
+      li('After each deal the next one starts by itself. Tap the back arrow or Stand up to leave.'))));
   }
 };
 const rmRankName = r => r === 'T' ? '10' : r;
+// Where your cards go: one row when they fit with clear gaps between groups, otherwise two rows of smaller cards.
+function rmRows(cards) {
+  const visU = Math.min(RT_W, (window.innerWidth || 360) * RT_H / Math.max(1, window.innerHeight || 715));
+  const AV = visU - 30, left0 = (RT_W - visU) / 2 + 15, GAP = 18;
+  const cnt = ix => ix.reduce((a, i) => a + cards[i].length, 0);
+  const fit = (ix, CW) => { const n = cnt(ix), k = ix.length; return Math.min(58, (AV - k * CW - GAP * (k - 1)) / Math.max(1, n - k)); };
+  const width = (ix, CW, st) => { const n = cnt(ix), k = ix.length; return st * (n - k) + k * CW + GAP * (k - 1); };
+  const all = cards.map((_, i) => i);
+  let CW = 92, st = fit(all, CW);
+  if (st >= 30 || cards.length < 2) return { rows: [all], step: [st], width: [width(all, CW, st)], CW, CH: 130, GAP, AV, left0, rowY: [1086], labY: [1228], btnY: 1300 };
+  // two rows: the split that leaves both rows the most room
+  CW = 84; let best = null;
+  for (let k2 = 1; k2 < cards.length; k2++) { const r1 = all.slice(0, k2), r2 = all.slice(k2), m = Math.min(fit(r1, CW), fit(r2, CW)); if (!best || m > best.m) best = { m, r1, r2 }; }
+  const rows = [best.r1, best.r2], step = rows.map(r => fit(r, CW));
+  return { rows, step, width: rows.map((r, i) => width(r, CW, step[i])), CW, CH: 118, GAP, AV, left0, rowY: [990, 1170], labY: [1112, 1292], btnY: 1352 };
+}
+// after the next paint
+const rmU = () => { const st = document.getElementById('rummyStage'); return st ? (st.getBoundingClientRect().height / RT_H) + 'px' : '1px'; };
+const rmAfterPaint = fn => requestAnimationFrame(() => requestAnimationFrame(fn));
+// a card flying from one place to another (a copy of where it lands, started where it came from)
+function rmFly(fromEl, toEl, small) {
+  if (!fromEl || !toEl || !toEl.animate) return;
+  const a = fromEl.getBoundingClientRect(), b = toEl.getBoundingClientRect(); if (!b.width) return;
+  const ghost = toEl.cloneNode(true); ghost.classList.add('rcfly'); ghost.classList.remove('can', 'sel');
+  Object.assign(ghost.style, { position: 'fixed', left: b.left + 'px', top: b.top + 'px', width: b.width + 'px', height: b.height + 'px', margin: 0, zIndex: 9000, pointerEvents: 'none' });
+  ghost.style.setProperty('--u', rmU()); document.body.appendChild(ghost); toEl.style.visibility = 'hidden';
+  const s0 = small ? .45 : Math.max(.3, a.width / b.width);
+  const dx = a.left + a.width / 2 - (b.left + b.width / 2), dy = a.top + a.height / 2 - (b.top + b.height / 2);
+  const an = ghost.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + s0 + ') rotate(-8deg)', opacity: small ? .4 : 1 }, { transform: 'none', opacity: 1 }], { duration: 380, easing: 'cubic-bezier(.2,.8,.25,1)' });
+  an.onfinish = an.oncancel = () => { ghost.remove(); toEl.style.visibility = ''; };
+}
+// Dragging a card: lift it, carry it across the screen, drop it into a group, between cards, on its own, or on the open pile to throw it.
+const RMDrag = {
+  s: null,
+  down(e, c, el) {
+    if (e.button > 0 || RMDrag.s) return;
+    RMDrag.s = { c, el, x: e.clientX, y: e.clientY, moved: false, ghost: null };
+    window.addEventListener('pointermove', RMDrag.move, { passive: false });
+    window.addEventListener('pointerup', RMDrag.up); window.addEventListener('pointercancel', RMDrag.cancel);
+  },
+  move(e) {
+    const d = RMDrag.s; if (!d) return;
+    const dx = e.clientX - d.x, dy = e.clientY - d.y;
+    if (!d.moved) {
+      if (Math.hypot(dx, dy) < 8) return;
+      d.moved = true;
+      const r = d.el.getBoundingClientRect(); d.r = r;
+      d.ghost = d.el.cloneNode(true); d.ghost.classList.add('rcghost'); d.ghost.classList.remove('sel');
+      Object.assign(d.ghost.style, { position: 'fixed', left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px', margin: 0, zIndex: 9000, pointerEvents: 'none' });
+      d.ghost.style.setProperty('--u', rmU()); document.body.appendChild(d.ghost); d.el.classList.add('lifted');
+      try { if (navigator.vibrate) navigator.vibrate(8); } catch (x) { /* no vibration */ }
+    }
+    e.preventDefault();
+    d.ghost.style.transform = 'translate(' + dx + 'px,' + (dy - 14) + 'px) scale(1.12) rotate(' + Math.max(-10, Math.min(10, dx / 25)) + 'deg)';
+    const t = RMDrag.target(e.clientX, e.clientY);
+    document.querySelectorAll('#rummyStage .rdrop').forEach(n => n.classList.remove('rdrop'));
+    if (t && t.el) t.el.classList.add('rdrop');
+  },
+  // what is under the finger
+  target(x, y) {
+    const list = document.elementsFromPoint(x, y), d = RMDrag.s;
+    const pile = list.find(n => n.classList && n.classList.contains('open') && n.classList.contains('rc'));
+    if (pile) return { kind: 'pile', el: pile };
+    const card = list.find(n => n.classList && n.classList.contains('hand') && n.dataset.c && (!d || n.dataset.c !== d.c));
+    if (card) { const r = card.getBoundingClientRect(); return { kind: 'group', gi: +card.dataset.g, idx: +card.dataset.i + (x > r.left + r.width / 2 ? 1 : 0), el: card }; }
+    const lab = list.find(n => n.classList && n.classList.contains('rmglab'));
+    if (lab) return { kind: 'group', gi: +lab.dataset.g, idx: 99, el: lab };
+    if (list.find(n => n.dataset && n.dataset.zone === 'hand')) return { kind: 'new', el: null };
+    return null;
+  },
+  up(e) {
+    const d = RMDrag.s; RMDrag.off(); if (!d) return;
+    if (!d.moved) { RM.tap(d.c); return; }
+    document.querySelectorAll('#rummyStage .rdrop').forEach(n => n.classList.remove('rdrop'));
+    const t = RMDrag.target(e.clientX, e.clientY), ghost = d.ghost;
+    const done = () => { ghost.remove(); d.el.classList.remove('lifted'); };
+    if (t && t.kind === 'pile') {
+      if (RM.myTurn() && RM.g.phase === 'discard') {
+        const r = t.el.getBoundingClientRect();
+        const an = ghost.animate([{ transform: ghost.style.transform }, { transform: 'translate(' + (r.left + r.width / 2 - (d.r.left + d.r.width / 2)) + 'px,' + (r.top + r.height / 2 - (d.r.top + d.r.height / 2)) + 'px) scale(' + (r.width / d.r.width).toFixed(3) + ')' }], { duration: 220, easing: 'ease-in', fill: 'forwards' });
+        an.onfinish = () => { ghost.remove(); const r2 = Rummy.act(RM.g, RM.ME, { type: 'discard', card: d.c }); if (!r2.ok) { toast(r2.error); scheduleRender(); return; } RM.sel = []; RM.after(); };
+        return;
+      }
+      toast(RM.myTurn() ? 'Pick a card first, then throw one.' : 'Wait for your turn to throw a card.');
+    } else if (t && t.kind === 'group') { done(); RM.place(d.c, t.gi, t.idx); return; }
+    else if (t && t.kind === 'new') { done(); RM.place(d.c, -1); return; }
+    // back to where it was
+    const an = ghost.animate([{ transform: ghost.style.transform }, { transform: 'none' }], { duration: 200, easing: 'ease-out' });
+    an.onfinish = done;
+  },
+  cancel() { const d = RMDrag.s; RMDrag.off(); if (d && d.ghost) { d.ghost.remove(); d.el.classList.remove('lifted'); } },
+  off() { RMDrag.s = null; window.removeEventListener('pointermove', RMDrag.move); window.removeEventListener('pointerup', RMDrag.up); window.removeEventListener('pointercancel', RMDrag.cancel); }
+};
+
 // a full-size card in your hand or on the table
 function rmCard(c, wild, cls, style, onclick) {
   if (!c) return h('div', { class: 'rc back' + (cls ? ' ' + cls : ''), style, onclick });
@@ -15571,7 +15771,7 @@ function renderRummy() {
   const B = fbox(RT_W, RT_H), g = RM.g, parts = [];
   const top = h('div', { class: 'stop rmtop' },
     h('button', { type: 'button', class: 'pback2', id: 'rmBack', 'aria-label': 'Leave the table', onclick: () => RM.leave() }, pI('back')),
-    h('div', { class: 'rmtitle' }, h('b', { text: 'Points Rummy' }), h('span', { text: 'Test table · ' + RM.perPoint + ' chip' + (RM.perPoint === 1 ? '' : 's') + ' per point' })),
+    h('div', { class: 'rmtitle' }, h('b', { text: 'Points Rummy' }), h('span', { text: (RM.sess && RM.g ? 'Deal ' + RM.sess.deal + ' · ' : 'Test table · ') + RM.perPoint + ' chip' + (RM.perPoint === 1 ? '' : 's') + ' per point' })),
     h('button', { type: 'button', class: 'rmhelp', id: 'rmHelp', 'aria-label': 'How to play', onclick: () => RM.rules(), text: '?' }));
   if (!g && RM.autoStart) { RM.autoStart = false; setTimeout(() => { if (!RM.g && S.route && S.route.name === 'rummy') RM.start(); }, 0); }
   if (!g) { parts.push(rmSetup(B)); return fitStage('p_rmtable', RT_W, RT_H, 'rummyStage', parts, 'prummy', top); }
@@ -15597,7 +15797,7 @@ function renderRummy() {
   parts.push(h('i', { class: 'rmcount wildl', style: B(130, 822, 266, 852), text: 'wild joker' }));
   parts.push(rmCard(null, g.wild, 'deck' + (canDraw ? ' can' : ''), B(272, 650, 392, 818), () => RM.draw('closed')));
   parts.push(h('i', { class: 'rmcount', style: B(272, 822, 392, 852), text: g.closed.length + ' left' }));
-  parts.push(top0 ? rmCard(top0, g.wild, 'open' + (openOk ? ' can' : ''), B(495, 650, 615, 818), () => RM.draw('open')) : h('div', { class: 'rc empty', style: B(495, 650, 615, 818) }));
+  parts.push(top0 ? rmCard(top0, g.wild, 'open' + (openOk ? ' can' : ''), B(495, 650, 615, 818), () => RM.draw('open')) : h('div', { class: 'rc empty open', style: B(495, 650, 615, 818) }));
   parts.push(h('i', { class: 'rmcount', style: B(455, 822, 655, 852), text: 'open pile' }));
 
   // what is going on
@@ -15608,34 +15808,34 @@ function renderRummy() {
   else if (myTurn) msg = g.phase === 'draw' ? (RM.note ? RM.note + ' ' : '') + 'Your turn: pick a card from the deck or the open pile.' : 'Select a card to throw, or put it away and tap Show.';
   else if (me.status !== 'in') msg = (RM.note || 'You are out of this game.') + ' ' + cur.name + ' is playing.';
   else if (!msg) msg = cur.name + ' is playing.';
-  parts.push(h('div', { class: 'rmmsg' + (myTurn || final ? ' you' : ''), style: B(110, 900, 777, 990), id: 'rmMsg', text: msg }));
+  const twoRows = !!RM.me() && rmRows(RM.groups).rows.length > 1;
+  parts.push(h('div', { class: 'rmmsg' + (myTurn || final ? ' you' : ''), style: twoRows ? B(130, 866, 757, 936) : B(110, 900, 777, 990), id: 'rmMsg', text: msg }));
 
   // your cards, in your groups
   if (me.status === 'in' || final || g.over) {
-    const cards = RM.groups, nC = cards.reduce((a, gr) => a + gr.length, 0), k = cards.length;
-    // Each group sits apart (3-3-3-4 reads at a glance); finished groups are lifted a little, set aside.
-    // The phone may trim the sides of the picture, so the hand fits the part that is on screen.
-    const visU = Math.min(RT_W, (window.innerWidth || 360) * RT_H / Math.max(1, window.innerHeight || 715));
-    const CW = 92, CH = 130, GAP = 22, AV = visU - 34, left0 = (RT_W - visU) / 2 + 17;
-    let step = (AV - k * CW - GAP * (k - 1)) / Math.max(1, nC - k), apart = step >= 38 && nC > k;
-    if (!apart) step = (AV - CW - GAP * (k - 1)) / Math.max(1, nC - 1);
-    step = Math.min(60, step);
-    const width = apart ? step * (nC - k) + k * CW + GAP * (k - 1) : step * (nC - 1) + CW + GAP * (k - 1);
-    let x = left0 + (AV - width) / 2;
+    const cards = RM.groups, L = rmRows(cards), two = L.rows.length > 1;
     const sc = Rummy.score(cards, g.wild), canEdit = inPlay || (final && me.status === 'in');
-    cards.forEach((gr, gi) => {
-      const x0 = x, kd = Rummy.kind(gr, g.wild), done = !!kd;
-      gr.forEach((c, ci) => {
-        const sel = RM.sel.includes(c), y0 = 1092 - (done ? 18 : 0) - (sel ? 30 : 0);
-        parts.push(rmCard(c, g.wild, 'hand' + (sel ? ' sel' : '') + (done ? ' done' : ''), B(x, y0, x + CW, y0 + CH), canEdit ? () => RM.tap(c) : null));
-        if (ci < gr.length - 1) x += step;
+    const CW = L.CW, CH = L.CH;
+    parts.push(h('div', { class: 'rmhandzone', 'data-zone': 'hand', style: B(L.left0 - 10, L.rowY[0] - 40, L.left0 + L.AV + 10, L.labY[L.rows.length - 1] + 40) }));
+    L.rows.forEach((row, ri) => {
+      let x = L.left0 + (L.AV - L.width[ri]) / 2;
+      const step = L.step[ri];
+      row.forEach(gi => {
+        const gr = cards[gi], x0 = x, kd = Rummy.kind(gr, g.wild), done = !!kd;
+        gr.forEach((c, ci) => {
+          const sel = RM.sel.includes(c), y0 = L.rowY[ri] - (done && !two ? 16 : 0) - (sel ? (two ? 22 : 30) : 0);
+          const el = rmCard(c, g.wild, 'hand' + (sel ? ' sel' : '') + (done ? ' done' : '') + (two ? ' sm' : ''), B(x, y0, x + CW, y0 + CH), null);
+          el.dataset.g = gi; el.dataset.i = ci;
+          if (canEdit) el.addEventListener('pointerdown', e => RMDrag.down(e, c, el));
+          parts.push(el);
+          if (ci < gr.length - 1) x += step;
+        });
+        const xe = x + CW, mid = (x0 + xe) / 2, lw = Math.max(64, xe - x0 - 6), pts = gr.reduce((n, c) => n + Rummy.value(c, g.wild), 0);
+        const canMove = canEdit && RM.sel.length && !(RM.sel.every(c => gr.includes(c)));
+        parts.push(h('button', { type: 'button', class: 'rmglab' + (kd ? ' ok' : ' bad') + (canMove ? ' move' : ''), style: B(mid - lw / 2, L.labY[ri], mid + lw / 2, L.labY[ri] + 30), 'data-g': gi,
+          onclick: canMove ? () => RM.moveTo(gi) : null, text: canMove ? (lw < 120 ? '+' : '+ Here') : kd ? (lw < 140 ? '✓' : lw < 250 ? RM_SHORT[kd] + ' ✓' : RM_KIND[kd] + ' ✓') : String(pts) }));
+        x = xe + L.GAP;
       });
-      const xe = x + CW;                                       // the right edge of this group's last card
-      x = apart ? xe + GAP : x + step + GAP;
-      const lx1 = apart ? xe : Math.min(xe, x - 4), mid = (x0 + lx1) / 2, pts = gr.reduce((a, c) => a + Rummy.value(c, g.wild), 0);
-      const lw = Math.max(70, lx1 - x0 - 2), canMove = canEdit && RM.sel.length && !(RM.sel.every(c => gr.includes(c)));
-      parts.push(h('button', { type: 'button', class: 'rmglab' + (kd ? ' ok' : ' bad') + (canMove ? ' move' : ''), style: B(mid - lw / 2, 1234, mid + lw / 2, 1274), 'data-g': gi,
-        onclick: canMove ? () => RM.moveTo(gi) : null, text: canMove ? (lw < 130 ? '+' : lw < 230 ? '+ Here' : '+ Move here') : kd ? (lw < 150 ? '\u2713' : lw < 260 ? RM_SHORT[kd] + ' \u2713' : RM_KIND[kd] + ' \u2713') : lw < 150 ? String(pts) : pts + ' pts' }));
     });
     // the buttons
     const btns = [];
@@ -15645,16 +15845,16 @@ function renderRummy() {
     if (myTurn && g.phase === 'draw') btns.push(B2('rmDrop', 'Drop', () => RM.drop(), 'warn'));
     if (myTurn && g.phase === 'discard' && RM.sel.length === 1) { btns.push(B2('rmDiscard', 'Throw', () => RM.discard())); btns.push(B2('rmShow', 'Show', () => RM.ask('Show your cards?', 'The selected card is put away and your groups are checked. If they are not valid you lose 80 points.', 'Show', () => RM.declare()), 'gold')); }
     if (final && me.status === 'in' && g.winner !== RM.ME) btns.push(B2('rmSubmit', 'Submit', () => RM.submit(), 'gold'));
-    if (btns.length) parts.push(h('div', { class: 'rmbtns', style: B(40, 1318, 847, 1400) }, btns));
+    parts.push(h('div', { class: 'rmbtns' + (btns.length ? '' : ' empty'), style: B(L.left0 + 20, L.btnY, L.left0 + L.AV - 20, L.btnY + 70) }, btns));
     // your name plate: points as your cards are grouped now
-    parts.push(h('div', { class: 'rmme' + (myTurn ? ' on' : ''), style: B(70, 1440, 817, 1540) },
+    parts.push(h('div', { class: 'rmme' + (myTurn ? ' on' : ''), style: B(L.left0 + 30, 1450, L.left0 + L.AV - 30, 1528) },
       h('span', { class: 'rmmeav' }, avatarNode(me.av), myTurn || (final && me.status === 'in' && g.winner !== RM.ME) ? rmRing(RM.turnStart, RM.endsAt) : null),
       h('b', { text: me.name }),
       h('span', { class: 'rmpts' + (sc.valid ? ' ok' : ''), text: sc.valid ? 'Ready to show' : 'Points: ' + sc.points })));
   } else {
     parts.push(h('div', { class: 'rmme out', style: B(70, 1440, 817, 1540) }, h('span', { class: 'rmmeav' }, avatarNode(me.av)), h('b', { text: me.name }), h('span', { class: 'rmpts', text: (me.status === 'drop' ? 'Dropped' : 'Wrong show') + ' · ' + me.points + ' points' })));
   }
-  if (g.over && RM.result && !Sheets.el) parts.push(h('button', { type: 'button', class: 'rmbtn gold', id: 'rmSeeResult', style: B(293, 1318, 593, 1400), text: 'See result', onclick: () => RM.showResult() }));
+  if (g.over && RM.result && !Sheets.el) parts.push(h('button', { type: 'button', class: 'rmbtn gold', id: 'rmSeeResult', style: B(293, 1350, 593, 1420), text: 'See result', onclick: () => RM.showResult() }));
   return fitStage('p_rmtable', RT_W, RT_H, 'rummyStage', parts, 'prummy', top);
 }
 // choose the number of players and the point value, then deal
