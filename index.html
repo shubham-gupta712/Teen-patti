@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build:20261119c -->
+<!-- build:20261119d -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -4062,6 +4062,71 @@ body .cc .cctlist>*{min-width:0}
 .rmshowt.can{border-color:#f2c75c;background:rgba(242,199,92,.12);animation:rmpulse 1.4s ease-in-out infinite}
 .rmshowt.can b{color:#ffe08a}
 .rmshowt.rdrop{border-style:solid;border-color:#7dffc0;background:rgba(125,255,192,.18);box-shadow:0 0 calc(var(--u) * 26) rgba(125,255,192,.7)}
+.cc .rxgames{display:flex;flex-direction:column;gap:10px}
+.cc .rxgame{border-radius:14px;border:1px solid var(--line);background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));overflow:hidden}
+.cc .rxghead{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border:0;background:none;color:var(--tx);text-align:left;cursor:pointer}
+.cc .rxghead>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.cc .rxghead b{font:800 14px system-ui}.cc .rxghead span{font:500 11px system-ui;color:var(--mute)}
+.cc .rxghead strong{font:800 16px system-ui;color:#fda4af}
+.cc .rxghead em{font-style:normal;color:var(--mute);font-size:12px}
+.cc .rxghead .ccgsym{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.07);font-style:normal;font-size:15px}
+.cc .rxghead .ccgsym.red{color:#ff8e9d}
+.cc .rxgame .rxlist{padding:0 10px 10px;display:flex;flex-direction:column;gap:6px}
+.cc .rxnone{margin:2px 0 4px !important;font-size:12px !important;text-align:center}
+/* ===== 102. Rummy: the picture guide ===== */
+#rmRules .sheet{max-height:92vh;overflow:auto}
+.hguide{display:flex;flex-direction:column;gap:8px;padding-top:4px}
+.hbox{padding:10px;border-radius:14px;background:rgba(0,0,0,.22);border:1px solid rgba(226,189,107,.22);display:flex;flex-direction:column;gap:8px}
+.hboxh{display:flex;align-items:center;gap:8px}
+.hboxh i{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:linear-gradient(180deg,#f6d77a,#c9972e);color:#2a1a02;font:900 12px system-ui;font-style:normal}
+.hboxh b{font:800 13.5px system-ui;color:#fff3d6}
+.hbox p{margin:0;font:500 12px/1.35 system-ui;color:#d9e8dc}
+.hrow{display:flex;align-items:center;gap:6px}.hrow.wrap{flex-wrap:wrap;gap:8px}
+.hgrp{display:flex;flex-direction:column;align-items:center;gap:3px}
+.hcards{display:inline-flex;gap:2px}
+.hc{display:inline-grid;place-items:center;min-width:24px;height:32px;padding:0 3px;border-radius:5px;background:linear-gradient(160deg,#fffdf5,#ece4cc);border:1px solid #cdbf98;color:#161a20;font:700 12px/1 Georgia,serif;box-shadow:0 2px 4px rgba(0,0,0,.35)}
+.hc.red{color:#b3261e}.hc.j{color:#c9972e;font-size:15px}
+.hc.w{box-shadow:0 0 0 2px #e2b04a,0 2px 4px rgba(0,0,0,.35)}
+.hcards.big .hc{min-width:34px;height:46px;font-size:15px}
+.htag{font:800 9.5px system-ui;font-style:normal;letter-spacing:.06em;padding:2px 7px;border-radius:99px;text-transform:uppercase}
+.htag.ok{background:rgba(28,140,82,.9);color:#eafff3}.htag.seq{background:rgba(56,140,200,.85);color:#eaf6ff}.htag.set{background:rgba(160,110,20,.9);color:#fff3d0}
+.hdeck{width:24px;height:32px;border-radius:5px;background:var(--i-card_back) center/100% 100%;box-shadow:0 2px 4px rgba(0,0,0,.4)}
+.hor,.hhand,.hpile{font:600 11px system-ui;color:#cdb98f}
+.harrow{font:800 15px system-ui;color:#f2c75c}
+.hshow{padding:6px 8px;border-radius:6px;border:1.5px dashed #f2c75c;font:900 10px system-ui;letter-spacing:.12em;color:#ffe08a}
+.hinline{flex:1;min-width:0}
+.hlist{display:flex;flex-direction:column;gap:6px}
+.hlist>div{display:flex;align-items:center;gap:10px}
+.hlist>div>span:last-child{font:500 12px system-ui;color:#d9e8dc}
+.hptsg{display:grid;grid-template-columns:repeat(auto-fit,minmax(60px,1fr));gap:6px}
+.hptsg div{display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px;border-radius:10px;background:rgba(0,0,0,.25);border:1px solid rgba(226,189,107,.25)}
+.hptsg b{font:900 17px system-ui;color:#ffe9b0}.hptsg span{font:600 10px/1.2 system-ui;color:#cdb98f;text-align:center}
+.hptsg .max b{color:#ff9f8a}
+.hmoves{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.hmoves div{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border-radius:10px;background:rgba(0,0,0,.25);text-align:center}
+.hmoves i{font-style:normal;font-size:20px}.hmoves span{font:600 10.5px/1.25 system-ui;color:#d9e8dc}
+.hfoot{margin:2px 0 0;text-align:center;font:500 11px system-ui;color:#9fb5a7}
+.cc .ccrmcur{display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:14px;border:1px solid rgba(163,230,53,.35);background:linear-gradient(160deg,rgba(163,230,53,.1),rgba(255,255,255,.03))}
+.cc .ccrmcurh{display:flex;align-items:center;gap:10px}
+.cc .ccrmcurh>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.cc .ccrmcurh b{font:800 14px system-ui}.cc .ccrmcurh span{font:500 11px system-ui;color:var(--mute)}
+.cc .ccrmcurh .ccgsym{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,.07);font-style:normal}
+.cc .ccrmcurh .ccgsym.red{color:#ff8e9d}
+.cc .ccrmcurb{display:grid;grid-template-columns:1fr 1.4fr;gap:8px}
+.cc .ccbtn.danger{background:rgba(239,91,107,.12) !important;border-color:rgba(239,91,107,.5) !important;color:#ffb1ba !important}
+.cc .ccrmfilt{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.cc .ccrmseg{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:3px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+.cc .ccrmseg button{height:28px;border:0;border-radius:7px;background:none;color:var(--mute);font:700 11.5px system-ui;cursor:pointer}
+.cc .ccrmseg button.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#0a0d22}
+.cc .ccrmsort{flex:none;height:34px;padding:0 10px;border-radius:10px;border:1px solid var(--line2);background:rgba(255,255,255,.04);color:var(--tx);font:700 11.5px system-ui;cursor:pointer}
+.cc .ccrmrow .cci.end{margin-left:4px}
+.rmtl{gap:8px}
+.rmtrow{display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;border-radius:14px;border:1px solid rgba(226,189,107,.45);background:linear-gradient(160deg,rgba(28,106,70,.5),rgba(8,46,28,.7));color:#fff3d6;text-align:left;cursor:pointer}
+.rmtpp{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;width:58px;height:50px;border-radius:12px;background:linear-gradient(180deg,#f6d77a,#c9972e);color:#2a1a02}
+.rmtpp b{font:900 18px/1 system-ui}.rmtpp i{font:700 8.5px system-ui;font-style:normal;letter-spacing:.06em;text-transform:uppercase}
+.rmtinfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.rmtinfo b{font:800 14px system-ui}.rmtinfo i{font:500 11px system-ui;font-style:normal;color:#cdb98f}
+.rmtst{flex:none;padding:5px 10px;border-radius:99px;border:1px solid rgba(226,189,107,.6);font:800 10.5px system-ui;font-style:normal;letter-spacing:.1em;color:#ffe08a}
 </style>
 </head>
 <body>
@@ -13740,7 +13805,7 @@ class AppError extends Error {}
 let toastTimer = null;
 /* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
    few bytes of the current file; if its build is newer, a banner offers a reload. */
-const BUILD = '20261119c';
+const BUILD = '20261119d';
 const Fresh = {
   at: 0, shown: false,
   async check(force) {
@@ -14603,7 +14668,10 @@ const AdminView = {
   watchOnly() { toast('You are watching as the admin. Players use this.'); }
 };
 // Home, Card games and the Teen Patti lobby: chosen by the address (#/home, #/games, #/lobby).
-const LOBBY_PAGES = ['home', 'games', 'lobby'];
+const LOBBY_PAGES = ['home', 'games', 'lobby', 'rmlobby'];
+// Rummy's lobby: open to the admin now; to every player once its live tables are switched on
+const RUMMY_LIVE = false;
+const RUMMY_OPEN = () => RUMMY_LIVE || !!(S.isAdmin || S.realAdmin);
 function playerPage() { const n = parseHash().name; return LOBBY_PAGES.includes(n) ? n : n === 'table' ? 'lobby' : 'home'; }   // leaving a table lands in the Teen Patti lobby
 function go() {
   Tour.sync();
@@ -14742,6 +14810,7 @@ function render() {
     case 'home': node = renderHome(); break;
     case 'games': node = renderGames(); break;
     case 'lobby': node = renderTPLobby(); break;
+    case 'rmlobby': node = RUMMY_OPEN() ? renderRmLobby() : renderGames(); break;
     case 'rummy': node = renderRummy(); break;
     case 'table': node = renderTable(); break;
     case 'admin': node = renderAdmin(); break;
@@ -15407,10 +15476,10 @@ const CARD_GAMES = [
   { id: 'blackjack', name: 'Blackjack', sub: 'Beat the dealer to 21', pic: 'g_blackjack' }];
 function renderGames() {
   const B = fbox(TPL_W, TPL_H), parts = [], idx = Math.min(CARD_GAMES.length - 1, S.gameIx || 0);
-  const tiles = CARD_GAMES.map((g, i) => pressable(h('button', { type: 'button', class: 'gtile' + (g.live ? ' live g-' + g.id : ' soon' + (g.pic && IMG[g.pic] ? ' haspic g-' + g.id : '')), id: 'game_' + g.id, 'data-i': i, 'aria-label': g.name + (g.live ? '' : ', under construction'),
+  const tiles = CARD_GAMES.map(g0 => Object.assign({}, g0, { live: g0.live || (g0.id === 'rummy' && RUMMY_OPEN()) })).map((g, i) => pressable(h('button', { type: 'button', class: 'gtile' + (g.live ? ' live g-' + g.id : ' soon' + (g.pic && IMG[g.pic] ? ' haspic g-' + g.id : '')), id: 'game_' + g.id, 'data-i': i, 'aria-label': g.name + (g.live ? '' : ', under construction'),
     onclick: () => {
       const tr = $('gameTrack'); if (tr && Number(tr.dataset.ix) !== i) return Games.center(i, true);
-      if (g.live) goTo('lobby'); else toast('This game is under construction.');
+      if (g.live) goTo(g.id === 'rummy' ? 'rmlobby' : 'lobby'); else toast('This game is under construction.');
     } },
     g.live || (g.pic && IMG[g.pic]) ? h('div', { class: 'gpic', 'aria-hidden': 'true', style: g.pic ? 'background-image:var(--i-' + g.pic + ')' : null }) : h('div', { class: 'gart soon' }, h('i', { class: 'glock' }, pI('lock'))),
     h('b', { class: 'gname', text: g.name }), h('span', { class: 'gsub', text: g.sub }),
@@ -15465,8 +15534,9 @@ const RM = {
   // keep: the next deal of the same session (same seats, running totals); otherwise a new session
   start(keep) {
     RM.stop();
-    if (!keep || !RM.sess) RM.sess = { deal: 0, tot: {} };
-    RM.sess.deal++;
+    if (!keep || !RM.sess) RM.sess = { id: 'rt' + Date.now().toString(36), deal: 0, tot: {}, players: RM.players, perPoint: RM.perPoint, openedAt: Date.now() };
+    RM.players = RM.sess.players; RM.perPoint = RM.sess.perPoint;
+    RM.sess.deal++; rmSave();
     const meName = (S.profile && S.profile.name) || 'You';
     const seats = [{ uid: RM.ME, name: meName }].concat(RM_BOTS.slice(0, RM.players - 1).map((b, i) => ({ uid: 'bot' + i, name: b[0] })));
     const g = Rummy.deal(seats);
@@ -15541,15 +15611,12 @@ const RM = {
     RM.clear();
     const g = RM.g; if (!g || RM.result) return;
     RM.result = Rummy.finish(g, RM.perPoint);
-    const mine = RM.result.lines.find(l => l.uid === RM.ME);
-    RM.history.unshift({ at: Date.now(), players: g.players.length, perPoint: RM.perPoint, won: g.winner === RM.ME, mine: mine ? mine.chips : 0,
-      pot: RM.result.pot, rake: RM.result.rake, winner: (g.players.find(p => p.uid === g.winner) || {}).name || '', how: g.how || '' });
-    RM.history = RM.history.slice(0, 50);
     if (RM.sess) RM.result.lines.forEach(l => { RM.sess.tot[l.uid] = (RM.sess.tot[l.uid] || 0) + l.chips; });
+    RM.lastRec = RM.record(); RM.history.unshift(RM.lastRec); rmPrune(); rmSave();
     // the next deal starts by itself, like Teen Patti, unless you stand up
     RM.nextAt = Date.now() + RM.NEXT_MS; clearTimeout(RM.nextT);
     RM.nextT = setTimeout(() => { if (S.route && S.route.name === 'rummy' && RM.result) { if (Sheets.el && Sheets.el.id === 'rmResult') Sheets.closeNow(); RM.start(true); } }, RM.NEXT_MS);
-    scheduleRender(); setTimeout(() => RM.showResult(), 700);
+    scheduleRender(); setTimeout(() => { if (S.route && S.route.name === 'rummy' && RM.result) RM.showResult(); }, 700);
   },
   /* ---- your moves ---- */
   myTurn() { const g = RM.g, me = RM.me(); return !!(g && me && me.status === 'in' && !g.over && g.phase !== 'final' && Rummy.cur(g) === me); },
@@ -15633,61 +15700,94 @@ const RM = {
     RM.exit();
   },
   // back to the console's Test page (Cards, Rummy)
-  exit() { RM.stop(); RM.sess = null; Object.assign(Admin.st, { nav: 'games', sec: 'test', cat: 'cards', game: 'rummy', view: 'hub', gopen: true }); location.hash = '#/admin'; },
+  exit() { RM.stop(); rmSave(); Object.assign(Admin.st, { nav: 'games', sec: 'test', cat: 'cards', game: 'rummy', view: 'hub', gopen: true }); location.hash = '#/admin'; },
   history: [], autoStart: false,
   /* ---- the result ---- */
-  showResult() {
-    const g = RM.g, res = RM.result; if (!g || !res) return;
-    const tot = (RM.sess && RM.sess.tot) || {}, win = g.players.find(p => p.uid === g.winner) || g.players[0];
-    const wl = res.lines.find(l => l.uid === win.uid) || { chips: 0 };
+  // one finished deal, kept as a record (for the result and the console's activity)
+  record() {
+    const g = RM.g, res = RM.result, tot = (RM.sess && RM.sess.tot) || {};
+    return { at: Date.now(), sid: RM.sess ? RM.sess.id : '', deal: RM.sess ? RM.sess.deal : 1, wild: g.wild, perPoint: RM.perPoint, pot: res.pot, rake: res.rake, how: g.how || '', winner: g.winner,
+      players: g.players.map(p => { const l = res.lines.find(x => x.uid === p.uid) || { chips: 0 };
+        return { uid: p.uid, name: p.name, av: p.av, status: p.status, points: p.uid === g.winner ? 0 : (p.points || 0), chips: l.chips, tot: tot[p.uid] || 0, groups: (p.groups || RM.bySuit(p.hand)).map(x => x.slice()) }; }) };
+  },
+  showResult(rec) {
+    const live = !rec; rec = rec || RM.lastRec; if (!rec) return;
+    const win = rec.players.find(p => p.uid === rec.winner) || rec.players[0];
     const nm = p => p.uid === RM.ME ? (p.name === 'You' ? 'You' : p.name + ' (you)') : p.name;
     const sgn = n => (n > 0 ? '+' : n < 0 ? '−' : '') + fmt(Math.abs(n));
-    const order = g.players.filter(p => p.uid !== win.uid).sort((a, b) => (b.uid === RM.ME) - (a.uid === RM.ME));
-    const cardsOf = p => h('div', { class: 'rmrc' }, (p.groups || RM.bySuit(p.hand)).map(gr => h('span', { class: 'rmresg' + (Rummy.kind(gr, g.wild) ? ' ok' : '') }, gr.map(c => rmMini(c, g.wild)))));
+    const order = rec.players.filter(p => p.uid !== win.uid).sort((a, b) => (b.uid === RM.ME) - (a.uid === RM.ME));
+    const cardsOf = p => h('div', { class: 'rmrc' }, p.groups.map(gr => h('span', { class: 'rmresg' + (Rummy.kind(gr, rec.wild) ? ' ok' : '') }, gr.map(c => rmMini(c, rec.wild)))));
     const row = p => {
-      const line = res.lines.find(l => l.uid === p.uid) || { chips: 0 };
       const tag = p.status === 'drop' ? 'Dropped' : p.status === 'out' ? 'Wrong show' : p.points + ' pts';
       return h('div', { class: 'rmr' + (p.uid === RM.ME ? ' mine' : '') },
         h('div', { class: 'rmrh' }, h('span', { class: 'rmresav' }, avatarNode(p.av)),
-          h('div', { class: 'rmrn' }, h('b', { text: nm(p) }), h('i', { text: tag + '  ·  total ' + sgn(tot[p.uid] || 0) })),
-          h('span', { class: 'rmreschips' + (line.chips < 0 ? ' down' : ''), text: sgn(line.chips) })),
+          h('div', { class: 'rmrn' }, h('b', { text: nm(p) }), h('i', { text: tag + '  ·  total ' + sgn(p.tot) })),
+          h('span', { class: 'rmreschips' + (p.chips < 0 ? ' down' : ''), text: sgn(p.chips) })),
         cardsOf(p));
     };
-    const ms = Math.max(1, RM.nextAt - Date.now());
-    const lab = h('span', { id: 'rmNextLab', text: 'Next deal in ' + Math.ceil(ms / 1000) + 's' });
-    const tick = setInterval(() => { const l = document.getElementById('rmNextLab'); if (!l || !RM.result) return clearInterval(tick); l.textContent = 'Next deal in ' + Math.max(0, Math.ceil((RM.nextAt - Date.now()) / 1000)) + 's'; }, 500);
-    const stand = h('button', { id: 'rmOut', type: 'button', class: 'rmrbtn ghost', onclick: () => { Sheets.close(); RM.exit(); } }, h('span', { text: 'Stand up' }));
-    const now = h('button', { id: 'rmAgain', type: 'button', class: 'rmrbtn gold', onclick: () => { Sheets.close(); RM.start(true); } }, h('span', { text: 'Deal now' }));
-    Sheets.open('rmResult', 'Deal ' + (RM.sess ? RM.sess.deal : 1) + ' result', h('div', { class: 'rmresult' },
+    const foot = [];
+    if (live && RM.result) {
+      const ms = Math.max(1, RM.nextAt - Date.now());
+      const lab = h('span', { id: 'rmNextLab', text: 'Next deal in ' + Math.ceil(ms / 1000) + 's' });
+      const tick = setInterval(() => { const l = document.getElementById('rmNextLab'); if (!l || !RM.result) return clearInterval(tick); l.textContent = 'Next deal in ' + Math.max(0, Math.ceil((RM.nextAt - Date.now()) / 1000)) + 's'; }, 500);
+      foot.push(h('div', { class: 'rmnextrow' }, lab, h('div', { class: 'rmnext' }, h('i', { style: 'animation-duration:' + ms + 'ms' }))),
+        h('div', { class: 'rmrbtns' },
+          h('button', { id: 'rmOut', type: 'button', class: 'rmrbtn ghost', onclick: () => { Sheets.close(); RM.exit(); } }, h('span', { text: 'Stand up' })),
+          h('button', { id: 'rmAgain', type: 'button', class: 'rmrbtn gold', onclick: () => { Sheets.close(); RM.start(true); } }, h('span', { text: 'Deal now' }))));
+    } else foot.push(h('p', { class: 'rmfine', text: new Date(rec.at).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) }));
+    Sheets.open('rmResult', 'Deal ' + rec.deal + ' result', h('div', { class: 'rmresult' },
       h('div', { class: 'rmwin' },
         h('span', { class: 'rmwinav' }, avatarNode(win.av), h('i', { class: 'rmcrown', text: '\u{1F451}' })),
-        h('div', { class: 'rmwinn' }, h('em', { text: g.how === 'last' ? 'LAST PLAYER IN' : 'WINNER' }), h('b', { text: nm(win) }), h('span', { text: 'Total ' + sgn(tot[win.uid] || 0) })),
-        h('strong', { text: sgn(wl.chips) })),
+        h('div', { class: 'rmwinn' }, h('em', { text: rec.how === 'last' ? 'LAST PLAYER IN' : 'WINNER' }), h('b', { text: nm(win) }), h('span', { text: 'Total ' + sgn(win.tot) })),
+        h('strong', { text: sgn(win.chips) })),
       h('div', { class: 'rmwincards' }, cardsOf(win)),
       h('div', { class: 'rmrlist' }, order.map(row)),
       h('div', { class: 'rmstats' },
-        h('div', {}, h('b', { text: fmt(res.pot) }), h('span', { text: 'Pot' })),
-        h('div', {}, h('b', { text: fmt(res.rake) }), h('span', { text: 'Rake 5%' })),
-        h('div', {}, h('b', { text: rmRankName(g.wild) }), h('span', { text: 'Wild joker' })),
-        h('div', {}, h('b', { text: String(RM.perPoint) }), h('span', { text: 'Per point' }))),
-      h('div', { class: 'rmnextrow' }, lab, h('div', { class: 'rmnext' }, h('i', { style: 'animation-duration:' + ms + 'ms' }))),
-      h('div', { class: 'rmrbtns' }, stand, now),
-      h('p', { class: 'rmfine', text: 'Test table: no chips change hands.' })));
+        h('div', {}, h('b', { text: fmt(rec.pot) }), h('span', { text: 'Pot' })),
+        h('div', {}, h('b', { text: fmt(rec.rake) }), h('span', { text: 'Rake 5%' })),
+        h('div', {}, h('b', { text: rmRankName(rec.wild) }), h('span', { text: 'Wild joker' })),
+        h('div', {}, h('b', { text: String(rec.perPoint) }), h('span', { text: 'Per point' }))),
+      foot, h('p', { class: 'rmfine', text: 'Test table: no chips change hands.' })));
   },
   rules() {
-    const li = t => h('li', { text: t });
-    Sheets.open('rmRules', 'How to play', h('div', { class: 'setlist' }, h('ul', { class: 'rmrules' },
-      li('Each player gets 13 cards. On your turn, pick one card from the closed deck or the open pile, then throw one card.'),
-      li('Make groups: a sequence is 3 or more cards in a row of one suit; a set is 3 or 4 cards of one rank in different suits.'),
-      li('To show, you need two sequences, one of them pure (no joker). Pick your 14th card, select the card to put away and tap Show.'),
-      li('Jokers: the printed jokers and every card of the wild joker’s rank can stand in for any card.'),
-      li('Points: A, K, Q, J and 10 count 10, other cards their number, jokers 0. The most you can lose is 80.'),
-      li('Drop before you pick a card: 20 points on your first turn, 40 later. A wrong show costs 80.'),
-      li('Drag a card to move it into a group, between two cards or off on its own; drag it onto the open pile to throw it. Or tap cards to select them and use Group, + Here and Throw.'),
-      li('After each deal the next one starts by itself. Tap the back arrow or Stand up to leave.'))));
+    // a few real cards, a word or two, and the numbers that matter
+    const cs = (list, cls) => h('span', { class: 'hcards' + (cls ? ' ' + cls : '') }, list.split(' ').map(c => c === '*' ? h('span', { class: 'hc j', text: '★' }) :
+      h('span', { class: 'hc' + ('hd'.includes(c.slice(-1)) ? ' red' : '') + (c[0] === '~' ? ' w' : '') }, (c[0] === '~' ? c.slice(1, -1) : c.slice(0, -1)).replace('T', '10') + { s: '♠', h: '♥', d: '♦', c: '♣' }[c.slice(-1)])));
+    const tag = (t, k) => h('em', { class: 'htag ' + k, text: t });
+    const box = (n, title, ...kids) => h('div', { class: 'hbox' }, h('div', { class: 'hboxh' }, h('i', { text: String(n) }), h('b', { text: title })), kids);
+    const grp = (cards, label, k) => h('div', { class: 'hgrp' }, cs(cards), tag(label, k));
+    Sheets.open('rmRules', 'How to play', h('div', { class: 'hguide' },
+      box(1, 'Make groups with all 13 cards',
+        h('div', { class: 'hrow wrap' }, grp('5h 6h 7h', 'Pure', 'ok'), grp('9s * Js', 'Sequence', 'seq'), grp('8c 8d 8s', 'Set', 'set'), grp('2d 3d 4d 5d', 'Pure', 'ok')),
+        h('p', { text: 'You need 2 sequences, and 1 of them must be pure (no joker).' })),
+      box(2, 'Each turn: pick one, throw one',
+        h('div', { class: 'hrow' }, h('span', { class: 'hdeck' }), h('span', { class: 'hor', text: 'or' }), cs('Kh'), h('span', { class: 'harrow', text: '→' }), h('span', { class: 'hhand', text: 'your hand' }), h('span', { class: 'harrow', text: '→' }), cs('3c'), h('span', { class: 'hpile', text: 'pile' }))),
+      box(3, 'Groups',
+        h('div', { class: 'hlist' },
+          h('div', {}, cs('Ts Js Qs'), h('span', { text: 'Pure sequence: same suit, in a row' })),
+          h('div', {}, cs('4h * 6h'), h('span', { text: 'Sequence: a joker fills a gap' })),
+          h('div', {}, cs('Kc Kd Kh'), h('span', { text: 'Set: same rank, different suits' })))),
+      box(4, 'Jokers',
+        h('div', { class: 'hrow' }, cs('~7c', 'big'), h('span', { class: 'harrow', text: '=' }), h('p', { class: 'hinline', text: 'The turned card is the wild joker: every 7 is a joker. The printed ★ is one too.' }))),
+      box(5, 'Show',
+        h('div', { class: 'hrow' }, cs('Qd'), h('span', { class: 'harrow', text: '→' }), h('span', { class: 'hshow', text: 'SHOW' }), h('p', { class: 'hinline', text: 'With 14 cards, drag the spare card onto SHOW. You are asked to confirm.' }))),
+      box(6, 'Points if you lose',
+        h('div', { class: 'hptsg' }, h('div', {}, h('b', { text: '10' }), h('span', { text: 'A K Q J 10' })), h('div', {}, h('b', { text: '2–9' }), h('span', { text: 'face value' })), h('div', {}, h('b', { text: '0' }), h('span', { text: 'jokers' })), h('div', { class: 'max' }, h('b', { text: '80' }), h('span', { text: 'most you lose' })))),
+      box(7, 'Dropping and wrong shows',
+        h('div', { class: 'hptsg' }, h('div', {}, h('b', { text: '20' }), h('span', { text: 'drop on 1st turn' })), h('div', {}, h('b', { text: '40' }), h('span', { text: 'drop later' })), h('div', { class: 'max' }, h('b', { text: '80' }), h('span', { text: 'wrong show' })))),
+      box(8, 'Moving cards',
+        h('div', { class: 'hmoves' },
+          h('div', {}, h('i', { text: '✋' }), h('span', { text: 'Drag a card to rearrange' })),
+          h('div', {}, h('i', { text: '\u{1F0CF}' }), h('span', { text: 'Drag onto the pile to throw' })),
+          h('div', {}, h('i', { text: '✨' }), h('span', { text: 'Sort groups your cards for you' })))),
+      h('p', { class: 'hfoot', text: 'A new deal starts by itself after each result. Tap the back arrow to stand up.' })));
   }
 };
 const rmRankName = r => r === 'T' ? '10' : r;
+// the test table and its deals stay on this phone for 24 hours
+function rmSave() { try { localStorage.setItem('tp_rmtest', JSON.stringify({ sess: RM.sess, history: RM.history.slice(0, 300) })); } catch (e) { /* storage full or private mode */ } }
+function rmPrune() { RM.history = RM.history.filter(r => r && r.players && Date.now() - r.at <= 864e5); }
+try { const o = JSON.parse(localStorage.getItem('tp_rmtest') || 'null'); if (o) { RM.sess = o.sess || null; RM.history = Array.isArray(o.history) ? o.history : []; rmPrune(); } } catch (e) { /* nothing saved */ }
 // Where your cards go: one row when they fit with clear gaps between groups, otherwise two rows of smaller cards.
 function rmRows(cards) {
   const visU = Math.min(RT_W, (window.innerWidth || 360) * RT_H / Math.max(1, window.innerHeight || 715));
@@ -15697,10 +15797,11 @@ function rmRows(cards) {
   const width = (ix, CW, st) => { const n = cnt(ix), k = ix.length; return st * (n - k) + k * CW + GAP * (k - 1); };
   const all = cards.map((_, i) => i);
   let CW = 92, st = fit(all, CW);
-  if (st >= 30 || cards.length < 2) return { rows: [all], step: [st], width: [width(all, CW, st)], CW, CH: 130, GAP, AV, left0, rowY: [1086], labY: [1228], btnY: 1300 };
+  if ((st >= 30 && cards.length <= 5) || cards.length < 2) return { rows: [all], step: [st], width: [width(all, CW, st)], CW, CH: 130, GAP, AV, left0, rowY: [1086], labY: [1228], btnY: 1300 };
   // two rows: the split that leaves both rows the most room
   CW = 84; let best = null;
-  for (let k2 = 1; k2 < cards.length; k2++) { const r1 = all.slice(0, k2), r2 = all.slice(k2), m = Math.min(fit(r1, CW), fit(r2, CW)); if (!best || m > best.m) best = { m, r1, r2 }; }
+  const cap = Math.max(5, Math.ceil(cards.length / 2));     // at most five groups in a row
+  for (let k2 = 1; k2 < cards.length; k2++) { if (k2 > cap || cards.length - k2 > cap) continue; const r1 = all.slice(0, k2), r2 = all.slice(k2), m = Math.min(fit(r1, CW), fit(r2, CW)); if (!best || m > best.m) best = { m, r1, r2 }; }
   const rows = [best.r1, best.r2], step = rows.map(r => fit(r, CW));
   return { rows, step, width: rows.map((r, i) => width(r, CW, step[i])), CW, CH: 118, GAP, AV, left0, rowY: [990, 1170], labY: [1112, 1292], btnY: 1352 };
 }
@@ -15824,6 +15925,7 @@ function renderRummy() {
     h('button', { type: 'button', class: 'pback2', id: 'rmBack', 'aria-label': 'Leave the table', onclick: () => RM.leave() }, pI('back')),
     h('div', { class: 'rmtitle' }, h('b', { text: 'Points Rummy' }), h('span', { text: (RM.sess && RM.g ? 'Deal ' + RM.sess.deal + ' · ' : 'Test table · ') + RM.perPoint + ' chip' + (RM.perPoint === 1 ? '' : 's') + ' per point' })),
     h('button', { type: 'button', class: 'rmhelp', id: 'rmHelp', 'aria-label': 'How to play', onclick: () => RM.rules(), text: '?' }));
+  if (!g && RM.autoResume) { RM.autoResume = false; setTimeout(() => { if (!RM.g && S.route && S.route.name === 'rummy') RM.start(!!RM.sess); }, 0); }
   if (!g && RM.autoStart) { RM.autoStart = false; setTimeout(() => { if (!RM.g && S.route && S.route.name === 'rummy') RM.start(); }, 0); }
   if (!g) { parts.push(rmSetup(B)); return fitStage('p_rmtable', RT_W, RT_H, 'rummyStage', parts, 'prummy', top); }
   const me = RM.me(), myIx = g.players.indexOf(me), n = g.players.length, inPlay = me.status === 'in' && !g.over;
@@ -15967,6 +16069,30 @@ function renderTPLobby() {
   parts.push(card('lbPrivate', [477, 918, 782, 1168], 'key', 'Private', 'Code and password',
     pv.mine ? 'RETURN' : pv.usable ? 'OPEN' : 'CLOSED', pv.usable ? 'on' : 'off', () => privateTap()));
   return fitStage('p_tplobby2', TPL_W, TPL_H, 'lobStage', parts, 'ptplobby', screenTop('Back to card games', () => goTo('games')));
+}
+
+/* ---- The Rummy lobby: Points tables, How to play, Tournament and Private, on the Rummy lounge picture ---- */
+function renderRmLobby() {
+  const B = fbox(TPL_W, TPL_H), parts = [];
+  const card = (id, rect, ic, title, sub, tag, tagCls, fn) => pressable(h('button', { type: 'button', class: 'tpcard', id, style: B(...rect), 'aria-label': title, onclick: fn },
+    h('i', { class: 'tpwm', 'aria-hidden': 'true' }, pI(ic)), h('span', { class: 'tpic' }, pI(ic)),
+    h('em', { class: 'tptag ' + (tagCls || '') }, h('i'), h('span', { text: tag })),
+    h('span', { class: 'tpbot' }, h('span', { class: 'tptxt' }, h('b', { text: title }), h('span', { class: 'tpsub', text: sub })), h('span', { class: 'tpgo', 'aria-hidden': 'true' }, pI('chev')))));
+  parts.push(h('b', { class: 'tptitle', style: B(317, 405, 617, 462), text: 'RUMMY' }));
+  parts.push(card('rmPoints', [152, 618, 457, 868], 'layers', 'Points', '0.5 – 10 per point', 'PLAY', 'on', () => rmTablesSheet()));
+  parts.push(card('rmHow', [477, 618, 782, 868], 'book', 'How to play', 'In pictures', 'GUIDE', '', () => RM.rules()));
+  parts.push(card('rmTour', [152, 918, 457, 1168], 'trophy', 'Tournament', 'Rummy events', 'SOON', 'off', () => Sheets.soon('Rummy tournaments', 'Rummy tournaments open once the Rummy tables are live.')));
+  parts.push(card('rmPrivate', [477, 918, 782, 1168], 'key', 'Private', 'Code and password', 'CLOSED', 'off', () => Sheets.soon('Rummy private table', 'The Rummy private table opens once the Rummy tables are live.')));
+  return fitStage('p_rmlobby', TPL_W, TPL_H, 'rmLobStage', parts, 'ptplobby', screenTop('Back to card games', () => goTo('games')));
+}
+// the five Points tables
+function rmTablesSheet() {
+  Sheets.open('rmTablesSheet', 'Points Rummy', h('div', { class: 'setlist rmtl' },
+    h('p', { class: 'hnote', text: '2 to 6 players  ·  one deal at a time  ·  5% rake' }),
+    RM_TABLES.map(t => h('button', { type: 'button', class: 'rmtrow', id: 'rmt_' + t.id, onclick: () => toast(RUMMY_LIVE ? 'Joining...' : 'The live Rummy tables are being switched on. Try the test table in the console.') },
+      h('span', { class: 'rmtpp' }, h('b', { text: String(t.perPoint) }), h('i', { text: 'per point' })),
+      h('span', { class: 'rmtinfo' }, h('b', { text: 'Min ' + fmt(Rummy.minBuyIn(t.perPoint)) + ' chips' }), h('i', { text: 'Most you lose in a deal: ' + fmt(Math.round(80 * t.perPoint)) })),
+      h('em', { class: 'rmtst', text: RUMMY_LIVE ? 'JOIN' : 'SOON' })))));
 }
 
 /* ---- Invite friends: your referral code ---- */
@@ -18473,7 +18599,7 @@ function ccGamesPage() {
   const game = a.game, sec = a.sec || 'overview', g = GAME_BY_ID[game];
   let page;
   if (g.status === 'soon') page = ccGameSoon(game);
-  else if (game === 'rummy') page = sec === 'test' ? ccRmTest() : ccRummySoon();
+  else if (game === 'rummy') page = sec === 'test' ? ccRmTest() : sec === 'tour' ? ccRmTour() : sec === 'private' ? ccRmPrivate() : ccRummySoon();
   else { if (sec === 'tour' || sec === 'private') a.sec = 'overview'; page = a.sec === 'tables' ? ccTables() : a.sec === 'test' ? ccTest() : ccTpOverview(); }
   page.insertBefore(ccGameHead(), page.firstChild);
   return page;
@@ -18496,6 +18622,19 @@ function ccTpOverview() {
         metric('tpHands', 'cards', fmt(hands), 'Hands played', 'with rake taken', () => Admin.go('rake')))));
 
 }
+// Rummy's tournaments and private table: the same layout as Teen Patti's; they open with the live Rummy tables.
+function ccRmTour() {
+  const later = () => toast('Rummy tournaments can be created once the Rummy tables are live.');
+  return h('div', { class: 'ccpage fixed' }, h('div', { class: 'ccscroll' },
+    h('div', { class: 'cctiles2' }, ccNewTile('rmTourNew', 'trophy', 'New Rummy tournament', 'Name, start time, chips per point, entry and rounds', later), ccNewTile('rmTourTest', 'flask', 'Test tournament', 'A short Rummy tournament with bots', later)),
+    ccSec('Rummy tournaments', h('span', { class: 'ccchip', text: '0 of 5 slots' }), h('p', { class: 'ccnote', text: 'Nothing scheduled. Rummy tournaments appear here, with their entries, tables and standings.' }))));
+}
+function ccRmPrivate() {
+  return h('div', { class: 'ccpage fixed' }, h('div', { class: 'ccscroll' },
+    h('div', { class: 'ccrmcur' }, h('div', { class: 'ccrmcurh' }, h('i', { class: 'ccgsym red', text: '♦' }), h('div', {}, h('b', { text: 'Rummy private table' }), h('span', { text: 'Invite only  ·  not created' }))),
+      h('button', { type: 'button', class: 'ccbtn primary', id: 'rmPrivNew', onclick: () => toast('The Rummy private table can be created once the Rummy tables are live.') }, h('span', { text: 'Create the private table' }))),
+    ccSec('Table summaries', null, h('p', { class: 'ccnote', text: 'None yet. Each Rummy private table you create is recorded here.' }))));
+}
 // A game that is still being built.
 function ccGameSoon(id) {
   const g = GAME_BY_ID[id];
@@ -18514,28 +18653,47 @@ function ccTools() {
     money: () => grid('Rake and rakeback', ['rake', 'vip'])
   });
 }
-// The Rummy test table: you against bots, on this phone. Results are kept until the app is closed.
+// The Rummy test table in the console: while one is open, its details, Rejoin and Dissolve, and its deals of the last 24 hours.
 function ccRmTest() {
-  const H = RM.history || [];
+  const a = Admin.st, S0 = RM.sess;
+  rmPrune();
+  const head = h('div', { class: 'ccpagehead' }, h('h2', { text: 'Rummy test table' }), h('span', { class: 'ccchip' + (S0 ? ' ok' : ''), text: S0 ? 'Table open' : 'No table' }));
   const pick = (id, vals, cur, fn) => h('div', { class: 'ccrmpick', id }, vals.map(v => h('button', { type: 'button', class: v === cur ? 'on' : '', text: String(v), onclick: () => { fn(v); Admin.paint(); } })));
-  const net = H.reduce((n, r) => n + r.mine, 0), rake = H.reduce((n, r) => n + r.rake, 0), wins = H.filter(r => r.won).length;
+  if (!S0) return h('div', { class: 'ccpage fixed', id: 'rmTestPage' }, head, h('div', { class: 'ccscroll' },
+    !a.rmForm ? ccNewTile('rmNew', 'flask', 'New Rummy test table', 'Players and chips per point. You play against the bots.', () => { a.rmForm = true; Admin.paint(); }) :
+    ccSec('New test table', h('button', { type: 'button', class: 'ccbtn ghost sm', id: 'rmCancel', onclick: () => { a.rmForm = false; Admin.paint(); } }, h('span', { text: 'Cancel' })), h('div', { class: 'ccrmform' },
+      h('span', { class: 'ccrml', text: 'PLAYERS, WITH YOU' }), pick('rmPlayers', [2, 3, 4, 5, 6], RM.players, v => { RM.players = v; }),
+      h('span', { class: 'ccrml', text: 'CHIPS PER POINT' }), pick('rmPoint', Rummy.CFG.tables, RM.perPoint, v => { RM.perPoint = v; }),
+      h('p', { class: 'ccnote', text: 'Minimum to sit at a real table at this rate: ' + fmt(Rummy.minBuyIn(RM.perPoint)) + ' chips. The test table uses no chips; rake is 5%.' }),
+      h('button', { type: 'button', class: 'ccbtn primary wide', id: 'rmOpen', onclick: () => { a.rmForm = false; RM.stop(); RM.sess = null; RM.autoStart = true; location.hash = '#/rummy'; } }, ccI('play'), h('span', { text: 'Create and open the table' }))))));
+  const H = RM.history.filter(r => r.sid === S0.id), range = a.rmRange || 'day', sortNew = a.rmSort !== 'old';
+  const lim = { hour: 36e5, six: 216e5, day: 864e5 }[range], list = H.filter(r => Date.now() - r.at <= lim).sort((x, y) => sortNew ? y.at - x.at : x.at - y.at);
+  const net = list.reduce((n, r) => n + (r.players.find(p => p.uid === RM.ME) || { chips: 0 }).chips, 0), rake = list.reduce((n, r) => n + r.rake, 0), wins = list.filter(r => r.winner === RM.ME).length;
   const stat = (v, l, cls) => h('div', { class: 'ccrmstat ' + (cls || '') }, h('b', { text: v }), h('span', { text: l }));
-  return h('div', { class: 'ccpage fixed', id: 'rmTestPage' },
-    h('div', { class: 'ccpagehead' }, h('h2', { text: 'Rummy test table' }), h('span', { class: 'ccchip', text: 'You vs bots' })),
-    h('div', { class: 'ccscroll' },
-      !Admin.st.rmForm ? ccNewTile('rmNew', 'flask', 'New Rummy test table', 'Players and chips per point. You play against the bots.', () => { Admin.st.rmForm = true; Admin.paint(); }) :
-      ccSec('New test table', h('button', { type: 'button', class: 'ccbtn ghost sm', id: 'rmCancel', onclick: () => { Admin.st.rmForm = false; Admin.paint(); } }, h('span', { text: 'Cancel' })), h('div', { class: 'ccrmform' },
-        h('span', { class: 'ccrml', text: 'PLAYERS, WITH YOU' }), pick('rmPlayers', [2, 3, 4, 5, 6], RM.players, v => { RM.players = v; }),
-        h('span', { class: 'ccrml', text: 'CHIPS PER POINT' }), pick('rmPoint', Rummy.CFG.tables, RM.perPoint, v => { RM.perPoint = v; }),
-        h('p', { class: 'ccnote', text: 'Minimum to sit at this table: ' + fmt(Rummy.minBuyIn(RM.perPoint)) + ' chips. The test table uses no chips; rake is 5%.' }),
-        h('button', { type: 'button', class: 'ccbtn primary wide', id: 'rmOpen', onclick: () => { RM.stop(); RM.autoStart = true; location.hash = '#/rummy'; } }, ccI('play'), h('span', { text: 'Open the test table' })))),
-      ccSec('This session', H.length ? h('span', { class: 'ccchip', text: H.length + (H.length === 1 ? ' game' : ' games') }) : null,
-        H.length ? h('div', {},
-          h('div', { class: 'ccrmstats' }, stat(String(H.length), 'Games'), stat(wins + '/' + H.length, 'You won', wins ? 'ok' : ''), stat((net > 0 ? '+' : '') + fmt(net), 'Your chips', net > 0 ? 'ok' : net < 0 ? 'bad' : ''), stat(fmt(rake), 'Rake')),
-          h('div', { class: 'ccrmlist' }, H.map(r => h('div', { class: 'ccrmrow' + (r.won ? ' won' : '') },
-            h('div', {}, h('b', { text: r.won ? 'You won' : r.winner + ' won' }), h('span', { text: ccAgo(r.at) + '  \u00b7  ' + r.players + ' players  \u00b7  ' + r.perPoint + '/point  \u00b7  rake ' + fmt(r.rake) })),
-            h('em', { class: r.mine > 0 ? 'up' : r.mine < 0 ? 'down' : '', text: (r.mine > 0 ? '+' : '') + fmt(r.mine) })))))
-        : h('p', { class: 'ccnote', text: 'Games you play at the Rummy test table show up here.' }))));
+  const dissolve = async () => {
+    const yes = await ccConfirm({ title: 'Dissolve the Rummy test table?', danger: true, ok: 'Dissolve', body: 'The table closes and its ' + H.length + (H.length === 1 ? ' deal is' : ' deals are') + ' deleted.' });
+    if (!yes) return;
+    RM.stop(); RM.history = RM.history.filter(r => r.sid !== S0.id); RM.sess = null; rmSave(); toast('The Rummy test table was dissolved.'); Admin.paint();
+  };
+  const chip = (k, t, cur, set) => h('button', { type: 'button', class: k === cur ? 'on' : '', id: 'rmf_' + k, text: t, onclick: () => { set(k); Admin.paint(); } });
+  return h('div', { class: 'ccpage fixed', id: 'rmTestPage' }, head, h('div', { class: 'ccscroll' },
+    ccSec('Current test table', null, h('div', { class: 'ccrmcur' },
+      h('div', { class: 'ccrmcurh' }, h('i', { class: 'ccgsym red', text: '♦' }),
+        h('div', {}, h('b', { text: 'Rummy test table' }), h('span', { text: S0.players + ' players  ·  ' + S0.perPoint + ' per point  ·  deal ' + S0.deal + '  ·  opened ' + ccAgo(S0.openedAt) }))),
+      h('div', { class: 'ccrmcurb' },
+        h('button', { type: 'button', class: 'ccbtn danger', id: 'rmDissolve', onclick: dissolve }, h('span', { text: 'Dissolve' })),
+        h('button', { type: 'button', class: 'ccbtn primary', id: 'rmRejoin', onclick: () => { RM.autoResume = true; location.hash = '#/rummy'; } }, ccI('play'), h('span', { text: 'Rejoin' }))))),
+    ccSec('Activity', h('span', { class: 'ccchip', text: list.length + (list.length === 1 ? ' deal' : ' deals') }), h('div', {},
+      h('div', { class: 'ccrmfilt' },
+        h('div', { class: 'ccrmseg' }, chip('hour', '1 hour', range, v => { a.rmRange = v; }), chip('six', '6 hours', range, v => { a.rmRange = v; }), chip('day', '24 hours', range, v => { a.rmRange = v; })),
+        h('button', { type: 'button', class: 'ccrmsort', id: 'rmSortBtn', onclick: () => { a.rmSort = sortNew ? 'old' : 'new'; Admin.paint(); }, text: sortNew ? 'Newest ↓' : 'Oldest ↑' })),
+      list.length ? h('div', {},
+        h('div', { class: 'ccrmstats' }, stat(String(list.length), 'Deals'), stat(wins + '/' + list.length, 'You won', wins ? 'ok' : ''), stat((net > 0 ? '+' : '') + fmt(net), 'Your chips', net > 0 ? 'ok' : net < 0 ? 'bad' : ''), stat(fmt(rake), 'Rake')),
+        h('div', { class: 'ccrmlist' }, list.map(r => { const me = r.players.find(p => p.uid === RM.ME) || { chips: 0 }, w = r.players.find(p => p.uid === r.winner) || {};
+          return h('button', { type: 'button', class: 'ccrmrow' + (r.winner === RM.ME ? ' won' : ''), onclick: () => RM.showResult(r) },
+            h('div', {}, h('b', { text: 'Deal ' + r.deal + '  ·  ' + (r.winner === RM.ME ? 'You won' : w.name + ' won') }), h('span', { text: ccAgo(r.at) + '  ·  ' + r.players.length + ' players  ·  rake ' + fmt(r.rake) })),
+            h('em', { class: me.chips > 0 ? 'up' : me.chips < 0 ? 'down' : '', text: (me.chips > 0 ? '+' : '') + fmt(me.chips) }), ccI('chev', 'end')); })))
+      : h('p', { class: 'ccnote', text: H.length ? 'No deals in this time.' : 'Deals played at this table show up here for 24 hours.' })))));
 }
 // Rummy is being built: its overview, tables and test table arrive here.
 function ccRummySoon() {
@@ -19177,14 +19335,18 @@ function adminPrivForm() {
 }
 
 /* ---- 6. rake: what the house has taken from each table, live ---- */
+// the Rummy tables (their ids match the database rules) and which game a table belongs to
+const RM_TABLES = [0.5, 1, 2, 5, 10].map(v => ({ id: 'rm_' + (v === 0.5 ? '05' : v), perPoint: v, name: 'Rummy · ' + v + (v === 1 ? ' chip' : ' chips') + ' per point' }));
+const RM_TABLE_BY_ID = {}; RM_TABLES.forEach(t => { RM_TABLE_BY_ID[t.id] = t; });
+const rakeGameOf = id => RM_TABLE_BY_ID[id] ? 'rummy' : /^ab_/.test(id) ? 'andarbahar' : /^bj_/.test(id) ? 'blackjack' : 'teenpatti';
 function adminRake() {
   const a = Admin.st, R = a.rake, T = a.tips || {}, pub = TABLES.filter(t => !t.private).concat(TABLES.filter(t => t.private));
   if (!R) return h('div', { class: 'card' }, h('p', { class: 'muted', text: 'Loading the rake ledger...' }));
   const sum = (o, k) => Object.values(o).reduce((x, d) => x + (d[k] || 0), 0);
   const ms = v => (v && v.toMillis ? new Date(v.toMillis()).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : '-');
-  const names = t => (TABLE_BY_ID[t] ? tableName(TABLE_BY_ID[t]) : t);
+  const names = t => (TABLE_BY_ID[t] ? tableName(TABLE_BY_ID[t]) : RM_TABLE_BY_ID[t] ? RM_TABLE_BY_ID[t].name : t);
   const val = id => ((R[id] || {}).total || 0) + ((T[id] || {}).total || 0);
-  const ids = Object.keys(R).concat(Object.keys(T)).concat(pub.map(t => t.id)).filter((id, i, ar) => ar.indexOf(id) === i).sort((x, y) => val(y) - val(x));
+  const ids = Object.keys(R).concat(Object.keys(T)).concat(pub.map(t => t.id)).concat(RM_TABLES.map(t => t.id)).filter((id, i, ar) => ar.indexOf(id) === i).sort((x, y) => val(y) - val(x));
   const busyIds = ids.filter(id => val(id) > 0 || (R[id] || {}).hands || (T[id] || {}).count), quiet = ids.filter(id => !busyIds.includes(id));
   const total = sum(R, 'total'), top = Math.max(1, ...busyIds.map(id => (R[id] || {}).total || 0));
   const kind = id => { const t = TABLE_BY_ID[id]; return !t ? '' : t.private ? 'private' : t.random || t.variant ? 'variant' : 'tables'; };
@@ -19210,11 +19372,23 @@ function adminRake() {
         h('div', { class: 'akpi flat' }, h('b', { id: 'rakeHands', text: fmt(sum(R, 'hands')) }), h('span', { text: 'Hands' })),
         h('div', { class: 'akpi flat' }, h('b', { id: 'tipTotal', text: fmt(sum(T, 'total')) }), h('span', { text: 'Dealer tips' })),
         h('div', { class: 'akpi flat' }, h('b', { id: 'tipCount', text: fmt(sum(T, 'count')) }), h('span', { text: 'Tips given' })))),
-    h('div', { class: 'rxlist', id: 'rakeList' },
-      busyIds.length ? busyIds.map(row) : h('p', { class: 'muted', style: 'text-align:center;margin:14px 0', text: 'No rake collected yet.' }),
-      quiet.length ? h('button', { type: 'button', class: 'rxquiet', id: 'rakeQuiet', onclick: () => { a.rakeZero = !a.rakeZero; Admin.paint(); } },
-        h('span', { text: quiet.length + (quiet.length === 1 ? ' table' : ' tables') + ' with no rake yet' }), h('i', { text: a.rakeZero ? 'Hide ▴' : 'Show ▾' })) : null,
-      quiet.length && a.rakeZero ? h('div', { class: 'rxzero' }, quiet.map(id => h('span', { 'data-rake': id, text: names(id) }))) : null));
+    // each card game on its own, with its tables under it
+    h('div', { class: 'rxgames', id: 'rakeList' }, GAME_CATS[0].games.map(gm => {
+      const own = ids.filter(id => rakeGameOf(id) === gm.id), busy = own.filter(id => busyIds.includes(id)), still = own.filter(id => !busyIds.includes(id));
+      const gt = own.reduce((n, id) => n + ((R[id] || {}).total || 0), 0), gh = own.reduce((n, id) => n + ((R[id] || {}).hands || 0), 0);
+      const shut = (a.rakeShut || {})[gm.id], key = 'rq_' + gm.id;
+      return h('div', { class: 'rxgame', 'data-game': gm.id },
+        h('button', { type: 'button', class: 'rxghead', id: 'rakeGame_' + gm.id, onclick: () => { a.rakeShut = Object.assign({}, a.rakeShut, { [gm.id]: !shut }); Admin.paint(); } },
+          h('i', { class: 'ccgsym' + (gm.red ? ' red' : ''), text: gm.sym }),
+          h('div', {}, h('b', { text: gm.name }), h('span', { text: own.length ? own.length + ' tables  ·  ' + fmt(gh) + ' hands' : 'No tables yet' })),
+          h('strong', { text: fmt(gt) }), h('em', { text: shut ? '▾' : '▴' })),
+        shut ? null : h('div', { class: 'rxlist' },
+          own.length === 0 ? h('p', { class: 'muted rxnone', text: gm.status === 'soon' ? gm.name + ' is being built. Its tables show here once it opens.' : 'No tables yet.' })
+            : busy.length ? busy.map(row) : h('p', { class: 'muted rxnone', text: 'No rake collected yet.' }),
+          still.length ? h('button', { type: 'button', class: 'rxquiet', onclick: () => { a[key] = !a[key]; Admin.paint(); } },
+            h('span', { text: still.length + (still.length === 1 ? ' table' : ' tables') + ' with no rake yet' }), h('i', { text: a[key] ? 'Hide ▴' : 'Show ▾' })) : null,
+          still.length && a[key] ? h('div', { class: 'rxzero' }, still.map(id => h('span', { 'data-rake': id, text: names(id) }))) : null));
+    })));
 }
 
 /* ---- 3. players ---- */
