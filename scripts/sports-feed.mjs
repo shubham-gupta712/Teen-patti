@@ -1,4 +1,4 @@
-// Teen Patti Club - sports data job (version 6: match details, scored matches count as started).
+// Teen Patti Club - sports data job (version 7: stuck matches without a score time, results read from the status).
 // Started by GitHub Actions (.github/workflows/sports-feed.yml) and then STAYS ON for up to ~5 h 45 min, updating
 // every few minutes (the admin picks 1, 5, 15, 30 or 60 minutes on the console's Data feed tab). Each update:
 //   1. reads matches, live scores and results from the data services (only what is needed: the full schedule
@@ -208,7 +208,9 @@ export function fromCricket(x) {
   const statusTxt = String(x.status || ''), low = statusTxt.toLowerCase();
   const off = /abandon|no result|cancel|postpon/.test(low);
   // a score means play has begun, even if the service has not flagged the start (it happens with multi-day matches)
-  const status = x.matchEnded ? (off ? 'cancelled' : 'finished') : x.matchStarted || (x.score || []).length ? 'live' : off ? 'cancelled' : 'upcoming';
+  // the service sometimes leaves matchEnded off although its status already reads like a result
+  const ended = x.matchEnded || /\bwon by\b|\bwon\b.*\b(runs?|wickets?|wkts?|innings)\b|match drawn|\bdrawn\b|match tied|no result|abandon/.test(low.replace(/[^.]*\btoss\b[^.]*/g, ''));
+  const status = ended ? (off ? 'cancelled' : 'finished') : x.matchStarted || (x.score || []).length ? 'live' : off ? 'cancelled' : 'upcoming';
   const teamOf = s => { const t = String(s.inning || '').toLowerCase(); return t.startsWith(hn.toLowerCase()) ? 'home' : t.startsWith(an.toLowerCase()) ? 'away' : ''; };
   const inn = (x.score || []).map(s => ({ team: teamOf(s), r: Number(s.r) || 0, w: Number(s.w) || 0, o: s.o == null ? 0 : s.o })).filter(s => s.team);
   const txt = k => (x.score || []).filter(s => teamOf(s) === k).map(s => s.r + '/' + s.w + (s.o != null ? ' (' + s.o + ')' : '')).join(' & ');
@@ -259,7 +261,7 @@ const TBC = n => /^(tbc|tba|tbd|to be (confirmed|announced|decided))$/i.test(Str
 const multiDay = m => /test|first|fc/i.test(m.type || '') || /^day \d/i.test(m.detail || '');
 export const frozenMs = m => { const t = String(m.type || '').toLowerCase(); return multiDay(m) ? 20 * 3600e3 : t === 't10' ? 30 * 60000 : t === 'odi' ? 75 * 60000 : 45 * 60000; };
 const maxMs = m => { const t = String(m.type || '').toLowerCase(); return multiDay(m) ? 5.5 * 864e5 : t === 't10' ? 3 * 3600e3 : t.startsWith('t20') ? 5 * 3600e3 : 10 * 3600e3; };
-export const isFrozen = (m, now) => m.sport === 'cricket' && m.status === 'live' && now - (Number(m.scoreAt) || Number(m.seenAt) || m.startAt || 0) > frozenMs(m);
+export const isFrozen = (m, now) => m.sport === 'cricket' && m.status === 'live' && now - (Number(m.scoreAt) || m.startAt || 0) > frozenMs(m);
 export async function run({ db, inc, ts, fetchJson, env, now = Date.now(), log = console.log, existing, config = {} }) {
   const meta = db.doc('sportsMeta/feed'), M0 = (await meta.get()).data() || {}, sports = Object.assign({}, M0.sports || {});
   const errors = [], counts = { added: 0, updated: 0, settled: 0, paid: 0, removed: 0 };
