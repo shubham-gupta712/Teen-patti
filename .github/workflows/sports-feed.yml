@@ -1,0 +1,34 @@
+# Teen Patti Club: brings sports matches, live scores and results into Firebase and settles bets.
+# Runs about every 15 minutes (GitHub may start it a few minutes late when it is busy).
+# Needs these repository secrets (Settings > Secrets and variables > Actions):
+#   FIREBASE_SERVICE_ACCOUNT  the whole JSON file from Firebase > Project settings > Service accounts > Generate new private key
+#   APISPORTS_KEY             your API-Sports key (football and basketball)
+#   CRICKETDATA_KEY           your CricketData.org key (cricket)
+# Optional repository variables: FOOTBALL_LEAGUES, BASKETBALL_LEAGUES (API-Sports league ids, comma separated)
+name: Sports feed
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch: {}
+concurrency:
+  group: sports-feed
+  cancel-in-progress: false
+jobs:
+  feed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install the Firebase library
+        run: npm install --no-save --no-audit --no-fund firebase-admin@12
+      - name: Update matches and settle bets
+        run: node scripts/sports-feed.mjs
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          APISPORTS_KEY: ${{ secrets.APISPORTS_KEY }}
+          CRICKETDATA_KEY: ${{ secrets.CRICKETDATA_KEY }}
+          FOOTBALL_LEAGUES: ${{ vars.FOOTBALL_LEAGUES }}
+          BASKETBALL_LEAGUES: ${{ vars.BASKETBALL_LEAGUES }}
