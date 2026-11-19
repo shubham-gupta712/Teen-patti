@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build:20261120c -->
+<!-- build:20261120e -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -4332,7 +4332,16 @@ body .cc .cctlist>*{min-width:0}
 .spmk2opt b{font:800 15px system-ui;color:#ffd36b}
 .spmk2opt:disabled{cursor:default}.spmk2opt:disabled b{color:#a99f88}
 .splock{margin-left:8px;font:700 11px system-ui;letter-spacing:0;text-transform:none;color:#d6b0ff}
+.spfresh{font:600 11px system-ui;color:#8fa79a;margin:2px 0 0}.spfresh.stale{color:#ffb02e}
+.spmpage .spfresh{margin:0}
 /* console */
+.ccfcard{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);margin-bottom:6px}
+.ccfline{display:flex;gap:10px;align-items:flex-start}.ccfline>i{flex:0 0 22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:900 12px system-ui;font-style:normal;background:rgba(255,255,255,.12);color:#cfd8f5}
+.ccfline.ok>i{background:#1f9d6b;color:#fff}.ccfline.bad>i{background:#d6455d;color:#fff}
+.ccfline b{display:block;font:800 14px/1.3 system-ui;color:#f2f5ff}.ccfline span{display:block;font:500 12px/1.4 system-ui;color:#9aa7c7}
+.ccfcard .ccmeter{margin-top:2px;background:rgba(0,0,0,.18)}
+.ccfhint{margin:8px 0 0;font:500 12px/1.4 system-ui;color:#8d98b8}
+.ccferrs p{margin:0 0 6px;font:500 12px/1.4 ui-monospace,monospace;color:#ffb3c1;word-break:break-word}
 .ccmeters{display:flex;flex-direction:column;gap:10px}
 .ccmeter{padding:12px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
 .ccmeter.warn{border-color:rgba(255,176,46,.5)}.ccmeter.over{border-color:rgba(255,77,106,.7);background:rgba(255,77,106,.08)}
@@ -4360,6 +4369,43 @@ body .cc .cctlist>*{min-width:0}
 .ccspbet{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04)}
 .ccspbet>div{flex:1;min-width:0}.ccspbet b{display:block;font:700 13px system-ui;color:#f2f5ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ccspbet span{display:block;font:500 11px system-ui;color:#9aa7c7}
 .ccspbet em{font-style:normal;font:800 13px system-ui;color:#ffe9b0}
+
+/* ---- Sports, compact ---- */
+.sphead{padding:4px 16px 0}.sphead h1{font-size:20px}
+.spchips{gap:6px;padding:8px 14px 2px}.spchip{height:30px;padding:0 10px;font-size:12px;gap:5px}.spchip i{font-size:13px}.spchip em{font-size:10px;min-width:16px;height:16px;line-height:16px}
+.sptabs{margin:8px 14px 4px;padding:3px;border-radius:12px}.sptab{height:30px;font-size:12px;border-radius:9px}.sptab em{font-size:10px;min-width:16px;height:16px;line-height:16px}
+.splist{padding:2px 12px 0}.spleague{margin:8px 0 10px}.spleaguehd{padding:2px 4px 6px;gap:6px}.spleaguehd b{font-size:10.5px;letter-spacing:.08em}.spleaguehd img{width:16px;height:16px}.spleaguehd i{font-size:13px}.spleaguehd em{font-size:10px}
+.spcard{gap:8px;padding:8px 10px 8px 12px;margin:0 0 6px;border-radius:12px;box-shadow:0 3px 10px rgba(0,0,0,.22);border-color:rgba(226,189,107,.16)}
+.spcard.live{border-color:rgba(255,77,106,.38);background:linear-gradient(90deg,rgba(255,77,106,.08),rgba(255,255,255,.03) 40%)}
+.spcardl{gap:1px}.spcard .spteam{padding:1px 0;gap:7px}.spcard .spteam b{font-size:12.5px;font-weight:650}.spcard .spteam strong{font-size:12px;font-weight:800}
+.spcard .spteamlogo,.spcard .spteaminit{width:16px;height:16px;flex-basis:16px}.spcard .spteaminit{font-size:6px}
+.spcardl .spdetail{font-size:10.5px;margin-top:1px;color:#8fc9a8}.spcardl .spdetail.stale{color:#ffb02e}
+.spcardr{flex:0 0 auto;align-self:stretch;justify-content:space-between;align-items:flex-end;gap:4px;padding-left:10px;border-left:1px solid rgba(255,255,255,.07);min-width:58px}
+.spcardr .splive{padding:2px 6px;font-size:9.5px;gap:4px}.spcardr .splive i{width:6px;height:6px}
+.spwhen2{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2}.spwhen2 b{font:800 10px system-ui;color:#e2bd6b;text-transform:uppercase;letter-spacing:.06em}.spwhen2 span{font:700 11.5px system-ui;color:#eadfc4}
+.spcardft{display:flex;align-items:center;gap:5px}.spcardr .spmore{font-size:20px;line-height:1}.spcardr .spmine{font-size:10px;padding:1px 6px}
+.spmpage{gap:8px}.spback{height:28px;font-size:12px;padding:0 10px 0 6px}.spback i{font-size:18px}
+.spboard{padding:10px 12px;border-radius:14px;gap:4px}.spmhd{font-size:11px}
+.spmteam{padding:3px 0;gap:8px}.spmteam b{font-size:14px;font-weight:750}.spmteam strong{font-size:14px}.spmteam .spteamlogo,.spmteam .spteaminit{width:22px;height:22px;flex-basis:22px}
+.spmdetail{font-size:11.5px}.sprates{font-size:11px;gap:12px}.sprowhd,.sprow{font-size:11px;padding:2px 0}.sprowhd{font-size:9px}
+.spballs i{width:20px;height:20px;font-size:10px}
+.spsub{margin:10px 4px 4px;font-size:10.5px}
+.spmk2{border-radius:12px}.spmk2hd{padding:9px 12px}.spmk2hd b{font-size:12.5px}.spmk2hd i{font-size:13px}
+.spmk2list{gap:5px;padding:0 8px 8px}.spmk2opt{min-height:36px;padding:0 12px;font-size:12.5px;border-radius:9px}.spmk2opt b{font-size:13.5px}
+.spmbet{font-size:12px;padding:7px 10px}.spsmall{font-size:10.5px}.spfresh{font-size:10px}.spfoot{font-size:10px}
+.spbetsum b{font-size:14px}.spbet{padding:8px 10px;border-radius:12px}.spbettop b{font-size:12.5px}.spbetpick,.spbetnums{font-size:12px}.spbetwhen{font-size:10px}
+.spempty b{font-size:15px}.spempty span{font-size:12px}
+/* console: approvals and the request switch */
+.cc .ccsecs:has(>:nth-child(4)){grid-template-columns:repeat(4,1fr);gap:4px}.cc .ccsecs:has(>:nth-child(4)) button{font-size:11.5px;gap:4px;padding:0 2px;min-width:0}.cc .ccsecs:has(>:nth-child(4)) button .cci{width:14px;height:14px}
+.ccaplist{display:flex;flex-direction:column;gap:6px}
+.ccaprow{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+.ccaprow>div:first-child{flex:1;min-width:0}.ccaprow>div:first-child b{display:block;font:800 13px/1.3 system-ui;color:#f2f5ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ccaprow>div:first-child span{display:block;font:500 11px/1.35 system-ui;color:#9aa7c7;margin-top:2px}
+.ccapbtns{display:flex;gap:6px;flex:0 0 auto}
+.cconoff{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.cconoff>div{flex:1}.cconoff b{display:block;font:800 14px system-ui;color:#f2f5ff}.cconoff span{display:block;font:500 12px system-ui;color:#9aa7c7}
+.cc .ccsw{position:relative;width:50px !important;height:28px !important;min-height:0 !important;min-width:0 !important;padding:0 !important;box-sizing:border-box;border-radius:14px !important;border:0;background:#4a5470;cursor:pointer;flex:0 0 auto;transition:background .2s}
+.cc .ccsw i{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:left .2s}
+.cc .ccsw.on{background:#1f9d6b}.cc .ccsw.on i{left:25px}
 </style>
 </head>
 <body>
@@ -14049,7 +14095,7 @@ class AppError extends Error {}
 let toastTimer = null;
 /* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
    few bytes of the current file; if its build is newer, a banner offers a reload. */
-const BUILD = '20261120c';
+const BUILD = '20261120e';
 const Fresh = {
   at: 0, shown: false,
   async check(force) {
@@ -17130,9 +17176,14 @@ function spDefaultMarkets(sport, home, away, withDraw) {
 const SP_OPT_ORDER = ['home', 'draw', 'away'];
 const spOptKeys = mk => Array.isArray(mk.order) && mk.order.length ? mk.order.filter(k => mk.opts && mk.opts[k]) : SP_OPT_ORDER.filter(k => mk.opts && mk.opts[k]).concat(Object.keys(mk.opts || {}).filter(k => !SP_OPT_ORDER.includes(k)));
 
+// how fresh a live score is
+const spAge = m => { const t = Number(m.scoreAt) || Number(m.seenAt) || 0; return t ? Date.now() - t : Infinity; };
+const spSeenAge = m => { const t = Number(m.seenAt) || 0; return t ? Date.now() - t : Infinity; };
+const spStale = m => m.status === 'live' && spSeenAge(m) > 12 * 60000;
+const spAgoShort = ms => ms === Infinity ? '' : ms < 60000 ? 'just now' : ms < 3600e3 ? Math.round(ms / 60000) + ' min ago' : Math.round(ms / 3600e3) + ' h ago';
 // can a bet be placed on this market right now? Before the start, or during play once the odds have settled
 const spLocked = m => m.status === 'live' && Date.now() < (Number(m.lockUntil) || 0);
-const spCanBet = (m, mk) => !!(m && mk && mk.open && m.bettingOpen && ((m.status === 'upcoming' && Date.now() < m.startAt) || (m.status === 'live' && !spLocked(m))));
+const spCanBet = (m, mk) => !!(m && mk && mk.open && m.approved === true && m.bettingOpen && ((m.status === 'upcoming' && Date.now() < m.startAt) || (m.status === 'live' && !spLocked(m))));
 const SpRepo = {
   col: () => db.collection('sports'),
   ref: id => db.collection('sports').doc(id),
@@ -17159,6 +17210,11 @@ const SpRepo = {
       tx.update(uref, { chips: u.chips - stake, lastBet: bref.id, updatedAt: FV.serverTimestamp() });
     });
     if (S.profile) S.profile.chips -= stake;
+  },
+  // The admin calls a match off before it starts: it leaves the list and every stake goes back
+  async cancel(id) {
+    await SpRepo.ref(id).update({ status: 'cancelled', adminCancelled: true, bettingOpen: false, cancelledAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
+    return SpRepo.settle(id, {}, 'cancelled');
   },
   // The admin settles a match: every open bet is won, lost or given back, and winners are paid.
   // result: { win: 'home' | 'away' | 'draw' | 'void' } (one entry per market)
@@ -17202,8 +17258,10 @@ const SpData = {
     if (Sheets.el && Sheets.el.id === 'spSlip') spSlipRefresh();
     if (Sheets.el && Sheets.el.id === 'spMatch') spMatchRefresh();
   },
-  live(sport) { return (SpData.matches || []).filter(m => m.status === 'live' && (!sport || m.sport === sport)).sort((a, b) => a.startAt - b.startAt); },
-  upcoming(sport) { return (SpData.matches || []).filter(m => m.status === 'upcoming' && (!sport || m.sport === sport)).sort((a, b) => a.startAt - b.startAt); },
+  // players only ever see matches the admin approved
+  live(sport) { return (SpData.matches || []).filter(m => m.status === 'live' && m.approved === true && (!sport || m.sport === sport)).sort((a, b) => a.startAt - b.startAt); },
+  upcoming(sport) { return (SpData.matches || []).filter(m => m.status === 'upcoming' && m.approved === true && (!sport || m.sport === sport)).sort((a, b) => a.startAt - b.startAt); },
+  pending(sport) { return (SpData.matches || []).filter(m => m.sport === sport && m.approved !== true && !m.rejected && m.status === 'upcoming' && m.startAt > Date.now()).sort((a, b) => a.startAt - b.startAt); },
   myOpen(id) { return (SpData.bets || []).filter(b => b.matchId === id && b.status === 'open' && (!S.user || b.uid === S.user.uid)); }
 };
 
@@ -17212,6 +17270,10 @@ function spWhen(ms) {
   const d = new Date(ms), now = new Date(), day = 864e5, t = d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
   const d0 = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime(), dd = Math.floor((ms - d0) / day);
   return dd === 0 ? 'Today ' + t : dd === 1 ? 'Tomorrow ' + t : d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }) + ' ' + t;
+}
+function spWhenParts(ms) {
+  const d = new Date(ms), now = new Date(), d0 = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime(), dd = Math.floor((ms - d0) / 864e5);
+  return [dd === 0 ? 'Today' : dd === 1 ? 'Tomorrow' : d.toLocaleDateString(undefined, { day: 'numeric', month: 'short' }), d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })];
 }
 function spTeamMark(t) {
   if (t && t.logo && /^https:\/\//.test(t.logo)) return h('img', { class: 'spteamlogo', src: t.logo, alt: '', loading: 'lazy', referrerpolicy: 'no-referrer', onerror: e => { e.target.replaceWith(spInitials(t)); } });
@@ -17249,9 +17311,9 @@ function renderSports() {
     body = list.length ? spLeagues(list) : spEmpty(st.tab === 'live' ? 'No live matches right now' : 'No upcoming matches yet',
       st.tab === 'live' ? (up.length ? 'The next one starts ' + spWhen(up[0].startAt) + '. Bet on it now in Upcoming.' : 'Matches show up here as soon as they start.') : 'When matches are scheduled they show up here with their odds.');
   }
-  const f = SpData.feed, upd = f && f.lastRun ? 'Scores updated ' + ccAgoTxt(f.lastRun) : '';
+  const f = SpData.feed, upd = f && f.lastRun ? 'Feed checked ' + ccAgoTxt(f.lastRun) : '';
   return h('div', { class: 'spwrap', id: 'sportsPage' }, top,
-    h('div', { class: 'sphead' }, h('h1', { text: 'Sports' }), h('span', { text: 'Bet with play chips  ·  odds lock when you bet' })),
+    h('div', { class: 'sphead' }, h('h1', { text: 'Sports' })),
     openM ? null : chips, openM ? null : tabs, h('div', { class: 'splist', id: 'spList' }, body),
     upd ? h('p', { class: 'spfoot', text: upd }) : null);
 }
@@ -17268,12 +17330,14 @@ function spLeagues(list) {
 function spCard(m) {
   const live = m.status === 'live', done = m.status === 'finished' || m.status === 'cancelled', sc = m.score || {}, mine = SpData.myOpen(m.id);
   const row = (k, t) => h('div', { class: 'spteam' }, spTeamMark(t), h('b', { text: t.name }), live || done ? h('strong', { text: sc[k] || '' }) : null);
+  const wd = spWhenParts(m.startAt);
   return h('article', { class: 'spcard' + (live ? ' live' : ''), id: 'spm_' + m.id, onclick: () => spMatch(m.id) },
     h('div', { class: 'spcardl' },
-      live ? h('span', { class: 'splive' }, h('i'), h('span', { text: 'LIVE' })) : h('span', { class: 'spwhen', text: spWhen(m.startAt) }),
       row('home', m.home || {}), row('away', m.away || {}),
-      live && m.detail ? h('span', { class: 'spdetail', text: m.detail }) : null),
-    h('div', { class: 'spcardr' }, mine.length ? h('span', { class: 'spmine', text: String(mine.length) }) : null, h('span', { class: 'spmore', 'aria-hidden': 'true', text: '›' })));
+      live && (m.detail || spStale(m)) ? h('span', { class: 'spdetail' + (spStale(m) ? ' stale' : ''), text: spStale(m) ? '\u26A0 ' + (spSeenAge(m) === Infinity ? 'No recent update' : 'No update for ' + spAgoShort(spSeenAge(m)).replace(' ago', '')) : m.detail }) : null),
+    h('div', { class: 'spcardr' },
+      live ? h('span', { class: 'splive' }, h('i'), h('span', { text: 'LIVE' })) : h('span', { class: 'spwhen2' }, h('b', { text: wd[0] }), h('span', { text: wd[1] })),
+      h('span', { class: 'spcardft' }, mine.length ? h('span', { class: 'spmine', text: String(mine.length) }) : null, h('span', { class: 'spmore', 'aria-hidden': 'true', text: '›' }))));
 }
 // a match opens on its own page: the scoreboard on top, every market below
 function spMatch(id) { const st = S.sp || (S.sp = { sport: '', tab: 'live' }); st.match = id; st.mkOpen = {}; scheduleRender(); const w = document.querySelector('#sportsPage'); if (w) w.scrollTop = 0; }
@@ -17289,13 +17353,14 @@ function spMatchPage(m) {
       live ? h('span', { class: 'splive' }, h('i'), h('span', { text: 'LIVE' })) : h('span', { class: 'spwhen', text: done ? (m.status === 'cancelled' ? 'Called off' : 'Finished') : spWhen(m.startAt) })),
     team('home', m.home || {}), team('away', m.away || {}),
     m.detail ? h('p', { class: 'spmdetail', text: m.detail }) : null,
+    live ? h('p', { class: 'spfresh' + (spStale(m) ? ' stale' : ''), text: spStale(m) ? '\u26A0 ' + (spSeenAge(m) === Infinity ? 'No recent score update' : 'No score update for ' + spAgoShort(spSeenAge(m)).replace(' ago', '')) : 'Updated ' + (spAgoShort(spAge(m)) || '') }) : null,
     L.crr || L.rrr ? h('div', { class: 'sprates' }, L.crr ? h('span', {}, 'CRR ', h('b', { text: String(L.crr) })) : null, L.rrr ? h('span', {}, 'RRR ', h('b', { text: String(L.rrr) })) : null, L.target ? h('span', {}, 'Target ', h('b', { text: String(L.target) })) : null) : null,
     L.batting && L.batting.length ? h('div', { class: 'spbat' }, h('div', { class: 'sprowhd' }, h('span', { text: 'Batter' }), h('span', { text: 'R' }), h('span', { text: 'B' }), h('span', { text: '4s' }), h('span', { text: '6s' })),
       L.batting.map(p => h('div', { class: 'sprow' + (p.on ? ' on' : '') }, h('span', { text: p.name + (p.on ? ' *' : '') }), h('b', { text: String(p.r || 0) }), h('span', { text: String(p.b || 0) }), h('span', { text: String(p.f4 || 0) }), h('span', { text: String(p.s6 || 0) })))) : null,
     L.bowling && L.bowling.name ? h('div', { class: 'spbat' }, h('div', { class: 'sprowhd' }, h('span', { text: 'Bowler' }), h('span', { text: 'O' }), h('span', { text: 'M' }), h('span', { text: 'R' }), h('span', { text: 'W' })),
       h('div', { class: 'sprow' }, h('span', { text: L.bowling.name }), h('span', { text: String(L.bowling.o || 0) }), h('span', { text: String(L.bowling.m || 0) }), h('span', { text: String(L.bowling.r || 0) }), h('b', { text: String(L.bowling.w || 0) }))) : null,
     L.recent && L.recent.length ? h('div', { class: 'spballs' }, h('span', { text: 'This over' }), L.recent.slice(-8).map(x => h('i', { class: 'b' + (x === 'W' ? ' w' : x === '4' ? ' f' : x === '6' ? ' s' : ''), text: x }))) : null,
-    !live && !done ? h('p', { class: 'spsmall', text: 'Live scores, batters and bowlers show here once the match starts.' }) : null);
+    null);
   // the markets, each one folding open like a bookmaker's
   const keys = Object.keys(m.markets || {}).sort((a, b) => (a === 'win' ? -1 : b === 'win' ? 1 : 0));
   const mks = keys.map(k => { const mk = m.markets[k], ok = spCanBet(m, mk), shut = st.mkOpen && st.mkOpen[k] === false;
@@ -17305,9 +17370,11 @@ function spMatchPage(m) {
       shut ? null : h('div', { class: 'spmk2list' + (spOptKeys(mk).length === 2 && mk.pair ? ' two' : '') }, spOptKeys(mk).map(o => h('button', { type: 'button', class: 'spmk2opt', disabled: !ok, onclick: () => spSlip(m.id, k, o) },
         h('span', { text: o === 'draw' ? 'Draw' : mk.opts[o].label }), h('b', { text: spOddsTxt(mk.opts[o].odds) })))));
   });
-  const why = open ? (live ? (locked ? 'Odds updating after the latest score\u2026 ' : '') + 'Bets stay open during play. The odds change after every score update, pause for a few seconds after each one, and markets close near the end.' : 'Odds are fixed when you place your bet. Bets stay open during play once the match starts.') : live ? 'Betting is paused for this match.' : done ? (m.settled ? 'This match is over and its bets are settled.' : 'This match is over. Bets are settled as soon as the result comes in.') : 'Betting is closed for this match.';
+  const pausedWhy = live && !m.bettingOpen ? (spStale(m) ? 'Paused: waiting for a fresh score.' : 'Betting closed by the club.')
+    : live && Object.values(m.markets || {}).every(x => !x.open) ? 'No live odds for this match type.' : '';
+  const why = pausedWhy ? pausedWhy : open ? (live ? 'Odds move after every score.' : 'Your odds are fixed when you bet.') : live ? 'Betting paused.' : done ? (m.status === 'cancelled' ? 'Called off. Stakes returned.' : m.settled ? 'Over. Bets settled.' : 'Over. Settling bets.') : 'Betting closed.';
   return h('div', { class: 'spmpage', id: 'spMatchPage' },
-    h('button', { type: 'button', class: 'spback', id: 'spBack', onclick: () => { st.match = ''; scheduleRender(); } }, h('i', { text: '‹' }), h('span', { text: 'All matches' })),
+    h('button', { type: 'button', class: 'spback', id: 'spBack', onclick: () => { st.match = ''; scheduleRender(); } }, h('i', { text: '‹' }), h('span', { text: 'Back' })),
     board,
     h('h3', { class: 'spsub' }, 'Markets', locked ? h('span', { class: 'splock', text: 'Odds updating\u2026' }) : null), mks.length ? mks : h('p', { class: 'spsmall', text: 'No odds for this match yet.' }),
     h('p', { class: 'spsmall', text: why }),
@@ -17381,17 +17448,17 @@ function spSlipRefresh(first) {
 }
 
 /* ---- the console: one page per sport ---- */
-const SP_SECS = [['overview', 'Matches', 'grid'], ['bets', 'Bets', 'inbox'], ['add', 'Add match', 'check'], ['feed', 'Data feed', 'pulse']];
+const SP_SECS = [['approve', 'Approvals', 'check'], ['overview', 'Matches', 'grid'], ['bets', 'Bets', 'inbox'], ['feed', 'Data feed', 'pulse']];
 function ccSportLine(id) {
   if (!SpData.matches) return 'Loading...';
-  const l = SpData.live(id).length, u = SpData.upcoming(id).length;
-  return l + ' live  ·  ' + u + ' upcoming';
+  const l = SpData.live(id).length, u = SpData.upcoming(id).length, p = SpData.pending(id).length;
+  return l + ' live  ·  ' + u + ' upcoming' + (p ? '  ·  ' + p + ' to approve' : '');
 }
 function ccSportPage(sport, sec) {
   SpData.open();
   const a = Admin.st, M = SpData.matches, B = SpData.bets || [];
   if (!M) return h('div', { class: 'ccpage fixed' }, h('div', { class: 'ccscroll' }, ccLoading('Loading matches...')));
-  if (sec === 'add') return h('div', { class: 'ccpage fixed', id: 'spAddPage' }, h('div', { class: 'ccscroll' }, ccSportAdd(sport)));
+  if (sec === 'approve') return h('div', { class: 'ccpage fixed', id: 'spApprovePage' }, h('div', { class: 'ccscroll' }, ccSportApprove(sport)));
   if (sec === 'feed') return h('div', { class: 'ccpage fixed', id: 'spFeedPage' }, h('div', { class: 'ccscroll' }, ccSportFeed(sport)));
   if (sec === 'bets') {
     const list = B.filter(b => b.sport === sport), open = list.filter(b => b.status === 'open');
@@ -17405,12 +17472,12 @@ function ccSportPage(sport, sec) {
         h('em', { text: fmt(b.stake) }), h('i', { class: 'spst s-' + b.status, text: b.status.toUpperCase() })))) : h('p', { class: 'ccnote', text: 'No bets on ' + SP_BY[sport].name + ' yet.' }))));
   }
   // matches: live first, then upcoming, then finished ones still to settle
-  const mine = M.filter(m => m.sport === sport), live = mine.filter(m => m.status === 'live'), up = mine.filter(m => m.status === 'upcoming'), todo = mine.filter(m => (m.status === 'finished' || m.status === 'cancelled') && !m.settled);
+  const mine = M.filter(m => m.sport === sport && m.approved === true), live = mine.filter(m => m.status === 'live'), up = mine.filter(m => m.status === 'upcoming'), todo = mine.filter(m => (m.status === 'finished' || m.status === 'cancelled') && !m.settled);
   const done = mine.filter(m => m.settled).sort((x, y) => y.startAt - x.startAt).slice(0, 10);
   const sorted = [].concat(live.sort((x, y) => x.startAt - y.startAt), todo, up.sort((x, y) => x.startAt - y.startAt));
   return h('div', { class: 'ccpage fixed', id: 'spAdminPage' }, h('div', { class: 'ccscroll' },
     ccSec('Matches', h('span', { class: 'ccchip', text: live.length + ' live  ·  ' + up.length + ' upcoming' + (todo.length ? '  ·  ' + todo.length + ' to settle' : '') }),
-      sorted.length ? h('div', { class: 'ccsplist' }, sorted.map(m => ccSportRow(m, B))) : spEmpty('No ' + SP_BY[sport].name.toLowerCase() + ' matches', 'Add one on the Add match tab, or set up the data feed so matches arrive by themselves.')),
+      sorted.length ? h('div', { class: 'ccsplist' }, sorted.map(m => ccSportRow(m, B))) : spEmpty('No ' + SP_BY[sport].name.toLowerCase() + ' matches', 'Approve matches on the Approvals tab and they show here and to players.')),
     done.length ? ccSec('Settled', null, h('div', { class: 'ccsplist' }, done.map(m => ccSportRow(m, B)))) : null));
 }
 function ccSportRow(m, B) {
@@ -17440,9 +17507,16 @@ function ccSportRow(m, B) {
     open ? h('div', { class: 'ccspmore' },
       mk ? h('p', { class: 'ccnote', text: mk.name + ':  ' + spOptKeys(mk).map(k => (k === 'draw' ? 'Draw' : mk.opts[k].label) + ' ' + spOddsTxt(mk.opts[k].odds)).join('   ·   ') + (m.oddsBy === 'admin' ? '  (set by you)' : '  (opening prices)') }) : null,
       m.status === 'upcoming' && !m.settled ? edit() : null,
-      m.status === 'upcoming' && !m.settled ? h('button', { type: 'button', class: 'ccbtn ghost sm', onclick: () => adminBusy('spb_' + m.id, 'betting', () => SpRepo.ref(m.id).update({ bettingOpen: !m.bettingOpen, updatedAt: FV.serverTimestamp() })) },
+      (m.status === 'upcoming' || m.status === 'live') && !m.settled ? h('button', { type: 'button', class: 'ccbtn ghost sm', onclick: () => adminBusy('spb_' + m.id, 'betting', () => SpRepo.ref(m.id).update({ bettingOpen: !m.bettingOpen, adminClosed: !!m.bettingOpen, updatedAt: FV.serverTimestamp() })) },
         h('span', { text: m.bettingOpen ? 'Close betting' : 'Open betting' })) : null,
-      !m.settled ? h('div', { class: 'ccspres' }, h('span', { class: 'cclabel', text: 'RESULT (SETTLES ALL BETS)' }),
+      m.status === 'upcoming' && !m.settled ? h('button', { type: 'button', class: 'ccbtn danger sm', id: 'spCancel_' + m.id, onclick: async () => {
+        if (Date.now() >= m.startAt) return toast('This match has started. It can no longer be cancelled.');
+        const st = ob.reduce((n, b) => n + b.stake, 0);
+        if (!(await ccConfirm({ title: 'Cancel ' + m.home.name + ' v ' + m.away.name + '?', ok: 'Cancel match', danger: true, body: 'Players stop seeing it. ' + (ob.length ? ob.length + (ob.length === 1 ? ' bet' : ' bets') + ' (' + fmt(st) + ' chips) are refunded now.' : 'There are no bets to refund.') }))) return;
+        adminBusy('spc_' + m.id, 'cancel match', async () => { const x = await SpRepo.cancel(m.id); Admin.say('Match cancelled  ·  ' + x.n + (x.n === 1 ? ' bet' : ' bets') + ' refunded (' + fmt(x.paid) + ' chips).'); });
+      } }, h('span', { text: 'Cancel match' + (ob.length ? ' and refund ' + ob.length + (ob.length === 1 ? ' bet' : ' bets') : '') })) : null,
+      m.status === 'live' ? h('p', { class: 'ccnote', text: 'In play: it can no longer be cancelled.' }) : null,
+      !m.settled && m.status !== 'upcoming' ? h('div', { class: 'ccspres' }, h('span', { class: 'cclabel', text: 'RESULT (SETTLES ALL BETS)' }),
         h('div', { class: 'ccspresbtns' },
           h('button', { type: 'button', class: 'ccbtn primary sm', onclick: () => settle('home', m.home.name + ' won') }, h('span', { text: m.home.short || m.home.name })),
           mk && mk.opts.draw ? h('button', { type: 'button', class: 'ccbtn primary sm', onclick: () => settle('draw', 'A draw') }, h('span', { text: 'Draw' })) : null,
@@ -17454,6 +17528,32 @@ function ccSportRow(m, B) {
         if (!(await ccConfirm({ title: 'Delete this match?', ok: 'Delete', danger: true, body: 'It has no bets.' }))) return;
         adminBusy('spd_' + m.id, 'delete match', () => SpRepo.ref(m.id).delete());
       }, text: 'Delete match' }) : null) : null);
+}
+function ccSportApprove(sport) {
+  const a = Admin.st, list = SpData.pending(sport), hid = (SpData.matches || []).filter(m => m.sport === sport && m.approved !== true && m.rejected && m.status === 'upcoming' && m.startAt > Date.now()).sort((x, y) => x.startAt - y.startAt);
+  const approve = ms => adminBusy('spa_' + (ms.length > 1 ? 'all' : ms[0].id), 'approve', async () => {
+    const live = ms.filter(m => m.startAt > Date.now());
+    for (let i = 0; i < live.length; i += 400) { const b = db.batch(); live.slice(i, i + 400).forEach(m => b.update(SpRepo.ref(m.id), { approved: true, rejected: false, approvedAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() })); await b.commit(); }
+    Admin.say(live.length === 1 ? 'Published. Players see it under Upcoming.' : live.length + ' matches published.');
+  });
+  const odds = m => { const w = m.markets && m.markets.win; return w ? spOptKeys(w).map(k => spOddsTxt(w.opts[k].odds)).join(' · ') : ''; };
+  const row = (m, isHid) => h('div', { class: 'ccaprow', 'data-match': m.id },
+    h('div', {}, h('b', { text: m.home.name + '  v  ' + m.away.name }), h('span', { text: [spWhen(m.startAt), m.league, (m.type || '').toUpperCase(), odds(m)].filter(Boolean).join('  ·  ') })),
+    isHid ? h('button', { type: 'button', class: 'ccbtn ghost sm', onclick: () => adminBusy('spr_' + m.id, 'restore', () => SpRepo.ref(m.id).update({ rejected: false, updatedAt: FV.serverTimestamp() })) }, h('span', { text: 'Restore' }))
+      : h('div', { class: 'ccapbtns' },
+        h('button', { type: 'button', class: 'ccbtn ghost sm', 'aria-label': 'Hide', onclick: () => adminBusy('spr_' + m.id, 'hide', () => SpRepo.ref(m.id).update({ rejected: true, updatedAt: FV.serverTimestamp() })) }, h('span', { text: 'Hide' })),
+        h('button', { type: 'button', class: 'ccbtn primary sm', onclick: () => approve([m]) }, h('span', { text: 'Approve' }))));
+  return h('div', {},
+    ccSec('Waiting for approval', h('span', { class: 'ccchip', text: String(list.length) }),
+      list.length ? h('div', {},
+        list.length > 1 ? h('button', { type: 'button', class: 'ccbtn primary sm', id: 'spApproveAll', style: 'margin-bottom:10px', onclick: async () => {
+          if (!(await ccConfirm({ title: 'Approve all ' + list.length + '?', ok: 'Approve all', body: 'They show to players under Upcoming with their opening odds.' }))) return;
+          approve(list); } }, h('span', { text: 'Approve all ' + list.length })) : null,
+        h('div', { class: 'ccaplist' }, list.map(m => row(m, false))))
+      : spEmpty('Nothing to approve', 'New matches from the data feed wait here until you publish them.')),
+    h('p', { class: 'ccfhint', text: 'Players only see approved matches. Unapproved ones use no live requests. Once a match starts it cannot be approved or cancelled.' }),
+    hid.length ? ccSec('Hidden', h('button', { type: 'button', class: 'ccchip', onclick: () => { a.spHid = !a.spHid; Admin.paint(); }, text: (a.spHid ? 'Hide list' : 'Show ' + hid.length) }),
+      a.spHid ? h('div', { class: 'ccaplist' }, hid.map(m => row(m, true))) : null) : null);
 }
 function ccSportAdd(sport) {
   const a = Admin.st, f = a.spAdd && a.spAdd.sport === sport ? a.spAdd : (a.spAdd = { sport, league: '', home: '', away: '', date: new Date(Date.now() + 864e5).toISOString().slice(0, 10), time: '19:30', draw: sport === 'football', err: '' });
@@ -17482,35 +17582,35 @@ function ccSportAdd(sport) {
     h('button', { type: 'button', class: 'btn-primary', id: 'spaSave', style: 'width:100%;margin-top:10px', text: 'Add match', disabled: !!S.busy.spAdd, onclick: save }));
 }
 function ccSportFeed(sport) {
-  const f = SpData.feed || {}, cfg = SpData.config || {}, a = Admin.st, s0 = f.sports && f.sports[sport];
-  const iv = Number(cfg.interval) || 15, ran = f.lastRun ? Date.now() - f.lastRun : Infinity;
+  const f = SpData.feed || {}, cfg = SpData.config || {}, s0 = f.sports && f.sports[sport];
+  const iv = Number(cfg.interval) || 15, ran = f.lastRun ? Date.now() - f.lastRun : Infinity, running = ran < (iv + 5) * 60000;
   const setCfg = o => adminBusy('spcfg', 'feed settings', () => db.collection('sportsMeta').doc('config').set(Object.assign({}, cfg, o, { updatedAt: FV.serverTimestamp() })));
-  const kv = (l, v) => h('div', { class: 'ccrow' }, h('div', {}, h('b', { text: l }), h('span', { text: v })));
-  const U = f.usage || {}, today = new Date().toISOString().slice(0, 10);
-  const meter = (key, name, what) => {
-    const u = (U.day === today && U[key]) || { used: 0, limit: 100 }, used = u.used || 0, lim = u.limit || 100, overNow = !!u.over || used >= lim, pct = Math.min(100, Math.round(used / lim * 100));
-    const reset = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate() + 1)).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
-    return h('div', { class: 'ccmeter' + (overNow ? ' over' : pct >= 80 ? ' warn' : ''), id: 'meter_' + key },
-      h('div', { class: 'ccmeterhd' }, h('b', { text: name }), h('span', { text: what }), overNow ? h('em', { text: 'LIMIT OVER' }) : null),
-      h('div', { class: 'ccmeterbar' }, h('i', { style: 'width:' + pct + '%' })),
-      h('div', { class: 'ccmeterft' }, h('strong', { text: fmt(used) + ' / ' + fmt(lim) }), h('span', { text: overNow ? 'Paused until ' + reset + ' (the daily reset)' : fmt(Math.max(0, lim - used)) + ' requests left today' })));
-  };
+  const key = sport === 'cricket' ? 'cricketdata' : 'apisports', U = f.usage || {}, today = new Date().toISOString().slice(0, 10);
+  const u = (U.day === today && U[key]) || { used: 0, limit: 100 }, used = u.used || 0, lim = u.limit || 100, over = !!u.over || used >= lim, pct = Math.min(100, Math.round(used / lim * 100));
+  const reset = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate() + 1)).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+  const M = (SpData.matches || []).filter(m => m.sport === sport), live = M.filter(m => m.status === 'live'), fresh = live.filter(m => !spStale(m)), openL = live.filter(m => m.bettingOpen && !spStale(m));
+  const next = running ? Math.max(0, iv * 60000 - ran) : 0, offAll = cfg.off || {}, isOff = !!offAll[key], svc = sport === 'cricket' ? 'CricketData' : 'API-Sports';
+  const line = (ok, t, sub) => h('div', { class: 'ccfline' + (ok === true ? ' ok' : ok === false ? ' bad' : '') }, h('i', { text: ok === true ? '✓' : ok === false ? '!' : '•' }), h('div', {}, h('b', { text: t }), sub ? h('span', { text: sub }) : null));
   return h('div', {},
-    ccSec('Requests today', h('span', { class: 'ccchip' + (ran < (iv + 3) * 60000 ? ' ok' : ''), text: f.lastRun ? 'Updated ' + ccAgoTxt(f.lastRun) : 'Not running yet' }),
-      h('div', { class: 'ccmeters' }, meter('cricketdata', 'CricketData.org', 'Cricket'), meter('apisports', 'API-Sports', 'Football and basketball')),
-      h('p', { class: 'ccnote', text: 'Counted by the data services themselves and refreshed after every update. A service that reaches its limit is not asked again until its daily reset; matches it covers keep their last score and betting pauses.' })),
+    h('div', { class: 'ccfcard' },
+      line(running, running ? 'Feed running' : f.lastRun ? 'Feed stopped' : 'Feed not started', f.lastRun ? 'Last update ' + ccAgoTxt(f.lastRun) + (running ? '  ·  next in about ' + Math.max(1, Math.round(next / 60000)) + ' min' : '  ·  start it on GitHub: Actions, Sports feed, Run workflow') : 'Start it on GitHub: Actions, Sports feed, Run workflow'),
+      isOff ? line(false, svc + ' requests are off', 'No data is fetched. Live betting pauses when scores go stale.') : null,
+      line(s0 ? !!s0.ok : null, SP_BY[sport].name + ' data', s0 ? (s0.ok ? live.length + ' live  ·  ' + M.filter(m => m.status === 'upcoming').length + ' upcoming' : s0.error || 'Problem') : 'Nothing yet'),
+      live.length ? line(fresh.length === live.length, fresh.length + ' of ' + live.length + ' live scores fresh', openL.length + ' taking bets') : null,
+      h('div', { class: 'ccmeter' + (over ? ' over' : pct >= 80 ? ' warn' : ''), id: 'meter_' + key },
+        h('div', { class: 'ccmeterhd' }, h('b', { text: 'Requests today' }), h('span', { text: sport === 'cricket' ? 'CricketData' : 'API-Sports' }), over ? h('em', { text: 'LIMIT OVER' }) : null),
+        h('div', { class: 'ccmeterbar' }, h('i', { style: 'width:' + pct + '%' })),
+        h('div', { class: 'ccmeterft' }, h('strong', { text: fmt(used) + ' / ' + fmt(lim) }), h('span', { text: over ? 'resumes ' + reset : fmt(Math.max(0, lim - used)) + ' left' })))),
+    ccSec('Requests', null, h('div', { class: 'cconoff', id: 'feedOnOff' },
+      h('div', {}, h('b', { text: svc + ' requests' }), h('span', { text: sport === 'cricket' ? 'Cricket' : 'Football and basketball' })),
+      h('button', { type: 'button', role: 'switch', 'aria-checked': String(!isOff), class: 'ccsw' + (isOff ? '' : ' on'), id: 'feedSwitch', onclick: () => setCfg({ off: Object.assign({}, offAll, { [key]: !isOff }) }).then(() => toast(svc + ' requests ' + (isOff ? 'on' : 'off') + '.')) }, h('i')))),
     ccSec('Update every', null, h('div', {},
-      h('div', { class: 'cmaud', id: 'feedInterval' }, [1, 5, 15, 30, 60].map(v => h('button', { type: 'button', class: 'achip' + (iv === v ? ' on' : ''), 'data-v': v, text: v === 60 ? '1 hour' : v + ' min', onclick: () => setCfg({ interval: v }) }))),
-      h('p', { class: 'ccnote', text: 'How often live scores and odds are refreshed while matches are on. More often is smoother but uses more requests: with the free 100 a day, 1 minute lasts about 1–2 hours of live cricket. A change applies within about 20 seconds.' }),
-      h('div', { class: 'pvrow' },
-        h('button', { type: 'button', class: 'ccbtn primary sm', id: 'feedNow', onclick: () => setCfg({ runNow: Date.now() }).then(() => toast('Asked the feed to update now.')) }, h('span', { text: 'Update now' })),
-        h('button', { type: 'button', class: 'ccbtn ghost sm', id: 'feedDetail', onclick: () => setCfg({ detail: !cfg.detail }) }, h('span', { text: 'Detailed scoreboard: ' + (cfg.detail ? 'On' : 'Off') }))),
-      h('p', { class: 'ccnote', text: 'The detailed scoreboard adds batters, the bowler, this over and batter markets for live cricket. It costs two more requests per live match at every update and may need a paid CricketData plan.' }))),
-    ccSec('Feed', null, h('div', { class: 'cclist' },
-      kv('Source', sport === 'cricket' ? 'CricketData.org (GitHub secret CRICKETDATA_KEY)' : 'API-Sports (GitHub secret APISPORTS_KEY)'),
-      kv(SP_BY[sport].name, s0 ? (s0.ok ? (s0.matches || 0) + ' matches listed  ·  full schedule ' + (s0.full ? ccAgoTxt(s0.full) : 'not yet') : 'Problem: ' + (s0.error || 'unknown')) : 'Nothing from the feed yet.'),
-      kv('Running', f.lastRun ? 'The GitHub job stays on and updates every ' + (iv === 60 ? 'hour' : iv + ' min') + '. Last update ' + new Date(f.lastRun).toLocaleTimeString() + (f.calls != null ? ', ' + f.calls + ' requests' : '') : 'Start it from GitHub: Actions, Sports feed, Run workflow.'),
-      f.errors && f.errors.length ? kv('Last problems', f.errors.slice(-3).join('  |  ')) : null)));
+      h('div', { class: 'cmaud', id: 'feedInterval' }, [1, 5, 15, 30, 60].map(v => h('button', { type: 'button', class: 'achip' + (iv === v ? ' on' : ''), 'data-v': v, text: v === 60 ? '1 h' : v + ' min', onclick: () => setCfg({ interval: v }) }))),
+      h('div', { class: 'pvrow', style: 'margin-top:10px' },
+        h('button', { type: 'button', class: 'ccbtn primary sm', id: 'feedNow', disabled: isOff, onclick: () => setCfg({ runNow: Date.now() }).then(() => toast('The feed updates within about 20 seconds.')) }, h('span', { text: 'Update now' })),
+        sport === 'cricket' ? h('button', { type: 'button', class: 'ccbtn ghost sm', id: 'feedDetail', onclick: () => setCfg({ detail: !cfg.detail }) }, h('span', { text: 'Batters and bowler: ' + (cfg.detail ? 'On' : 'Off') })) : null),
+      h('p', { class: 'ccfhint', text: 'Free plan: 100 requests a day. 1 min uses them in about 2 hours of live play' + (sport === 'cricket' ? '; batters and bowler cost 2 more per live match each update.' : '.') }))),
+    f.errors && f.errors.length ? ccSec('Last problems', null, h('div', { class: 'ccferrs' }, f.errors.slice(-3).reverse().map(e => h('p', { text: e })))) : null);
 }
 
 function renderRummy() {
