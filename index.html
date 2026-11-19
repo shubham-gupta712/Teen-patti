@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build:20261120h -->
+<!-- build:20261120i -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -4432,6 +4432,17 @@ body .cc .cctlist>*{min-width:0}
 .sptbl table{font-size:10.5px}.sptbl th,.sptbl td{padding:5px 8px}.sptbl table.num thead th{font-size:8.5px}
 .spmbet{font-size:11px;padding:6px 9px}
 .spbetsum b{font-size:13px}.spbetsum span{font-size:9px}.spbet{padding:7px 9px}.spbettop b{font-size:11.5px}.spbetpick,.spbetnums{font-size:11px}.spbetwhen{font-size:9.5px}
+/* top bar, round 3: a plain back arrow and a slim bar */
+.spwrap .stop{padding:calc(env(safe-area-inset-top) + 4px) 8px 4px 4px !important;min-height:0}
+.spwrap .stop .pback2{width:32px !important;height:32px !important;padding:5px !important;background:none !important;border:0 !important;box-shadow:none !important;border-radius:8px !important}
+.spwrap .stop .pback2 svg,.spwrap .stop .pback2 .pico{filter:none}
+.spwrap .stop .hchips{height:28px;box-shadow:none !important;border-width:1px !important}.spwrap .stop .hchips .pchip{width:17px;height:17px}.spwrap .stop .hchips b{font-size:12.5px !important}
+.spwrap .stop .hchips .pplus{width:20px !important;height:20px !important;font-size:13px !important}
+.spwrap .stop .hadmin{height:26px;box-sizing:border-box;padding:0 10px !important;margin:0}
+/* the page title: a gold heading between two thin rules */
+.sphead{display:flex;align-items:center;gap:12px;padding:8px 18px 2px;position:relative;z-index:1}
+.sphead i{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(226,189,107,.7))}.sphead i:last-child{background:linear-gradient(90deg,rgba(226,189,107,.7),transparent)}
+.sphead h1{margin:0;font:700 22px/1.1 Georgia,'Times New Roman',serif;letter-spacing:.14em;text-transform:uppercase;background:linear-gradient(180deg,#fff3c4 10%,#e9b949 55%,#b9822a 95%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 3px rgba(0,0,0,.45))}
 /* console: approvals and the request switch */
 .cc .ccsecs:has(>:nth-child(4)){grid-template-columns:repeat(4,1fr);gap:4px}.cc .ccsecs:has(>:nth-child(4)) button{font-size:11.5px;gap:4px;padding:0 2px;min-width:0}.cc .ccsecs:has(>:nth-child(4)) button .cci{width:14px;height:14px}
 .ccaplist{display:flex;flex-direction:column;gap:6px}
@@ -14132,7 +14143,7 @@ class AppError extends Error {}
 let toastTimer = null;
 /* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
    few bytes of the current file; if its build is newer, a banner offers a reload. */
-const BUILD = '20261120h';
+const BUILD = '20261120i';
 const Fresh = {
   at: 0, shown: false,
   async check(force) {
@@ -17214,13 +17225,13 @@ const SP_OPT_ORDER = ['home', 'draw', 'away'];
 const spOptKeys = mk => Array.isArray(mk.order) && mk.order.length ? mk.order.filter(k => mk.opts && mk.opts[k]) : SP_OPT_ORDER.filter(k => mk.opts && mk.opts[k]).concat(Object.keys(mk.opts || {}).filter(k => !SP_OPT_ORDER.includes(k)));
 
 // how fresh a live score is
-const spAge = m => { const t = Number(m.scoreAt) || Number(m.seenAt) || 0; return t ? Date.now() - t : Infinity; };
+const spAge = m => { const t = Number(m.scoreAt) || m.startAt || 0; return t ? Date.now() - t : Infinity; };
 const spSeenAge = m => { const t = Number(m.seenAt) || 0; return t ? Date.now() - t : Infinity; };
 const spStale = m => m.status === 'live' && spSeenAge(m) > 12 * 60000;
 // a live cricket score that has stopped moving: the data service stopped updating it (the same test as the data job)
 const spMulti = m => /test|first|fc/i.test(m.type || '') || /^day \d/i.test(m.detail || '');
 const spFrozenMs = m => { const t = String(m.type || '').toLowerCase(); return spMulti(m) ? 20 * 3600e3 : t === 't10' ? 30 * 60000 : t === 'odi' ? 75 * 60000 : 45 * 60000; };
-const spFrozen = m => m.sport === 'cricket' && m.status === 'live' && Date.now() - (Number(m.scoreAt) || Number(m.seenAt) || m.startAt || 0) > spFrozenMs(m);
+const spFrozen = m => m.sport === 'cricket' && m.status === 'live' && Date.now() - (Number(m.scoreAt) || m.startAt || 0) > spFrozenMs(m);
 const spTbc = m => [m.home, m.away].some(t => /^(tbc|tba|tbd|to be (confirmed|announced|decided))$/i.test(String((t && t.name) || '').trim()));
 const spAgoShort = ms => ms === Infinity ? '' : ms < 60000 ? 'just now' : ms < 3600e3 ? Math.round(ms / 60000) + ' min ago' : Math.round(ms / 3600e3) + ' h ago';
 // can a bet be placed on this market right now? Before the start, or during play once the odds have settled
@@ -17356,7 +17367,7 @@ function renderSports() {
   }
   const f = SpData.feed, upd = f && f.lastRun ? 'Feed checked ' + ccAgoTxt(f.lastRun) : '';
   return h('div', { class: 'spwrap', id: 'sportsPage' }, top,
-    h('div', { class: 'sphead' }, h('h1', { text: 'Sports' })),
+    h('div', { class: 'sphead' }, h('i'), h('h1', { text: 'Sports' }), h('i')),
     openM ? null : chips, openM ? null : tabs, h('div', { class: 'splist', id: 'spList' }, body),
     upd ? h('p', { class: 'spfoot', text: upd }) : null);
 }
@@ -17536,17 +17547,20 @@ function ccSportPage(sport, sec) {
         h('em', { text: fmt(b.stake) }), h('i', { class: 'spst s-' + b.status, text: b.status.toUpperCase() })))) : h('p', { class: 'ccnote', text: 'No bets on ' + SP_BY[sport].name + ' yet.' }))));
   }
   // matches: live first, then upcoming, then finished ones still to settle
-  const mine = M.filter(m => m.sport === sport && m.approved === true), live = mine.filter(m => m.status === 'live'), up = mine.filter(m => m.status === 'upcoming'), todo = mine.filter(m => (m.status === 'finished' || m.status === 'cancelled') && !m.settled);
+  const mine = M.filter(m => m.sport === sport && m.approved === true), stuck = mine.filter(m => spFrozen(m) && !m.settled), live = mine.filter(m => m.status === 'live' && !spFrozen(m)), up = mine.filter(m => m.status === 'upcoming'), todo = mine.filter(m => (m.status === 'finished' || m.status === 'cancelled') && !m.settled);
   const done = mine.filter(m => m.settled).sort((x, y) => y.startAt - x.startAt).slice(0, 10);
   const sorted = [].concat(live.sort((x, y) => x.startAt - y.startAt), todo, up.sort((x, y) => x.startAt - y.startAt));
   return h('div', { class: 'ccpage fixed', id: 'spAdminPage' }, h('div', { class: 'ccscroll' },
     ccSec('Matches', h('span', { class: 'ccchip', text: live.length + ' live  ·  ' + up.length + ' upcoming' + (todo.length ? '  ·  ' + todo.length + ' to settle' : '') }),
-      sorted.length ? h('div', { class: 'ccsplist' }, sorted.map(m => ccSportRow(m, B))) : spEmpty('No ' + SP_BY[sport].name.toLowerCase() + ' matches', 'Approve matches on the Approvals tab and they show here and to players.')),
+      sorted.length || stuck.length ? h('div', { class: 'ccsplist' }, sorted.map(m => ccSportRow(m, B))) : spEmpty('No ' + SP_BY[sport].name.toLowerCase() + ' matches', 'Approve matches on the Approvals tab and they show here and to players.')),
+    stuck.length ? ccSec('Stuck: no score change', h('span', { class: 'ccchip', text: String(stuck.length) }), h('div', {},
+      h('p', { class: 'ccnote', text: 'The data service stopped updating these. Players do not see them and cannot bet. The feed looks each one up again every 30 min and closes it with all bets refunded once it is past its latest finish. Settle one yourself below if you know the result.' }),
+      h('div', { class: 'ccsplist' }, stuck.map(m => ccSportRow(m, B))))) : null,
     done.length ? ccSec('Settled', null, h('div', { class: 'ccsplist' }, done.map(m => ccSportRow(m, B)))) : null));
 }
 function ccSportRow(m, B) {
   const a = Admin.st, open = a.spOpen === m.id, bets = B.filter(b => b.matchId === m.id), ob = bets.filter(b => b.status === 'open'), mk = m.markets && m.markets.win;
-  const lab = spFrozen(m) ? 'NO SCORE CHANGE FOR ' + spAgoShort(spAge(m)).replace(' ago', '').toUpperCase() + '  ·  hidden from players, closes by itself' : m.status === 'live' ? 'LIVE' + (m.detail ? '  ·  ' + m.detail : '') : m.status === 'upcoming' ? spWhen(m.startAt) : m.settled ? 'Settled' : m.status === 'cancelled' ? 'Cancelled  ·  to settle' : 'Finished  ·  to settle';
+  const lab = spFrozen(m) ? 'NO SCORE CHANGE FOR ' + spAgoShort(spAge(m)).replace(' ago', '').toUpperCase() + (m.detail ? '  ·  ' + m.detail : '') : m.status === 'live' ? 'LIVE' + (m.detail ? '  ·  ' + m.detail : '') : m.status === 'upcoming' ? spWhen(m.startAt) : m.settled ? 'Settled' : m.status === 'cancelled' ? 'Cancelled  ·  to settle' : 'Finished  ·  to settle';
   const sc = m.score || {};
   const settle = async (r, label) => {
     const n = ob.length;
