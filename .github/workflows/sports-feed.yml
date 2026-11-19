@@ -1,5 +1,6 @@
 # Teen Patti Club: brings sports matches, live scores and results into Firebase and settles bets.
-# Runs about every 15 minutes (GitHub may start it a few minutes late when it is busy).
+# Each run stays on for about 5 h 40 min, updating at the interval the admin picks on the console (Data feed tab).
+# The schedule below starts the next run as soon as the previous one ends, so it runs around the clock.
 # Needs these repository secrets (Settings > Secrets and variables > Actions):
 #   FIREBASE_SERVICE_ACCOUNT  the whole JSON file from Firebase > Project settings > Service accounts > Generate new private key
 #   APISPORTS_KEY             your API-Sports key (football and basketball)
@@ -16,7 +17,7 @@ concurrency:
 jobs:
   feed:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,3 +33,4 @@ jobs:
           CRICKETDATA_KEY: ${{ secrets.CRICKETDATA_KEY }}
           FOOTBALL_LEAGUES: ${{ vars.FOOTBALL_LEAGUES }}
           BASKETBALL_LEAGUES: ${{ vars.BASKETBALL_LEAGUES }}
+          RUN_FOR_MIN: '340'
