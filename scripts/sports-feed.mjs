@@ -1,4 +1,4 @@
-// Teen Patti Club - sports data job (version 2).
+// Teen Patti Club - sports data job (version 4: approvals and request switch).
 // Started by GitHub Actions (.github/workflows/sports-feed.yml) and then STAYS ON for up to ~5 h 45 min, updating
 // every few minutes (the admin picks 1, 5, 15, 30 or 60 minutes on the console's Data feed tab). Each update:
 //   1. reads matches, live scores and results from the data services (only what is needed: the full schedule
@@ -265,14 +265,20 @@ export async function run({ db, inc, ts, fetchJson, env, now = Date.now(), log =
     return json;
   };
   if (!existing) { existing = {}; (await db.collection('sports').get()).docs.forEach(d => { existing[d.id] = d.data(); }); }
+  // matches listed before approvals existed: those not started yet wait for the admin; the rest carry on (they may have bets)
+  for (const [id, m] of Object.entries(existing)) {
+    if (m.approved === undefined) { const ok = m.source === 'manual' || m.status !== 'upcoming' || m.startAt <= now; await db.doc('sports/' + id).update({ approved: ok }); m.approved = ok; }
+  }
   const tracked = sport => Object.entries(existing).filter(([, m]) => m.sport === sport && m.source !== 'manual');
-  const hot = m => m.status === 'live' || (m.status === 'upcoming' && m.startAt - now < SOON_MS);
+  // only matches the admin approved for players are worth live requests
+  const hot = m => m.approved === true && !m.adminCancelled && (m.status === 'live' || (m.status === 'upcoming' && m.startAt - now < SOON_MS));
+  const off = config.off || {};          // the admin can switch each service's requests off
   const needsLive = sport => tracked(sport).some(([, m]) => hot(m) && !m.settled);
   const dates = Array.from({ length: DAYS_AHEAD + 1 }, (_, i) => new Date(now + i * 864e5).toISOString().slice(0, 10));
   const found = { football: [], basketball: [], cricket: [] };
   const fail = (sport, e) => { errors.push(sport + ': ' + e.message); sports[sport] = Object.assign({}, sports[sport], { ok: false, error: e.message }); };
 
-  if (env.APISPORTS_KEY) {
+  if (env.APISPORTS_KEY && !off.apisports) {
     const H = { 'x-apisports-key': env.APISPORTS_KEY };
     // FOOTBALL
     try {
@@ -295,7 +301,7 @@ export async function run({ db, inc, ts, fetchJson, env, now = Date.now(), log =
     } catch (e) { fail('basketball', e); }
   }
   // CRICKET
-  if (env.CRICKETDATA_KEY) {
+  if (env.CRICKETDATA_KEY && !off.cricketdata) {
     const B = 'https://api.cricapi.com/v1', k = encodeURIComponent(env.CRICKETDATA_KEY);
     try {
       const full = !sports.cricket || !sports.cricket.full || now - sports.cricket.full > FULL_EVERY_MS;
@@ -308,9 +314,18 @@ export async function run({ db, inc, ts, fetchJson, env, now = Date.now(), log =
         const r = await call('cricketdata', B + '/currentMatches?apikey=' + k + '&offset=0');
         (r.data || []).map(fromCricket).filter(Boolean).forEach(m => { const i = found.cricket.findIndex(x => x.id === m.id); if (i >= 0) found.cricket[i] = m; else found.cricket.push(m); });
         sports.cricket = Object.assign({}, sports.cricket, { ok: true, error: '' });
+        // matches we show as live (or that should have started) but the service no longer lists as current: they have
+        // usually ended. Ask for each one by itself (a few per update, the longest unseen first) so they finish and settle.
+        const seen = new Set(found.cricket.map(m => m.id));
+        const lost = tracked('cricket').filter(([id, m]) => !m.settled && m.approved === true && !m.adminCancelled && !seen.has(id) && (m.status === 'live' || (m.status === 'upcoming' && m.startAt < now - 30 * 60000)))
+          .sort((a, b) => (a[1].seenAt || 0) - (b[1].seenAt || 0)).slice(0, 3);
+        for (const [, m] of lost) {
+          try { const r1 = await call('cricketdata', B + '/match_info?apikey=' + k + '&id=' + encodeURIComponent(m.srcId)); const x = r1.data && fromCricket(r1.data); if (x) found.cricket.push(x); }
+          catch (e) { errors.push('cricket match info: ' + e.message); break; }
+        }
       }
       // the detailed scoreboard: two more requests per live match, only when the admin turned it on
-      if (config.detail) for (const m of found.cricket.filter(x => x.status === 'live' && existing[x.id])) {
+      if (config.detail) for (const m of found.cricket.filter(x => x.status === 'live' && existing[x.id] && existing[x.id].approved === true)) {
         try { const card = await call('cricketdata', B + '/match_scorecard?apikey=' + k + '&id=' + encodeURIComponent(m.srcId)); let bbb = null;
           try { bbb = await call('cricketdata', B + '/match_bbb?apikey=' + k + '&id=' + encodeURIComponent(m.srcId)); } catch (e) { errors.push('cricket ball by ball: ' + e.message); }
           m.live = cricketDetail(card, bbb); }
@@ -323,28 +338,31 @@ export async function run({ db, inc, ts, fetchJson, env, now = Date.now(), log =
   for (const sport of Object.keys(found)) {
     let list = found[sport].filter(m => m && m.startAt && !isNaN(m.startAt));
     const fresh = list.filter(m => !existing[m.id] && m.status === 'upcoming').sort((a, b) => a.startAt - b.startAt).slice(0, MAX_PER_SPORT);
-    list = list.filter(m => existing[m.id] || fresh.includes(m) || m.status === 'live');
+    // a match the club has not listed yet only joins before it starts: the admin approves it for players first
+    list = list.filter(m => existing[m.id] || fresh.includes(m));
     for (const m of list) {
       const old = existing[m.id];
       const base = { sport: m.sport, league: m.league, leagueLogo: m.leagueLogo, home: m.home, away: m.away, startAt: m.startAt, status: m.status, score: m.score, detail: m.detail,
-        source: m.sport === 'cricket' ? 'cricketdata' : 'apisports', srcId: m.srcId, type: m.type || '', updatedAt: ts() };
+        source: m.sport === 'cricket' ? 'cricketdata' : 'apisports', srcId: m.srcId, type: m.type || '', seenAt: now, updatedAt: ts() };
       if (m.live) base.live = m.live;
       if (!old) {
         if (m.status === 'finished' || m.status === 'cancelled') continue;
         const mk = m.status === 'live' ? liveMarkets(m) || openingMarkets(m) : openingMarkets(m);
-        Object.assign(base, { bettingOpen: true, markets: mk, result: {}, decided: [], settled: false, lockUntil: m.status === 'live' ? now + LOCK_MS : 0, createdAt: ts() });
+        Object.assign(base, { approved: false, bettingOpen: true, markets: mk, result: {}, decided: [], settled: false, lockUntil: m.status === 'live' ? now + LOCK_MS : 0, scoreAt: now, createdAt: ts() });
         await db.doc('sports/' + m.id).set(base); counts.added++; existing[m.id] = Object.assign({}, base, { createdAt: now, updatedAt: now, lockUntil: base.lockUntil });
         continue;
       }
-      if (old.settled) continue;
+      if (old.settled || old.adminCancelled) continue;
       const changed = JSON.stringify(old.score || {}) !== JSON.stringify(m.score) || old.status !== m.status || old.detail !== m.detail;
+      if (changed) base.scoreAt = now;
       if (m.status === 'live') {
         const mk = liveMarkets(m);
-        if (mk) { base.markets = keepDecided(mk, old); }
+        // live odds from the score; a match with no live model (a Test) keeps its prices but takes no bets during play
+        base.markets = mk ? keepDecided(mk, old) : closeAll(old.markets);
         if (changed) base.lockUntil = now + LOCK_MS;
-        if (old.status === 'upcoming') base.bettingOpen = true;
+        base.bettingOpen = !old.adminClosed;          // open during play, unless the admin closed it
       } else if (m.status !== 'upcoming') { base.bettingOpen = false; }
-      if (changed || m.status === 'live' || old.status !== m.status) { await db.doc('sports/' + m.id).update(base); counts.updated++; Object.assign(old, base, { lockUntil: base.lockUntil != null ? base.lockUntil : old.lockUntil }); }
+      if (changed || m.status === 'live' || old.status !== m.status || !old.seenAt || now - old.seenAt > 5 * 60000) { await db.doc('sports/' + m.id).update(base); counts.updated++; Object.assign(old, base, { lockUntil: base.lockUntil != null ? base.lockUntil : old.lockUntil }); }
       // settle every market whose outcome is now known
       const done = decidedNow(m, old);
       const newly = done.filter(k => !(old.decided || []).includes(k));
@@ -359,7 +377,13 @@ export async function run({ db, inc, ts, fetchJson, env, now = Date.now(), log =
     }
   }
   // any listed match that has started without the services telling us (e.g. a limit was reached): no more bets
+  const staleMs = Math.max(12 * 60000, 2.5 * (Number(config.interval) || 15) * 60000);
   for (const [id, m] of Object.entries(existing)) {
+    // not approved for players: no bets are possible, so nothing to pause; once it has started it can never be approved, so it goes
+    if (m.approved === false) { if (m.startAt < now - 6 * 3600e3) { await db.doc('sports/' + id).delete(); delete existing[id]; counts.removed++; } continue; }
+    // a live match with no fresh score: betting pauses until the service sends one
+    if (m.status === 'live' && !m.settled && m.bettingOpen && m.source !== 'manual' && now - (m.seenAt || 0) > staleMs) {
+      await db.doc('sports/' + id).update({ bettingOpen: false, updatedAt: ts() }); m.bettingOpen = false; }
     if (m.status === 'upcoming' && m.bettingOpen && m.startAt <= now && m.source !== 'manual' && (over(m.sport === 'cricket' ? 'cricketdata' : 'apisports') || now - m.startAt > 30 * 60000)) {
       await db.doc('sports/' + id).update({ bettingOpen: false, updatedAt: ts() }); m.bettingOpen = false; }
     if (m.status === 'upcoming' && m.bettingOpen && m.startAt <= now && m.source === 'manual') { await db.doc('sports/' + id).update({ bettingOpen: false, updatedAt: ts() }); m.bettingOpen = false; }
@@ -367,7 +391,7 @@ export async function run({ db, inc, ts, fetchJson, env, now = Date.now(), log =
   }
   Object.keys(sports).forEach(k => { if (sports[k] && sports[k].ok) sports[k].matches = Object.values(existing).filter(m => m.sport === k && !m.settled).length; });
   const errs = (M0.errors || []).concat(errors.map(e => new Date(now).toISOString().slice(0, 16) + ' ' + e)).slice(-10);
-  await meta.set({ lastRun: now, calls, counts, sports, usage, errors: errs, interval: config.interval || 15, detail: !!config.detail, updatedAt: ts() });
+  await meta.set({ lastRun: now, calls, counts, sports, usage, errors: errs, interval: config.interval || 15, off: { apisports: !!off.apisports, cricketdata: !!off.cricketdata }, detail: !!config.detail, updatedAt: ts() });
   log('update', JSON.stringify({ calls, counts, errors, usage: { a: usage.apisports.used, c: usage.cricketdata.used } }));
   return { calls, counts, errors, usage };
 }
@@ -376,6 +400,7 @@ function liveMarkets(m) {
   if (m.sport === 'basketball') return basketballMarkets(m, m.elapsed || 0, m.pts[0], m.pts[1], m.leagueId === 12);
   return cricketMarkets(m, m.inn || [], (m.live && m.live.batting) || []);
 }
+function closeAll(mk) { const out = {}; Object.keys(mk || {}).forEach(k => { out[k] = Object.assign({}, mk[k], { open: false }); }); return out; }
 // markets already decided stay as they were (shut); markets that disappeared stay shut so their bets still settle
 function keepDecided(mk, old) {
   const out = Object.assign({}, mk);
