@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build:20261119j -->
+<!-- build:20261119k -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -4215,6 +4215,102 @@ body .cc .cctlist>*{min-width:0}
 .rc.mid u{font-size:calc(var(--u) * 46);right:calc(var(--u) * 5);bottom:calc(var(--u) * 3)}
 .rc.cutup.mid b{font-size:calc(var(--u) * 28)}.rc.cutup.mid i{top:calc(var(--u) * 33);font-size:calc(var(--u) * 23)}.rc.cutup.mid u{font-size:calc(var(--u) * 42)}
 .rmshowt.mid b{font-size:calc(var(--u) * 20)}.rmshowt.mid span{font-size:calc(var(--u) * 14)}
+
+/* ---- Sports ---- */
+.spwrap{min-height:100dvh;background:radial-gradient(120% 60% at 50% 0%,#174a33 0%,#0b2a1d 45%,#06170f 100%);color:#eef4ec;padding:0 0 calc(24px + env(safe-area-inset-bottom));box-sizing:border-box}
+.spwrap .stop{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,rgba(6,23,15,.96),rgba(6,23,15,.82));backdrop-filter:blur(6px)}
+.sphead{padding:6px 16px 4px}
+.sphead h1{margin:0;font:800 26px/1.15 Georgia,'Times New Roman',serif;color:#ffe9b0;letter-spacing:.01em}
+.sphead span{display:block;font:600 12px/1.4 system-ui;color:#a9c3b4;margin-top:2px}
+.spchips{display:flex;gap:8px;overflow-x:auto;padding:10px 16px 4px;scrollbar-width:none}.spchips::-webkit-scrollbar{display:none}
+.spchip{flex:0 0 auto;display:flex;align-items:center;gap:6px;height:36px;padding:0 12px;border-radius:999px;border:1px solid rgba(226,189,107,.35);background:rgba(255,255,255,.05);color:#e8dcc0;font:700 13px system-ui;cursor:pointer}
+.spchip i{font-style:normal;font-size:15px}.spchip em{font-style:normal;font:800 11px system-ui;min-width:18px;height:18px;line-height:18px;border-radius:9px;background:rgba(0,0,0,.3);color:#cdbf9f;text-align:center;padding:0 5px}
+.spchip.on{background:linear-gradient(180deg,#ffe08a,#d39a2e);color:#2a1a02;border-color:#fff0bf}.spchip.on em{background:rgba(42,26,2,.18);color:#2a1a02}
+.sptabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:10px 16px 6px;padding:4px;border-radius:14px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.06)}
+.sptab{display:flex;align-items:center;justify-content:center;gap:5px;height:36px;border-radius:10px;border:0;background:none;color:#b9c9bf;font:800 13px system-ui;cursor:pointer;white-space:nowrap;padding:0 4px}
+.sptab.on{background:#1c5a3d;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.sptab em{font-style:normal;font:800 11px system-ui;min-width:18px;height:18px;line-height:18px;border-radius:9px;background:#b56cff;color:#fff;padding:0 5px}
+.spdot{width:8px;height:8px;border-radius:50%;background:#6b7d73}.spdot.on{background:#ff4d6a;box-shadow:0 0 0 0 rgba(255,77,106,.6);animation:sppulse 1.6s infinite}
+@keyframes sppulse{0%{box-shadow:0 0 0 0 rgba(255,77,106,.6)}70%{box-shadow:0 0 0 7px rgba(255,77,106,0)}100%{box-shadow:0 0 0 0 rgba(255,77,106,0)}}
+.splist{padding:4px 12px 0}
+.spleague{margin:10px 0 14px}
+.spleaguehd{display:flex;align-items:center;gap:8px;padding:2px 6px 8px}
+.spleaguehd img{width:20px;height:20px;object-fit:contain}.spleaguehd i{font-style:normal;font-size:16px}
+.spleaguehd b{flex:1;font:800 13px/1.2 system-ui;letter-spacing:.04em;text-transform:uppercase;color:#e2bd6b}
+.spleaguehd em{font-style:normal;font:700 11px system-ui;color:#8fa79a}
+.spcard{margin:0 0 10px;padding:12px 12px 10px;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid rgba(226,189,107,.2);box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.spcard.live{border-color:rgba(255,77,106,.45)}
+.spcardtop{display:flex;align-items:center;gap:8px;margin-bottom:8px;min-height:20px}
+.spwhen{font:700 12px system-ui;color:#cdbf9f}
+.splive{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:999px;background:rgba(255,77,106,.16);color:#ff8a9c;font:900 11px system-ui;letter-spacing:.1em}
+.splive i{width:7px;height:7px;border-radius:50%;background:#ff4d6a;animation:sppulse 1.6s infinite}
+.spdetail{font:700 12px system-ui;color:#a9c3b4}
+.spmine{margin-left:auto;font:800 11px system-ui;color:#2a1a02;background:#ffd36b;border-radius:999px;padding:2px 8px}
+.spteam{display:flex;align-items:center;gap:10px;padding:4px 0}
+.spteam b{flex:1;font:700 15px/1.25 system-ui;color:#fff6e0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.spteam strong{font:800 15px system-ui;color:#ffe9b0;white-space:nowrap}
+.spteamlogo{width:26px;height:26px;object-fit:contain;flex:0 0 26px}
+.spteaminit{width:26px;height:26px;flex:0 0 26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:900 9px system-ui;color:#fff;letter-spacing:.02em}
+.spodds{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(226,189,107,.22)}
+.spmk{display:block;font:800 10px system-ui;letter-spacing:.12em;text-transform:uppercase;color:#8fa79a;margin-bottom:6px}
+.spoddsrow{display:grid;gap:8px}.spoddsrow.n2{grid-template-columns:1fr 1fr}.spoddsrow.n3{grid-template-columns:1fr 1fr 1fr}
+.spodd{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;align-items:center;column-gap:6px;padding:7px 10px;border-radius:12px;border:1px solid rgba(226,189,107,.45);background:linear-gradient(180deg,#123f2b,#0b2c1e);color:#fff;text-align:left;cursor:pointer;min-width:0}
+.spodd span{grid-row:1 / 3;font:900 12px system-ui;color:#e2bd6b;width:16px;text-align:center}
+.spodd i{font-style:normal;font:600 11px system-ui;color:#b9c9bf;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.spodd b{font:900 17px/1.1 system-ui;color:#ffe08a}
+.spodd:active{transform:scale(.97)}
+.spodd:disabled{opacity:.45;cursor:default}
+.spclosed{display:block;margin-top:6px;font:600 11px system-ui;color:#a9b4ad}
+.spnote{display:flex;align-items:center;justify-content:center;gap:10px;padding:40px 0;color:#a9c3b4;font:600 14px system-ui}
+.spspin{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.2);border-top-color:#ffd36b;animation:spspin 1s linear infinite}
+@keyframes spspin{to{transform:rotate(360deg)}}
+.spempty{padding-top:30px}
+.spfoot{text-align:center;font:600 11px system-ui;color:#7f978a;margin:14px 0 0}
+.spsub{margin:16px 6px 8px;font:800 12px system-ui;letter-spacing:.12em;text-transform:uppercase;color:#e2bd6b}
+.spbetsum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 4px}
+.spbetsum div{padding:10px 6px;border-radius:12px;background:rgba(0,0,0,.25);text-align:center}
+.spbetsum b{display:block;font:900 16px system-ui;color:#ffe9b0}.spbetsum span{display:block;font:600 10px system-ui;color:#9fb3a7;margin-top:2px}
+.spwrap .up,.ccspsum .up{color:#4ade80 !important}.spwrap .down,.ccspsum .down{color:#ff7a8a !important}
+.spbet{margin:0 0 8px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.spbet.s-won{border-color:rgba(74,222,128,.45)}.spbet.s-lost{opacity:.8}
+.spbettop{display:flex;align-items:center;gap:8px}.spbettop i{font-style:normal}.spbettop b{flex:1;font:800 14px system-ui;color:#fff6e0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.spst{font-style:normal;font:900 10px system-ui;letter-spacing:.1em;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.1);color:#ddd}
+.spst.s-open{background:rgba(181,108,255,.2);color:#d6b0ff}.spst.s-won{background:rgba(74,222,128,.18);color:#86efac}.spst.s-lost{background:rgba(255,122,138,.16);color:#ff9aa7}.spst.s-void{background:rgba(255,255,255,.1);color:#cdd}
+.spbetpick{margin-top:6px;font:600 13px system-ui;color:#c8d6cd}.spbetpick b{color:#ffe08a}
+.spbetnums{display:flex;justify-content:space-between;margin-top:6px;font:700 13px system-ui;color:#c8d6cd}.spbetnums strong{color:#ffe9b0}
+.spbetwhen{display:block;margin-top:4px;font:600 11px system-ui;color:#7f978a}
+.spslip{display:flex;flex-direction:column;gap:10px}
+.spslipm{display:flex;align-items:center;gap:10px}.spslipm i{font-style:normal;font-size:22px}
+.spslipm b{display:block;font:800 15px system-ui;color:#fff3d6}.spslipm span{display:block;font:600 12px system-ui;color:#b9ad92}
+.spslippick{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:14px;background:linear-gradient(180deg,#14452f,#0c2f20);border:1px solid rgba(226,189,107,.5)}
+.spslippick span{display:block;font:700 11px system-ui;letter-spacing:.08em;text-transform:uppercase;color:#a9c3b4}.spslippick b{display:block;font:800 17px system-ui;color:#fff}
+.spslippick strong{font:900 26px system-ui;color:#ffe08a}
+.spquick{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.spquick button{height:36px;border-radius:10px;border:1px solid rgba(226,189,107,.55);background:rgba(0,0,0,.25);color:#ffe9b0;font:800 12px system-ui;cursor:pointer}
+.spret{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:12px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.35)}
+.spret span{font:700 13px system-ui;color:#bfe8cf}.spret b{font:900 20px system-ui;color:#86efac}
+.spsmall{margin:0;font:600 11px/1.4 system-ui;color:#9fb3a7}
+.spslip .btn-primary{width:100%}
+/* console */
+.ccsplist{display:flex;flex-direction:column;gap:8px}
+.ccsprow{border-radius:14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);overflow:hidden}
+.ccsprow.s-live{border-color:rgba(255,77,106,.45)}
+.ccsphead{display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;background:none;border:0;color:inherit;text-align:left;cursor:pointer}
+.ccsphead>div{flex:1;min-width:0}.ccsphead b{display:block;font:800 14px/1.3 system-ui;color:#f2f5ff}.ccsphead span{display:block;font:500 12px/1.35 system-ui;color:#9aa7c7;margin-top:2px}
+.ccsphead em{font-style:normal;font:800 11px system-ui;color:#c9a7ff}
+.ccspmore{display:flex;flex-direction:column;gap:10px;padding:0 14px 14px}
+.ccspodds{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;align-items:end}
+.ccspodds label{display:flex;flex-direction:column;gap:4px;font:700 11px system-ui;color:#9aa7c7}
+.ccspodds input{height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.25);color:#fff;font:800 15px system-ui;padding:0 10px}
+.ccspres .cclabel{display:block;font:800 10px system-ui;letter-spacing:.12em;color:#9aa7c7;margin-bottom:6px}
+.ccspresbtns{display:flex;flex-wrap:wrap;gap:6px}
+.ccspsum{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.ccspsum div{padding:12px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.ccspsum b{display:block;font:800 18px system-ui;color:#f2f5ff}.ccspsum span{display:block;font:600 11px system-ui;color:#9aa7c7;margin-top:2px}
+.ccspbets{display:flex;flex-direction:column;gap:6px}
+.ccspbet{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04)}
+.ccspbet>div{flex:1;min-width:0}.ccspbet b{display:block;font:700 13px system-ui;color:#f2f5ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ccspbet span{display:block;font:500 11px system-ui;color:#9aa7c7}
+.ccspbet em{font-style:normal;font:800 13px system-ui;color:#ffe9b0}
 </style>
 </head>
 <body>
@@ -13904,7 +14000,7 @@ class AppError extends Error {}
 let toastTimer = null;
 /* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
    few bytes of the current file; if its build is newer, a banner offers a reload. */
-const BUILD = '20261119j';
+const BUILD = '20261119k';
 const Fresh = {
   at: 0, shown: false,
   async check(force) {
@@ -14770,7 +14866,7 @@ const AdminView = {
   watchOnly() { toast('You are watching as the admin. Players use this.'); }
 };
 // Home, Card games and the Teen Patti lobby: chosen by the address (#/home, #/games, #/lobby).
-const LOBBY_PAGES = ['home', 'games', 'lobby', 'rmlobby'];
+const LOBBY_PAGES = ['home', 'games', 'lobby', 'rmlobby', 'sports'];
 // Rummy's lobby: open to the admin now; to every player once its live tables are switched on
 const RUMMY_LIVE = true;
 const RUMMY_OPEN = () => RUMMY_LIVE || !!(S.isAdmin || S.realAdmin);
@@ -14915,6 +15011,7 @@ function render() {
     case 'games': node = renderGames(); break;
     case 'lobby': node = renderTPLobby(); break;
     case 'rmlobby': node = RUMMY_OPEN() ? renderRmLobby() : renderGames(); break;
+    case 'sports': node = renderSports(); break;
     case 'rummy': node = renderRummy(); break;
     case 'table': node = renderTable(); break;
     case 'admin': node = renderAdmin(); break;
@@ -15578,7 +15675,7 @@ function renderHome() {
     homeTop(), adminPill(),
     h('div', { class: 'htiles four' },
       tile('tileCards', 'cards', 't_cards', 'Cards', 'CARD ROOM', 'Teen Patti · Rummy · more', true, () => goTo('games')),
-      tile('tileSports', 'sports', 't_sports', 'Sports', 'SPORTS ARENA', 'Cricket · Football · Basketball', false, () => Sheets.soon('Sports', 'Sports games are under construction. They arrive here soon.')),
+      tile('tileSports', 'sports', 't_sports', 'Sports', 'SPORTS ARENA', 'Cricket · Football · Basketball', true, () => goTo('sports')),
       tile('tileBoard', 'board', 't_board', 'Board Games', 'GAMES ROOM', 'Classic board games', false, () => Sheets.soon('Board Games', 'Board games are under construction. They arrive here soon.')),
       tile('tileSlots', 'slots', 't_slots', 'Casino Slots', 'CASINO FLOOR', 'Slot machines', false, () => Sheets.soon('Casino Slots', 'Casino slots are under construction. They arrive here soon.')))], 'phome');
 }
@@ -16958,6 +17055,353 @@ function tpAdminTest(cfg, name, mode, watch) {
 function rmAdminTest(pp, name) {
   adminTestSheet({ title: name, sym: '\u2666', sub: 'A practice game on this phone  \u00b7  no real chips', max: 5, def: 2,
     play: async n => { Sheets.closeNow(); RM.stop(); RM.sess = null; RM.standing = false; RM._stub = null; RM.players = n + 1; RM.perPoint = pp; RM.autoStart = true; location.hash = '#/rummy'; } });
+}
+
+/* ==========================================================================
+   SPORTS: live and upcoming matches, odds, and play-chip bets
+   /sports/{id}        one match: teams, start, status, score, markets (each with its options and odds), result
+   /bets/{id}          one bet: who, which match and pick, the odds taken, stake, status (open, won, lost, void), payout
+   /sportsMeta/feed    what the scheduled data job last did
+   Matches come from the scheduled GitHub job (API-Sports for football and basketball, CricketData.org for cricket)
+   or are added by the admin. Bets close when a match starts; the job (or the admin) settles them from the result.
+   ========================================================================== */
+const SP_SPORTS = [{ id: 'cricket', name: 'Cricket', sym: '\u{1F3CF}' }, { id: 'football', name: 'Football', sym: '⚽' }, { id: 'basketball', name: 'Basketball', sym: '\u{1F3C0}' }];
+const SP_BY = Object.fromEntries(SP_SPORTS.map(x => [x.id, x]));
+const SP_MIN_BET = 10, SP_MAX_BET = 1000000;
+const spPayout = (stake, odds) => Math.floor(stake * odds + 0.000001);
+const spOdds = v => (Math.round(Number(v) * 100) / 100);
+const spOddsTxt = v => Number(v).toFixed(2);
+// the default markets for a new match: the club's opening prices, which the admin can change
+function spDefaultMarkets(sport, home, away, withDraw) {
+  const opts = { home: { label: home, odds: sport === 'football' ? 2.3 : 1.9 } };
+  if (sport === 'football' || withDraw) opts.draw = { label: 'Draw', odds: sport === 'football' ? 3.2 : 4.0 };
+  opts.away = { label: away, odds: sport === 'football' ? 2.9 : 1.9 };
+  return { win: { name: sport === 'football' ? 'Match result' : 'Match winner', open: true, opts } };
+}
+const SP_OPT_ORDER = ['home', 'draw', 'away'];
+const spOptKeys = mk => SP_OPT_ORDER.filter(k => mk.opts && mk.opts[k]).concat(Object.keys(mk.opts || {}).filter(k => !SP_OPT_ORDER.includes(k)));
+
+const SpRepo = {
+  col: () => db.collection('sports'),
+  ref: id => db.collection('sports').doc(id),
+  bets: () => db.collection('bets'),
+  bet: id => db.collection('bets').doc(id),
+  feed: () => db.collection('sportsMeta').doc('feed'),
+  // A bet: the stake leaves the wallet in the same write. The odds must be the ones on the match right now.
+  async place(matchId, mk, pick, odds, stake) {
+    const uid = S.user.uid, bref = SpRepo.bets().doc(), uref = Repo.userRef(uid), mref = SpRepo.ref(matchId);
+    await db.runTransaction(async tx => {
+      const us = await tx.get(uref), ms = await tx.get(mref);
+      if (!us.exists) throw new AppError('Your profile is missing. Sign out and back in.');
+      const u = us.data(), M = ms.exists ? ms.data() : null;
+      if (!M) throw new AppError('This match is no longer listed.');
+      if (M.status !== 'upcoming' || !M.bettingOpen || Date.now() >= M.startAt) throw new AppError('Betting on this match has closed.');
+      const m0 = M.markets && M.markets[mk], o = m0 && m0.open && m0.opts && m0.opts[pick];
+      if (!o) throw new AppError('This price is no longer offered.');
+      if (o.odds !== odds) throw new AppError('The odds just changed to ' + spOddsTxt(o.odds) + '. Check them and try again.');
+      if (!Number.isInteger(stake) || stake < SP_MIN_BET || stake > SP_MAX_BET) throw new AppError('Bet between ' + fmt(SP_MIN_BET) + ' and ' + fmt(SP_MAX_BET) + ' chips.');
+      if (u.chips < stake) throw new AppError('You only have ' + fmt(u.chips) + ' chips.');
+      tx.set(bref, { uid, name: u.name, matchId, sport: M.sport, match: M.home.name + ' v ' + M.away.name, startAt: M.startAt, market: mk, marketName: m0.name, pick, pickName: o.label,
+        odds: o.odds, stake, status: 'open', payout: 0, createdAt: FV.serverTimestamp() });
+      tx.update(uref, { chips: u.chips - stake, lastBet: bref.id, updatedAt: FV.serverTimestamp() });
+    });
+    if (S.profile) S.profile.chips -= stake;
+  },
+  // The admin settles a match: every open bet is won, lost or given back, and winners are paid.
+  // result: { win: 'home' | 'away' | 'draw' | 'void' } (one entry per market)
+  async settle(id, result, status) {
+    await SpRepo.ref(id).update({ status: status || 'finished', bettingOpen: false, result, updatedAt: FV.serverTimestamp() });
+    const sn = await SpRepo.bets().where('matchId', '==', id).get();
+    let n = 0, paid = 0;
+    for (const d of sn.docs) {
+      const b = d.data(); if (b.status !== 'open') continue;
+      const r = result[b.market] || 'void', st = r === 'void' ? 'void' : r === b.pick ? 'won' : 'lost';
+      const pay = st === 'won' ? spPayout(b.stake, b.odds) : st === 'void' ? b.stake : 0;
+      const batch = db.batch();
+      batch.update(d.ref, { status: st, payout: pay, settledAt: FV.serverTimestamp() });
+      if (pay > 0) batch.update(Repo.userRef(b.uid), { chips: FV.increment(pay), lastPayout: d.id, updatedAt: FV.serverTimestamp() });
+      await batch.commit(); n++; paid += pay;
+    }
+    await SpRepo.ref(id).update({ settled: true, updatedAt: FV.serverTimestamp() });
+    return { n, paid };
+  }
+};
+
+/* ---- what this phone is watching: the matches, my bets (or, for the admin, every recent bet) and the feed ---- */
+const SpData = {
+  sc: null, matches: null, bets: null, feed: null, who: '',
+  open() {
+    const who = (S.user && S.user.uid) + (S.isAdmin ? ':a' : '');
+    if (SpData.sc && SpData.who === who) return;
+    SpData.close(); SpData.who = who;
+    const sc = SpData.sc = Scopes.open('sports');
+    sc.listen(SpRepo.col(), q => { SpData.matches = q.docs.map(d => Object.assign({ id: d.id }, d.data())); SpData.redraw(); }, () => { SpData.matches = []; SpData.redraw(); });
+    const bq = S.isAdmin ? SpRepo.bets().orderBy('createdAt', 'desc').limit(300) : SpRepo.bets().where('uid', '==', S.user.uid);
+    sc.listen(bq, q => { SpData.bets = q.docs.map(d => Object.assign({ id: d.id }, d.data())).sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt)); SpData.redraw(); }, () => { SpData.bets = []; SpData.redraw(); });
+    sc.listen(SpRepo.feed(), s => { SpData.feed = s.exists ? s.data() : null; SpData.redraw(); }, () => {});
+    sc.every(() => { if (S.route && S.route.name === 'sports') SpData.redraw(); }, 30000);
+  },
+  close() { if (SpData.sc) Scopes.close(SpData.sc); SpData.sc = null; SpData.matches = null; SpData.bets = null; SpData.who = ''; },
+  redraw() {
+    if (S.route && S.route.name === 'admin') { if (Admin.st.game && GAME_BY_ID[Admin.st.game] && GAME_BY_ID[Admin.st.game].cat === 'sports' && !Admin.st.spEdit) Admin.paint(); }
+    else if (S.route && S.route.name === 'sports') scheduleRender();
+    if (Sheets.el && Sheets.el.id === 'spSlip') spSlipRefresh();
+  },
+  live(sport) { return (SpData.matches || []).filter(m => m.status === 'live' && (!sport || m.sport === sport)).sort((a, b) => a.startAt - b.startAt); },
+  upcoming(sport) { return (SpData.matches || []).filter(m => m.status === 'upcoming' && (!sport || m.sport === sport)).sort((a, b) => a.startAt - b.startAt); },
+  myOpen(id) { return (SpData.bets || []).filter(b => b.matchId === id && b.status === 'open' && (!S.user || b.uid === S.user.uid)); }
+};
+
+/* ---- little pieces ---- */
+function spWhen(ms) {
+  const d = new Date(ms), now = new Date(), day = 864e5, t = d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+  const d0 = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime(), dd = Math.floor((ms - d0) / day);
+  return dd === 0 ? 'Today ' + t : dd === 1 ? 'Tomorrow ' + t : d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }) + ' ' + t;
+}
+function spTeamMark(t) {
+  if (t && t.logo && /^https:\/\//.test(t.logo)) return h('img', { class: 'spteamlogo', src: t.logo, alt: '', loading: 'lazy', referrerpolicy: 'no-referrer', onerror: e => { e.target.replaceWith(spInitials(t)); } });
+  return spInitials(t);
+}
+function spInitials(t) {
+  const n = String((t && (t.short || t.name)) || '?'), w = n.split(/\s+/).filter(Boolean), ab = (t && t.short) ? t.short.slice(0, 3) : (w.length > 1 ? w[0][0] + w[1][0] : n.slice(0, 3));
+  let hsh = 0; for (const c of n) hsh = (hsh * 31 + c.charCodeAt(0)) % 360;
+  return h('span', { class: 'spteaminit', style: 'background:hsl(' + hsh + ',45%,32%)', text: ab.toUpperCase() });
+}
+const spShort = (t, k) => k === 'draw' ? 'Draw' : (t && (t.short || t.name)) || '';
+
+/* ---- the players' page ---- */
+function renderSports() {
+  SpData.open();
+  const st = S.sp || (S.sp = { sport: '', tab: 'live' }), M = SpData.matches;
+  const top = screenTop('Back to home', () => goTo('home'));
+  const counts = id => SpData.live(id).length + SpData.upcoming(id).length;
+  const chips = h('div', { class: 'spchips', role: 'tablist', id: 'spSports' },
+    [{ id: '', name: 'All', sym: '★' }].concat(SP_SPORTS).map(x => h('button', { type: 'button', class: 'spchip' + (st.sport === x.id ? ' on' : ''), id: 'spSport_' + (x.id || 'all'), onclick: () => { st.sport = x.id; scheduleRender(); } },
+      h('i', { text: x.sym }), h('span', { text: x.name }), M ? h('em', { text: String(counts(x.id)) }) : null)));
+  const live = SpData.live(st.sport), up = SpData.upcoming(st.sport), mine = (SpData.bets || []).filter(b => !st.sport || b.sport === st.sport), openN = mine.filter(b => b.status === 'open').length;
+  if (st.tab === 'live' && M && !live.length && up.length && !st.pickedTab) st.tab = 'up';
+  const tab = (k, t, n) => h('button', { type: 'button', role: 'tab', class: 'sptab' + (st.tab === k ? ' on' : ''), id: 'spTab_' + k, onclick: () => { st.tab = k; st.pickedTab = true; scheduleRender(); } },
+    k === 'live' ? h('i', { class: 'spdot' + (n ? ' on' : '') }) : null, h('span', { text: t }), n ? h('em', { text: String(n) }) : null);
+  const tabs = h('div', { class: 'sptabs', role: 'tablist' }, tab('live', 'Live', live.length), tab('up', 'Upcoming', up.length), tab('bets', 'My bets', openN));
+  let body;
+  if (!M) body = h('div', { class: 'spnote' }, h('span', { class: 'spspin' }), h('span', { text: 'Loading matches...' }));
+  else if (st.tab === 'bets') body = spMyBets(mine);
+  else {
+    const list = st.tab === 'live' ? live : up;
+    body = list.length ? spLeagues(list) : spEmpty(st.tab === 'live' ? 'No live matches right now' : 'No upcoming matches yet',
+      st.tab === 'live' ? (up.length ? 'The next one starts ' + spWhen(up[0].startAt) + '. Bet on it now in Upcoming.' : 'Matches show up here as soon as they start.') : 'When matches are scheduled they show up here with their odds.');
+  }
+  const f = SpData.feed, upd = f && f.lastRun ? 'Scores updated ' + ccAgoTxt(f.lastRun) : '';
+  return h('div', { class: 'spwrap', id: 'sportsPage' }, top,
+    h('div', { class: 'sphead' }, h('h1', { text: 'Sports' }), h('span', { text: 'Bet with play chips  ·  odds lock when you bet' })),
+    chips, tabs, h('div', { class: 'splist', id: 'spList' }, body),
+    upd ? h('p', { class: 'spfoot', text: upd }) : null);
+}
+const ccAgoTxt = ms => { const s = Math.max(0, Math.round((Date.now() - ms) / 1000)); return s < 60 ? 'just now' : s < 3600 ? Math.round(s / 60) + ' min ago' : s < 86400 ? Math.round(s / 3600) + ' h ago' : Math.round(s / 86400) + ' days ago'; };
+// matches grouped by competition, the soonest first
+function spLeagues(list) {
+  const groups = []; const by = {};
+  list.forEach(m => { const k = m.sport + '|' + (m.league || 'Other'); if (!by[k]) { by[k] = { sport: m.sport, league: m.league || 'Other', logo: m.leagueLogo, list: [] }; groups.push(by[k]); } by[k].list.push(m); });
+  return groups.map(g => h('section', { class: 'spleague' },
+    h('div', { class: 'spleaguehd' }, g.logo && /^https:\/\//.test(g.logo) ? h('img', { src: g.logo, alt: '', loading: 'lazy', referrerpolicy: 'no-referrer', onerror: e => e.target.remove() }) : h('i', { text: (SP_BY[g.sport] || {}).sym || '' }),
+      h('b', { text: g.league }), h('em', { text: String(g.list.length) })),
+    g.list.map(spCard)));
+}
+function spCard(m) {
+  const live = m.status === 'live', open = m.status === 'upcoming' && m.bettingOpen && Date.now() < m.startAt, mk = m.markets && m.markets.win, mine = SpData.myOpen(m.id);
+  const sc = m.score || {}, row = (k, t) => h('div', { class: 'spteam' }, spTeamMark(t), h('b', { text: t.name }), live || m.status === 'finished' ? h('strong', { text: sc[k] || '' }) : null);
+  return h('article', { class: 'spcard' + (live ? ' live' : ''), id: 'spm_' + m.id },
+    h('div', { class: 'spcardtop' },
+      live ? h('span', { class: 'splive' }, h('i'), h('span', { text: 'LIVE' })) : h('span', { class: 'spwhen', text: spWhen(m.startAt) }),
+      live && m.detail ? h('span', { class: 'spdetail', text: m.detail }) : !live && m.detail ? h('span', { class: 'spdetail', text: m.detail }) : null,
+      mine.length ? h('span', { class: 'spmine', text: mine.length + (mine.length === 1 ? ' bet' : ' bets') }) : null),
+    row('home', m.home || {}), row('away', m.away || {}),
+    mk ? h('div', { class: 'spodds' + (open && mk.open ? '' : ' shut') },
+      h('span', { class: 'spmk', text: mk.name }),
+      h('div', { class: 'spoddsrow n' + spOptKeys(mk).length }, spOptKeys(mk).map(k => { const o = mk.opts[k];
+        return h('button', { type: 'button', class: 'spodd', 'data-pick': k, disabled: !(open && mk.open), onclick: () => spSlip(m.id, 'win', k) },
+          h('span', { text: k === 'home' ? '1' : k === 'draw' ? 'X' : k === 'away' ? '2' : '' }), h('i', { text: spShort(k === 'home' ? m.home : k === 'away' ? m.away : null, k) }), h('b', { text: spOddsTxt(o.odds) })); })),
+      open && mk.open ? null : h('span', { class: 'spclosed', text: live ? '\u{1F512} Betting closed: the match has started' : '\u{1F512} Betting is closed for this match' })) : null);
+}
+function spEmpty(title, text) {
+  const ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', '0 0 220 140'); svg.setAttribute('class', 'rmemptyart'); svg.setAttribute('aria-hidden', 'true');
+  svg.innerHTML = '<defs><linearGradient id="spg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff1c2"/><stop offset="1" stop-color="#c38a2a"/></linearGradient></defs>'
+    + '<ellipse cx="110" cy="128" rx="70" ry="7" fill="rgba(0,0,0,.28)"/>'
+    + '<g class="rmfloat"><rect x="38" y="30" width="144" height="88" rx="12" fill="#0d3a25" stroke="url(#spg1)" stroke-width="3"/><path d="M110 30v88M38 74h144" stroke="rgba(241,195,92,.35)" stroke-width="2"/>'
+    + '<circle cx="110" cy="74" r="16" fill="none" stroke="rgba(241,195,92,.45)" stroke-width="2"/><rect x="38" y="56" width="16" height="36" fill="none" stroke="rgba(241,195,92,.35)" stroke-width="2"/><rect x="166" y="56" width="16" height="36" fill="none" stroke="rgba(241,195,92,.35)" stroke-width="2"/></g>'
+    + '<g class="rmfloat d2"><circle cx="160" cy="40" r="17" fill="#fff8e6" stroke="#8a5a12" stroke-width="2"/><path d="M160 23l6 9-6 7-6-7zM149 46l5-6 6 5-2 9zM171 46l-5-6-6 5 2 9z" fill="#3a2a10"/></g>'
+    + '<path class="rmspark" d="M50 22q0 6 6 6q-6 0-6 6q0-6-6-6q6 0 6-6z" fill="#ffe3a0"/><path class="rmspark" style="animation-delay:.8s" d="M194 100q0 5 5 5q-5 0-5 5q0-5-5-5q5 0 5-5z" fill="#ffe3a0"/>';
+  return h('div', { class: 'rmempty spempty' }, svg, h('b', { text: title }), h('span', { text: text }));
+}
+function spMyBets(list) {
+  if (!list.length) return spEmpty('No bets yet', 'Tap any price under a match to place a bet with your play chips.');
+  const open = list.filter(b => b.status === 'open'), done = list.filter(b => b.status !== 'open');
+  const staked = open.reduce((n, b) => n + b.stake, 0), toWin = open.reduce((n, b) => n + spPayout(b.stake, b.odds), 0);
+  const won = done.reduce((n, b) => n + (b.payout || 0) - b.stake, 0);
+  const card = b => h('div', { class: 'spbet s-' + b.status },
+    h('div', { class: 'spbettop' }, h('i', { text: (SP_BY[b.sport] || {}).sym || '' }), h('b', { text: b.match }), h('em', { class: 'spst s-' + b.status, text: b.status === 'open' ? 'OPEN' : b.status === 'won' ? 'WON' : b.status === 'lost' ? 'LOST' : 'VOID' })),
+    h('div', { class: 'spbetpick' }, h('span', { text: b.marketName + ': ' }), h('b', { text: b.pickName }), h('span', { text: ' @ ' + spOddsTxt(b.odds) })),
+    h('div', { class: 'spbetnums' }, h('span', { text: 'Stake ' + fmt(b.stake) }),
+      h('strong', { class: b.status === 'won' ? 'up' : b.status === 'lost' ? 'down' : '', text: b.status === 'open' ? 'Returns ' + fmt(spPayout(b.stake, b.odds)) : b.status === 'won' ? '+' + fmt(b.payout - b.stake) : b.status === 'lost' ? '−' + fmt(b.stake) : 'Stake returned' })),
+    h('span', { class: 'spbetwhen', text: (b.status === 'open' ? 'Placed ' : 'Settled ') + new Date(tsMs(b.status === 'open' ? b.createdAt : b.settledAt || b.createdAt) || Date.now()).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) }));
+  return h('div', { id: 'spBets' },
+    h('div', { class: 'spbetsum' }, h('div', {}, h('b', { text: fmt(staked) }), h('span', { text: 'In open bets' })), h('div', {}, h('b', { text: fmt(toWin) }), h('span', { text: 'Could return' })),
+      h('div', {}, h('b', { class: won > 0 ? 'up' : won < 0 ? 'down' : '', text: (won > 0 ? '+' : won < 0 ? '−' : '') + fmt(Math.abs(won)) }), h('span', { text: 'Settled result' }))),
+    open.length ? h('h3', { class: 'spsub', text: 'Open' }) : null, open.map(card),
+    done.length ? h('h3', { class: 'spsub', text: 'Settled' }) : null, done.slice(0, 50).map(card));
+}
+
+/* ---- the bet slip ---- */
+let SP_SLIP = null;
+function spSlip(id, mk, pick) {
+  if (S.isAdmin) return toast('You are watching as the admin. Use player view to place test bets.');
+  SP_SLIP = { id, mk, pick, stake: SP_SLIP && SP_SLIP.stake || 100 };
+  spSlipRefresh(true);
+}
+function spSlipRefresh(first) {
+  const s0 = SP_SLIP; if (!s0) return;
+  const m = (SpData.matches || []).find(x => x.id === s0.id), mk = m && m.markets && m.markets[s0.mk], o = mk && mk.opts && mk.opts[s0.pick];
+  const open = !!(m && o && mk.open && m.status === 'upcoming' && m.bettingOpen && Date.now() < m.startAt), wallet = (S.profile && S.profile.chips) || 0;
+  if (!first && !(Sheets.el && Sheets.el.id === 'spSlip')) return;
+  const ret = h('b', { id: 'spReturn', text: fmt(o ? spPayout(s0.stake || 0, o.odds) : 0) });
+  const inp = h('input', { id: 'spStake', type: 'number', inputmode: 'numeric', min: SP_MIN_BET, value: s0.stake || '', 'aria-label': 'Stake',
+    oninput: e => { s0.stake = parseInt(e.target.value, 10) || 0; ret.textContent = fmt(o ? spPayout(s0.stake, o.odds) : 0); } });
+  const quick = [100, 500, 1000, 5000].filter(v => v <= Math.max(wallet, 100));
+  const place = h('button', { type: 'button', class: 'btn-primary', id: 'spPlace', text: open ? 'Place bet' : 'Betting closed', disabled: !open, onclick: async () => {
+    const stake = s0.stake;
+    if (!Number.isInteger(stake) || stake < SP_MIN_BET) return toast('The smallest bet is ' + fmt(SP_MIN_BET) + ' chips.');
+    if (stake > wallet) return toast('You only have ' + fmt(wallet) + ' chips.');
+    place.disabled = true; place.textContent = 'Placing...';
+    try { await SpRepo.place(m.id, s0.mk, s0.pick, o.odds, stake); Sheets.close(); toast('Bet placed: ' + fmt(stake) + ' on ' + o.label + ' @ ' + spOddsTxt(o.odds) + '.'); SP_SLIP = null; }
+    catch (e) { toast(friendlyError(e), 'err'); place.disabled = false; place.textContent = 'Place bet'; }
+  } });
+  const body = h('div', { class: 'spslip', id: 'spSlipBody' },
+    m ? h('div', { class: 'spslipm' }, h('i', { text: (SP_BY[m.sport] || {}).sym || '' }), h('div', {}, h('b', { text: m.home.name + ' v ' + m.away.name }), h('span', { text: (m.league ? m.league + '  ·  ' : '') + spWhen(m.startAt) }))) : null,
+    o ? h('div', { class: 'spslippick' }, h('div', {}, h('span', { text: mk.name }), h('b', { text: o.label })), h('strong', { id: 'spSlipOdds', text: spOddsTxt(o.odds) })) : h('p', { class: 'hnote', text: 'This price is no longer offered.' }),
+    h('label', { class: 'rmbuy' }, h('span', { text: 'Your stake (chips)' }), inp),
+    h('div', { class: 'spquick' }, quick.map(v => h('button', { type: 'button', text: fmt(v), onclick: () => { s0.stake = v; inp.value = v; ret.textContent = fmt(o ? spPayout(v, o.odds) : 0); } }))),
+    h('div', { class: 'spret' }, h('span', { text: 'Returns if it wins' }), ret),
+    h('p', { class: 'spsmall', text: 'Wallet ' + fmt(wallet) + '  ·  the odds are fixed when you place the bet  ·  bets close at the start' }),
+    place);
+  if (Sheets.el && Sheets.el.id === 'spSlip') { const old = Sheets.el.querySelector('#spSlipBody'); if (old) { const keep = document.activeElement === old.querySelector('#spStake'); old.replaceWith(body); if (keep) inp.focus(); return; } }
+  Sheets.open('spSlip', 'Your bet', body);
+}
+
+/* ---- the console: one page per sport ---- */
+const SP_SECS = [['overview', 'Matches', 'grid'], ['bets', 'Bets', 'inbox'], ['add', 'Add match', 'check'], ['feed', 'Data feed', 'pulse']];
+function ccSportLine(id) {
+  if (!SpData.matches) return 'Loading...';
+  const l = SpData.live(id).length, u = SpData.upcoming(id).length;
+  return l + ' live  ·  ' + u + ' upcoming';
+}
+function ccSportPage(sport, sec) {
+  SpData.open();
+  const a = Admin.st, M = SpData.matches, B = SpData.bets || [];
+  if (!M) return h('div', { class: 'ccpage fixed' }, h('div', { class: 'ccscroll' }, ccLoading('Loading matches...')));
+  if (sec === 'add') return h('div', { class: 'ccpage fixed', id: 'spAddPage' }, h('div', { class: 'ccscroll' }, ccSportAdd(sport)));
+  if (sec === 'feed') return h('div', { class: 'ccpage fixed', id: 'spFeedPage' }, h('div', { class: 'ccscroll' }, ccSportFeed(sport)));
+  if (sec === 'bets') {
+    const list = B.filter(b => b.sport === sport), open = list.filter(b => b.status === 'open');
+    const staked = open.reduce((n, b) => n + b.stake, 0), liab = open.reduce((n, b) => n + spPayout(b.stake, b.odds), 0);
+    const house = list.filter(b => b.status !== 'open').reduce((n, b) => n + b.stake - (b.payout || 0), 0);
+    const metric = (v, l, cls) => h('div', {}, h('b', { class: cls || '', text: v }), h('span', { text: l }));
+    return h('div', { class: 'ccpage fixed', id: 'spBetsPage' }, h('div', { class: 'ccscroll' },
+      h('div', { class: 'ccspsum' }, metric(String(open.length), 'Open bets'), metric(fmt(staked), 'Staked, open'), metric(fmt(liab), 'Most to pay out'), metric((house >= 0 ? '+' : '−') + fmt(Math.abs(house)), 'Club result, settled', house > 0 ? 'up' : house < 0 ? 'down' : '')),
+      ccSec('Recent bets', h('span', { class: 'ccchip', text: String(list.length) }), list.length ? h('div', { class: 'ccspbets' }, list.slice(0, 120).map(b => h('div', { class: 'ccspbet s-' + b.status },
+        h('div', {}, h('b', { text: b.name + '  ·  ' + b.pickName + ' @ ' + spOddsTxt(b.odds) }), h('span', { text: b.match + '  ·  ' + ccAgoTxt(tsMs(b.createdAt) || Date.now()) })),
+        h('em', { text: fmt(b.stake) }), h('i', { class: 'spst s-' + b.status, text: b.status.toUpperCase() })))) : h('p', { class: 'ccnote', text: 'No bets on ' + SP_BY[sport].name + ' yet.' }))));
+  }
+  // matches: live first, then upcoming, then finished ones still to settle
+  const mine = M.filter(m => m.sport === sport), live = mine.filter(m => m.status === 'live'), up = mine.filter(m => m.status === 'upcoming'), todo = mine.filter(m => (m.status === 'finished' || m.status === 'cancelled') && !m.settled);
+  const done = mine.filter(m => m.settled).sort((x, y) => y.startAt - x.startAt).slice(0, 10);
+  const sorted = [].concat(live.sort((x, y) => x.startAt - y.startAt), todo, up.sort((x, y) => x.startAt - y.startAt));
+  return h('div', { class: 'ccpage fixed', id: 'spAdminPage' }, h('div', { class: 'ccscroll' },
+    ccSec('Matches', h('span', { class: 'ccchip', text: live.length + ' live  ·  ' + up.length + ' upcoming' + (todo.length ? '  ·  ' + todo.length + ' to settle' : '') }),
+      sorted.length ? h('div', { class: 'ccsplist' }, sorted.map(m => ccSportRow(m, B))) : spEmpty('No ' + SP_BY[sport].name.toLowerCase() + ' matches', 'Add one on the Add match tab, or set up the data feed so matches arrive by themselves.')),
+    done.length ? ccSec('Settled', null, h('div', { class: 'ccsplist' }, done.map(m => ccSportRow(m, B)))) : null));
+}
+function ccSportRow(m, B) {
+  const a = Admin.st, open = a.spOpen === m.id, bets = B.filter(b => b.matchId === m.id), ob = bets.filter(b => b.status === 'open'), mk = m.markets && m.markets.win;
+  const lab = m.status === 'live' ? 'LIVE' + (m.detail ? '  ·  ' + m.detail : '') : m.status === 'upcoming' ? spWhen(m.startAt) : m.settled ? 'Settled' : m.status === 'cancelled' ? 'Cancelled  ·  to settle' : 'Finished  ·  to settle';
+  const sc = m.score || {};
+  const settle = async (r, label) => {
+    const n = ob.length;
+    if (!(await ccConfirm({ title: 'Settle ' + m.home.name + ' v ' + m.away.name + '?', ok: 'Settle', danger: r === 'void', body: label + '. ' + (n ? n + (n === 1 ? ' open bet is' : ' open bets are') + ' settled now and winners are paid.' : 'There are no open bets.') }))) return;
+    adminBusy('sps_' + m.id, 'settle match', async () => { const x = await SpRepo.settle(m.id, { win: r }, r === 'void' ? 'cancelled' : 'finished'); Admin.say(x.n + (x.n === 1 ? ' bet' : ' bets') + ' settled  ·  ' + fmt(x.paid) + ' chips paid.'); });
+  };
+  const edit = () => {
+    if (!mk) return null;
+    const f = a.spOddsF && a.spOddsF.id === m.id ? a.spOddsF : (a.spOddsF = { id: m.id, v: Object.fromEntries(spOptKeys(mk).map(k => [k, spOddsTxt(mk.opts[k].odds)])) });
+    return h('div', { class: 'ccspodds' }, spOptKeys(mk).map(k => h('label', {}, h('span', { text: k === 'draw' ? 'Draw' : mk.opts[k].label }),
+      h('input', { type: 'number', step: '0.01', min: '1.01', inputmode: 'decimal', value: f.v[k], onfocus: () => { a.spEdit = true; }, onblur: () => { a.spEdit = false; }, oninput: e => { f.v[k] = e.target.value; } }))),
+      h('button', { type: 'button', class: 'ccbtn ghost sm', onclick: () => {
+        const opts = {}; for (const k of spOptKeys(mk)) { const v = spOdds(f.v[k]); if (!(v >= 1.01 && v <= 1000)) return toast('Odds must be between 1.01 and 1000.'); opts[k] = { label: mk.opts[k].label, odds: v }; }
+        a.spEdit = false;
+        adminBusy('spo_' + m.id, 'change odds', async () => { await SpRepo.ref(m.id).update({ 'markets.win.opts': opts, oddsBy: 'admin', updatedAt: FV.serverTimestamp() }); Admin.say('Odds changed. New bets take the new odds.'); });
+      } }, h('span', { text: 'Save odds' })));
+  };
+  return h('div', { class: 'ccsprow' + (open ? ' open' : '') + ' s-' + m.status, 'data-match': m.id },
+    h('button', { type: 'button', class: 'ccsphead', onclick: () => { a.spOpen = open ? '' : m.id; a.spOddsF = null; Admin.paint(); } },
+      h('div', {}, h('b', { text: m.home.name + (sc.home ? ' ' + sc.home : '') + '  v  ' + m.away.name + (sc.away ? ' ' + sc.away : '') }), h('span', { text: (m.league || '') + '  ·  ' + lab })),
+      h('em', { text: ob.length ? ob.length + ' open' : bets.length ? bets.length + ' bets' : '' }), ccI('chev', 'end')),
+    open ? h('div', { class: 'ccspmore' },
+      mk ? h('p', { class: 'ccnote', text: mk.name + ':  ' + spOptKeys(mk).map(k => (k === 'draw' ? 'Draw' : mk.opts[k].label) + ' ' + spOddsTxt(mk.opts[k].odds)).join('   ·   ') + (m.oddsBy === 'admin' ? '  (set by you)' : '  (opening prices)') }) : null,
+      m.status === 'upcoming' && !m.settled ? edit() : null,
+      m.status === 'upcoming' && !m.settled ? h('button', { type: 'button', class: 'ccbtn ghost sm', onclick: () => adminBusy('spb_' + m.id, 'betting', () => SpRepo.ref(m.id).update({ bettingOpen: !m.bettingOpen, updatedAt: FV.serverTimestamp() })) },
+        h('span', { text: m.bettingOpen ? 'Close betting' : 'Open betting' })) : null,
+      !m.settled ? h('div', { class: 'ccspres' }, h('span', { class: 'cclabel', text: 'RESULT (SETTLES ALL BETS)' }),
+        h('div', { class: 'ccspresbtns' },
+          h('button', { type: 'button', class: 'ccbtn primary sm', onclick: () => settle('home', m.home.name + ' won') }, h('span', { text: m.home.short || m.home.name })),
+          mk && mk.opts.draw ? h('button', { type: 'button', class: 'ccbtn primary sm', onclick: () => settle('draw', 'A draw') }, h('span', { text: 'Draw' })) : null,
+          h('button', { type: 'button', class: 'ccbtn primary sm', onclick: () => settle('away', m.away.name + ' won') }, h('span', { text: m.away.short || m.away.name })),
+          h('button', { type: 'button', class: 'ccbtn danger sm', onclick: () => settle('void', 'Cancelled: every stake is given back') }, h('span', { text: 'Void' }))),
+        m.source && m.source !== 'manual' ? h('p', { class: 'ccnote', text: 'The data feed settles this match by itself when the result comes in. Use these only if it does not.' }) : null) : null,
+      m.settled ? h('p', { class: 'ccnote', text: 'Result: ' + ((m.result || {}).win === 'home' ? m.home.name + ' won' : (m.result || {}).win === 'away' ? m.away.name + ' won' : (m.result || {}).win === 'draw' ? 'Draw' : 'Void') + '  ·  ' + bets.length + ' bets' }) : null,
+      m.source === 'manual' && !bets.length ? h('button', { type: 'button', class: 'aplink bad', onclick: async () => {
+        if (!(await ccConfirm({ title: 'Delete this match?', ok: 'Delete', danger: true, body: 'It has no bets.' }))) return;
+        adminBusy('spd_' + m.id, 'delete match', () => SpRepo.ref(m.id).delete());
+      }, text: 'Delete match' }) : null) : null);
+}
+function ccSportAdd(sport) {
+  const a = Admin.st, f = a.spAdd && a.spAdd.sport === sport ? a.spAdd : (a.spAdd = { sport, league: '', home: '', away: '', date: new Date(Date.now() + 864e5).toISOString().slice(0, 10), time: '19:30', draw: sport === 'football', err: '' });
+  const inp = (id, k, type, extra) => h('input', Object.assign({ id, type, value: String(f[k]), oninput: e => { f[k] = e.target.value; } }, extra || {}));
+  const save = () => {
+    const startAt = new Date(f.date + 'T' + f.time).getTime(), home = f.home.trim().slice(0, 40), away = f.away.trim().slice(0, 40), league = (f.league.trim() || SP_BY[sport].name).slice(0, 50);
+    const err = !home || !away ? 'Enter both teams.' : home.toLowerCase() === away.toLowerCase() ? 'The two teams must be different.' : !(startAt > Date.now()) ? 'Pick a start time in the future.' : '';
+    if (err) { f.err = err; Admin.paint(); return; }
+    f.err = '';
+    return adminBusy('spAdd', 'add match', async () => {
+      const id = 'mn_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      await SpRepo.ref(id).set({ sport, league, home: { name: home, short: '' }, away: { name: away, short: '' }, startAt, status: 'upcoming', score: { home: '', away: '' }, detail: '',
+        bettingOpen: true, markets: spDefaultMarkets(sport, home, away, sport !== 'football' && f.draw), result: {}, settled: false, source: 'manual', createdAt: FV.serverTimestamp(), updatedAt: FV.serverTimestamp() });
+      a.spAdd = null; a.sec = 'overview'; a.spOpen = id; Admin.say('Match added with opening odds. Change them under Matches.');
+    });
+  };
+  return h('div', { class: 'cmcard', id: 'spAddForm' },
+    h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'COMPETITION' }), inp('spaLeague', 'league', 'text', { maxlength: 50, placeholder: sport === 'cricket' ? 'e.g. IPL 2027' : sport === 'football' ? 'e.g. Premier League' : 'e.g. NBA' })),
+    h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'HOME TEAM' }), inp('spaHome', 'home', 'text', { maxlength: 40 })),
+    h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'AWAY TEAM' }), inp('spaAway', 'away', 'text', { maxlength: 40 })),
+    h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'DATE AND START TIME' }), h('div', { class: 'apfields even' }, inp('spaDate', 'date', 'date'), inp('spaTime', 'time', 'time'))),
+    sport !== 'football' ? h('div', { class: 'cmsec' }, h('div', { class: 'cmlabel', text: 'CAN IT END IN A DRAW?' }),
+      h('div', { class: 'cmaud' }, [[false, 'No'], [true, 'Yes (e.g. a Test match)']].map(([v, t]) => h('button', { type: 'button', class: 'achip' + (!!f.draw === v ? ' on' : ''), text: t, onclick: () => { f.draw = v; Admin.paint(); } })))) : null,
+    h('p', { class: 'tznote', text: 'Opening odds: ' + (sport === 'football' ? 'home 2.30, draw 3.20, away 2.90' : '1.90 each side' + (f.draw ? ', draw 4.00' : '')) + '. You can change them before the match starts. Betting closes at the start time.' }),
+    h('div', { id: 'spaErr', class: 'msg err', role: 'alert', hidden: !f.err, text: f.err }),
+    h('button', { type: 'button', class: 'btn-primary', id: 'spaSave', style: 'width:100%;margin-top:10px', text: 'Add match', disabled: !!S.busy.spAdd, onclick: save }));
+}
+function ccSportFeed(sport) {
+  const f = SpData.feed, src = sport === 'cricket' ? 'CricketData.org' : 'API-Sports', key = sport === 'cricket' ? 'CRICKETDATA_KEY' : 'APISPORTS_KEY', s0 = f && f.sports && f.sports[sport];
+  const kv = (l, v) => h('div', { class: 'ccrow' }, h('div', {}, h('b', { text: l }), h('span', { text: v })));
+  return h('div', {},
+    ccSec('Data feed', h('span', { class: 'ccchip' + (f && f.lastRun && Date.now() - f.lastRun < 40 * 60000 ? ' ok' : ''), text: f && f.lastRun ? 'Ran ' + ccAgoTxt(f.lastRun) : 'Not running yet' }),
+      h('div', { class: 'cclist' },
+        kv('Source', src + ' (the key is the GitHub secret ' + key + ')'),
+        kv('Last run', f && f.lastRun ? new Date(f.lastRun).toLocaleString() + '  ·  ' + (f.calls || 0) + ' calls' : 'The scheduled job has not written anything yet.'),
+        kv(SP_BY[sport].name, s0 ? (s0.ok ? (s0.matches || 0) + ' matches in the list  ·  last full refresh ' + (s0.full ? ccAgoTxt(s0.full) : 'never') : 'Problem: ' + (s0.error || 'unknown')) : 'Nothing from the feed yet.'),
+        f && f.errors && f.errors.length ? kv('Last errors', f.errors.slice(-3).join('  |  ')) : null)),
+    ccSec('How the feed works', null, h('div', { class: 'ccnote' },
+      h('p', { text: 'A scheduled job in your GitHub repository runs about every 15 minutes. It reads matches, live scores and results from the data service, writes them here, closes betting when a match starts and settles bets when it ends. The keys are GitHub secrets, so nobody can see them.' }),
+      h('p', { text: 'Until the feed is set up you can add matches by hand on the Add match tab and settle them here yourself.' }))));
 }
 
 function renderRummy() {
@@ -19686,9 +20130,9 @@ const GAME_CATS = [
     { id: 'andarbahar', name: 'Andar Bahar', sym: '♥', status: 'soon', red: true },
     { id: 'blackjack', name: 'Blackjack', sym: '♣', status: 'soon' }] },
   { id: 'sports', name: 'Sports', sym: '⚽', games: [
-    { id: 'cricket', name: 'Cricket', sym: '\u{1F3CF}', status: 'soon' },
-    { id: 'football', name: 'Football', sym: '⚽', status: 'soon' },
-    { id: 'basketball', name: 'Basketball', sym: '\u{1F3C0}', status: 'soon' }] },
+    { id: 'cricket', name: 'Cricket', sym: '\u{1F3CF}', status: 'live' },
+    { id: 'football', name: 'Football', sym: '⚽', status: 'live' },
+    { id: 'basketball', name: 'Basketball', sym: '\u{1F3C0}', status: 'live' }] },
   { id: 'board', name: 'Board Games', sym: '\u{1F3B2}', games: [] },
   { id: 'slots', name: 'Casino Slots', sym: '\u{1F3B0}', games: [] }
 ];
@@ -19701,6 +20145,7 @@ const CC_STATUS = { live: 'Live', test: 'Testing', soon: 'Soon' };
 function ccGameLine(id) {
   if (id === 'teenpatti') { const pub = TABLES.filter(t => !t.private), live = pub.filter(t => hostLive(S.rooms[t.id])).length, seated = TABLES.reduce((n, t) => n + (hostLive(S.rooms[t.id]) ? (S.rooms[t.id].seated || 0) : 0), 0); return live + ' live tables  ·  ' + seated + ' playing'; }
   if (id === 'rummy') { const R0 = S.rmRooms || {}, live = RM_TABLES.filter(t => hostLive(R0[t.id], 20000)).length, n = RM_TABLES.reduce((k, t) => k + (hostLive(R0[t.id], 20000) ? R0[t.id].seated || 0 : 0), 0); return live + ' live tables  \u00b7  ' + n + ' playing'; }
+  if (GAME_BY_ID[id] && GAME_BY_ID[id].cat === 'sports') return ccSportLine(id);
   return 'Being built';
 }
 // open a game's page
@@ -19731,7 +20176,7 @@ function ccGameHead() {
     const m = $('ccMain'); if (m) m.scrollTop = 0;
   };
   const back = () => { if (a.view && a.view !== 'hub') Admin.go('hub'); a.gopen = false; a.tsheet = ''; Admin.paint(); };
-  const tabs = g.status === 'soon' ? null : h('div', { class: 'ccsecs', role: 'tablist', id: 'ccSecTabs' }, CC_SECS.map(([k, label, ic]) =>
+  const tabs = g.status === 'soon' ? null : h('div', { class: 'ccsecs', role: 'tablist', id: 'ccSecTabs' }, (g.cat === 'sports' ? SP_SECS : CC_SECS).map(([k, label, ic]) =>
     h('button', { type: 'button', role: 'tab', id: 'sec_' + k, class: 's-' + k + (k === sec ? ' on' : ''), 'aria-selected': k === sec ? 'true' : 'false', onclick: () => pick(k) }, ccI(ic), h('span', { text: label }))));
   const cat = GAME_CATS.find(c => c.id === g.cat);
   return h('div', { class: 'ccgamehead' },
@@ -19750,6 +20195,7 @@ function ccGamesPage() {
   const game = a.game, sec = a.sec || 'overview', g = GAME_BY_ID[game];
   let page;
   if (g.status === 'soon') page = ccGameSoon(game);
+  else if (g.cat === 'sports') { if (!SP_SECS.some(x => x[0] === sec)) a.sec = 'overview'; page = ccSportPage(game, a.sec); }
   else if (game === 'rummy') page = sec === 'test' ? ccRmTest() : sec === 'tour' ? ccRmTour() : sec === 'private' ? ccRmPrivate() : ccRmTables();
   else { if (sec === 'tour' || sec === 'private') a.sec = 'overview'; page = a.sec === 'tables' ? ccTables() : a.sec === 'test' ? ccTest() : ccTpOverview(); }
   page.insertBefore(ccGameHead(), page.firstChild);
