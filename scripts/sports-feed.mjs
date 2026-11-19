@@ -1,4 +1,4 @@
-// Teen Patti Club - sports data job (version 4: approvals and request switch).
+// Teen Patti Club - sports data job (version 6: match details, scored matches count as started).
 // Started by GitHub Actions (.github/workflows/sports-feed.yml) and then STAYS ON for up to ~5 h 45 min, updating
 // every few minutes (the admin picks 1, 5, 15, 30 or 60 minutes on the console's Data feed tab). Each update:
 //   1. reads matches, live scores and results from the data services (only what is needed: the full schedule
@@ -175,7 +175,9 @@ export function fromFootball(x) {
     startAt: x.fixture.timestamp * 1000, status,
     score: { home: g.home == null ? '' : String(g.home), away: g.away == null ? '' : String(g.away) },
     detail: status === 'live' ? (st === 'HT' ? 'Half time' : x.fixture.status.elapsed ? x.fixture.status.elapsed + "'" : st) : status === 'cancelled' ? x.fixture.status.long : '',
-    win, minute: st === 'HT' ? 45 : x.fixture.status.elapsed || 0, goals: [hg, ag] };
+    win, minute: st === 'HT' ? 45 : x.fixture.status.elapsed || 0, goals: [hg, ag],
+    info: { title: String(x.league.round || '').slice(0, 60), venue: [x.fixture.venue && x.fixture.venue.name, x.fixture.venue && x.fixture.venue.city].filter(Boolean).join(', ').slice(0, 90),
+      referee: String(x.fixture.referee || '').slice(0, 60), ht: x.score && x.score.halftime && x.score.halftime.home != null ? x.score.halftime.home + ' – ' + x.score.halftime.away : '' } };
 }
 const BK_LIVE = ['Q1', 'Q2', 'Q3', 'Q4', 'OT', 'BT', 'HT'], BK_DONE = ['FT', 'AOT'], BK_OFF = ['POST', 'CANC', 'SUSP', 'AWD', 'ABD'];
 export function fromBasketball(x) {
@@ -188,7 +190,9 @@ export function fromBasketball(x) {
     startAt: x.timestamp * 1000, status,
     score: { home: h0 == null ? '' : String(h0), away: a0 == null ? '' : String(a0) },
     detail: status === 'live' ? st + (x.status.timer ? ' ' + x.status.timer + "'" : '') : status === 'cancelled' ? x.status.long : '',
-    win: status === 'finished' && h0 != null && a0 != null ? (h0 > a0 ? 'home' : a0 > h0 ? 'away' : 'void') : '', elapsed, pts: [h0 || 0, a0 || 0] };
+    win: status === 'finished' && h0 != null && a0 != null ? (h0 > a0 ? 'home' : a0 > h0 ? 'away' : 'void') : '', elapsed, pts: [h0 || 0, a0 || 0],
+    info: { title: String(x.stage || x.week || '').slice(0, 60), venue: String((x.venue && (x.venue.name || x.venue)) || '').slice(0, 90),
+      qs: ['quarter_1', 'quarter_2', 'quarter_3', 'quarter_4', 'over_time'].map((k, i) => ({ q: i < 4 ? 'Q' + (i + 1) : 'OT', h: s.home && s.home[k], a: s.away && s.away[k] })).filter(r => r.h != null || r.a != null).map(r => ({ q: r.q, h: r.h == null ? '' : String(r.h), a: r.a == null ? '' : String(r.a) })) } };
 }
 // "India vs Australia, 3rd T20I, India tour of Australia, 2026" -> "India tour of Australia 2026"
 export function cricketLeague(x) {
@@ -203,7 +207,8 @@ export function fromCricket(x) {
   const startAt = Date.parse((x.dateTimeGMT || x.date) + (/Z$|[+-]\d\d:?\d\d$/.test(x.dateTimeGMT || '') ? '' : 'Z'));
   const statusTxt = String(x.status || ''), low = statusTxt.toLowerCase();
   const off = /abandon|no result|cancel|postpon/.test(low);
-  const status = x.matchEnded ? (off ? 'cancelled' : 'finished') : x.matchStarted ? 'live' : off ? 'cancelled' : 'upcoming';
+  // a score means play has begun, even if the service has not flagged the start (it happens with multi-day matches)
+  const status = x.matchEnded ? (off ? 'cancelled' : 'finished') : x.matchStarted || (x.score || []).length ? 'live' : off ? 'cancelled' : 'upcoming';
   const teamOf = s => { const t = String(s.inning || '').toLowerCase(); return t.startsWith(hn.toLowerCase()) ? 'home' : t.startsWith(an.toLowerCase()) ? 'away' : ''; };
   const inn = (x.score || []).map(s => ({ team: teamOf(s), r: Number(s.r) || 0, w: Number(s.w) || 0, o: s.o == null ? 0 : s.o })).filter(s => s.team);
   const txt = k => (x.score || []).filter(s => teamOf(s) === k).map(s => s.r + '/' + s.w + (s.o != null ? ' (' + s.o + ')' : '')).join(' & ');
@@ -217,7 +222,11 @@ export function fromCricket(x) {
   return { id: 'cr_' + String(x.id).replace(/[^A-Za-z0-9_-]/g, '').slice(0, 50), srcId: String(x.id), sport: 'cricket', league: cricketLeague(x), leagueLogo: '',
     home: { name: hn, short: ti(hn).shortname || '', logo: ti(hn).img || '' }, away: { name: an, short: ti(an).shortname || '', logo: ti(an).img || '' },
     startAt, status, score: { home: txt('home'), away: txt('away') }, detail: status === 'upcoming' ? '' : statusTxt.slice(0, 80),
-    win, draw: String(x.matchType || '').toLowerCase() === 'test', type: x.matchType || '', inn };
+    win, draw: String(x.matchType || '').toLowerCase() === 'test', type: x.matchType || '', inn,
+    // match details for the match page: everything here comes free with the list the job already asks for
+    info: { title: String(x.name || '').split(',').slice(1, 2).join('').trim().slice(0, 60), venue: String(x.venue || '').slice(0, 90),
+      toss: x.tossWinner ? (String(x.tossWinner) + (x.tossChoice ? ' chose to ' + String(x.tossChoice).toLowerCase().replace(/^bowling$/, 'bowl').replace(/^batting$/, 'bat') : '')).slice(0, 80) : '',
+      inns: (x.score || []).slice(0, 4).map(s => ({ t: String(s.inning || '').replace(/\s+Inning\s+(\d)/i, ' · innings $1').slice(0, 60), r: Number(s.r) || 0, w: Number(s.w) || 0, o: s.o == null ? '' : String(s.o) })) } };
 }
 // the detailed scoreboard (batters, bowler, this over) from CricketData's scorecard and ball-by-ball answers
 export function cricketDetail(card, bbb) {
@@ -244,6 +253,13 @@ export function cricketDetail(card, bbb) {
 }
 
 /* ---- one update ---- */
+// teams not known yet (knockouts): "TBC v TBC" is never listed
+const TBC = n => /^(tbc|tba|tbd|to be (confirmed|announced|decided))$/i.test(String(n || '').trim());
+// a live cricket score that has not moved for this long is frozen: the service stopped updating it (usually the match is over)
+const multiDay = m => /test|first|fc/i.test(m.type || '') || /^day \d/i.test(m.detail || '');
+export const frozenMs = m => { const t = String(m.type || '').toLowerCase(); return multiDay(m) ? 20 * 3600e3 : t === 't10' ? 30 * 60000 : t === 'odi' ? 75 * 60000 : 45 * 60000; };
+const maxMs = m => { const t = String(m.type || '').toLowerCase(); return multiDay(m) ? 5.5 * 864e5 : t === 't10' ? 3 * 3600e3 : t.startsWith('t20') ? 5 * 3600e3 : 10 * 3600e3; };
+export const isFrozen = (m, now) => m.sport === 'cricket' && m.status === 'live' && now - (Number(m.scoreAt) || Number(m.seenAt) || m.startAt || 0) > frozenMs(m);
 export async function run({ db, inc, ts, fetchJson, env, now = Date.now(), log = console.log, existing, config = {} }) {
   const meta = db.doc('sportsMeta/feed'), M0 = (await meta.get()).data() || {}, sports = Object.assign({}, M0.sports || {});
   const errors = [], counts = { added: 0, updated: 0, settled: 0, paid: 0, removed: 0 };
@@ -317,10 +333,14 @@ export async function run({ db, inc, ts, fetchJson, env, now = Date.now(), log =
         // matches we show as live (or that should have started) but the service no longer lists as current: they have
         // usually ended. Ask for each one by itself (a few per update, the longest unseen first) so they finish and settle.
         const seen = new Set(found.cricket.map(m => m.id));
-        const lost = tracked('cricket').filter(([id, m]) => !m.settled && m.approved === true && !m.adminCancelled && !seen.has(id) && (m.status === 'live' || (m.status === 'upcoming' && m.startAt < now - 30 * 60000)))
-          .sort((a, b) => (a[1].seenAt || 0) - (b[1].seenAt || 0)).slice(0, 3);
-        for (const [, m] of lost) {
-          try { const r1 = await call('cricketdata', B + '/match_info?apikey=' + k + '&id=' + encodeURIComponent(m.srcId)); const x = r1.data && fromCricket(r1.data); if (x) found.cricket.push(x); }
+        // also frozen scores (still listed, but not moving), at most every 30 min each
+        const lost = tracked('cricket').filter(([id, m]) => !m.settled && m.approved === true && !m.adminCancelled &&
+            ((!seen.has(id) && (m.status === 'live' || (m.status === 'upcoming' && m.startAt < now - 30 * 60000))) || (isFrozen(m, now) && now - (m.infoAt || 0) > 30 * 60000)))
+          .sort((a, b) => (a[1].infoAt || a[1].seenAt || 0) - (b[1].infoAt || b[1].seenAt || 0)).slice(0, 3);
+        for (const [id, m] of lost) {
+          try { const r1 = await call('cricketdata', B + '/match_info?apikey=' + k + '&id=' + encodeURIComponent(m.srcId)); const x = r1.data && fromCricket(r1.data);
+            await db.doc('sports/' + id).update({ infoAt: now }); m.infoAt = now;
+            if (x) { const i = found.cricket.findIndex(y => y.id === x.id); if (i >= 0) found.cricket[i] = x; else found.cricket.push(x); } }
           catch (e) { errors.push('cricket match info: ' + e.message); break; }
         }
       }
@@ -337,7 +357,7 @@ export async function run({ db, inc, ts, fetchJson, env, now = Date.now(), log =
   // write: new matches get opening markets; live ones get new odds from the score
   for (const sport of Object.keys(found)) {
     let list = found[sport].filter(m => m && m.startAt && !isNaN(m.startAt));
-    const fresh = list.filter(m => !existing[m.id] && m.status === 'upcoming').sort((a, b) => a.startAt - b.startAt).slice(0, MAX_PER_SPORT);
+    const fresh = list.filter(m => !existing[m.id] && m.status === 'upcoming' && !TBC(m.home && m.home.name) && !TBC(m.away && m.away.name)).sort((a, b) => a.startAt - b.startAt).slice(0, MAX_PER_SPORT);
     // a match the club has not listed yet only joins before it starts: the admin approves it for players first
     list = list.filter(m => existing[m.id] || fresh.includes(m));
     for (const m of list) {
@@ -345,6 +365,7 @@ export async function run({ db, inc, ts, fetchJson, env, now = Date.now(), log =
       const base = { sport: m.sport, league: m.league, leagueLogo: m.leagueLogo, home: m.home, away: m.away, startAt: m.startAt, status: m.status, score: m.score, detail: m.detail,
         source: m.sport === 'cricket' ? 'cricketdata' : 'apisports', srcId: m.srcId, type: m.type || '', seenAt: now, updatedAt: ts() };
       if (m.live) base.live = m.live;
+      if (m.info) base.info = m.info;
       if (!old) {
         if (m.status === 'finished' || m.status === 'cancelled') continue;
         const mk = m.status === 'live' ? liveMarkets(m) || openingMarkets(m) : openingMarkets(m);
@@ -360,7 +381,8 @@ export async function run({ db, inc, ts, fetchJson, env, now = Date.now(), log =
         // live odds from the score; a match with no live model (a Test) keeps its prices but takes no bets during play
         base.markets = mk ? keepDecided(mk, old) : closeAll(old.markets);
         if (changed) base.lockUntil = now + LOCK_MS;
-        base.bettingOpen = !old.adminClosed;          // open during play, unless the admin closed it
+        // open during play, unless the admin closed it or the score has frozen
+        base.bettingOpen = !old.adminClosed && !isFrozen(Object.assign({}, old, base, { scoreAt: changed ? now : old.scoreAt }), now);
       } else if (m.status !== 'upcoming') { base.bettingOpen = false; }
       if (changed || m.status === 'live' || old.status !== m.status || !old.seenAt || now - old.seenAt > 5 * 60000) { await db.doc('sports/' + m.id).update(base); counts.updated++; Object.assign(old, base, { lockUntil: base.lockUntil != null ? base.lockUntil : old.lockUntil }); }
       // settle every market whose outcome is now known
@@ -381,6 +403,13 @@ export async function run({ db, inc, ts, fetchJson, env, now = Date.now(), log =
   for (const [id, m] of Object.entries(existing)) {
     // not approved for players: no bets are possible, so nothing to pause; once it has started it can never be approved, so it goes
     if (m.approved === false) { if (m.startAt < now - 6 * 3600e3) { await db.doc('sports/' + id).delete(); delete existing[id]; counts.removed++; } continue; }
+    // frozen long past the latest it could still be going on: no result will come, every open bet is given back
+    if (isFrozen(m, now) && !m.settled && now > m.startAt + maxMs(m)) {
+      const x = await settle(db, inc, ts, id, () => 'void'); counts.settled += x.n; counts.paid += x.paid;
+      const upd = { status: 'cancelled', noResult: true, detail: 'No result: the data service stopped updating', settled: true, bettingOpen: false, result: { win: 'void' }, updatedAt: ts() };
+      await db.doc('sports/' + id).update(upd); Object.assign(m, upd); continue;
+    }
+    if (isFrozen(m, now) && m.bettingOpen) { await db.doc('sports/' + id).update({ bettingOpen: false, updatedAt: ts() }); m.bettingOpen = false; }
     // a live match with no fresh score: betting pauses until the service sends one
     if (m.status === 'live' && !m.settled && m.bettingOpen && m.source !== 'manual' && now - (m.seenAt || 0) > staleMs) {
       await db.doc('sports/' + id).update({ bettingOpen: false, updatedAt: ts() }); m.bettingOpen = false; }
