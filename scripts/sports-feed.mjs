@@ -1,4 +1,4 @@
-// Teen Patti Club - sports data job (version 7: stuck matches without a score time, results read from the status).
+// Teen Patti Club - sports data job (version 8: fewer requests: lookups every 30 min at most, extras stop near the daily limit).
 // Started by GitHub Actions (.github/workflows/sports-feed.yml) and then STAYS ON for up to ~5 h 45 min, updating
 // every few minutes (the admin picks 1, 5, 15, 30 or 60 minutes on the console's Data feed tab). Each update:
 //   1. reads matches, live scores and results from the data services (only what is needed: the full schedule
@@ -336,8 +336,10 @@ export async function run({ db, inc, ts, fetchJson, env, now = Date.now(), log =
         // usually ended. Ask for each one by itself (a few per update, the longest unseen first) so they finish and settle.
         const seen = new Set(found.cricket.map(m => m.id));
         // also frozen scores (still listed, but not moving), at most every 30 min each
-        const lost = tracked('cricket').filter(([id, m]) => !m.settled && m.approved === true && !m.adminCancelled &&
-            ((!seen.has(id) && (m.status === 'live' || (m.status === 'upcoming' && m.startAt < now - 30 * 60000))) || (isFrozen(m, now) && now - (m.infoAt || 0) > 30 * 60000)))
+        // each one at most every 30 minutes, and none once 80% of the day's allowance is used (the list and scores come first)
+        const roomy = usage.cricketdata.used < usage.cricketdata.limit * 0.8;
+        const lost = !roomy ? [] : tracked('cricket').filter(([id, m]) => !m.settled && m.approved === true && !m.adminCancelled && now - (m.infoAt || 0) > 30 * 60000 &&
+            ((!seen.has(id) && (m.status === 'live' || (m.status === 'upcoming' && m.startAt < now - 30 * 60000))) || isFrozen(m, now)))
           .sort((a, b) => (a[1].infoAt || a[1].seenAt || 0) - (b[1].infoAt || b[1].seenAt || 0)).slice(0, 3);
         for (const [id, m] of lost) {
           try { const r1 = await call('cricketdata', B + '/match_info?apikey=' + k + '&id=' + encodeURIComponent(m.srcId)); const x = r1.data && fromCricket(r1.data);
@@ -347,7 +349,7 @@ export async function run({ db, inc, ts, fetchJson, env, now = Date.now(), log =
         }
       }
       // the detailed scoreboard: two more requests per live match, only when the admin turned it on
-      if (config.detail) for (const m of found.cricket.filter(x => x.status === 'live' && existing[x.id] && existing[x.id].approved === true)) {
+      if (config.detail && usage.cricketdata.used < usage.cricketdata.limit * 0.7) for (const m of found.cricket.filter(x => x.status === 'live' && existing[x.id] && existing[x.id].approved === true && !isFrozen(Object.assign({}, existing[x.id], { scoreAt: existing[x.id].scoreAt }), now))) {
         try { const card = await call('cricketdata', B + '/match_scorecard?apikey=' + k + '&id=' + encodeURIComponent(m.srcId)); let bbb = null;
           try { bbb = await call('cricketdata', B + '/match_bbb?apikey=' + k + '&id=' + encodeURIComponent(m.srcId)); } catch (e) { errors.push('cricket ball by ball: ' + e.message); }
           m.live = cricketDetail(card, bbb); }
