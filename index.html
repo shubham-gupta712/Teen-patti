@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build:20261120k -->
+<!-- build:20261120l -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -4636,6 +4636,7 @@ body .cc .cctlist>*{min-width:0}
 .dcnums{grid-template-columns:repeat(3,minmax(0,1fr))}.dcnum{min-width:0}.dcnum input{width:100%;box-sizing:border-box}
 .mnmines input,.dctrack input{accent-color:#e9b949}
 .mntile{min-width:0;overflow:hidden}
+.whwrap{width:100%;height:100%;border-radius:50%;box-shadow:0 0 0 4px rgba(233,192,96,.4),0 10px 26px rgba(0,0,0,.55);will-change:transform}.whsvg{display:block;width:100%;height:100%}
 .crauto .cslab{margin:0}.crauto input{min-width:0;height:28px;border:0;border-radius:8px;background:rgba(255,255,255,.06);color:#ffe08a;font:800 13px system-ui;padding:0 8px}.crauto i{font-style:normal;color:#8fa79a;font-weight:800}
 </style>
 </head>
@@ -14330,7 +14331,7 @@ class AppError extends Error {}
 let toastTimer = null;
 /* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
    few bytes of the current file; if its build is newer, a banner offers a reload. */
-const BUILD = '20261120k';
+const BUILD = '20261120l';
 const Fresh = {
   at: 0, shown: false,
   async check(force) {
@@ -17824,7 +17825,8 @@ function ccSportApprove(sport) {
           if (!(await ccConfirm({ title: 'Approve all ' + list.length + '?', ok: 'Approve all', body: 'They show to players under Upcoming with their opening odds.' }))) return;
           approve(list); } }, h('span', { text: 'Approve all ' + list.length })) : null,
         h('div', { class: 'ccaplist' }, list.map(m => row(m, false))))
-      : spEmpty('Nothing to approve', 'New matches from the data feed wait here until you publish them.')),
+      : spEmpty('Nothing to approve', (() => { const f = SpData.feed || {}, cfg = SpData.config || {}, k = sport === 'cricket' ? 'cricketdata' : 'apisports', U = f.usage || {}, u = (U.day === new Date().toISOString().slice(0, 10) && U[k]) || {};
+        return (cfg.off || {})[k] ? 'Requests for this sport are switched off on the Data feed tab, so no new matches arrive.' : (u.over || (u.limit && u.used >= u.limit)) ? 'Today’s request allowance is used up, so no new matches arrive until it resets at 5:30 AM.' : 'New matches from the data feed wait here until you publish them. The full list is fetched every 3 hours.'; })())),
     h('p', { class: 'ccfhint', text: 'Players only see approved matches. Unapproved ones use no live requests. Once a match starts it cannot be approved or cancelled.' }),
     hid.length ? ccSec('Hidden', h('button', { type: 'button', class: 'ccchip', onclick: () => { a.spHid = !a.spHid; Admin.paint(); }, text: (a.spHid ? 'Hide list' : 'Show ' + hid.length) }),
       a.spHid ? h('div', { class: 'ccaplist' }, hid.map(m => row(m, true))) : null) : null);
@@ -18477,7 +18479,7 @@ function casWheelSegs(risk, n) {
 }
 
 /* ---- the bank: real chips in the database, or a practice wallet on this phone for the admin ---- */
-const casTs = () => { const ms = Date.now(); return { seconds: Math.floor(ms / 1000), nanoseconds: (ms % 1000) * 1e6 + Math.floor(Math.random() * 1000) * 1000, toMillis: () => ms }; };
+const casTs = () => { const ms = Date.now() - (Date.now() % 10) + Math.floor(Math.random() * 10); return { seconds: Math.floor(ms / 1000), nanoseconds: (ms % 1000) * 1e6 + Math.floor(Math.random() * 1000) * 1000, toMillis: () => ms }; };
 const CasApi = {
   local: () => adminTesting(),
   practice: { chips: 100000, bets: {} },
@@ -18556,7 +18558,6 @@ function casPage(game, kids) {
   const G = CAS_BY[game], loc = CasApi.local();
   return h('div', { class: 'cswrap cs-' + game, id: 'casGame' }, screenTop('Back', () => { if (CasUI.busy || (S.casGame === 'crash' && CasUI.live)) return toast('Finish this round first.'); casLeave(); }),
     h('div', { class: 'cshd' }, h('i'), h('h1', { text: G.name }), h('i')),
-    h('div', { class: 'csmeta' }, h('span', { text: (loc ? 'Practice chips ' + fmt(CasApi.practice.chips) + '  ·  ' : '') + 'RTP ' + casPct(casRtp(game)) })),
     kids);
 }
 function casLeave() { S.casGame = ''; try { sessionStorage.removeItem('tp_casgame'); } catch (e) { /* private mode */ } CasGames.stop(); goTo('casino'); }
@@ -18649,14 +18650,27 @@ const Wh = {
       const spins = 5 + Math.floor(Math.random() * 4), base = Math.ceil(Wh.rot / 360) * 360;
       Wh.rot = base + spins * 360 + (360 - (i + 0.5) * seg);
       Wh.spinning = true; scheduleRender();
-      requestAnimationFrame(() => { const el = Wh.el; if (!el) return; el.style.transition = 'transform 3s cubic-bezier(.12,.68,.1,1)'; el.style.transform = 'rotate(' + Wh.rot + 'deg)'; });
-      await new Promise(r => setTimeout(r, 3150));
-      Wh.spinning = false; Wh.land = i; if (Wh.el) Wh.el.style.transition = 'none';
+      const el = Wh.el, from = Wh.cur || 0, to = Wh.rot;
+      try { if (el && el.animate) { const an = el.animate([{ transform: 'rotate(' + from + 'deg)' }, { transform: 'rotate(' + to + 'deg)' }], { duration: 3000, easing: 'cubic-bezier(.12,.68,.1,1)', fill: 'forwards' }); Wh.anim = an; } } catch (e) { /* no animation: it just lands */ }
+      await new Promise(r => setTimeout(r, 3100));
+      if (el) { el.style.transform = 'rotate(' + to + 'deg)'; if (Wh.anim) { try { Wh.anim.cancel(); } catch (e) { /* finished */ } Wh.anim = null; } }
+      Wh.cur = to; Wh.spinning = false; Wh.land = i;
       if (v > 0) { const pay = Math.floor(b.stake * v * b.p / 1e6); await CasApi.pay(b, { payout: pay, idx: i }); casMsg(casX(v * b.p / 1e6) + '  ·  you win ' + fmt(pay), 'win'); }
       else { await CasApi.lose(b); casMsg('0.00×  ·  no win', 'lose'); }
     });
   }
 };
+function whSvg(segs, p) {
+  const n = segs.length, R = 250, C = 260, fs = n <= 10 ? 26 : n <= 20 ? 19 : n <= 30 ? 14 : 0;
+  let s = '<svg viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg" class="whsvg" aria-hidden="true">';
+  segs.forEach((v, i) => {
+    const a0 = -Math.PI / 2 + i * 2 * Math.PI / n, a1 = a0 + 2 * Math.PI / n, mid = (a0 + a1) / 2;
+    s += '<path d="M' + C + ' ' + C + ' L' + (C + R * Math.cos(a0)).toFixed(2) + ' ' + (C + R * Math.sin(a0)).toFixed(2) + ' A' + R + ' ' + R + ' 0 0 1 ' + (C + R * Math.cos(a1)).toFixed(2) + ' ' + (C + R * Math.sin(a1)).toFixed(2) + ' Z" fill="' + WH_COLORS(v) + '" stroke="rgba(255,230,160,.55)" stroke-width="2"/>';
+    if (fs && v > 0) { const x = C + R * 0.7 * Math.cos(mid), y = C + R * 0.7 * Math.sin(mid), deg = mid * 180 / Math.PI + (Math.cos(mid) < 0 ? 180 : 0);   // never upside down
+      s += '<text x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" transform="rotate(' + deg.toFixed(1) + ' ' + x.toFixed(1) + ' ' + y.toFixed(1) + ')" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-weight="800" font-size="' + fs + '" fill="#fff8e6" stroke="rgba(0,0,0,.45)" stroke-width="3" paint-order="stroke">' + casX(v * p / 1e6) + '</text>'; }
+  });
+  return s + '<circle cx="260" cy="260" r="250" fill="none" stroke="#c8962d" stroke-width="10"/><circle cx="260" cy="260" r="54" fill="#0b2a1d" stroke="#e9c060" stroke-width="6"/><circle cx="260" cy="260" r="20" fill="#e9c060"/></svg>';
+}
 const WH_COLORS = v => v === 0 ? '#1d2a24' : v < 120 ? '#3b7d5a' : v < 160 ? '#1fa04f' : v < 250 ? '#d4a63a' : v < 1000 ? '#e2683a' : '#c0283f';
 function whCanvas() {
   const segs = casWheelSegs(Wh.risk, Wh.n), c = h('canvas', { width: 520, height: 520, class: 'whcanvas', id: 'whCanvas', style: 'transform:rotate(' + (Wh.rot % 360) + 'deg)' });
@@ -18676,8 +18690,8 @@ function whRender() {
   const legend = h('div', { class: 'whleg', id: 'whLegend' }, vals.map(v => h('span', { class: Wh.land >= 0 && segs[Wh.land] === v && !Wh.spinning ? 'on' : '', style: '--c:' + WH_COLORS(v) },
     h('b', { text: casX(v * p / 1e6) }), h('i', { text: (segs.filter(x => x === v).length / segs.length * 100).toFixed(0) + '%' }))));
   // one wheel kept between redraws (so a spin is never cut short); drawn again only when the settings change
-  const key = Wh.risk + ':' + Wh.n;
-  if (!Wh.el || Wh.key !== key) { Wh.el = whCanvas(); Wh.key = key; Wh.el.style.transform = 'rotate(' + Wh.rot + 'deg)'; }
+  const key = Wh.risk + ':' + Wh.n + ':' + p;
+  if (!Wh.el || Wh.key !== key) { Wh.el = h('div', { class: 'whwrap', id: 'whWheel' }); Wh.el.innerHTML = whSvg(segs, p); Wh.key = key; Wh.el.style.transform = 'rotate(' + (Wh.cur || 0) + 'deg)'; }
   const wheel = Wh.el;
   return casPage('wheel', h('div', { class: 'csbody' },
     h('div', { class: 'csstage whstage' }, h('div', { class: 'whbox' }, wheel, h('i', { class: 'whptr' }))),
