@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build:20261121a -->
+<!-- build:20261121b -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -4647,6 +4647,22 @@ body .cc .cctlist>*{min-width:0}
 .phome .htile2:has(.htfull) .httx b{filter:drop-shadow(0 1px 3px rgba(0,0,0,.55)) !important;opacity:.9}
 .phome .htile2:has(.htfull) .htline{text-shadow:0 1px 4px rgba(0,0,0,.6);color:#e6e1d3}
 .phome .htcta{background:linear-gradient(180deg,#eedaa2,#c8a253) !important;box-shadow:0 3px 8px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,246,208,.55) !important}
+/* results you can read at a glance */
+.csmsg{min-height:0}
+.csmsg.win,.csmsg.lose{align-self:center;margin-top:2px;padding:9px 18px;border-radius:14px;font:900 15px/1.25 system-ui;letter-spacing:.01em;text-shadow:none;box-shadow:0 6px 16px rgba(0,0,0,.35)}
+.csmsg.win{background:linear-gradient(180deg,#2fc173,#14824a);color:#fff;border:1px solid #8ff0b8}
+.csmsg.lose{background:linear-gradient(180deg,#d8405a,#8f1a2e);color:#fff;border:1px solid #ffa3b1}
+/* the database is not ready */
+.rulesbad{margin:8px 14px 0;padding:10px 12px;border-radius:12px;background:rgba(192,40,63,.18);border:1px solid rgba(255,122,138,.6);display:flex;flex-direction:column;gap:3px}
+.rulesbad b{font:800 12.5px system-ui;color:#ffb3bf}.rulesbad span{font:500 11px/1.4 system-ui;color:#f2d6da}
+/* this session, on the home screen */
+.sesspill{position:relative;z-index:3;display:flex;align-items:center;gap:8px;margin:2px auto 8px;padding:6px 14px;border-radius:999px;border:1px solid rgba(231,191,99,.55);background:rgba(10,30,20,.72);color:#e9e2cf;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font:600 11px system-ui;cursor:pointer}
+.sesspill b{font:900 13px system-ui;color:#ffe08a}.sesspill.up b{color:#86efac}.sesspill.down b{color:#ff9aa7}.sesspill i{font-style:normal;color:#b9c9bf}
+.sesslist{display:flex;flex-direction:column;gap:2px}
+.sessrow{display:grid;grid-template-columns:1.4fr .8fr .7fr .7fr 1fr;align-items:center;gap:6px;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.1);font:600 13px system-ui;color:#fff3d6}.sessrow b{color:#fff3d6}.sessrow strong{font:900 14px system-ui}
+.sessrow span,.sessrow strong{text-align:right}.sessrow.head{font:800 10px system-ui;letter-spacing:.08em;text-transform:uppercase;color:#a9c3b4}
+.sessrow.total{border-bottom:0;border-top:2px solid rgba(231,191,99,.45);margin-top:2px}
+.sessrow .up{color:#86efac}.sessrow .down{color:#ff9aa7}
 .crauto .cslab{margin:0}.crauto input{min-width:0;height:28px;border:0;border-radius:8px;background:rgba(255,255,255,.06);color:#ffe08a;font:800 13px system-ui;padding:0 8px}.crauto i{font-style:normal;color:#8fa79a;font-weight:800}
 </style>
 </head>
@@ -14341,7 +14357,7 @@ class AppError extends Error {}
 let toastTimer = null;
 /* A phone can keep an old copy of the page open (or cached). Every so often the page asks the site for the first
    few bytes of the current file; if its build is newer, a banner offers a reload. */
-const BUILD = '20261121a';
+const BUILD = '20261121b';
 const Fresh = {
   at: 0, shown: false,
   async check(force) {
@@ -16023,7 +16039,7 @@ function renderHome() {
     h('span', { class: 'httx' }, h('i', { class: 'htkick', text: kick }), h('b', { text: word }), h('span', { class: 'htline', text: line })),
     live ? h('span', { class: 'htcta' }, h('span', { text: 'PLAY' }), pI('play', '', true)) : h('span', { class: 'htcta soon' }, pI('lock'), h('span', { text: 'COMING SOON' }))));
   return lounge('homeStage', [
-    homeTop(), adminPill(),
+    homeTop(), adminPill(), Sess.pill(),
     h('div', { class: 'htiles four' },
       tile('tileCards', 'cards', 't_cards', 'Cards', 'CARD ROOM', 'Teen Patti · Rummy · more', true, () => goTo('games')),
       tile('tileSports', 'sports', 't_sports', 'Sports', 'SPORTS ARENA', 'Cricket · Football · Basketball', true, () => goTo('sports')),
@@ -18025,7 +18041,6 @@ const LdRepo = {
       }
       tx.update(ref, upd);
       tx.update(uref, { chips: u.chips - g.stake, ludoId: t, updatedAt: FV.serverTimestamp() });
-      if (S.profile) S.profile.chips = u.chips - g.stake;
       return 'joined';
     });
   },
@@ -18103,6 +18118,7 @@ const LdNet = {
     // a finished game stays on screen with its result until you leave it
     if (g && g.status === 'done' && (g.uids || []).includes(uid) && (!LdNet.res || LdNet.res.gid !== g.gid)) {
       LdNet.res = JSON.parse(JSON.stringify(g)); LdNet.resGame = null;
+      { const me = (g.uids || []).indexOf(uid), pl = (g.places || []).indexOf(me), pay = ldPayout(g.stake, g.size, (g.places || []).length); Sess.add('ludo', g.stake, pl >= 0 && pl < pay.length ? pay[pl] : 0); }
       setTimeout(() => LdRepo.game(g.gid).get().then(s => { if (s.exists) { LdNet.resGame = s.data(); scheduleRender(); } }).catch(() => {}), 600);
       setTimeout(() => LdRepo.claimAll().catch(() => {}), 1200);
     }
@@ -18392,6 +18408,7 @@ function renderLudoLobby() {
   return ldPage('Ludo', h('div', { class: 'ldlist' },
     mine && mine.status !== 'done' && (mine.uids || []).includes(S.user.uid) ? h('button', { type: 'button', class: 'ldmine', id: 'ldMine', onclick: () => { location.hash = '#/ludoplay'; go(); } },
       h('b', { text: 'You have a seat' }), h('span', { text: ldTableName(p.ludoId) + '  ·  back to the table ›' })) : null,
+    RulesProbe.banner('ludo'),
     seg, !R ? h('div', { class: 'ldnote' }, h('span', { class: 'spspin' }), h('span', { text: 'Loading tables…' })) : LD_TABLES.filter(T => T.size === st.size).map(card),
     h('p', { class: 'ldfine', text: 'The club keeps 10% of each pot. A player away for 30 seconds is skipped; three skips in a row and they are out.' })));
 }
@@ -18436,6 +18453,7 @@ function ccLudoPage(sec) {
     const lab = g.status === 'playing' ? 'Game on  ·  ' + names.join(', ') : g.status === 'waiting' && names.length ? names.length + '/' + x.size + ' waiting  ·  ' + names.join(', ') : 'Open';
     return h('div', { class: 'ccaprow' + (g.status === 'playing' ? ' on' : '') }, h('div', {}, h('b', { text: 'Entry ' + fmt(x.stake) + '  ·  ' + x.size + ' players' }), h('span', { text: lab }))); };
   return h('div', { class: 'ccpage fixed', id: 'ldTablesPage' }, h('div', { class: 'ccscroll' },
+    h('div', { class: 'ccfcard' }, RulesProbe.line('ludo')),
     h('div', { class: 'ccspsum' }, h('div', {}, h('b', { text: String(on.length) }), h('span', { text: 'Games on' })), h('div', {}, h('b', { text: String(wait.reduce((n, x) => n + x.g.uids.length, 0)) }), h('span', { text: 'Players waiting' }))),
     on.length || wait.length ? ccSec('Busy tables', null, h('div', { class: 'ccaplist' }, on.concat(wait).map(row))) : null,
     ccSec('All tables', h('span', { class: 'ccchip', text: String(LD_TABLES.length) }), h('div', { class: 'ccaplist' }, list.filter(x => !on.includes(x) && !wait.includes(x)).map(row))),
@@ -18533,11 +18551,13 @@ const CasApi = {
       tx.update(uref, { chips: u.chips + payout, cbet: b.id, updatedAt: FV.serverTimestamp() });
     });
     if (S.profile) S.profile.chips += payout;
+    Sess.add(b.game, b.stake, payout);
     return Object.assign({}, b, upd, { status: 'paid' });
   },
   async lose(b) {
     if (CasApi.local()) { CasApi.practice.bets[b.id].status = 'lost'; return; }
     await db.collection('casino').doc(b.id).update({ status: 'lost', updatedAt: FV.serverTimestamp() }).catch(() => {});
+    Sess.add(b.game, b.stake, 0);
   },
   // your unfinished bets in this game (after leaving the page or losing the connection)
   async open(game) {
@@ -18568,6 +18588,7 @@ function casPage(game, kids) {
   const G = CAS_BY[game], loc = CasApi.local();
   return h('div', { class: 'cswrap cs-' + game, id: 'casGame' }, screenTop('Back', () => { if (CasUI.busy || (S.casGame === 'crash' && CasUI.live)) return toast('Finish this round first.'); casLeave(); }),
     h('div', { class: 'cshd' }, h('i'), h('h1', { text: G.name }), h('i')),
+    loc ? null : RulesProbe.banner('casino'),
     kids);
 }
 function casLeave() { S.casGame = ''; try { sessionStorage.removeItem('tp_casgame'); } catch (e) { /* private mode */ } CasGames.stop(); goTo('casino'); }
@@ -18583,6 +18604,7 @@ function renderCasino() {
   CasCfg.open();
   return h('div', { class: 'cswrap csscroll', id: 'casLobby' }, screenTop('Back', () => goTo('home')),
     h('div', { class: 'cshd' }, h('i'), h('h1', { text: 'Casino' }), h('i')),
+    RulesProbe.banner('casino'),
     adminTesting() ? h('p', { class: 'csfine', text: 'Admin practice: you play with 100,000 practice chips on this phone. Nothing is saved.' }) : null,
     h('div', { class: 'csgrid' }, CAS_GAMES.map(g => pressable(h('button', { type: 'button', class: 'cstile', id: 'cas_' + g.id, onclick: () => casOpen(g.id) },
       h('span', { class: 'cstart', style: 'background-image:var(--i-cas_t_' + g.id + ')' }), h('b', { text: g.name }), h('span', { text: g.sub }))))),
@@ -19003,6 +19025,7 @@ function ccCasPage(game) {
   const setRtp = v => adminBusy('casrtp', 'RTP', async () => { const cur = (S.casCfg && S.casCfg.rtp) || {}; await db.collection('casinoCfg').doc('main').set({ rtp: Object.assign({}, CAS_GAMES.reduce((o, g) => (o[g.id] = cur[g.id] || CAS_RTP0, o), {}), { [game]: v }), updatedAt: FV.serverTimestamp() }); Admin.say(CAS_BY[game].name + ' RTP set to ' + casPct(v) + '. New bets use it.'); });
   const metric = (v, l, cls) => h('div', {}, h('b', { class: cls || '', text: v }), h('span', { text: l }));
   return h('div', { class: 'ccpage fixed', id: 'casCc' }, h('div', { class: 'ccscroll' },
+    h('div', { class: 'ccfcard' }, RulesProbe.line('casino')),
     ccSec('Return to player (RTP)', h('span', { class: 'ccchip', text: casPct(p) }), h('div', {},
       h('div', { class: 'cmaud', id: 'casRtp' }, [9000, 9200, 9400, 9500, 9600, 9700, 9800, 9900].map(v => h('button', { type: 'button', class: 'achip' + (p === v ? ' on' : ''), 'data-v': v, text: casPct(v), onclick: () => setRtp(v) }))),
       h('p', { class: 'ccfhint', text: 'On average players get back this share of what they bet; the club keeps the rest. A change applies to new bets; bets already running keep the RTP they started with.' }))),
@@ -19011,6 +19034,59 @@ function ccCasPage(game) {
     h('p', { class: 'ccfhint', text: 'From the last 600 casino bets. The actual return moves around a lot over a few bets and settles near the RTP over many.' }),
     h('button', { type: 'button', class: 'ccbtn ghost sm', onclick: () => { a.casBets = null; Admin.paint(); } }, h('span', { text: 'Refresh' }))));
 }
+
+/* ---- is the database running the latest rules? (Ludo and the casino need them) ----
+   Older rules refuse every read of these collections; the latest allow any signed-in player to read them. */
+const RulesProbe = {
+  st: {}, busy: {},
+  check(key) {
+    if (!db || !S.user || RulesProbe.st[key] || RulesProbe.busy[key]) return RulesProbe.st[key] || '';
+    RulesProbe.busy[key] = true;
+    const ref = key === 'casino' ? db.collection('casinoCfg').doc('main') : db.collection('ludo').doc('ld_25_2');
+    ref.get().then(() => { RulesProbe.st[key] = 'ok'; }, e => { RulesProbe.st[key] = e && e.code === 'permission-denied' ? 'old' : ''; })
+      .finally(() => { RulesProbe.busy[key] = false; scheduleRender(); if (S.route && S.route.name === 'admin') Admin.paint(); });
+    return '';
+  },
+  banner(key) {
+    if (RulesProbe.check(key) !== 'old') return null;
+    return h('div', { class: 'rulesbad', id: 'rulesBad_' + key }, h('b', { text: 'Not switched on yet' }),
+      h('span', { text: S.realAdmin || S.isAdmin ? 'The database is still running older rules, so it refuses ' + (key === 'casino' ? 'casino bets' : 'Ludo tables') + '. Publish firestore-rules.html in Firebase: Firestore Database, Rules, paste, Publish.' : 'This game is being set up. Try again a little later.' }));
+  },
+  line(key) {
+    const v = RulesProbe.check(key);
+    return h('div', { class: 'ccfline ' + (v === 'ok' ? 'ok' : v === 'old' ? 'bad' : '') }, h('i', { text: v === 'ok' ? '✓' : v === 'old' ? '!' : '•' }),
+      h('div', {}, h('b', { text: v === 'ok' ? 'Database rules published' : v === 'old' ? 'Database rules out of date' : 'Checking the database rules…' }),
+        v === 'old' ? h('span', { text: 'Players cannot play this yet. In Firebase: Firestore Database, Rules, paste the whole of firestore-rules.html, Publish. If Publish shows a red error, send a screenshot.' }) : null));
+  }
+};
+
+/* ---- this session: games played, won and lost, and the chips up or down, per game (kept for this browser tab) ---- */
+const SESS_NAMES = { crash: 'Crash', mines: 'Mines', wheel: 'Wheel', towers: 'Towers', dice: 'Dice', hilo: 'Hi-Lo', ludo: 'Ludo' };
+const Sess = {
+  d: (() => { try { return JSON.parse(sessionStorage.getItem('tp_sess') || '{}') || {}; } catch (e) { return {}; } })(),
+  // one finished game: what it cost and what came back
+  add(game, stake, back) {
+    const g = Sess.d[game] || (Sess.d[game] = { n: 0, w: 0, l: 0, net: 0 });
+    g.n++; if (back > stake) g.w++; else if (back < stake) g.l++; g.net += back - stake;
+    try { sessionStorage.setItem('tp_sess', JSON.stringify(Sess.d)); } catch (e) { /* private mode */ }
+  },
+  total() { return Object.values(Sess.d).reduce((o, g) => ({ n: o.n + g.n, net: o.net + g.net }), { n: 0, net: 0 }); },
+  sign: v => (v > 0 ? '+' : v < 0 ? '−' : '') + fmt(Math.abs(v)),
+  pill() {
+    const t = Sess.total(); if (!t.n) return null;
+    return h('button', { type: 'button', class: 'sesspill ' + (t.net > 0 ? 'up' : t.net < 0 ? 'down' : ''), id: 'sessPill', onclick: () => Sess.sheet() },
+      h('span', { text: 'This session' }), h('b', { text: Sess.sign(t.net) }), h('i', { text: t.n + (t.n === 1 ? ' game' : ' games') + '  ›' }));
+  },
+  sheet() {
+    const rows = Object.keys(Sess.d).filter(k => Sess.d[k].n).sort((a, b) => Sess.d[b].n - Sess.d[a].n), t = Sess.total();
+    Sheets.open('sessSheet', 'This session', h('div', { class: 'sesslist' },
+      h('div', { class: 'sessrow head' }, h('span', { text: 'Game' }), h('span', { text: 'Played' }), h('span', { text: 'Won' }), h('span', { text: 'Lost' }), h('span', { text: 'Chips' })),
+      rows.map(k => { const g = Sess.d[k]; return h('div', { class: 'sessrow' }, h('b', { text: SESS_NAMES[k] || k }), h('span', { text: String(g.n) }), h('span', { class: 'up', text: String(g.w) }), h('span', { class: 'down', text: String(g.l) }), h('strong', { class: g.net > 0 ? 'up' : g.net < 0 ? 'down' : '', text: Sess.sign(g.net) })); }),
+      h('div', { class: 'sessrow total' }, h('b', { text: 'Total' }), h('span', { text: String(t.n) }), h('span'), h('span'), h('strong', { class: t.net > 0 ? 'up' : t.net < 0 ? 'down' : '', text: Sess.sign(t.net) })),
+      h('p', { class: 'hnote', text: 'Counts the games finished on this phone since you opened the club. A win is a game that paid back more than it cost.' }),
+      h('button', { type: 'button', class: 'btn-secondary', id: 'sessReset', text: 'Start a new session', onclick: () => { Sess.d = {}; try { sessionStorage.removeItem('tp_sess'); } catch (e) { /* private mode */ } Sheets.close(); scheduleRender(); } })));
+  }
+};
 
 function renderRummy() {
   const tid = S.route && S.route.tableId;
